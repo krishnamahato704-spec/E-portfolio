@@ -2,31 +2,23 @@
   'use strict';
 
   // CLOUD-ONLY PORTFOLIO STORAGE
-  // No portfolio data is persisted in browser localStorage.
-  // The existing editor still calls localStorage, so we intercept those calls:
-  // saves are sent directly to Supabase and reads are supplied from the cloud.
+  // Portfolio state and images are stored in Supabase Storage.
   const SUPABASE_URL = 'https://oyqevsygintkjrkfbzpx.supabase.co';
   const SUPABASE_KEY = 'sb_publishable_CZOIotDHbTM9m4e8vHZ9Aw_H3-G9mAd';
   const BUCKET = 'portfolio-media';
   const EDITOR_STATE_KEY = 'krishna_portfolio_v4';
   const REMOTE_STATE_PATH = 'state/portfolio-v5.json';
 
-  const ORIGINAL = {
-    getItem: Storage.prototype.getItem,
-    setItem: Storage.prototype.setItem,
-    removeItem: Storage.prototype.removeItem,
-    clear: Storage.prototype.clear,
-    key: Storage.prototype.key
-  };
-
   const headers = {
     apikey: SUPABASE_KEY,
     Authorization: 'Bearer ' + SUPABASE_KEY
   };
 
-  let remoteState = null;
   let syncing = false;
-  let initialized = false;
+
+  function objectUrl(path) {
+    return SUPABASE_URL + '/storage/v1/object/' + BUCKET + '/' + path;
+  }
 
   function publicUrl(path) {
     return SUPABASE_URL + '/storage/v1/object/public/' + BUCKET + '/' + path;
@@ -41,7 +33,7 @@
     const binary = atob(body);
     const bytes = new Uint8Array(binary.length);
     for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
-    return new Blob([bytes], {type: mime});
+    return new Blob([bytes], { type: mime });
   }
 
   async function uploadImage(dataUrl, label) {
@@ -49,12 +41,16 @@
     const ext = (blob.type.split('/')[1] || 'bin').replace(/[^a-z0-9]/gi, '').toLowerCase() || 'bin';
     const safe = String(label || 'image').replace(/[^a-z0-9_-]/gi, '_').slice(0, 60);
     const path = 'portfolio-v5/' + safe + '_' + Date.now() + '_' + Math.random().toString(36).slice(2, 9) + '.' + ext;
-    const response = await fetch(SUPABASE_URL + '/storage/v1/object/' + BUCKET + '/' + path, {
+    const response = await fetch(objectUrl(path), {
       method: 'POST',
-      headers: Object.assign({}, headers, {'Content-Type': blob.type || 'application/octet-stream', 'x-upsert': 'true'}),
+      headers: Object.assign({}, headers, {
+        'Content-Type': blob.type || 'application/octet-stream',
+        'x-upsert': 'true',
+        'cache-control': '31536000'
+      }),
       body: blob
     });
-    if (!response.ok) throw new Error('Image upload failed (' + response.status + ')');
+    if (!response.ok) throw new Error('Image upload failed (' + response.status + '): ' + await response.text().catch(() => ''));
     return publicUrl(path);
   }
 
@@ -93,10 +89,11 @@
     const status = document.getElementById('modeStatus');
     try {
       state = await migrateImages(state);
-      remoteState = state;
+      const blob = new Blob([JSON.stringify(state)], { type: 'application/json' });
 
-      const blob = new Blob([JSON.stringify(state)], {type: 'application/json'});
-      const response = await fetch(SUPABASE_URL + '/storage/v1/object/' + BUCKET + '/' + REMOTE_STATE_PATH, {
+      // IMPORTANT: Storage GET/POST object operations use /object/{bucket}/{path}.
+      // The /object/public/... form is only for reading public assets.
+      const response = await fetch(objectUrl(REMOTE_STATE_PATH), {
         method: 'POST',
         headers: Object.assign({}, headers, {
           'Content-Type': 'application/json',
@@ -107,8 +104,6 @@
       });
       if (!response.ok) throw new Error('Cloud state save failed (' + response.status + '): ' + await response.text().catch(() => ''));
 
-      // Put the uploaded public URLs back into the visible editor without
-      // writing the state to browser storage.
       if (window.__portfolio && typeof window.__portfolio.restore === 'function') {
         window.__portfolio.restore(state);
       }
@@ -124,31 +119,38 @@
   async function loadRemote() {
     const status = document.getElementById('modeStatus');
     try {
-      const response = await fetch(SUPABASE_URL + '/storage/v1/object/' + BUCKET + '/' + REMOTE_STATE_PATH + '?t=' + Date.now(), {headers});
+      // Read the object through the normal Storage object endpoint, not the
+      // public endpoint. The publishable key is sent for authorization.
+      const response = await fetch(objectUrl(REMOTE_STATE_PATH) + '?t=' + Date.now(), {
+        method: 'GET',
+        headers: Object.assign({}, headers, { 'cache-control': 'no-cache' })
+      });
+
       if (response.status === 404) {
-        initialized = true;
         if (status) status.textContent = 'New portfolio · ready';
         return;
       }
-      if (!response.ok) throw new Error('Cloud state load failed (' + response.status + ')');
+      if (!response.ok) throw new Error('Cloud state load failed (' + response.status + '): ' + await response.text().catch(() => ''));
 
-      remoteState = await response.json();
-      initialized = true;
-
-      // Restore the cloud state directly. Nothing is written to localStorage.
+      const remoteState = await response.json();
       if (window.__portfolio && typeof window.__portfolio.restore === 'function') {
         window.__portfolio.restore(remoteState);
       }
       if (status) status.textContent = 'Synced online ✓';
     } catch (error) {
       console.error('Portfolio cloud load error:', error);
-      initialized = true;
       if (status) status.textContent = 'Cloud unavailable';
     }
   }
 
-  // Disable browser persistence for this portfolio. All getItem calls return
-  // null so old device-specific history can never override cloud data.
+  // Disable browser persistence for this portfolio. Cloud is authoritative.
+  const ORIGINAL = {
+    getItem: Storage.prototype.getItem,
+    setItem: Storage.prototype.setItem,
+    removeItem: Storage.prototype.removeItem,
+    clear: Storage.prototype.clear
+  };
+
   Storage.prototype.getItem = function (key) {
     if (this === localStorage) return null;
     return ORIGINAL.getItem.call(this, key);
@@ -172,14 +174,10 @@
     return ORIGINAL.clear.call(this);
   };
 
-  // Erase any old browser-local portfolio keys that were created before the
-  // cloud-only version. This is intentionally best-effort and never stores new data.
   try {
     ['krishna_portfolio_v4', 'krishna_portfolio_v5', 'krishna_portfolio_pending_upload', 'krishna_experiences', 'portfolio-theme'].forEach(k => ORIGINAL.removeItem.call(localStorage, k));
   } catch (_) {}
 
-  // The editor script is loaded before this file, so wait until its public API
-  // exists, then fetch the authoritative cloud state and restore it directly.
   window.addEventListener('load', () => {
     const wait = () => {
       if (window.__portfolio && typeof window.__portfolio.restore === 'function') loadRemote();
