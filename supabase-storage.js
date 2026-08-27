@@ -2,19 +2,26 @@
   'use strict';
 
   // CLOUD-ONLY PORTFOLIO STORAGE
-  // Portfolio state and images are stored in Supabase Storage.
+  // Portfolio state is stored in Supabase Postgres; images remain in Supabase Storage.
   const SUPABASE_URL = 'https://oyqevsygintkjrkfbzpx.supabase.co';
   const SUPABASE_KEY = 'sb_publishable_CZOIotDHbTM9m4e8vHZ9Aw_H3-G9mAd';
   const BUCKET = 'portfolio-media';
+  const TABLE = 'portfolio_state';
   const EDITOR_STATE_KEY = 'krishna_portfolio_v4';
-  const REMOTE_STATE_PATH = 'state/portfolio-v5.json';
+  const ROW_ID = 'default';
 
   const headers = {
     apikey: SUPABASE_KEY,
-    Authorization: 'Bearer ' + SUPABASE_KEY
+    Authorization: 'Bearer ' + SUPABASE_KEY,
+    'Content-Type': 'application/json'
   };
 
   let syncing = false;
+  let saveTimer = null;
+
+  function tableUrl() {
+    return SUPABASE_URL + '/rest/v1/' + TABLE;
+  }
 
   function objectUrl(path) {
     return SUPABASE_URL + '/storage/v1/object/' + BUCKET + '/' + path;
@@ -44,7 +51,6 @@
     const response = await fetch(objectUrl(path), {
       method: 'POST',
       headers: Object.assign({}, headers, {
-        'Content-Type': blob.type || 'application/octet-stream',
         'x-upsert': 'true',
         'cache-control': '31536000'
       }),
@@ -89,24 +95,14 @@
     const status = document.getElementById('modeStatus');
     try {
       state = await migrateImages(state);
-      const blob = new Blob([JSON.stringify(state)], { type: 'application/json' });
-
-      // IMPORTANT: Storage GET/POST object operations use /object/{bucket}/{path}.
-      // The /object/public/... form is only for reading public assets.
-      const response = await fetch(objectUrl(REMOTE_STATE_PATH), {
-        method: 'POST',
-        headers: Object.assign({}, headers, {
-          'Content-Type': 'application/json',
-          'x-upsert': 'true',
-          'cache-control': 'no-cache'
-        }),
-        body: blob
+      const response = await fetch(tableUrl() + '?id=eq.' + encodeURIComponent(ROW_ID), {
+        method: 'PATCH',
+        headers: Object.assign({}, headers, { Prefer: 'return=minimal' }),
+        body: JSON.stringify({ state: state, updated_at: new Date().toISOString() })
       });
       if (!response.ok) throw new Error('Cloud state save failed (' + response.status + '): ' + await response.text().catch(() => ''));
 
-      if (window.__portfolio && typeof window.__portfolio.restore === 'function') {
-        window.__portfolio.restore(state);
-      }
+      if (window.__portfolio && typeof window.__portfolio.restore === 'function') window.__portfolio.restore(state);
       if (status && document.body.classList.contains('editing')) status.textContent = 'Saved online ✓';
     } catch (error) {
       console.error('Portfolio cloud save error:', error);
@@ -116,26 +112,28 @@
     }
   }
 
+  function queueSave(raw) {
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(function () { saveRemote(raw); }, 250);
+  }
+
   async function loadRemote() {
     const status = document.getElementById('modeStatus');
     try {
-      // Read the object through the normal Storage object endpoint, not the
-      // public endpoint. The publishable key is sent for authorization.
-      const response = await fetch(objectUrl(REMOTE_STATE_PATH) + '?t=' + Date.now(), {
+      const response = await fetch(tableUrl() + '?id=eq.' + encodeURIComponent(ROW_ID) + '&select=state&limit=1', {
         method: 'GET',
-        headers: Object.assign({}, headers, { 'cache-control': 'no-cache' })
+        headers: Object.assign({}, headers, { 'Cache-Control': 'no-cache' })
       });
 
-      if (response.status === 404) {
+      if (!response.ok) throw new Error('Cloud state load failed (' + response.status + '): ' + await response.text().catch(() => ''));
+      const rows = await response.json();
+      if (!Array.isArray(rows) || !rows.length || !rows[0].state) {
         if (status) status.textContent = 'New portfolio · ready';
         return;
       }
-      if (!response.ok) throw new Error('Cloud state load failed (' + response.status + '): ' + await response.text().catch(() => ''));
 
-      const remoteState = await response.json();
-      if (window.__portfolio && typeof window.__portfolio.restore === 'function') {
-        window.__portfolio.restore(remoteState);
-      }
+      const remoteState = typeof rows[0].state === 'string' ? JSON.parse(rows[0].state) : rows[0].state;
+      if (window.__portfolio && typeof window.__portfolio.restore === 'function') window.__portfolio.restore(remoteState);
       if (status) status.textContent = 'Synced online ✓';
     } catch (error) {
       console.error('Portfolio cloud load error:', error);
@@ -158,7 +156,7 @@
 
   Storage.prototype.setItem = function (key, value) {
     if (this === localStorage) {
-      if (key === EDITOR_STATE_KEY && typeof value === 'string' && !syncing) saveRemote(value);
+      if (key === EDITOR_STATE_KEY && typeof value === 'string' && !syncing) queueSave(value);
       return;
     }
     return ORIGINAL.setItem.call(this, key, value);
@@ -178,8 +176,8 @@
     ['krishna_portfolio_v4', 'krishna_portfolio_v5', 'krishna_portfolio_pending_upload', 'krishna_experiences', 'portfolio-theme'].forEach(k => ORIGINAL.removeItem.call(localStorage, k));
   } catch (_) {}
 
-  window.addEventListener('load', () => {
-    const wait = () => {
+  window.addEventListener('load', function () {
+    const wait = function () {
       if (window.__portfolio && typeof window.__portfolio.restore === 'function') loadRemote();
       else setTimeout(wait, 50);
     };
