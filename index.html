@@ -601,6 +601,11 @@
         .view-mode .academic-img:not(:has(img)) { display:none !important; }
         .view-mode .evidence-card:has(.resource-list:empty) .evidence-preview { display:none; }
         .view-mode .evidence-card:has(.resource-list:empty) .evidence-body { padding-top:18px; }
+        /* Uploaded media controls its own box height; never crop or stretch it. */
+        .upload-zone, .cert-upload, .academic-img { height:auto !important; min-height:0 !important; aspect-ratio:auto !important; }
+        .editing .upload-zone, .editing .cert-upload, .editing .academic-img { min-height:110px !important; }
+        .upload-zone img, .cert-upload img, .academic-img img { width:100% !important; height:auto !important; max-height:520px !important; object-fit:contain !important; object-position:center; }
+        .view-mode .upload-zone, .view-mode .cert-upload, .view-mode .academic-img { padding:0 !important; }
         /* Retain old saved certificate fields for migration, but show one clean section. */
         .legacy-certificate-layout, .legacy-professional-development { display:none !important; }
 
