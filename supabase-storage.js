@@ -4,7 +4,8 @@
   const SUPABASE_KEY = 'sb_publishable_CZOIotDHbTM9m4E8vHZ9Aw_H3-G9mAd';
   const BUCKET = 'portfolio-media';
   const TABLE = 'portfolio_state';
-  const ROW_ID = 'default';
+  // The existing Supabase table uses an integer primary key.
+  const ROW_ID = 1;
   const EDITOR_STATE_KEY = 'krishna_portfolio_v4';
   const SESSION_KEY = 'portfolio_editor_session';
   const MAX_FILE_SIZE = 25 * 1024 * 1024;

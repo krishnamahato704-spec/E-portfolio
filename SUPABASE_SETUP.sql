@@ -4,7 +4,7 @@
 -- Then, in Project Settings > Data API, expose the public.portfolio_state table.
 
 create table if not exists public.portfolio_state (
-  id text primary key,
+  id bigint primary key,
   data jsonb not null default '{}'::jsonb,
   updated_at timestamptz not null default now()
 );
