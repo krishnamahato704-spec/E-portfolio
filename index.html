@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Krishna Mahato · Academic E‑Portfolio</title>
-    <style id="themeStyles">
+    <style>
         :root {
             --bg: #f6f4f0;
             --card: #ffffff;
@@ -20,9 +20,6 @@
             --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             --serif: 'Georgia', 'Times New Roman', serif;
         }
-        .theme-forest { --bg: #f0f5ee; --text: #1a2e1a; --muted: #4a6a4a; --accent: #1f4f2f; --accent2: #7a4a2a; --gold: #8a7a3a; --gold-light: #b8a85a; --border: #d0d8c8; --shadow: 0 8px 30px rgba(26,46,26,.08); }
-        .theme-fort { --bg: #ece8e0; --card: #faf8f4; --text: #2a2a2a; --muted: #6a6a6a; --accent: #5a4a3a; --accent2: #8a6a4a; --gold: #b89a6a; --gold-light: #d4b88a; --border: #d4cec4; --shadow: 0 8px 30px rgba(42,42,42,.08); }
-        .theme-ocean { --bg: #eef4f8; --card: #ffffff; --text: #1a2a3a; --muted: #4a6a7a; --accent: #1a4a6a; --accent2: #2a6a8a; --gold: #6a9ab8; --gold-light: #8ab8d4; --border: #c8d8e0; --shadow: 0 8px 30px rgba(26,42,58,.08); }
     </style>
     <style>
         /* ----- reset & base ----- */
@@ -156,46 +153,9 @@
         .mode-btn.reset-btn:hover { background: rgba(139,26,43,.8); }
         .mode-hint { font-size: .65rem; opacity: .5; display: none; }
         .mode-hint.show { display: inline; }
-        .theme-selector { position: relative; display: inline-block; }
-        .theme-dropdown {
-            display: none;
-            position: absolute;
-            bottom: 110%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(30,30,46,.96);
-            backdrop-filter: blur(12px);
-            border-radius: 16px;
-            padding: 10px 6px;
-            min-width: 150px;
-            box-shadow: 0 8px 32px rgba(0,0,0,.4);
-            border: 1px solid rgba(255,255,255,.06);
-            flex-direction: column;
-            gap: 4px;
-        }
-        .theme-dropdown.open { display: flex; }
-        .theme-option {
-            background: transparent;
-            border: none;
-            color: #fff;
-            padding: 6px 14px;
-            border-radius: 30px;
-            font-size: .75rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: .2s;
-            text-align: left;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .theme-option:hover { background: rgba(255,255,255,.08); }
-        .theme-option .color-dot { width: 14px; height: 14px; border-radius: 50%; border: 1px solid rgba(255,255,255,.15); flex-shrink:0; }
-        .theme-option input[type="file"] { display: none; }
         @media (max-width: 700px) {
             #modeBar { bottom: 12px; padding: 6px 12px; gap: 6px; font-size: .68rem; width: 94%; border-radius: 30px; }
             .mode-btn { padding: 4px 10px; font-size: .65rem; }
-            .theme-dropdown { min-width: 130px; left: 0; transform: none; }
         }
 
         /* ----- edit mode ----- */
@@ -610,6 +570,32 @@
         .evidence-card .evidence-body .meta { font-size: .75rem; color: var(--muted); }
         .evidence-card .evidence-body p { font-size: .88rem; color: var(--muted); margin-top: 4px; }
 
+        /* Academic 3-D treatment and a more readable baseline */
+        body { font-size: 18px; background: radial-gradient(circle at 12% 10%, rgba(184,134,11,.12), transparent 26%), linear-gradient(135deg, #f7f4ed 0%, #e8edf1 100%); }
+        body::before { content:""; position:fixed; inset:0; pointer-events:none; opacity:.36; z-index:-1; background-image:linear-gradient(rgba(31,58,95,.045) 1px, transparent 1px),linear-gradient(90deg, rgba(31,58,95,.045) 1px, transparent 1px); background-size:28px 28px; }
+        .hero { background:linear-gradient(135deg, rgba(255,255,255,.74), rgba(223,231,235,.84)); perspective:1200px; }
+        .hero-grid > * { transform:translateZ(0); }
+        .hero-grid > :first-child { animation: academicRise .8s ease-out both; }
+        .hero-grid > :last-child { animation: academicRise .8s .12s ease-out both; }
+        .card, .evidence-card, .experience-card { transform-style:preserve-3d; transition:transform .25s ease, box-shadow .25s ease; }
+        .card:hover, .evidence-card:hover, .experience-card:hover { transform:translateY(-7px) rotateX(1.2deg) rotateY(-1.2deg); box-shadow:0 22px 42px rgba(26,45,70,.16); }
+        .section-title { font-size:clamp(2.05rem, 4vw, 3.15rem); }
+        .section-desc, .card p, .evidence-card .evidence-body p, .experience-card .exp-desc { font-size:1rem; }
+        .nav-links a, .tag, .skill-pill, .timeline-item .year, .card .card-label { font-size:.84rem; }
+        .evidence-card .evidence-body h4 { font-size:1.22rem; }
+        .evidence-card .evidence-body .meta { font-size:.9rem; }
+        @keyframes academicRise { from { opacity:0; transform:translateY(22px) rotateX(-4deg); } to { opacity:1; transform:translateY(0) rotateX(0); } }
+        .resource-list { display:grid; gap:8px; margin-top:12px; }
+        .resource-item { display:flex; align-items:center; gap:9px; padding:9px 10px; border:1px solid var(--border); border-radius:10px; background:#fff; box-shadow:0 3px 10px rgba(26,45,70,.06); }
+        .resource-icon { color:var(--accent); font-size:1.15rem; line-height:1; }
+        .resource-link { min-width:0; flex:1; font-size:.92rem; font-weight:650; color:var(--accent); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; text-decoration:underline; text-underline-offset:2px; }
+        .resource-size { color:var(--muted); font-size:.76rem; white-space:nowrap; }
+        .resource-delete { display:none; border:0; border-radius:7px; padding:4px 7px; background:#8b1a2b; color:#fff; cursor:pointer; font-size:.78rem; }
+        .editing .resource-delete { display:inline-block; }
+        .file-upload-zone { margin-top:12px; padding:12px; border:2px dashed rgba(31,58,95,.34); border-radius:12px; text-align:center; color:var(--muted); cursor:pointer; }
+        .file-upload-zone:hover { border-color:var(--accent); background:rgba(31,58,95,.045); }
+        .view-mode .file-upload-zone { display:none; }
+
         .hidden { display: none; }
         .mt-8 { margin-top: 8px; }
         .mt-16 { margin-top: 16px; }
@@ -650,18 +636,8 @@
         <button class="mode-btn" id="editBtn">Edit</button>
         <button class="mode-btn save-btn" id="saveBtn" style="display:none;">Save</button>
         <button class="mode-btn reset-btn" id="resetBtn" style="display:none;">Reset</button>
-        <span class="mode-hint" id="modeHint">Click text to edit · click zones to add images</span>
+        <span class="mode-hint" id="modeHint">Click text to edit · use upload areas to add evidence</span>
         <span class="edit-lock" style="font-size:.7rem;opacity:.4;">🔒</span>
-        <div class="theme-selector">
-            <button class="mode-btn" id="themeBtn">🎨</button>
-            <div class="theme-dropdown" id="themeDropdown">
-                <button class="theme-option" data-theme="default"><span class="color-dot" style="background:#1f3a5f;"></span> Academic</button>
-                <button class="theme-option" data-theme="forest"><span class="color-dot" style="background:#1f4f2f;"></span> Forest</button>
-                <button class="theme-option" data-theme="fort"><span class="color-dot" style="background:#5a4a3a;"></span> Fort</button>
-                <button class="theme-option" data-theme="ocean"><span class="color-dot" style="background:#1a4a6a;"></span> Ocean</button>
-                <button class="theme-option" data-theme="upload"><span>📤 Upload Theme</span><input type="file" accept=".css" id="themeFileInput"></button>
-            </div>
-        </div>
     </div>
 
     <!-- ===== HERO ===== -->
@@ -895,12 +871,9 @@
                         <h4 contenteditable="false" data-editable="work1_title">Lesson Plans</h4>
                         <div class="meta" contenteditable="false" data-editable="work1_meta">History · B.Ed.</div>
                         <p contenteditable="false" data-editable="work1_text">Add lesson plans, teaching reflections, and instructional materials.</p>
-                        <div class="upload-zone" id="workUpload1" style="margin-top:8px;padding:8px;min-height:60px;">
-                            <div id="workPreview1_upload"></div>
-                            <span class="upload-label" style="font-size:.7rem;">📄 Upload</span>
-                            <span class="upload-sub" style="font-size:.6rem;">Click to add</span>
-                            <input type="file" accept="image/*" style="display:none;" id="workInput1">
-                            <div class="img-caption" contenteditable="false" data-caption="workUpload1">Add a caption or description for this evidence.</div>
+                        <div class="resource-list" id="workResources1" aria-live="polite"></div>
+                        <label class="file-upload-zone" for="workInput1">📎 Add lesson-plan files<br><small>PDF, Word, PowerPoint, images and documents</small></label>
+                        <input type="file" id="workInput1" multiple accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.csv,.txt,image/*" hidden>
                         </div>
                     </div>
                 </div>
@@ -910,12 +883,9 @@
                         <h4 contenteditable="false" data-editable="work2_title">Teaching Resources</h4>
                         <div class="meta" contenteditable="false" data-editable="work2_meta">Worksheets · Timelines · Posters</div>
                         <p contenteditable="false" data-editable="work2_text">Add worksheets, maps, timelines, posters, and digital activities.</p>
-                        <div class="upload-zone" id="workUpload2" style="margin-top:8px;padding:8px;min-height:60px;">
-                            <div id="workPreview2_upload"></div>
-                            <span class="upload-label" style="font-size:.7rem;">📄 Upload</span>
-                            <span class="upload-sub" style="font-size:.6rem;">Click to add</span>
-                            <input type="file" accept="image/*" style="display:none;" id="workInput2">
-                            <div class="img-caption" contenteditable="false" data-caption="workUpload2">Add a caption or description for this evidence.</div>
+                        <div class="resource-list" id="workResources2" aria-live="polite"></div>
+                        <label class="file-upload-zone" for="workInput2">📎 Add teaching-resource files<br><small>PDF, Word, PowerPoint, images and documents</small></label>
+                        <input type="file" id="workInput2" multiple accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.csv,.txt,image/*" hidden>
                         </div>
                     </div>
                 </div>
@@ -925,30 +895,9 @@
                         <h4 contenteditable="false" data-editable="work3_title">Presentations &amp; Activities</h4>
                         <div class="meta" contenteditable="false" data-editable="work3_meta">Smart‑board · Assessments</div>
                         <p contenteditable="false" data-editable="work3_text">Add presentations, smart‑board activities, assessments, and diagnostic tests.</p>
-                        <div class="upload-zone" id="workUpload3" style="margin-top:8px;padding:8px;min-height:60px;">
-                            <div id="workPreview3_upload"></div>
-                            <span class="upload-label" style="font-size:.7rem;">📄 Upload</span>
-                            <span class="upload-sub" style="font-size:.6rem;">Click to add</span>
-                            <input type="file" accept="image/*" style="display:none;" id="workInput3">
-                            <div class="img-caption" contenteditable="false" data-caption="workUpload3">Add a caption or description for this evidence.</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <button class="add-image-btn" data-target="workGrid" data-template="workTemplate">＋ Add Evidence Item</button>
-            <div id="workTemplate" style="display:none;">
-                <div class="evidence-card">
-                    <div class="evidence-preview"><span>📄</span></div>
-                    <div class="evidence-body">
-                        <h4>New Evidence</h4>
-                        <div class="meta">Add description</div>
-                        <p>Upload your teaching material.</p>
-                        <div class="upload-zone" style="margin-top:8px;padding:8px;min-height:60px;">
-                            <div></div>
-                            <span class="upload-label" style="font-size:.7rem;">📄 Upload</span>
-                            <span class="upload-sub" style="font-size:.6rem;">Click to add</span>
-                            <input type="file" accept="image/*" style="display:none;" class="work-input">
-                            <div class="img-caption" contenteditable="false" data-caption="">Add a caption or description.</div>
+                        <div class="resource-list" id="workResources3" aria-live="polite"></div>
+                        <label class="file-upload-zone" for="workInput3">📎 Add presentation or activity files<br><small>PDF, Word, PowerPoint, images and documents</small></label>
+                        <input type="file" id="workInput3" multiple accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.csv,.txt,image/*" hidden>
                         </div>
                     </div>
                 </div>
@@ -1196,7 +1145,6 @@
     <script>
         (function() {
             const STORAGE_KEY = 'krishna_portfolio_v4';
-            const PASSWORD = 'krishna2026';
             const EXPERIENCES_KEY = 'krishna_experiences';
 
             // ---- DOM refs ----
@@ -1207,9 +1155,6 @@
             const modeStatus = document.getElementById('modeStatus');
             const modeHint = document.getElementById('modeHint');
             const body = document.body;
-            const themeBtn = document.getElementById('themeBtn');
-            const themeDropdown = document.getElementById('themeDropdown');
-            const themeFileInput = document.getElementById('themeFileInput');
             const navToggle = document.getElementById('navToggle');
             const navLinks = document.getElementById('navLinks');
             const experiencesContainer = document.getElementById('experiencesContainer');
@@ -1222,6 +1167,7 @@
             let currentMode = 'view';
             let zoneCounter = 0;
             let experiences = [];
+            let resources = { workResources1: [], workResources2: [], workResources3: [] };
 
             // ---- DEFAULT EXPERIENCES (UPDATED) ----
             function getDefaultExperiences() {
@@ -1354,55 +1300,6 @@
                 link.addEventListener('click', () => { navLinks.classList.remove('open'); });
             });
 
-            // ---- theme ----
-            function applyTheme(name) {
-                body.classList.remove('theme-forest', 'theme-fort', 'theme-ocean', 'theme-custom');
-                if (name && name !== 'default') body.classList.add('theme-' + name);
-                localStorage.setItem('portfolio-theme', name || 'default');
-                document.querySelectorAll('.theme-option').forEach(b => {
-                    b.style.background = b.dataset.theme === name ? 'rgba(255,255,255,.12)' : 'transparent';
-                });
-            }
-            function loadTheme() {
-                const saved = localStorage.getItem('portfolio-theme') || 'default';
-                if (saved !== 'default') body.classList.add('theme-' + saved);
-                document.querySelectorAll('.theme-option').forEach(b => {
-                    b.style.background = b.dataset.theme === saved ? 'rgba(255,255,255,.12)' : 'transparent';
-                });
-            }
-            themeFileInput.addEventListener('change', function() {
-                const file = this.files[0];
-                if (!file) return;
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    let s = document.getElementById('customThemeStyle');
-                    if (!s) { s = document.createElement('style'); s.id = 'customThemeStyle'; document.head.appendChild(s); }
-                    s.textContent = e.target.result;
-                    body.classList.remove('theme-forest', 'theme-fort', 'theme-ocean');
-                    body.classList.add('theme-custom');
-                    localStorage.setItem('portfolio-theme', 'custom');
-                    document.querySelectorAll('.theme-option').forEach(b => {
-                        b.style.background = b.dataset.theme === 'custom' ? 'rgba(255,255,255,.12)' : 'transparent';
-                    });
-                    themeDropdown.classList.remove('open');
-                    alert('Custom theme applied!');
-                };
-                reader.readAsText(file);
-                this.value = '';
-            });
-            themeBtn.addEventListener('click', e => { e.stopPropagation(); themeDropdown.classList.toggle('open'); });
-            document.addEventListener('click', () => themeDropdown.classList.remove('open'));
-            themeDropdown.addEventListener('click', e => e.stopPropagation());
-            document.querySelectorAll('.theme-option').forEach(btn => {
-                btn.addEventListener('click', function(e) {
-                    const t = this.dataset.theme;
-                    if (t === 'upload') { themeFileInput.click(); return; }
-                    applyTheme(t);
-                    themeDropdown.classList.remove('open');
-                });
-            });
-            loadTheme();
-
             // ---- mode ----
             function setMode(mode) {
                 currentMode = mode;
@@ -1443,13 +1340,6 @@
                 renderExperiences();
             }
 
-            function promptPassword() {
-                const pwd = prompt('Enter edit password:');
-                if (pwd === PASSWORD) return true;
-                if (pwd !== null) alert('Incorrect password.');
-                return false;
-            }
-
             // ---- snapshot / restore (mode is NOT restored) ----
             function saveFullState() {
                 saveToStorage();
@@ -1488,7 +1378,7 @@
             }
 
             function snapshot() {
-                const data = { editable: {}, images: {}, captions: {} };
+                const data = { editable: {}, images: {}, captions: {}, resources: resources };
                 editableEls.forEach(el => { data.editable[el.dataset.editable] = el.innerHTML; });
                 data.images.portrait = portrait.src;
 
@@ -1512,6 +1402,7 @@
 
             function restore(data) {
                 if (!data) return;
+                const wasEditing = currentMode === 'edit';
                 if (data.editable) {
                     editableEls.forEach(el => {
                         if (data.editable[el.dataset.editable] !== undefined) el.innerHTML = data.editable[el.dataset.editable];
@@ -1606,8 +1497,11 @@
                 } else {
                     loadExperiences();
                 }
-                // always start in view mode
-                setMode('view');
+                resources = data.resources && typeof data.resources === 'object'
+                    ? data.resources
+                    : { workResources1: [], workResources2: [], workResources3: [] };
+                renderAllResources();
+                setMode(wasEditing ? 'edit' : 'view');
                 renderExperiences();
             }
 
@@ -1618,10 +1512,83 @@
                 setTimeout(() => { if (currentMode === 'edit') modeStatus.textContent = 'Edit'; }, 1000);
             }
 
+            function fileIcon(file) {
+                const type = (file.type || '').toLowerCase();
+                const name = (file.name || '').toLowerCase();
+                if (type.startsWith('image/') || /\.(png|jpe?g|gif|webp|svg)$/.test(name)) return '🖼️';
+                if (type === 'application/pdf' || name.endsWith('.pdf')) return '📕';
+                if (/word|\.docx?$/.test(type + name)) return '📘';
+                if (/presentation|\.pptx?$/.test(type + name)) return '📊';
+                if (/sheet|excel|\.xlsx?$|\.csv$/.test(type + name)) return '📗';
+                return '📄';
+            }
+
+            function fileSize(bytes) {
+                if (!Number.isFinite(bytes)) return '';
+                return bytes < 1024 * 1024 ? Math.max(1, Math.round(bytes / 1024)) + ' KB' : (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+            }
+
+            function renderResources(listId) {
+                const list = document.getElementById(listId);
+                if (!list) return;
+                const files = Array.isArray(resources[listId]) ? resources[listId] : [];
+                list.innerHTML = files.map((file, index) => `
+                    <div class="resource-item">
+                        <span class="resource-icon" aria-hidden="true">${fileIcon(file)}</span>
+                        <a class="resource-link" href="${file.downloadUrl || file.url}" target="_blank" rel="noopener" download="${file.name}" title="Download ${file.name}">${file.name}</a>
+                        <span class="resource-size">${fileSize(file.size)}</span>
+                        <button class="resource-delete" type="button" data-resource-list="${listId}" data-resource-index="${index}" aria-label="Delete ${file.name}">Delete</button>
+                    </div>`).join('');
+                list.querySelectorAll('.resource-delete').forEach(button => button.addEventListener('click', async function () {
+                    if (currentMode !== 'edit') return;
+                    const collection = this.dataset.resourceList;
+                    const index = Number(this.dataset.resourceIndex);
+                    const file = resources[collection] && resources[collection][index];
+                    if (!file || !confirm(`Delete “${file.name}” from this portfolio?`)) return;
+                    this.disabled = true;
+                    try {
+                        if (file.path && window.PortfolioCloud) await window.PortfolioCloud.deleteFile(file.path);
+                        resources[collection].splice(index, 1);
+                        renderResources(collection);
+                        saveToStorage();
+                    } catch (error) {
+                        alert('The file could not be deleted. Please check your Supabase editor login and try again.');
+                        this.disabled = false;
+                    }
+                }));
+            }
+
+            function renderAllResources() {
+                ['workResources1', 'workResources2', 'workResources3'].forEach(renderResources);
+            }
+
+            function setupWorkFiles(inputId, listId, folder) {
+                const input = document.getElementById(inputId);
+                if (!input) return;
+                input.addEventListener('change', async function () {
+                    if (currentMode !== 'edit') { input.value = ''; return; }
+                    const files = Array.from(input.files || []);
+                    input.value = '';
+                    if (!files.length) return;
+                    if (!window.PortfolioCloud) { alert('File storage is still loading. Please try again.'); return; }
+                    modeStatus.textContent = 'Uploading…';
+                    try {
+                        const uploaded = await Promise.all(files.map(file => window.PortfolioCloud.uploadFile(file, folder)));
+                        resources[listId] = (resources[listId] || []).concat(uploaded);
+                        renderResources(listId);
+                        saveToStorage();
+                    } catch (error) {
+                        console.error('Evidence upload failed:', error);
+                        alert(error.message || 'The file could not be uploaded.');
+                    } finally {
+                        if (currentMode === 'edit') modeStatus.textContent = 'Edit';
+                    }
+                });
+            }
+
             function resetStorage() {
                 if (!confirm('Reset all saved edits, images, captions, and experiences?')) return;
                 localStorage.removeItem(STORAGE_KEY);
-                localStorage.removeItem('portfolio-theme');
                 localStorage.removeItem(EXPERIENCES_KEY);
                 location.reload();
             }
@@ -1838,10 +1805,13 @@
             setupUpload('cert2Upload', 'cert2Input', 'cert2Preview');
             for (let i = 1; i <= 6; i++) {
                 setupUpload('certWall' + i, 'certWallInput' + i, 'certWall' + i + 'Preview');
-                setupUpload('workUpload' + i, 'workInput' + i, 'workPreview' + i + '_upload');
                 setupUpload('eventUpload' + i, 'eventInput' + i, 'eventPreview' + i);
             }
             for (let i = 1; i <= 3; i++) setupAcademicUpload('academicImg' + i);
+            setupWorkFiles('workInput1', 'workResources1', 'lesson-plans');
+            setupWorkFiles('workInput2', 'workResources2', 'teaching-resources');
+            setupWorkFiles('workInput3', 'workResources3', 'presentations-and-activities');
+            renderAllResources();
 
             document.querySelectorAll('.add-image-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
@@ -1854,7 +1824,16 @@
             addExperienceBtn.addEventListener('click', addExperience);
 
             viewBtn.addEventListener('click', () => setMode('view'));
-            editBtn.addEventListener('click', () => { if (currentMode !== 'edit' && promptPassword()) setMode('edit'); });
+            editBtn.addEventListener('click', async () => {
+                if (currentMode === 'edit') return;
+                if (!window.PortfolioCloud) { alert('The editor is still loading. Please try again.'); return; }
+                try {
+                    await window.PortfolioCloud.signInEditor();
+                    setMode('edit');
+                } catch (error) {
+                    if (error.message) alert(error.message);
+                }
+            });
             saveBtn.addEventListener('click', saveToStorage);
             resetBtn.addEventListener('click', resetStorage);
 
@@ -1876,8 +1855,8 @@
                 el.addEventListener('input', () => { if (currentMode === 'edit') saveToStorage(); });
             });
 
-            console.log('📚 Portfolio loaded. Edit password is not logged.');
-            window.__portfolio = { snapshot, restore, saveToStorage, resetStorage, setMode, applyTheme, addSlot, addExperience, experiences };
+            console.log('📚 Portfolio loaded.');
+            window.__portfolio = { snapshot, restore, saveToStorage, resetStorage, setMode, addSlot, addExperience, experiences };
         })();
     </script>
     <script src="supabase-storage.js"></script>
