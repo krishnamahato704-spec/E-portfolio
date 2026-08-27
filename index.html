@@ -1244,9 +1244,9 @@
             function refreshSectionControls() {
                 document.querySelectorAll('body > section').forEach(section => {
                     if (!section.id || section.classList.contains('legacy-certificate-layout') || section.classList.contains('legacy-professional-development')) return;
-                    const container = section.querySelector(':scope > .container');
+                    const container = Array.from(section.children).find(child => child.classList.contains('container'));
                     if (!container) return;
-                    let controls = container.querySelector(':scope > .section-controls');
+                    let controls = Array.from(container.children).find(child => child.classList.contains('section-controls'));
                     if (!controls) {
                         controls = document.createElement('div');
                         controls.className = 'section-controls';
