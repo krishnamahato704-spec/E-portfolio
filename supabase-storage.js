@@ -1,18 +1,17 @@
 (function () {
   'use strict';
 
-  // Persistent image/state storage for the portfolio.
-  // Images live in Supabase Storage and the complete portfolio state is stored
-  // in a small JSON document in Storage, so text, captions, experiences and
-  // image URLs are available on every device.
+  // NEW PORTFOLIO DATA SPACE — intentionally starts completely empty.
   const SUPABASE_URL = 'https://oyqevsygintkjrkfbzpx.supabase.co';
   const SUPABASE_KEY = 'sb_publishable_CZOIotDHbTM9m4e8vHZ9Aw_H3-G9mAd';
   const BUCKET = 'portfolio-media';
-  const STATE_KEY = 'krishna_portfolio_v4';
-  const REMOTE_STATE_PATH = 'state/portfolio.json';
+  const STATE_KEY = 'krishna_portfolio_v5';
+  const REMOTE_STATE_PATH = 'state/portfolio-v5.json';
+  const OLD_KEYS = ['krishna_portfolio_v4', 'krishna_portfolio_pending_upload', 'krishna_experiences', 'portfolio-theme'];
   const ORIGINAL_SET = Storage.prototype.setItem;
   const ORIGINAL_GET = Storage.prototype.getItem;
   let syncing = false;
+  let resetDone = false;
 
   const headers = {
     apikey: SUPABASE_KEY,
@@ -39,13 +38,10 @@
     const blob = dataUrlToBlob(dataUrl);
     const ext = (blob.type.split('/')[1] || 'bin').replace(/[^a-z0-9]/gi, '').toLowerCase() || 'bin';
     const safeLabel = String(label || 'image').replace(/[^a-z0-9_-]/gi, '_').slice(0, 60);
-    const path = 'portfolio/' + safeLabel + '_' + Date.now() + '_' + Math.random().toString(36).slice(2, 9) + '.' + ext;
+    const path = 'portfolio-v5/' + safeLabel + '_' + Date.now() + '_' + Math.random().toString(36).slice(2, 9) + '.' + ext;
     const response = await fetch(SUPABASE_URL + '/storage/v1/object/' + BUCKET + '/' + path, {
       method: 'POST',
-      headers: Object.assign({}, headers, {
-        'Content-Type': blob.type || 'application/octet-stream',
-        'x-upsert': 'true'
-      }),
+      headers: Object.assign({}, headers, {'Content-Type': blob.type || 'application/octet-stream', 'x-upsert': 'true'}),
       body: blob
     });
     if (!response.ok) throw new Error('Image upload failed (' + response.status + '): ' + await response.text().catch(() => ''));
@@ -56,20 +52,14 @@
     const blob = new Blob([JSON.stringify(state)], { type: 'application/json' });
     const response = await fetch(SUPABASE_URL + '/storage/v1/object/' + BUCKET + '/' + REMOTE_STATE_PATH, {
       method: 'POST',
-      headers: Object.assign({}, headers, {
-        'Content-Type': 'application/json',
-        'x-upsert': 'true',
-        'cache-control': 'no-cache'
-      }),
+      headers: Object.assign({}, headers, {'Content-Type': 'application/json', 'x-upsert': 'true', 'cache-control': 'no-cache'}),
       body: blob
     });
     if (!response.ok) throw new Error('State upload failed (' + response.status + '): ' + await response.text().catch(() => ''));
   }
 
   async function fetchRemoteState() {
-    const response = await fetch(SUPABASE_URL + '/storage/v1/object/' + BUCKET + '/' + REMOTE_STATE_PATH + '?t=' + Date.now(), {
-      headers: Object.assign({}, headers, { 'Cache-Control': 'no-cache' })
-    });
+    const response = await fetch(SUPABASE_URL + '/storage/v1/object/' + BUCKET + '/' + REMOTE_STATE_PATH + '?t=' + Date.now(), {headers});
     if (response.status === 404) return null;
     if (!response.ok) throw new Error('Remote state fetch failed (' + response.status + ')');
     return await response.json();
@@ -82,7 +72,6 @@
       if (typeof value !== 'string' || !value.startsWith('data:image/')) return Promise.resolve(value);
       return uploadDataUrl(value, label);
     };
-
     if (typeof state.images.portrait === 'string' && state.images.portrait.startsWith('data:image/')) {
       jobs.push(replace(state.images.portrait, 'portrait').then(url => { state.images.portrait = url; }));
     }
@@ -90,9 +79,7 @@
       if (id === 'portrait' || !Array.isArray(state.images[id])) return;
       state.images[id] = state.images[id].slice();
       state.images[id].forEach((src, index) => {
-        if (typeof src === 'string' && src.startsWith('data:image/')) {
-          jobs.push(replace(src, id + '_' + index).then(url => { state.images[id][index] = url; }));
-        }
+        if (typeof src === 'string' && src.startsWith('data:image/')) jobs.push(replace(src, id + '_' + index).then(url => { state.images[id][index] = url; }));
       });
     });
     await Promise.all(jobs);
@@ -117,39 +104,37 @@
     } catch (error) {
       console.error('Portfolio cloud save error:', error);
       if (status && document.body.classList.contains('editing')) status.textContent = 'Saved locally · cloud save failed';
-    } finally {
-      syncing = false;
-    }
+    } finally { syncing = false; }
   }
 
   async function bootSync() {
+    if (resetDone) return;
+    resetDone = true;
+
+    // Remove ALL previous local portfolio history. This deliberately does not
+    // migrate v4 data. The new v5 portfolio starts clean.
+    OLD_KEYS.forEach(key => localStorage.removeItem(key));
+
     const status = document.getElementById('modeStatus');
     try {
       const remote = await fetchRemoteState();
-      const localRaw = ORIGINAL_GET.call(localStorage, STATE_KEY);
-
       if (remote) {
-        // Cloud is authoritative when it exists. This is what makes the same
-        // portfolio appear on a second browser/device.
         saveLocal(remote);
-        if (status) status.textContent = 'Synced online ✓';
+        if (status) status.textContent = 'New portfolio synced ✓';
         setTimeout(() => location.reload(), 50);
-        return;
+      } else if (status) {
+        status.textContent = 'New portfolio · ready';
       }
-
-      // First device: migrate its existing local data into cloud storage.
-      if (localRaw) await pushState(localRaw);
     } catch (error) {
       console.error('Portfolio cloud sync error:', error);
-      if (status) status.textContent = 'Offline · local data preserved';
+      if (status) status.textContent = 'New portfolio · ready';
     }
   }
 
-  // Intercept the portfolio's existing localStorage saves. Whenever an image
-  // or edit is saved, mirror the resulting state to Supabase.
   Storage.prototype.setItem = function (key, value) {
     ORIGINAL_SET.call(this, key, value);
-    if (this !== localStorage || key !== STATE_KEY || syncing) return;
+    if (this !== localStorage || key !== 'krishna_portfolio_v4' || syncing) return;
+    // The old editor still writes v4. Mirror it into the NEW v5 cloud state.
     pushState(value);
   };
 
