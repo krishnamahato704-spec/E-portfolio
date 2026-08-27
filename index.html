@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Krishna Mahato · Academic E‑Portfolio</title>
+    <meta name="description" content="Krishna Mahato's recruitment portfolio for TGT History, Social Science, and PGT History roles, including qualifications, teaching experience, and evidence of practice." />
+    <title>Krishna Mahato · TGT / PGT History Teacher Portfolio</title>
     <style>
         :root {
             --bg: #f6f4f0;
@@ -443,6 +444,25 @@
         }
         .hero h1 em { color: var(--accent2); font-style: normal; }
         .hero .lead { font-size: 1.05rem; color: var(--muted); max-width: 520px; }
+        .hero-cta { display:flex; flex-wrap:wrap; gap:10px; margin-top:18px; align-items:center; }
+        .cta-button { display:inline-flex; align-items:center; justify-content:center; gap:6px; min-height:40px; padding:9px 16px; border-radius:10px; border:1px solid var(--accent); background:var(--accent); color:#fff; font-size:.82rem; font-weight:700; transition:.2s; }
+        .cta-button:hover, .cta-button:focus-visible { background:var(--accent2); border-color:var(--accent2); transform:translateY(-1px); outline:3px solid rgba(184,134,11,.28); outline-offset:2px; }
+        .cta-button.secondary { background:transparent; color:var(--accent); border-color:var(--border); }
+        .cta-button.secondary:hover, .cta-button.secondary:focus-visible { background:var(--card); color:var(--accent2); border-color:var(--accent2); }
+        .cta-button.disabled { background:#e8e4dd; color:var(--muted); border-color:var(--border); cursor:not-allowed; opacity:.9; }
+        footer .cta-button.secondary { color:#fff; border-color:rgba(255,255,255,.35); }
+        footer .cta-button.secondary:hover, footer .cta-button.secondary:focus-visible { color:var(--text); background:#fff; }
+        .recruiter-profile { background:linear-gradient(135deg,#fff,#f0ece5); border-top:4px solid var(--gold); }
+        .profile-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-top:16px; }
+        .profile-item { padding:14px 16px; background:rgba(255,255,255,.72); border:1px solid var(--border); border-radius:12px; min-height:92px; }
+        .profile-item strong { display:block; color:var(--accent); font-size:.74rem; text-transform:uppercase; letter-spacing:.08em; margin-bottom:4px; }
+        .profile-item span { color:var(--text); font-size:.9rem; }
+        .profile-note { color:var(--muted); font-size:.9rem; max-width:820px; }
+        .evidence-sequence { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin:10px 0 16px; color:var(--accent); font-size:.78rem; font-weight:700; letter-spacing:.03em; }
+        .evidence-sequence span { padding:6px 10px; border:1px solid var(--border); border-radius:8px; background:var(--card); }
+        .evidence-sequence b { color:var(--gold); }
+        @media (max-width: 860px) { .profile-grid { grid-template-columns:1fr 1fr; } }
+        @media (max-width: 520px) { .profile-grid { grid-template-columns:1fr; } .hero-cta { justify-content:center; } .cta-button { width:100%; } }
 
         .skill-pill {
             display: inline-block;
@@ -634,18 +654,21 @@
     <nav id="navbar">
         <div class="container">
             <a class="nav-brand" href="#hero">Krishna<span>.</span></a>
-            <button class="nav-toggle" id="navToggle" aria-label="Menu">☰</button>
+            <button class="nav-toggle" id="navToggle" aria-label="Open navigation menu" aria-expanded="false">☰</button>
             <ul class="nav-links" id="navLinks">
                 <li><a href="#hero" class="active">Home</a></li>
-                <li><a href="#academic-journey">Journey</a></li>
-                <li><a href="#why-history">History</a></li>
-                <li><a href="#philosophy">Philosophy</a></li>
-                <li><a href="#history-teaching">Teach History</a></li>
+                <li><a href="#profile">Profile</a></li>
+                <li><a href="#academic-journey">Qualifications</a></li>
+                <li><a href="#experiences">Experience</a></li>
+                <li><a href="#my-work">Teaching Evidence</a></li>
+                <li><a href="#assessment">Assessment</a></li>
+                <li><a href="#differentiation">Inclusive Practice</a></li>
+                <li><a href="#history-teaching">Subject Expertise</a></li>
+                <li><a href="#why-history">Why History</a></li>
+                <li><a href="#skills">Competencies</a></li>
+                <li><a href="#philosophy">Teaching Philosophy</a></li>
                 <li><a href="#thinkers">Thinkers</a></li>
-                <li><a href="#experiences">Experiences</a></li>
-                <li><a href="#my-work">My Work</a></li>
-                <li><a href="#skills">Skills</a></li>
-                <li><a href="#certificates">Certificates</a></li>
+                <li><a href="#certificates">Professional Development</a></li>
                 <li><a href="#reflection">Reflection</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
@@ -670,13 +693,17 @@
             <div>
                 <div class="section-label">B.Ed. · History · Emerging Educator</div>
                 <h1 contenteditable="false" data-editable="hero_title">Krishna<br><em>Mahato</em></h1>
-                <p class="lead" contenteditable="false" data-editable="hero_sub">Studying the past. Understanding the present. Nurturing future learners.</p>
-                <p style="margin-top:8px;font-size:.95rem;color:var(--muted);max-width:480px;" contenteditable="false" data-editable="hero_statement">I believe education is the nurturing of the whole person—and that History, taught well, becomes a discipline of the mind, not merely a record of the past.</p>
+                <p class="lead" contenteditable="false" data-editable="hero_sub">History educator with an academic foundation in History and Economics, teacher education experience, and practical classroom exposure.</p>
+                <p style="margin-top:8px;font-size:.95rem;color:var(--muted);max-width:560px;" contenteditable="false" data-editable="hero_statement">Developing historical thinking through inquiry, discussion, evidence-based learning, and reflective classroom practice in secondary settings.</p>
                 <div style="margin-top:14px;display:flex;flex-wrap:wrap;gap:6px;">
-                    <span class="tag">📚 History</span>
-                    <span class="tag">🧑‍🏫 B.Ed.</span>
-                    <span class="tag">🍎 Teacher</span>
-                    <span class="tag">🎓 M.A. History</span>
+                    <span class="tag">TGT History / Social Science</span>
+                    <span class="tag">PGT History</span>
+                    <span class="tag">B.Ed. · M.A. History</span>
+                </div>
+                <div class="hero-cta">
+                    <a class="cta-button" href="#my-work">View Teaching Evidence <span aria-hidden="true">↓</span></a>
+                    <span class="cta-button disabled" role="status" title="Add a CV PDF in the editor to activate this link">Download CV <small>(PDF not uploaded)</small></span>
+                    <a class="cta-button secondary" href="#contact">Contact Me</a>
                 </div>
             </div>
             <div class="portrait-wrap" style="display:flex;flex-direction:column;align-items:center;">
@@ -686,11 +713,27 @@
         </div>
     </section>
 
+    <!-- ===== RECRUITER PROFILE ===== -->
+    <section id="profile" class="recruiter-profile">
+        <div class="container">
+            <div class="section-label">01 · Recruiter Profile</div>
+            <h2 class="section-title" contenteditable="false" data-editable="profile_title">At a glance</h2>
+            <p class="profile-note" contenteditable="false" data-editable="profile_note">A developing History teacher candidate bringing subject study, teacher education, and practical exposure together. This profile highlights the evidence a school recruitment team may want to review first.</p>
+            <div class="profile-grid">
+                <div class="profile-item"><strong>Target roles</strong><span contenteditable="false" data-editable="profile_roles">TGT History / Social Science<br>PGT History</span></div>
+                <div class="profile-item"><strong>Academic background</strong><span contenteditable="false" data-editable="profile_qualifications">B.A. History &amp; Economics<br>B.Ed. · M.A. History</span></div>
+                <div class="profile-item"><strong>Teaching exposure</strong><span contenteditable="false" data-editable="profile_experience">School observation experience<br>5-week teaching internship</span></div>
+                <div class="profile-item"><strong>Core strengths</strong><span contenteditable="false" data-editable="profile_strengths">Historical thinking · Lesson planning · Assessment · Differentiated support</span></div>
+            </div>
+        </div>
+    </section>
+
     <!-- ===== ACADEMIC JOURNEY ===== -->
     <section id="academic-journey">
         <div class="container">
-            <div class="section-label">01 · Academic Journey</div>
-            <h2 class="section-title" contenteditable="false" data-editable="journey_title">From student to educator</h2>
+            <div class="section-label">02 · Qualifications</div>
+            <h2 class="section-title" contenteditable="false" data-editable="journey_title">Qualifications &amp; academic foundation</h2>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0 2px;"><span class="exp-status completed">Completed</span><span class="exp-status in-progress">In Progress</span><span class="section-desc" style="font-size:.82rem;">Status is shown explicitly for recruitment review.</span></div>
             <div class="divider">📜 🏛️ 🎓</div>
             <div class="grid-2" style="margin-top:12px;">
                 <div class="card">
@@ -698,11 +741,11 @@
                     <p style="font-size:.95rem;margin-top:10px;" contenteditable="false" data-editable="journey_text2">I am now pursuing a B.Ed. at Amity Institute of Education, Amity University, Noida, alongside an M.A. in History. These programmes are helping me connect subject knowledge with classroom practice, and develop a reflective, learner‑centred teaching identity.</p>
                 </div>
                 <div class="timeline">
-                    <div class="timeline-item"><div class="year">2014</div><h3 contenteditable="false" data-editable="t1_title">Class X · Secondary</h3><div class="sub" contenteditable="false" data-editable="t1_sub">Little Angels' School · 87.75%</div></div>
-                    <div class="timeline-item"><div class="year">2017</div><h3 contenteditable="false" data-editable="t2_title">Class XII · Senior Secondary</h3><div class="sub" contenteditable="false" data-editable="t2_sub">CRBVM Senior Secondary School · CBSE · 89%</div></div>
-                    <div class="timeline-item"><div class="year">2018–2021</div><h3 contenteditable="false" data-editable="t3_title">B.A. History &amp; Economics</h3><div class="sub" contenteditable="false" data-editable="t3_sub">Gurukul Kangri Vishwavidyalaya · CGPA 8.80</div></div>
-                    <div class="timeline-item"><div class="year">2025–Present</div><h3 contenteditable="false" data-editable="t4_title">B.Ed. · Amity University</h3><div class="sub" contenteditable="false" data-editable="t4_sub">Amity Institute of Education, Noida</div></div>
-                    <div class="timeline-item"><div class="year">2025–Present</div><h3 contenteditable="false" data-editable="t5_title">M.A. History</h3><div class="sub" contenteditable="false" data-editable="t5_sub">Postgraduate study in History</div></div>
+                    <div class="timeline-item"><div class="year">2014 · Completed</div><h3 contenteditable="false" data-editable="t1_title">Class X · Secondary</h3><div class="sub" contenteditable="false" data-editable="t1_sub">Little Angels' School · 87.75%</div></div>
+                    <div class="timeline-item"><div class="year">2017 · Completed</div><h3 contenteditable="false" data-editable="t2_title">Class XII · Senior Secondary</h3><div class="sub" contenteditable="false" data-editable="t2_sub">CRBVM Senior Secondary School · CBSE · 89%</div></div>
+                    <div class="timeline-item"><div class="year">2018–2021 · Completed</div><h3 contenteditable="false" data-editable="t3_title">B.A. History &amp; Economics</h3><div class="sub" contenteditable="false" data-editable="t3_sub">Gurukul Kangri Vishwavidyalaya · CGPA 8.80</div></div>
+                    <div class="timeline-item"><div class="year">2025–Present · In Progress</div><h3 contenteditable="false" data-editable="t4_title">B.Ed. · Amity University</h3><div class="sub" contenteditable="false" data-editable="t4_sub">Amity Institute of Education, Noida</div></div>
+                    <div class="timeline-item"><div class="year">2025–Present · In Progress</div><h3 contenteditable="false" data-editable="t5_title">M.A. History</h3><div class="sub" contenteditable="false" data-editable="t5_sub">Postgraduate study in History</div></div>
                 </div>
             </div>
         </div>
@@ -711,10 +754,10 @@
     <!-- ===== WHY HISTORY ===== -->
     <section id="why-history" style="background:linear-gradient(135deg,var(--bg),#ece8e0);">
         <div class="container">
-            <div class="section-label">02 · Why History</div>
+            <div class="section-label">03 · Why History</div>
             <h2 class="section-title" contenteditable="false" data-editable="why_title">From memorisation to understanding</h2>
             <div class="card" style="max-width:820px;border-left:4px solid var(--gold);">
-                <p contenteditable="false" data-editable="why_text">History, for me, did not begin as a passion—it began as a strategy. Like many students, I initially approached it as a pathway toward UPSC preparation, a subject to be memorised and reproduced. The turning point came gradually, through the patient guidance of professors who taught me to ask not just <em>what</em> happened, but <em>why</em> it happened—and what it still means. History ceased to be a collection of dates and became a living conversation between the past and the present. Engaging with primary sources—from Kautilya's <em>Arthashastra</em> to accounts of the Partition of India—transformed my understanding of societal change. This shift from rote learning to reflective inquiry is what drew me toward teaching: I want my students to experience the same awakening—to understand that studying the past is, above all, a way of understanding ourselves.</p>
+                <p contenteditable="false" data-editable="why_text">My study of History moved from memorising events to asking why they happened, how we know, and what they mean for people in different contexts. Working with sources such as Kautilya's <em>Arthashastra</em> and accounts of Partition strengthened my interest in teaching History as evidence-based inquiry that connects past and present.</p>
                 <div class="academic-img" id="academicImg1" style="margin-top:14px;aspect-ratio:16/5;">
                     <svg viewBox="0 0 200 70" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="70" fill="#e8e4dd"/><text x="100" y="44" text-anchor="middle" font-family="Georgia,serif" font-size="32" fill="#b8860b" opacity="0.35">📜 ✍️ 📖</text></svg>
                     <span class="upload-label">📸 Replace image</span>
@@ -729,28 +772,28 @@
     <!-- ===== TEACHING PHILOSOPHY ===== -->
     <section id="philosophy">
         <div class="container">
-            <div class="section-label">03 · Teaching Philosophy</div>
+            <div class="section-label">04 · Teaching Philosophy</div>
             <h2 class="section-title" contenteditable="false" data-editable="phil_title">Nurturing the whole person</h2>
             <div class="grid-3" style="margin-top:14px;">
                 <div class="card" style="border-bottom:3px solid var(--accent);">
                     <div class="academic-icon">🌟</div>
                     <div class="card-label">Holistic Development</div>
-                    <p contenteditable="false" data-editable="phil1">Education develops the whole person—character, personality, intellect, and values. A learner is not merely a student of a subject but a growing human being shaped by every interaction in the classroom.</p>
+                    <p contenteditable="false" data-editable="phil1">I plan for the whole learner: subject knowledge, confidence, curiosity, and respectful participation. Classroom interactions should help learners grow as people as well as historians.</p>
                 </div>
                 <div class="card" style="border-bottom:3px solid var(--gold);">
                     <div class="academic-icon">🔍</div>
                     <div class="card-label">Seeing Potential</div>
-                    <p contenteditable="false" data-editable="phil2">Every learner carries unique strengths. A teacher's role is to look beyond surface performance and recognise the best in each student—nurturing confidence, curiosity, and the capacity for independent thought.</p>
+                    <p contenteditable="false" data-editable="phil2">I look for strengths as well as gaps, then use clear feedback and encouragement to help learners take the next step toward independent thought.</p>
                 </div>
                 <div class="card" style="border-bottom:3px solid var(--accent2);">
                     <div class="academic-icon">🛤️</div>
                     <div class="card-label">Differentiation</div>
-                    <p contenteditable="false" data-editable="phil3">Every learner brings a unique set of strengths and ways of engaging with knowledge. Differentiation does not mean lowering expectations—it means offering different pathways to the same depth of understanding.</p>
+                    <p contenteditable="false" data-editable="phil3">Differentiation means offering different routes—scaffolded prompts, visual sources, discussion, or deeper comparison—toward the same meaningful understanding.</p>
                 </div>
             </div>
             <div class="feature-block" style="margin-top:20px;">
-                <p style="font-size:1rem;max-width:760px;" contenteditable="false" data-editable="enc_text">Reinforcement should motivate, not discourage. Every learner carries within them the seed of potential—and it is the educator's responsibility to nurture that seed with care, patience, and genuine encouragement. Before we point to what is lacking, we must first acknowledge what is growing.</p>
-                <p style="margin-top:12px;color:#d4dce0;font-style:italic;" contenteditable="false" data-editable="enc_quote">"A learner who feels seen and supported will reach further than one who feels judged. Teaching is, above all, an act of belief in another person's capacity to grow."</p>
+                <p style="font-size:1rem;max-width:760px;" contenteditable="false" data-editable="enc_text">A practical cycle guides my teaching: notice what learners can already do, make the next idea visible, invite them to practise, and use evidence from their responses to plan the next step.</p>
+                <p style="margin-top:12px;color:#d4dce0;font-style:italic;" contenteditable="false" data-editable="enc_quote">Encouragement should preserve confidence while feedback stays specific enough to improve the work.</p>
                 <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;">
                     <span class="tag" style="background:rgba(255,255,255,.10);color:#fff;">🌱 Encourage improvement</span>
                     <span class="tag" style="background:rgba(255,255,255,.10);color:#fff;">👏 Acknowledge effort</span>
@@ -764,9 +807,9 @@
     <!-- ===== MY HISTORY TEACHING APPROACH ===== -->
     <section id="history-teaching" style="background:linear-gradient(135deg,var(--bg),#ece8e0);">
         <div class="container">
-            <div class="section-label">04 · My History Teaching Approach</div>
+            <div class="section-label">05 · Subject Expertise</div>
             <h2 class="section-title" contenteditable="false" data-editable="ht_title">Teaching History as a discipline of the mind</h2>
-            <div class="grid-2" style="margin-top:14px;">
+            <div class="grid-3" style="margin-top:14px;">
                 <div class="card">
                     <h3 contenteditable="false" data-editable="ht1_title">Beyond Dates &amp; Events</h3>
                     <p contenteditable="false" data-editable="ht1_text">True historical learning asks students to question—<em>Why did this happen?</em> To compare—<em>How was this different elsewhere?</em> To interpret—<em>What did this mean to those who lived it?</em> I want my students to connect the past with the present, to reflect on what they have understood, and to reconsider their assumptions.</p>
@@ -808,13 +851,21 @@
                     </div>
                 </div>
             </div>
+            <div class="card" style="margin-top:16px;border-left:4px solid var(--accent2);">
+                <div class="card-label">History thinking toolkit</div>
+                <h3 contenteditable="false" data-editable="history_skills_title">The skills behind the subject</h3>
+                <p class="section-desc" style="margin-top:4px;" contenteditable="false" data-editable="history_skills_desc">My History and Economics study supports a focus on how learners reason with the past, not only how many dates they can recall.</p>
+                <div class="flex-wrap" style="margin-top:10px;">
+                    <span class="skill-pill">Chronology</span><span class="skill-pill">Cause &amp; consequence</span><span class="skill-pill">Change &amp; continuity</span><span class="skill-pill">Comparison</span><span class="skill-pill">Historical interpretation</span><span class="skill-pill">Source analysis</span><span class="skill-pill">Evidence-based reasoning</span><span class="skill-pill">Argumentation</span>
+                </div>
+            </div>
         </div>
     </section>
 
     <!-- ===== THINKERS ===== -->
     <section id="thinkers">
         <div class="container">
-            <div class="section-label">05 · Thinkers Who Influence Me</div>
+            <div class="section-label">06 · Thinkers Who Influence Me</div>
             <h2 class="section-title" contenteditable="false" data-editable="think_title">Guided by great minds</h2>
             <div class="grid-2" style="margin-top:14px;">
                 <div class="card" style="border-top:3px solid var(--accent2);">
@@ -822,7 +873,7 @@
                         <span style="font-size:2.5rem;">🕊️</span>
                         <div><h3 contenteditable="false" data-editable="tagore_title" style="margin:0;">Rabindranath Tagore</h3></div>
                     </div>
-                    <p contenteditable="false" data-editable="tagore_text">Education should take place in open, natural spaces that nurture the whole person. Tagore believed in freedom, creativity, and learning beyond rigid classroom walls—ideas that inspire my holistic approach.</p>
+                    <p contenteditable="false" data-editable="tagore_text"><strong>Influence:</strong> holistic education, curiosity, freedom, and creative learning. I use this lens to keep History connected to the whole learner.</p>
                     <div class="academic-img" id="academicImg2" style="margin-top:10px;aspect-ratio:16/5;">
                         <svg viewBox="0 0 200 70" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="70" fill="#e8e4dd"/><text x="100" y="44" text-anchor="middle" font-family="Georgia,serif" font-size="28" fill="#8b1a2b" opacity="0.3">🕊️ 🌿</text></svg>
                         <span class="upload-label">📸 Replace image</span>
@@ -836,7 +887,7 @@
                         <span style="font-size:2.5rem;">🧠</span>
                         <div><h3 contenteditable="false" data-editable="vygotsky_title" style="margin:0;">Lev Vygotsky</h3></div>
                     </div>
-                    <p contenteditable="false" data-editable="vygotsky_text">Learning is a social process shaped by interaction and guided support. Vygotsky's concept of the Zone of Proximal Development reminds me that a teacher's role is to scaffold growth through meaningful dialogue.</p>
+                    <p contenteditable="false" data-editable="vygotsky_text"><strong>Influence:</strong> social learning and scaffolding. Dialogue, guided source work, and peer interaction can help learners move toward independent historical reasoning.</p>
                     <div class="academic-img" id="academicImg3" style="margin-top:10px;aspect-ratio:16/5;">
                         <svg viewBox="0 0 200 70" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="70" fill="#e8e4dd"/><text x="100" y="44" text-anchor="middle" font-family="Georgia,serif" font-size="28" fill="#1f3a5f" opacity="0.3">🧠 💬</text></svg>
                         <span class="upload-label">📸 Replace image</span>
@@ -847,7 +898,7 @@
                 </div>
             </div>
             <div class="card" style="margin-top:16px;background:var(--accent);color:#fff;border-color:var(--accent);">
-                <p style="color:#d4dce0;font-size:1rem;" contenteditable="false" data-editable="synthesis"><strong>✨ My Synthesis:</strong> Holistic growth + guided interaction + freedom + reflection = meaningful education.</p>
+                <p style="color:#d4dce0;font-size:1rem;" contenteditable="false" data-editable="synthesis"><strong>My classroom translation:</strong> make the question visible, scaffold the evidence, let learners discuss interpretations, and reflect on what changed in their thinking.</p>
             </div>
         </div>
     </section>
@@ -855,7 +906,7 @@
     <!-- ===== EXPERIENCES / INTERNSHIPS (UPDATED) ===== -->
     <section id="experiences" style="background:linear-gradient(135deg,var(--bg),#ece8e0);">
         <div class="container">
-            <div class="section-label">06 · Experiences / Internships</div>
+            <div class="section-label">07 · Experience &amp; Internships</div>
             <h2 class="section-title" contenteditable="false" data-editable="exp_title">Teaching &amp; Community Internships</h2>
 
             <div style="margin-top:16px;">
@@ -868,9 +919,9 @@
             <div class="divider" style="margin:24px 0 16px;">📸 Classroom Evidence</div>
 
             <div class="grid-3" style="margin-top:14px;">
-                <div class="card"><div class="academic-icon">👀</div><h3 contenteditable="false" data-editable="tp1_title">Classroom Observation</h3><p contenteditable="false" data-editable="tp1_text">Observed diverse teaching methods, questioning techniques, and classroom management across multiple History and Social Science lessons.</p></div>
-                <div class="card"><div class="academic-icon">🏫</div><h3 contenteditable="false" data-editable="tp2_title">School Environment</h3><p contenteditable="false" data-editable="tp2_text">Explored school culture, infrastructure, co‑curricular integration, and the broader learning ecosystem that shapes student development.</p></div>
-                <div class="card"><div class="academic-icon">🪞</div><h3 contenteditable="false" data-editable="tp3_title">Reflective Practice</h3><p contenteditable="false" data-editable="tp3_text">Each day deepened my understanding of what it means to be an educator—connecting theory with real classroom dynamics.</p></div>
+                <div class="card"><div class="card-label">What I observed</div><h3 contenteditable="false" data-editable="tp1_title">Classroom practice</h3><p contenteditable="false" data-editable="tp1_text">Teaching methods, questioning techniques, student engagement, and classroom management across History and Social Science lessons.</p></div>
+                <div class="card"><div class="card-label">What I learned</div><h3 contenteditable="false" data-editable="tp2_title">School environment</h3><p contenteditable="false" data-editable="tp2_text">School culture, infrastructure, co-curricular integration, and the wider learning ecosystem shape how teaching is experienced.</p></div>
+                <div class="card"><div class="card-label">How it informs me</div><h3 contenteditable="false" data-editable="tp3_title">Reflective practice</h3><p contenteditable="false" data-editable="tp3_text">I connect teacher-education theory with observed classroom dynamics and use reflection to identify practical next steps.</p></div>
             </div>
             <div class="upload-zone" id="exposureUpload" style="margin-top:16px;text-align:center;">
                 <div id="exposurePreview" style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;"></div>
@@ -885,9 +936,10 @@
     <!-- ===== MY WORK / TEACHING EVIDENCE ===== -->
     <section id="my-work">
         <div class="container">
-            <div class="section-label">07 · My Work / Teaching Evidence</div>
+            <div class="section-label">08 · Teaching Evidence</div>
             <h2 class="section-title" contenteditable="false" data-editable="work_title">Evidence from the classroom</h2>
-            <p style="color:var(--muted);margin-bottom:14px;" contenteditable="false" data-editable="work_desc">Lesson plans, worksheets, timelines, teaching materials, classroom activities, and other B.Ed. work.</p>
+            <p style="color:var(--muted);margin-bottom:14px;" contenteditable="false" data-editable="work_desc">Use the evidence cards to show the complete teaching cycle: lesson plans, teaching resources, assessment tasks, and the reflections that connect them.</p>
+            <div class="evidence-sequence" aria-label="Teaching cycle"><span>Plan</span><b>→</b><span>Teach</span><b>→</b><span>Assess</span><b>→</b><span>Reflect &amp; improve</span></div>
             <div class="grid-3" id="workGrid">
                 <div class="evidence-card">
                     <div class="evidence-preview" id="workPreview1"><span>📝</span></div>
@@ -898,8 +950,8 @@
                         <div class="resource-list" id="workResources1" aria-live="polite"></div>
                         <label class="file-upload-zone" for="workInput1">📎 Add lesson-plan files<br><small>PDF, Word, PowerPoint, images and documents</small></label>
                         <input type="file" id="workInput1" multiple accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.csv,.txt,image/*" hidden>
-                        </div>
                     </div>
+                </div>
                 <div class="evidence-card">
                     <div class="evidence-preview" id="workPreview2"><span>🖼️</span></div>
                     <div class="evidence-body">
@@ -911,6 +963,46 @@
                         <input type="file" id="workInput2" multiple accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.csv,.txt,image/*" hidden>
                         </div>
                     </div>
+                <div class="evidence-card">
+                    <div class="evidence-preview" id="workPreview3"><span>✓</span></div>
+                    <div class="evidence-body">
+                        <h4 contenteditable="false" data-editable="work3_title">Assessment Evidence</h4>
+                        <div class="meta" contenteditable="false" data-editable="work3_meta">Source questions · Worksheets · Exit tickets</div>
+                        <p contenteditable="false" data-editable="work3_text">Add formative checks, comprehension tasks, source-based questions, assessment prompts, or feedback reflections.</p>
+                        <div class="resource-list" id="workResources3" aria-live="polite"></div>
+                        <label class="file-upload-zone" for="workInput3">📎 Add assessment files<br><small>PDF, Word, PowerPoint, images and documents</small></label>
+                        <input type="file" id="workInput3" multiple accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.csv,.txt,image/*" hidden>
+                    </div>
+                </div>
+                </div>
+        </div>
+    </section>
+
+    <!-- ===== ASSESSMENT ===== -->
+    <section id="assessment" style="background:linear-gradient(135deg,var(--bg),#ece8e0);">
+        <div class="container">
+            <div class="section-label">09 · Assessment Practice</div>
+            <h2 class="section-title" contenteditable="false" data-editable="assessment_title">Assessment that improves instruction</h2>
+            <p class="section-desc" contenteditable="false" data-editable="assessment_desc">Assessment is a way to understand learning and adjust the next teaching move—not only a way to assign marks. Add your real assessment examples in Teaching Evidence when available.</p>
+            <div class="grid-3" style="margin-top:16px;">
+                <div class="card" style="border-top:3px solid var(--accent);"><div class="card-label">During learning</div><h3 contenteditable="false" data-editable="assessment1_title">Formative checks</h3><p contenteditable="false" data-editable="assessment1_text">Use questioning, short responses, observation, and exit tickets to identify what learners understand before moving on.</p></div>
+                <div class="card" style="border-top:3px solid var(--gold);"><div class="card-label">Historical evidence</div><h3 contenteditable="false" data-editable="assessment2_title">Source &amp; comprehension tasks</h3><p contenteditable="false" data-editable="assessment2_text">Ask learners to interpret a source, explain cause and consequence, compare perspectives, and support an answer with evidence.</p></div>
+                <div class="card" style="border-top:3px solid var(--accent2);"><div class="card-label">After the task</div><h3 contenteditable="false" data-editable="assessment3_title">Feedback and reflection</h3><p contenteditable="false" data-editable="assessment3_text">Use responses to decide what needs re-teaching, extension, or a different explanation in the next lesson.</p></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== DIFFERENTIATION ===== -->
+    <section id="differentiation">
+        <div class="container">
+            <div class="section-label">10 · Inclusive Practice</div>
+            <h2 class="section-title" contenteditable="false" data-editable="differentiation_title">Different pathways to the same understanding</h2>
+            <p class="section-desc" contenteditable="false" data-editable="differentiation_desc">My portfolio currently demonstrates the principle of differentiation; add a specific learner task or adapted resource when you are ready to document one.</p>
+            <div class="card" style="margin-top:16px;border-left:4px solid var(--gold);">
+                <div class="grid-3">
+                    <div><div class="card-label">Scaffold</div><p contenteditable="false" data-editable="diff1">Break a complex historical question into prompts, vocabulary, models, and guided source reading.</p></div>
+                    <div><div class="card-label">Offer choice</div><p contenteditable="false" data-editable="diff2">Use written, visual, spoken, and collaborative pathways so learners can show the same depth of understanding.</p></div>
+                    <div><div class="card-label">Extend</div><p contenteditable="false" data-editable="diff3">Invite confident learners to compare interpretations, evaluate evidence, or pursue a deeper line of inquiry.</p></div>
                 </div>
             </div>
         </div>
@@ -919,7 +1011,7 @@
     <!-- ===== SKILLS ===== -->
     <section id="skills" class="skills-section">
         <div class="container">
-            <div class="section-label">08 · Skills</div>
+            <div class="section-label">11 · Competencies</div>
             <h2 class="section-title" contenteditable="false" data-editable="pd_title">Skills for TGT History &amp; Social Science</h2>
             <div class="grid-2" style="margin-top:14px;">
                 <div class="card" style="border-top:3px solid var(--accent);">
@@ -936,24 +1028,31 @@
                         <span class="skill-pill">Canva</span><span class="skill-pill">MS Office</span><span class="skill-pill">Online Classroom</span><span class="skill-pill">Communication</span><span class="skill-pill">Leadership</span><span class="skill-pill">Mentoring</span>
                     </div>
                 </div>
+                <div class="card" style="border-top:3px solid var(--accent2);">
+                    <div class="academic-icon">🔎</div>
+                    <h3 contenteditable="false" data-editable="skills_history_title">History classroom competencies</h3>
+                    <div class="flex-wrap" style="margin-top:6px;">
+                        <span class="skill-pill">Inquiry-based learning</span><span class="skill-pill">Source analysis</span><span class="skill-pill">Question design</span><span class="skill-pill">Discussion</span><span class="skill-pill">Student engagement</span><span class="skill-pill">Formative assessment</span><span class="skill-pill">Reflective practice</span>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- ===== CERTIFICATES ===== -->
-    <section id="legacy-certificate-layout" class="legacy-certificate-layout" style="background:linear-gradient(135deg,var(--bg),#ece8e0);">
+    <template id="legacy-certificate-layout" class="legacy-certificate-layout">
         <div class="container">
-            <div class="section-label">09 · Certificates</div>
+            <div class="section-label">Legacy migration content</div>
             <h2 class="section-title" contenteditable="false" data-editable="certwall_title">Certificates &amp; Professional Credentials</h2>
             <p style="color:var(--muted);margin-bottom:14px;" contenteditable="false" data-editable="certwall_desc">Upload certificates, workshop completions, seminar participation, and other professional development credentials.</p>
             <div class="grid-2" style="margin-top:14px;">
                 <div class="card" style="border-left:3px solid var(--accent);">
                     <div class="card-label">🤖 AI in Education</div><h3 contenteditable="false" data-editable="cert1_title">Leveraging AI for Transforming School Education</h3><p contenteditable="false" data-editable="cert1_text">Add a short note about this credential and what it contributed to your teaching practice.</p>
-                    <div class="cert-upload" id="cert1Upload" style="margin-top:10px;"><div id="cert1Preview"></div><span class="upload-label">📄 Upload certificate</span><span class="upload-sub">Click to add (Edit mode)</span><input type="file" accept="image/*" style="display:none;" id="cert1Input"><div class="img-caption" contenteditable="false" data-caption="cert1Upload">Add a caption for this certificate.</div></div>
+                    <div class="cert-upload" id="legacyCert1Upload" style="margin-top:10px;"><div id="legacyCert1Preview"></div><span class="upload-label">📄 Upload certificate</span><span class="upload-sub">Click to add (Edit mode)</span><input type="file" accept="image/*" style="display:none;" id="legacyCert1Input"><div class="img-caption" contenteditable="false" data-caption="legacyCert1Upload">Add a caption for this certificate.</div></div>
                 </div>
                 <div class="card" style="border-left:3px solid var(--gold);">
                     <div class="card-label">💡 Life Skills Teaching</div><h3 contenteditable="false" data-editable="cert2_title">Life Skills / Holistic Teaching</h3><p contenteditable="false" data-editable="cert2_text">Add a short note about this credential and how it supports your classroom work.</p>
-                    <div class="cert-upload" id="cert2Upload" style="margin-top:10px;"><div id="cert2Preview"></div><span class="upload-label">📄 Upload certificate</span><span class="upload-sub">Click to add (Edit mode)</span><input type="file" accept="image/*" style="display:none;" id="cert2Input"><div class="img-caption" contenteditable="false" data-caption="cert2Upload">Add a caption for this certificate.</div></div>
+                    <div class="cert-upload" id="legacyCert2Upload" style="margin-top:10px;"><div id="legacyCert2Preview"></div><span class="upload-label">📄 Upload certificate</span><span class="upload-sub">Click to add (Edit mode)</span><input type="file" accept="image/*" style="display:none;" id="legacyCert2Input"><div class="img-caption" contenteditable="false" data-caption="legacyCert2Upload">Add a caption for this certificate.</div></div>
                 </div>
             </div>
             <div class="divider" style="margin-top:28px;">Certificate gallery</div>
@@ -1012,12 +1111,12 @@
                 </div>
             </div>
         </div>
-    </section>
+    </template>
 
-    <!-- ===== PROFESSIONAL DEVELOPMENT ===== -->
-    <section id="legacy-professional-development" class="legacy-professional-development">
+    <!-- ===== PROFESSIONAL DEVELOPMENT (legacy template retained for saved-state migration) ===== -->
+    <template id="legacy-professional-development" class="legacy-professional-development">
         <div class="container">
-            <div class="section-label">09 · Professional Development</div>
+            <div class="section-label">Legacy migration content</div>
             <h2 class="section-title" contenteditable="false" data-editable="pd_title">Skills &amp; Certifications</h2>
             <div class="grid-2" style="margin-top:14px;">
                 <div class="card" style="border-top:3px solid var(--accent);">
@@ -1049,36 +1148,36 @@
                     <div class="card-label">🤖 AI in Education</div>
                     <h3 contenteditable="false" data-editable="cert1_title">Leveraging AI for Transforming School Education</h3>
                     <p contenteditable="false" data-editable="cert1_text">Explored how AI tools can enhance lesson design, personalise learning, and support assessment. Gained practical insight into responsible and reflective use of technology in the classroom.</p>
-                    <div class="cert-upload" id="cert1Upload" style="margin-top:10px;">
-                        <div id="cert1Preview"></div>
+                    <div class="cert-upload" id="legacyCert1UploadDetail" style="margin-top:10px;">
+                        <div id="legacyCert1PreviewDetail"></div>
                         <span class="upload-label">📄 Upload certificate</span>
                         <span class="upload-sub">Click to add (Edit mode)</span>
-                        <input type="file" accept="image/*" style="display:none;" id="cert1Input">
-                        <div class="img-caption" contenteditable="false" data-caption="cert1Upload">Add a caption (e.g., "Certificate from NCERT / DIKSHA")</div>
+                        <input type="file" accept="image/*" style="display:none;" id="legacyCert1InputDetail">
+                        <div class="img-caption" contenteditable="false" data-caption="legacyCert1UploadDetail">Add a caption (e.g., "Certificate from NCERT / DIKSHA")</div>
                     </div>
                 </div>
                 <div class="card" style="border-left:3px solid var(--gold);">
                     <div class="card-label">💡 Life Skills Teaching</div>
                     <h3 contenteditable="false" data-editable="cert2_title">Life Skills / Holistic Teaching</h3>
                     <p contenteditable="false" data-editable="cert2_text">Deepened understanding of education beyond academics: nurturing empathy, resilience, communication, and self‑awareness in learners. Reinforced my belief that a teacher shapes the whole person.</p>
-                    <div class="cert-upload" id="cert2Upload" style="margin-top:10px;">
-                        <div id="cert2Preview"></div>
+                    <div class="cert-upload" id="legacyCert2UploadDetail" style="margin-top:10px;">
+                        <div id="legacyCert2PreviewDetail"></div>
                         <span class="upload-label">📄 Upload certificate</span>
                         <span class="upload-sub">Click to add (Edit mode)</span>
-                        <input type="file" accept="image/*" style="display:none;" id="cert2Input">
-                        <div class="img-caption" contenteditable="false" data-caption="cert2Upload">Add a caption (e.g., "Certificate from Institute of Teacher's Education")</div>
+                        <input type="file" accept="image/*" style="display:none;" id="legacyCert2InputDetail">
+                        <div class="img-caption" contenteditable="false" data-caption="legacyCert2UploadDetail">Add a caption (e.g., "Certificate from Institute of Teacher's Education")</div>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
+    </template>
 
     <!-- ===== CERTIFICATE WALL ===== -->
     <section id="certificates" style="background:linear-gradient(135deg,var(--bg),#ece8e0);">
         <div class="container">
-            <div class="section-label">09 · Certificates</div>
+            <div class="section-label">12 · Certificates</div>
             <h2 class="section-title" contenteditable="false" data-editable="certwall_title">Certificates &amp; Professional Credentials</h2>
-            <p style="color:var(--muted);margin-bottom:14px;" contenteditable="false" data-editable="certwall_desc">Upload scans or photos of your academic certificates, workshop completions, seminar participations, and professional development credentials.</p>
+            <p style="color:var(--muted);margin-bottom:14px;" contenteditable="false" data-editable="certwall_desc">Keep only meaningful credentials here. Use each caption for the certificate title, issuing organisation, date, and the teaching practice it supported; leave any unknown field blank rather than guessing.</p>
             <div class="grid-3" id="certWallGrid">
                 <div class="cert-upload" id="certWall1">
                     <div id="certWall1Preview"></div>
@@ -1139,7 +1238,7 @@
     <!-- ===== REFLECTION & GROWTH ===== -->
     <section id="reflection">
         <div class="container">
-            <div class="section-label">11 · Reflection &amp; Growth</div>
+            <div class="section-label">13 · Reflection &amp; Growth</div>
             <h2 class="section-title" contenteditable="false" data-editable="refl_title">Learning through honest reflection</h2>
             <div class="grid-2" style="margin-top:14px;">
                 <div class="card" style="border-left:3px solid var(--accent);">
@@ -1179,6 +1278,10 @@
                     <h2 style="font-family:var(--serif);font-size:clamp(1.6rem,3vw,2.4rem);margin:4px 0 8px;color:#fff;" contenteditable="false" data-editable="footer_title">Krishna Mahato</h2>
                     <p class="muted" contenteditable="false" data-editable="footer_text">B.Ed. · History · Emerging Educator</p>
                     <p style="margin-top:8px;"><a href="mailto:krishnamahato704@gmail.com" contenteditable="false" data-editable="footer_email">krishnamahato704@gmail.com</a></p>
+                    <div style="margin-top:14px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;">
+                        <a class="cta-button secondary" href="mailto:krishnamahato704@gmail.com">Contact Me</a>
+                        <span class="cta-button disabled" title="Add a CV PDF in the editor to activate this link">CV PDF not uploaded</span>
+                    </div>
                 </div>
                 <div style="text-align:right;">
                     <p class="muted small" style="font-size:.8rem;" contenteditable="false" data-editable="footer_lang">English · Hindi · Nepali · Maithili</p>
@@ -1212,7 +1315,7 @@
             let currentMode = 'view';
             let zoneCounter = 0;
             let experiences = [];
-            let resources = { workResources1: [], workResources2: [] };
+            let resources = { workResources1: [], workResources2: [], workResources3: [] };
             let deletedSections = [];
 
             function editableElements() {
@@ -1331,6 +1434,16 @@
                 section.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
 
+            function orderSectionsForRecruiters() {
+                const order = ['hero', 'profile', 'academic-journey', 'experiences', 'my-work', 'assessment', 'differentiation', 'history-teaching', 'why-history', 'philosophy', 'thinkers', 'skills', 'certificates', 'reflection'];
+                const footer = document.querySelector('footer');
+                if (!footer) return;
+                order.forEach(id => {
+                    const section = document.getElementById(id);
+                    if (section) footer.before(section);
+                });
+            }
+
             // ---- DEFAULT EXPERIENCES (UPDATED) ----
             function getDefaultExperiences() {
                 return [
@@ -1340,7 +1453,7 @@
                         type: 'Observation',
                         duration: 'May 2026 (1 Week)',
                         status: 'Completed',
-                        description: 'Observed diverse teaching methods, student engagement strategies, questioning techniques, and classroom management across multiple History and Social Science lessons. Explored school culture, infrastructure, and co‑curricular integration.'
+                        description: '• Classroom observation across History and Social Science lessons<br>• Noted questioning, student engagement, and classroom-management strategies<br>• Explored school culture, infrastructure, and co-curricular integration'
                     },
                     {
                         id: 'exp_2',
@@ -1348,7 +1461,7 @@
                         type: 'Internship',
                         duration: '1 June – 6 July 2026',
                         status: 'Completed',
-                        description: 'Taught KG students (Nursery, LKG, UKG) foundational literacy and numeracy through competency‑based, activity‑based methods. Also conducted adult literacy sessions (ULLAS programme) for five learners. Gained practical teaching skills, classroom management, and community engagement experience.'
+                        description: '• Taught Nursery, LKG, and UKG learners foundational literacy and numeracy<br>• Used competency-based and activity-based methods<br>• Conducted ULLAS adult-literacy sessions for five learners<br>• Developed classroom-management and community-engagement experience'
                     }
                 ];
             }
@@ -1396,6 +1509,7 @@
                                 <span class="exp-type" contenteditable="false" data-exp-field="type">${exp.type}</span>
                                 <span contenteditable="false" data-exp-field="duration">${exp.duration}</span>
                             </div>
+                            <div class="card-label" style="margin-top:8px;">Experience evidence</div>
                             <div class="exp-desc" contenteditable="false" data-exp-field="description">${exp.description}</div>
                             <button class="exp-remove-btn" data-id="${exp.id}">✕ Remove</button>
                         </div>
@@ -1457,7 +1571,11 @@
             }
 
             // ---- nav toggle ----
-            navToggle.addEventListener('click', () => { navLinks.classList.toggle('open'); });
+            navToggle.addEventListener('click', () => {
+                const open = navLinks.classList.toggle('open');
+                navToggle.setAttribute('aria-expanded', String(open));
+                navToggle.setAttribute('aria-label', open ? 'Close navigation menu' : 'Open navigation menu');
+            });
             document.querySelectorAll('.nav-links a').forEach(link => {
                 link.addEventListener('click', () => { navLinks.classList.remove('open'); });
             });
@@ -1612,7 +1730,7 @@
                         if (preview) {
                             preview.innerHTML = srcs.map(s => {
                                 return `<div style="position:relative;display:inline-block;margin:2px;">
-                                    <img src="${s}" style="width:100%;height:auto;border-radius:8px;">
+                                    <img src="${s}" alt="Uploaded portfolio evidence" style="width:100%;height:auto;border-radius:8px;">
                                     <button class="img-remove-btn" data-src="${s}">✕</button>
                                 </div>`;
                             }).join('');
@@ -1635,6 +1753,7 @@
                             if (svg) svg.style.display = 'none';
                             const img = document.createElement('img');
                             img.src = srcs[0];
+                            img.alt = 'Uploaded portfolio evidence';
                             img.style.width = '100%';
                             img.style.height = 'auto';
                             img.style.borderRadius = '8px';
@@ -1691,7 +1810,7 @@
                 }
                 resources = data.resources && typeof data.resources === 'object'
                     ? data.resources
-                    : { workResources1: [], workResources2: [] };
+                    : { workResources1: [], workResources2: [], workResources3: [] };
                 renderAllResources();
                 refreshSectionControls();
                 applyDeletedSections();
@@ -1722,6 +1841,17 @@
                 return bytes < 1024 * 1024 ? Math.max(1, Math.round(bytes / 1024)) + ' KB' : (bytes / (1024 * 1024)).toFixed(1) + ' MB';
             }
 
+            function fileTypeLabel(file) {
+                const name = (file.name || '').toLowerCase();
+                const type = (file.type || '').toLowerCase();
+                if (type.includes('pdf') || name.endsWith('.pdf')) return 'PDF';
+                if (type.includes('word') || /\.docx?$/.test(name)) return 'Word';
+                if (type.includes('presentation') || /\.pptx?$/.test(name)) return 'Slides';
+                if (type.includes('sheet') || /\.(xlsx?|csv)$/.test(name)) return 'Sheet';
+                if (type.startsWith('image/') || /\.(png|jpe?g|gif|webp|svg)$/.test(name)) return 'Image';
+                return 'Document';
+            }
+
             function renderResources(listId) {
                 const list = document.getElementById(listId);
                 if (!list) return;
@@ -1730,6 +1860,7 @@
                     <div class="resource-item">
                         <span class="resource-icon" aria-hidden="true">${fileIcon(file)}</span>
                         <a class="resource-link" href="${file.downloadUrl || file.url}" target="_blank" rel="noopener" download="${file.name}" title="Download ${file.name}">${file.name}</a>
+                        <span class="resource-size">${fileTypeLabel(file)}</span>
                         <span class="resource-size">${fileSize(file.size)}</span>
                         <button class="resource-delete" type="button" data-resource-list="${listId}" data-resource-index="${index}" aria-label="Delete ${file.name}">Delete</button>
                     </div>`).join('');
@@ -1753,7 +1884,7 @@
             }
 
             function renderAllResources() {
-                ['workResources1', 'workResources2'].forEach(renderResources);
+                ['workResources1', 'workResources2', 'workResources3'].forEach(renderResources);
             }
 
             function setupWorkFiles(inputId, listId, folder) {
@@ -1810,7 +1941,7 @@
                         const allSrcs = [...existingSrcs, ...srcs];
                         preview.innerHTML = allSrcs.map(s => {
                             return `<div style="position:relative;display:inline-block;margin:2px;">
-                                <img src="${s}" style="width:100%;height:auto;border-radius:8px;">
+                                <img src="${s}" alt="Uploaded portfolio evidence" style="width:100%;height:auto;border-radius:8px;">
                                 <button class="img-remove-btn" data-src="${s}">✕</button>
                             </div>`;
                         }).join('');
@@ -1859,6 +1990,7 @@
                         if (svg) svg.style.display = 'none';
                         const img = document.createElement('img');
                         img.src = e.target.result;
+                        img.alt = 'Uploaded portfolio evidence';
                         img.style.width = '100%';
                         img.style.height = 'auto';
                         img.style.borderRadius = '8px';
@@ -1945,7 +2077,7 @@
                             Promise.all(Array.from(files).map(f => reader(f))).then(srcs => {
                                 newPreview.innerHTML = srcs.map(s => {
                                     return `<div style="position:relative;display:inline-block;margin:2px;">
-                                        <img src="${s}" style="width:100%;height:auto;border-radius:8px;">
+                                        <img src="${s}" alt="Uploaded portfolio evidence" style="width:100%;height:auto;border-radius:8px;">
                                         <button class="img-remove-btn" data-src="${s}">✕</button>
                                     </div>`;
                                 }).join('');
@@ -1995,15 +2127,13 @@
             loadExperiences();
 
             setupUpload('exposureUpload', 'exposureInput', 'exposurePreview', true);
-            setupUpload('cert1Upload', 'cert1Input', 'cert1Preview');
-            setupUpload('cert2Upload', 'cert2Input', 'cert2Preview');
             for (let i = 1; i <= 6; i++) {
                 setupUpload('certWall' + i, 'certWallInput' + i, 'certWall' + i + 'Preview');
-                setupUpload('eventUpload' + i, 'eventInput' + i, 'eventPreview' + i);
             }
             for (let i = 1; i <= 3; i++) setupAcademicUpload('academicImg' + i);
             setupWorkFiles('workInput1', 'workResources1', 'lesson-plans');
             setupWorkFiles('workInput2', 'workResources2', 'teaching-resources');
+            setupWorkFiles('workInput3', 'workResources3', 'assessment-evidence');
             renderAllResources();
 
             document.querySelectorAll('.add-image-btn').forEach(btn => {
@@ -2030,6 +2160,7 @@
             saveBtn.addEventListener('click', saveToStorage);
             resetBtn.addEventListener('click', resetStorage);
             sectionAddBtn?.addEventListener('click', addSection);
+            orderSectionsForRecruiters();
             refreshSectionControls();
 
             const saved = localStorage.getItem(STORAGE_KEY);
