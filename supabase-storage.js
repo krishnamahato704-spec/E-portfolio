@@ -1,7 +1,7 @@
 (function () {
   'use strict';
   const SUPABASE_URL = 'https://oyqevsygintkjrkfbzpx.supabase.co';
-  const SUPABASE_KEY = 'sb_publishable_CZOIotDHbTM9m4e8vHZ9Aw_H3-G9mAd';
+  const SUPABASE_KEY = 'sb_publishable_CZOIotDHbTM9m4E8vHZ9Aw_H3-G9mAd';
   const BUCKET = 'portfolio-media';
   const TABLE = 'portfolio_state';
   const ROW_ID = 'default';
@@ -14,7 +14,9 @@
   function session() { try { return JSON.parse(sessionStorage.getItem(SESSION_KEY) || 'null'); } catch (_) { return null; } }
   function headers(extra) {
     const current = session();
-    return Object.assign({ apikey: SUPABASE_KEY, Authorization: 'Bearer ' + (current && current.access_token ? current.access_token : SUPABASE_KEY) }, extra || {});
+    const base = { apikey: SUPABASE_KEY };
+    if (current && current.access_token) base.Authorization = 'Bearer ' + current.access_token;
+    return Object.assign(base, extra || {});
   }
   function tableUrl() { return SUPABASE_URL + '/rest/v1/' + TABLE; }
   function objectUrl(path) { return SUPABASE_URL + '/storage/v1/object/' + BUCKET + '/' + path; }
