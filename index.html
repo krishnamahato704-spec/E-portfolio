@@ -601,6 +601,8 @@
         .view-mode .academic-img:not(:has(img)) { display:none !important; }
         .view-mode .evidence-card:has(.resource-list:empty) .evidence-preview { display:none; }
         .view-mode .evidence-card:has(.resource-list:empty) .evidence-body { padding-top:18px; }
+        /* Retain old saved certificate fields for migration, but show one clean section. */
+        .legacy-certificate-layout, .legacy-professional-development { display:none !important; }
 
         .hidden { display: none; }
         .mt-8 { margin-top: 8px; }
@@ -626,8 +628,7 @@
                 <li><a href="#thinkers">Thinkers</a></li>
                 <li><a href="#experiences">Experiences</a></li>
                 <li><a href="#my-work">My Work</a></li>
-                <li><a href="#events">Events</a></li>
-                <li><a href="#professional-dev">Development</a></li>
+                <li><a href="#skills">Skills</a></li>
                 <li><a href="#certificates">Certificates</a></li>
                 <li><a href="#reflection">Reflection</a></li>
                 <li><a href="#contact">Contact</a></li>
@@ -898,11 +899,11 @@
                 <div class="evidence-card">
                     <div class="evidence-preview" id="workPreview3"><span>📊</span></div>
                     <div class="evidence-body">
-                        <h4 contenteditable="false" data-editable="work3_title">Presentations &amp; Activities</h4>
-                        <div class="meta" contenteditable="false" data-editable="work3_meta">Smart‑board · Assessments</div>
-                        <p contenteditable="false" data-editable="work3_text">Add presentations, smart‑board activities, assessments, and diagnostic tests.</p>
+                        <h4 contenteditable="false" data-editable="work3_title">Additional Teaching Evidence</h4>
+                        <div class="meta" contenteditable="false" data-editable="work3_meta">Classroom · B.Ed.</div>
+                        <p contenteditable="false" data-editable="work3_text">Add supporting classroom evidence or teaching reflections.</p>
                         <div class="resource-list" id="workResources3" aria-live="polite"></div>
-                        <label class="file-upload-zone" for="workInput3">📎 Add presentation or activity files<br><small>PDF, Word, PowerPoint, images and documents</small></label>
+                        <label class="file-upload-zone" for="workInput3">📎 Add supporting files<br><small>PDF, Word, PowerPoint, images and documents</small></label>
                         <input type="file" id="workInput3" multiple accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.csv,.txt,image/*" hidden>
                         </div>
                     </div>
@@ -911,13 +912,48 @@
         </div>
     </section>
 
-    <!-- ===== EVENTS & ACTIVITIES ===== -->
-    <section id="events" style="background:linear-gradient(135deg,var(--bg),#ece8e0);">
+    <!-- ===== SKILLS ===== -->
+    <section id="skills" class="skills-section">
         <div class="container">
-            <div class="section-label">08 · Events &amp; Activities</div>
-            <h2 class="section-title" contenteditable="false" data-editable="events_title">Miscellaneous moments &amp; participation</h2>
-            <p style="color:var(--muted);margin-bottom:14px;" contenteditable="false" data-editable="events_desc">Add photographs from academic events, seminars, competitions, cultural activities, or any other memorable moments that don't fit elsewhere.</p>
-            <div class="grid-3" id="eventsGrid">
+            <div class="section-label">08 · Skills</div>
+            <h2 class="section-title" contenteditable="false" data-editable="pd_title">Skills for TGT History &amp; Social Science</h2>
+            <div class="grid-2" style="margin-top:14px;">
+                <div class="card" style="border-top:3px solid var(--accent);">
+                    <div class="academic-icon">📋</div>
+                    <h3 contenteditable="false" data-editable="pd1_title">Pedagogical Skills</h3>
+                    <div class="flex-wrap" style="margin-top:6px;">
+                        <span class="skill-pill">Lesson Planning</span><span class="skill-pill">Curriculum Design</span><span class="skill-pill">Classroom Management</span><span class="skill-pill">Pedagogical Knowledge</span><span class="skill-pill">Online Assessment</span>
+                    </div>
+                </div>
+                <div class="card" style="border-top:3px solid var(--gold);">
+                    <div class="academic-icon">💻</div>
+                    <h3 contenteditable="false" data-editable="pd2_title">Digital &amp; Professional Skills</h3>
+                    <div class="flex-wrap" style="margin-top:6px;">
+                        <span class="skill-pill">Canva</span><span class="skill-pill">MS Office</span><span class="skill-pill">Online Classroom</span><span class="skill-pill">Communication</span><span class="skill-pill">Leadership</span><span class="skill-pill">Mentoring</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== CERTIFICATES ===== -->
+    <section id="legacy-certificate-layout" class="legacy-certificate-layout" style="background:linear-gradient(135deg,var(--bg),#ece8e0);">
+        <div class="container">
+            <div class="section-label">09 · Certificates</div>
+            <h2 class="section-title" contenteditable="false" data-editable="certwall_title">Certificates &amp; Professional Credentials</h2>
+            <p style="color:var(--muted);margin-bottom:14px;" contenteditable="false" data-editable="certwall_desc">Upload certificates, workshop completions, seminar participation, and other professional development credentials.</p>
+            <div class="grid-2" style="margin-top:14px;">
+                <div class="card" style="border-left:3px solid var(--accent);">
+                    <div class="card-label">🤖 AI in Education</div><h3 contenteditable="false" data-editable="cert1_title">Leveraging AI for Transforming School Education</h3><p contenteditable="false" data-editable="cert1_text">Add a short note about this credential and what it contributed to your teaching practice.</p>
+                    <div class="cert-upload" id="cert1Upload" style="margin-top:10px;"><div id="cert1Preview"></div><span class="upload-label">📄 Upload certificate</span><span class="upload-sub">Click to add (Edit mode)</span><input type="file" accept="image/*" style="display:none;" id="cert1Input"><div class="img-caption" contenteditable="false" data-caption="cert1Upload">Add a caption for this certificate.</div></div>
+                </div>
+                <div class="card" style="border-left:3px solid var(--gold);">
+                    <div class="card-label">💡 Life Skills Teaching</div><h3 contenteditable="false" data-editable="cert2_title">Life Skills / Holistic Teaching</h3><p contenteditable="false" data-editable="cert2_text">Add a short note about this credential and how it supports your classroom work.</p>
+                    <div class="cert-upload" id="cert2Upload" style="margin-top:10px;"><div id="cert2Preview"></div><span class="upload-label">📄 Upload certificate</span><span class="upload-sub">Click to add (Edit mode)</span><input type="file" accept="image/*" style="display:none;" id="cert2Input"><div class="img-caption" contenteditable="false" data-caption="cert2Upload">Add a caption for this certificate.</div></div>
+                </div>
+            </div>
+            <div class="divider" style="margin-top:28px;">Certificate gallery</div>
+            <div class="grid-3" id="legacyCertWallGrid">
                 <div class="upload-zone" id="eventUpload1" style="min-height:180px;">
                     <div id="eventPreview1"></div>
                     <span class="upload-label">📸 Event Photo</span>
@@ -975,7 +1011,7 @@
     </section>
 
     <!-- ===== PROFESSIONAL DEVELOPMENT ===== -->
-    <section id="professional-dev">
+    <section id="legacy-professional-development" class="legacy-professional-development">
         <div class="container">
             <div class="section-label">09 · Professional Development</div>
             <h2 class="section-title" contenteditable="false" data-editable="pd_title">Skills &amp; Certifications</h2>
@@ -1036,8 +1072,8 @@
     <!-- ===== CERTIFICATE WALL ===== -->
     <section id="certificates" style="background:linear-gradient(135deg,var(--bg),#ece8e0);">
         <div class="container">
-            <div class="section-label">10 · Certificate Wall</div>
-            <h2 class="section-title" contenteditable="false" data-editable="certwall_title">Academic Certificates &amp; Credentials</h2>
+            <div class="section-label">09 · Certificates</div>
+            <h2 class="section-title" contenteditable="false" data-editable="certwall_title">Certificates &amp; Professional Credentials</h2>
             <p style="color:var(--muted);margin-bottom:14px;" contenteditable="false" data-editable="certwall_desc">Upload scans or photos of your academic certificates, workshop completions, seminar participations, and professional development credentials.</p>
             <div class="grid-3" id="certWallGrid">
                 <div class="cert-upload" id="certWall1">
