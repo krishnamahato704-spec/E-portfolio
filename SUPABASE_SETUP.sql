@@ -5,9 +5,13 @@
 
 create table if not exists public.portfolio_state (
   id text primary key,
-  state jsonb not null default '{}'::jsonb,
+  data jsonb not null default '{}'::jsonb,
   updated_at timestamptz not null default now()
 );
+
+-- If the table already exists (as in the first portfolio version), add the
+-- column used by this site without deleting the existing row or data.
+alter table public.portfolio_state add column if not exists data jsonb not null default '{}'::jsonb;
 
 alter table public.portfolio_state enable row level security;
 grant select on public.portfolio_state to anon, authenticated;

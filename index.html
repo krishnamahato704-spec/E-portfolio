@@ -595,6 +595,12 @@
         .file-upload-zone { margin-top:12px; padding:12px; border:2px dashed rgba(31,58,95,.34); border-radius:12px; text-align:center; color:var(--muted); cursor:pointer; }
         .file-upload-zone:hover { border-color:var(--accent); background:rgba(31,58,95,.045); }
         .view-mode .file-upload-zone { display:none; }
+        /* Keep the public portfolio compact when an editor has not added evidence yet. */
+        .view-mode .upload-zone:not(:has(img)),
+        .view-mode .cert-upload:not(:has(img)),
+        .view-mode .academic-img:not(:has(img)) { display:none !important; }
+        .view-mode .evidence-card:has(.resource-list:empty) .evidence-preview { display:none; }
+        .view-mode .evidence-card:has(.resource-list:empty) .evidence-body { padding-top:18px; }
 
         .hidden { display: none; }
         .mt-8 { margin-top: 8px; }

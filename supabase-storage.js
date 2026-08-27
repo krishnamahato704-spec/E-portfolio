@@ -103,7 +103,7 @@
       state = await migrateImages(state);
       const response = await fetch(tableUrl() + '?on_conflict=id', {
         method: 'POST', headers: headers({ 'Content-Type': 'application/json', Prefer: 'resolution=merge-duplicates,return=minimal' }),
-        body: JSON.stringify({ id: ROW_ID, state, updated_at: new Date().toISOString() })
+        body: JSON.stringify({ id: ROW_ID, data: state, updated_at: new Date().toISOString() })
       });
       if (!response.ok) throw await errorFor(response, 'Cloud save failed');
       if (window.__portfolio && typeof window.__portfolio.restore === 'function') window.__portfolio.restore(state);
@@ -118,11 +118,11 @@
   async function loadRemote() {
     const status = document.getElementById('modeStatus');
     try {
-      const response = await fetch(tableUrl() + '?id=eq.' + encodeURIComponent(ROW_ID) + '&select=state&limit=1', { headers: headers({ 'Cache-Control': 'no-cache' }) });
+      const response = await fetch(tableUrl() + '?id=eq.' + encodeURIComponent(ROW_ID) + '&select=data&limit=1', { headers: headers({ 'Cache-Control': 'no-cache' }) });
       if (!response.ok) throw await errorFor(response, 'Cloud load failed');
       const rows = await response.json();
-      if (rows[0] && rows[0].state && window.__portfolio) window.__portfolio.restore(rows[0].state);
-      if (status) status.textContent = rows[0] && rows[0].state ? 'Synced online ✓' : 'Portfolio ready';
+      if (rows[0] && rows[0].data && window.__portfolio) window.__portfolio.restore(rows[0].data);
+      if (status) status.textContent = rows[0] && rows[0].data ? 'Synced online ✓' : 'Portfolio ready';
     } catch (error) { console.error('Portfolio cloud load error:', error); if (status) status.textContent = 'Cloud unavailable'; }
   }
 
