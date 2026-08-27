@@ -188,7 +188,9 @@
         remoteState = rows[0].data;
         cvMeta = remoteState.cv || null;
         remoteRaw = JSON.stringify(remoteState);
+        syncing = true;
         if (window.__portfolio) window.__portfolio.restore(remoteState);
+        syncing = false;
         updateCvUI();
         status.textContent = 'Synced online ✓';
       } else {
@@ -197,6 +199,7 @@
         status.textContent = 'Portfolio ready';
       }
     } catch (error) {
+      syncing = false;
       console.error('Portfolio cloud load error:', error);
       if (status) status.textContent = 'Cloud unavailable';
     }
@@ -257,9 +260,8 @@
   function addCompletionDates() {
     const items = document.querySelectorAll('#academic-journey .timeline-item');
     items.forEach(item => {
-      const year = item.querySelector('.year');
       const title = item.querySelector('h3');
-      if (!year || !title || item.querySelector('.completion-note')) return;
+      if (!title || item.querySelector('.completion-note')) return;
       const text = title.textContent || '';
       if (/B\.Ed\.|M\.A\. History/i.test(text)) {
         const note = document.createElement('div');
