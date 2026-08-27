@@ -883,7 +883,6 @@
                         <input type="file" id="workInput1" multiple accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.csv,.txt,image/*" hidden>
                         </div>
                     </div>
-                </div>
                 <div class="evidence-card">
                     <div class="evidence-preview" id="workPreview2"><span>🖼️</span></div>
                     <div class="evidence-body">
@@ -893,18 +892,6 @@
                         <div class="resource-list" id="workResources2" aria-live="polite"></div>
                         <label class="file-upload-zone" for="workInput2">📎 Add teaching-resource files<br><small>PDF, Word, PowerPoint, images and documents</small></label>
                         <input type="file" id="workInput2" multiple accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.csv,.txt,image/*" hidden>
-                        </div>
-                    </div>
-                </div>
-                <div class="evidence-card">
-                    <div class="evidence-preview" id="workPreview3"><span>📊</span></div>
-                    <div class="evidence-body">
-                        <h4 contenteditable="false" data-editable="work3_title">Additional Teaching Evidence</h4>
-                        <div class="meta" contenteditable="false" data-editable="work3_meta">Classroom · B.Ed.</div>
-                        <p contenteditable="false" data-editable="work3_text">Add supporting classroom evidence or teaching reflections.</p>
-                        <div class="resource-list" id="workResources3" aria-live="polite"></div>
-                        <label class="file-upload-zone" for="workInput3">📎 Add supporting files<br><small>PDF, Word, PowerPoint, images and documents</small></label>
-                        <input type="file" id="workInput3" multiple accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.csv,.txt,image/*" hidden>
                         </div>
                     </div>
                 </div>
@@ -1209,7 +1196,7 @@
             let currentMode = 'view';
             let zoneCounter = 0;
             let experiences = [];
-            let resources = { workResources1: [], workResources2: [], workResources3: [] };
+            let resources = { workResources1: [], workResources2: [] };
 
             // ---- DEFAULT EXPERIENCES (UPDATED) ----
             function getDefaultExperiences() {
@@ -1541,7 +1528,7 @@
                 }
                 resources = data.resources && typeof data.resources === 'object'
                     ? data.resources
-                    : { workResources1: [], workResources2: [], workResources3: [] };
+                    : { workResources1: [], workResources2: [] };
                 renderAllResources();
                 setMode(wasEditing ? 'edit' : 'view');
                 renderExperiences();
@@ -1601,7 +1588,7 @@
             }
 
             function renderAllResources() {
-                ['workResources1', 'workResources2', 'workResources3'].forEach(renderResources);
+                ['workResources1', 'workResources2'].forEach(renderResources);
             }
 
             function setupWorkFiles(inputId, listId, folder) {
@@ -1852,7 +1839,6 @@
             for (let i = 1; i <= 3; i++) setupAcademicUpload('academicImg' + i);
             setupWorkFiles('workInput1', 'workResources1', 'lesson-plans');
             setupWorkFiles('workInput2', 'workResources2', 'teaching-resources');
-            setupWorkFiles('workInput3', 'workResources3', 'presentations-and-activities');
             renderAllResources();
 
             document.querySelectorAll('.add-image-btn').forEach(btn => {
