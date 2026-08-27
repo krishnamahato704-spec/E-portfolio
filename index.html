@@ -1,0 +1,1884 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Krishna Mahato · Academic E‑Portfolio</title>
+    <style id="themeStyles">
+        :root {
+            --bg: #f6f4f0;
+            --card: #ffffff;
+            --text: #1a1a2e;
+            --muted: #5a5a7a;
+            --accent: #1f3a5f;
+            --accent2: #8b1a2b;
+            --gold: #b8860b;
+            --gold-light: #d4a843;
+            --border: #dcd8d0;
+            --shadow: 0 8px 30px rgba(26, 26, 46, .08);
+            --radius: 16px;
+            --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            --serif: 'Georgia', 'Times New Roman', serif;
+        }
+        .theme-forest { --bg: #f0f5ee; --text: #1a2e1a; --muted: #4a6a4a; --accent: #1f4f2f; --accent2: #7a4a2a; --gold: #8a7a3a; --gold-light: #b8a85a; --border: #d0d8c8; --shadow: 0 8px 30px rgba(26,46,26,.08); }
+        .theme-fort { --bg: #ece8e0; --card: #faf8f4; --text: #2a2a2a; --muted: #6a6a6a; --accent: #5a4a3a; --accent2: #8a6a4a; --gold: #b89a6a; --gold-light: #d4b88a; --border: #d4cec4; --shadow: 0 8px 30px rgba(42,42,42,.08); }
+        .theme-ocean { --bg: #eef4f8; --card: #ffffff; --text: #1a2a3a; --muted: #4a6a7a; --accent: #1a4a6a; --accent2: #2a6a8a; --gold: #6a9ab8; --gold-light: #8ab8d4; --border: #c8d8e0; --shadow: 0 8px 30px rgba(26,42,58,.08); }
+    </style>
+    <style>
+        /* ----- reset & base ----- */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: var(--font);
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            transition: background .3s, color .3s;
+            padding-top: 64px;
+        }
+        a { color: inherit; text-decoration: none; }
+        .container { width: min(1140px, 94%); margin: 0 auto; padding: 0 12px; }
+        img { max-width: 100%; display: block; }
+
+        /* ----- navigation ----- */
+        #navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(26, 26, 46, .92);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255,255,255,.06);
+            height: 64px;
+            display: flex;
+            align-items: center;
+            transition: .2s;
+        }
+        #navbar .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+        }
+        .nav-brand {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #fff;
+            letter-spacing: -.02em;
+        }
+        .nav-brand span { color: var(--gold-light); }
+        .nav-links {
+            display: flex;
+            gap: 6px;
+            list-style: none;
+            flex-wrap: wrap;
+        }
+        .nav-links a {
+            color: rgba(255,255,255,.7);
+            font-size: .78rem;
+            font-weight: 500;
+            padding: 6px 14px;
+            border-radius: 40px;
+            transition: .2s;
+            letter-spacing: .02em;
+            white-space: nowrap;
+        }
+        .nav-links a:hover, .nav-links a.active {
+            color: #fff;
+            background: rgba(255,255,255,.10);
+        }
+        .nav-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 4px 8px;
+        }
+        @media (max-width: 820px) {
+            .nav-toggle { display: block; }
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 64px;
+                left: 0;
+                right: 0;
+                background: rgba(26, 26, 46, .96);
+                backdrop-filter: blur(16px);
+                padding: 16px 24px;
+                gap: 4px;
+                border-bottom: 1px solid rgba(255,255,255,.06);
+            }
+            .nav-links.open { display: flex; }
+            .nav-links a { font-size: .9rem; padding: 10px 16px; white-space: normal; }
+        }
+
+        /* ----- mode bar ----- */
+        #modeBar {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 999;
+            background: rgba(26, 26, 46, .92);
+            backdrop-filter: blur(14px);
+            color: #fff;
+            padding: 8px 18px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 8px 32px rgba(0,0,0,.25);
+            font-size: .78rem;
+            border: 1px solid rgba(255,255,255,.06);
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        #modeBar .mode-status { font-weight: 700; color: var(--gold-light); }
+        .mode-btn {
+            border: none;
+            background: rgba(255,255,255,.08);
+            color: #fff;
+            padding: 6px 14px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: .72rem;
+            cursor: pointer;
+            transition: .2s;
+        }
+        .mode-btn:hover { background: rgba(255,255,255,.18); }
+        .mode-btn.active { background: var(--gold); color: #1a1a2e; }
+        .mode-btn.save-btn { background: var(--accent); }
+        .mode-btn.save-btn:hover { background: #2a4a7a; }
+        .mode-btn.reset-btn { background: rgba(139,26,43,.5); }
+        .mode-btn.reset-btn:hover { background: rgba(139,26,43,.8); }
+        .mode-hint { font-size: .65rem; opacity: .5; display: none; }
+        .mode-hint.show { display: inline; }
+        .theme-selector { position: relative; display: inline-block; }
+        .theme-dropdown {
+            display: none;
+            position: absolute;
+            bottom: 110%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(30,30,46,.96);
+            backdrop-filter: blur(12px);
+            border-radius: 16px;
+            padding: 10px 6px;
+            min-width: 150px;
+            box-shadow: 0 8px 32px rgba(0,0,0,.4);
+            border: 1px solid rgba(255,255,255,.06);
+            flex-direction: column;
+            gap: 4px;
+        }
+        .theme-dropdown.open { display: flex; }
+        .theme-option {
+            background: transparent;
+            border: none;
+            color: #fff;
+            padding: 6px 14px;
+            border-radius: 30px;
+            font-size: .75rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: .2s;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .theme-option:hover { background: rgba(255,255,255,.08); }
+        .theme-option .color-dot { width: 14px; height: 14px; border-radius: 50%; border: 1px solid rgba(255,255,255,.15); flex-shrink:0; }
+        .theme-option input[type="file"] { display: none; }
+        @media (max-width: 700px) {
+            #modeBar { bottom: 12px; padding: 6px 12px; gap: 6px; font-size: .68rem; width: 94%; border-radius: 30px; }
+            .mode-btn { padding: 4px 10px; font-size: .65rem; }
+            .theme-dropdown { min-width: 130px; left: 0; transform: none; }
+        }
+
+        /* ----- edit mode ----- */
+        .editing [contenteditable="true"] {
+            outline: 2px dashed rgba(31,58,95,.35);
+            outline-offset: 4px;
+            border-radius: 4px;
+            transition: outline .2s;
+            cursor: text;
+        }
+        .editing [contenteditable="true"]:focus {
+            outline: 2px solid var(--accent);
+            background: rgba(31,58,95,.04);
+        }
+        .editing .upload-zone, .editing .cert-upload, .editing .academic-img, .editing .experience-card {
+            border: 2px dashed rgba(31,58,95,.3);
+            background: rgba(31,58,95,.04);
+            border-radius: 12px;
+            padding: 12px;
+            cursor: pointer;
+            transition: .2s;
+            text-align: center;
+            color: var(--muted);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100px;
+        }
+        .editing .upload-zone:hover, .editing .cert-upload:hover, .editing .academic-img:hover, .editing .experience-card:hover {
+            border-color: var(--accent);
+            background: rgba(31,58,95,.08);
+        }
+        .editing .upload-zone img, .editing .cert-upload img, .editing .academic-img img {
+            width: 100%;
+            height: auto;
+            max-height: 300px;
+            object-fit: contain;
+            border-radius: 10px;
+        }
+        .editing .upload-zone .upload-label, .editing .cert-upload .upload-label, .editing .academic-img .upload-label {
+            font-weight: 600;
+            margin-top: 6px;
+            color: var(--accent);
+            font-size: .8rem;
+        }
+        .editing .upload-zone .upload-sub, .editing .cert-upload .upload-sub, .editing .academic-img .upload-sub {
+            font-size: .7rem;
+            color: var(--muted);
+        }
+        .editing .cert-upload { border-color: rgba(139,26,43,.3); background: rgba(139,26,43,.04); }
+        .editing .cert-upload:hover { border-color: var(--accent2); background: rgba(139,26,43,.08); }
+        .add-image-btn, .add-experience-btn {
+            display: none;
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: .8rem;
+            cursor: pointer;
+            transition: .2s;
+            margin-top: 14px;
+        }
+        .add-image-btn:hover, .add-experience-btn:hover { background: var(--accent2); }
+        .editing .add-image-btn, .editing .add-experience-btn { display: inline-block; }
+        .editing .exp-remove-btn, .editing .img-remove-btn { display: inline-block !important; }
+
+        /* image remove button */
+        .img-remove-btn {
+            display: none;
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            background: rgba(139,26,43,.85);
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            font-size: .75rem;
+            font-weight: 700;
+            cursor: pointer;
+            line-height: 1;
+            z-index: 5;
+            transition: .2s;
+        }
+        .img-remove-btn:hover { background: rgba(180,40,40,.95); transform: scale(1.05); }
+        .editing .img-remove-btn { display: flex; align-items: center; justify-content: center; }
+
+        .upload-zone, .cert-upload, .academic-img { position: relative; }
+
+        /* ----- view mode ----- */
+        .view-mode .upload-zone, .view-mode .cert-upload, .view-mode .academic-img, .view-mode .experience-card {
+            border: 1px solid var(--border) !important;
+            background: var(--bg) !important;
+            cursor: default !important;
+        }
+        .view-mode .upload-zone .upload-label, .view-mode .upload-zone .upload-sub,
+        .view-mode .cert-upload .upload-label, .view-mode .cert-upload .upload-sub,
+        .view-mode .academic-img .upload-label, .view-mode .academic-img .upload-sub,
+        .view-mode .exp-remove-btn, .view-mode .img-remove-btn { display: none !important; }
+        .view-mode [contenteditable="true"] { outline: none !important; cursor: default !important; }
+        .view-mode .portrait-img { outline: none !important; cursor: default !important; }
+        .view-mode .editing-hint { display: none !important; }
+        .editing-hint { font-size: .7rem; color: var(--accent); margin-top: 4px; opacity: .7; }
+
+        /* ----- captions ----- */
+        .img-caption {
+            font-size: .82rem;
+            color: var(--muted);
+            margin-top: 6px;
+            text-align: center;
+            width: 100%;
+            padding: 4px 8px;
+            border-radius: 6px;
+            transition: .2s;
+            min-height: 1.4em;
+        }
+        .editing .img-caption {
+            background: rgba(31,58,95,.04);
+            border: 1px dashed var(--border);
+            cursor: text;
+        }
+        .editing .img-caption:focus {
+            background: rgba(31,58,95,.08);
+            border-color: var(--accent);
+            outline: none;
+        }
+
+        /* ----- typography & layout ----- */
+        section { padding: 56px 0 48px; border-bottom: 1px solid var(--border); }
+        section:last-of-type { border-bottom: none; }
+        .section-label {
+            font-size: .65rem;
+            text-transform: uppercase;
+            letter-spacing: .15em;
+            color: var(--accent2);
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+        .section-title {
+            font-family: var(--serif);
+            font-size: clamp(1.8rem, 3.8vw, 2.8rem);
+            line-height: 1.08;
+            letter-spacing: -.02em;
+            margin: 4px 0 10px;
+        }
+        .section-desc { color: var(--muted); max-width: 640px; font-size: 1rem; }
+
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+        .grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 16px; }
+
+        .card {
+            background: var(--card);
+            border-radius: var(--radius);
+            padding: 24px 24px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            transition: .2s;
+        }
+        .card:hover { box-shadow: 0 12px 40px rgba(26,26,46,.07); }
+        .card .card-label { font-size: .65rem; text-transform: uppercase; letter-spacing: .08em; color: var(--accent2); font-weight: 700; }
+        .card h3 { font-family: var(--serif); font-size: 1.2rem; margin: 4px 0 8px; letter-spacing: -.01em; }
+        .card p { color: var(--muted); font-size: .95rem; }
+
+        .tag {
+            display: inline-block;
+            padding: 3px 12px;
+            background: #e8e4dd;
+            color: var(--accent);
+            border-radius: 40px;
+            font-size: .72rem;
+            font-weight: 600;
+            margin: 3px 4px 3px 0;
+        }
+        .exp-status {
+            display: inline-block;
+            padding: 2px 12px;
+            border-radius: 40px;
+            font-size: .65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .04em;
+        }
+        .exp-status.completed { background: #d4edda; color: #155724; }
+        .exp-status.in-progress { background: #fff3cd; color: #856404; }
+        .exp-status.upcoming { background: #e2e3e5; color: #383d41; }
+
+        .timeline {
+            position: relative;
+            padding-left: 24px;
+            border-left: 2px solid var(--border);
+        }
+        .timeline-item {
+            position: relative;
+            padding: 0 0 28px 16px;
+        }
+        .timeline-item::before {
+            content: "";
+            position: absolute;
+            left: -30px;
+            top: 6px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--gold);
+            box-shadow: 0 0 0 4px var(--bg);
+        }
+        .timeline-item .year { font-size: .7rem; font-weight: 700; color: var(--accent2); text-transform: uppercase; letter-spacing: .06em; }
+        .timeline-item h3 { font-size: 1rem; margin: 2px 0 2px; }
+        .timeline-item .sub { color: var(--muted); font-size: .85rem; }
+
+        .feature-block {
+            background: var(--accent);
+            color: #fff;
+            border-radius: var(--radius);
+            padding: 36px 40px;
+            position: relative;
+            overflow: hidden;
+        }
+        .feature-block .section-label { color: var(--gold-light); }
+        .feature-block .section-title { color: #fff; }
+        .feature-block p { color: #d4dce0; }
+        .feature-block .tag { background: rgba(255,255,255,.10); color: #fff; }
+
+        .academic-icon { font-size: 1.8rem; line-height: 1.2; margin-bottom: 4px; }
+        .academic-img {
+            border-radius: 12px;
+            overflow: hidden;
+            background: #e8e4dd;
+            width: 100%;
+            min-height: 100px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--border);
+            transition: .2s;
+            padding: 10px;
+        }
+        .academic-img img { width: 100%; height: auto; max-height: 280px; object-fit: contain; border-radius: 8px; }
+        .academic-img svg { width: 50%; height: 50%; opacity: .3; }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 12px 0 20px;
+            color: var(--muted);
+            font-size: .7rem;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            opacity: .4;
+        }
+        .divider::before, .divider::after { content: ""; flex: 1; height: 1px; background: var(--border); }
+
+        .portrait-img {
+            width: min(240px, 50vw);
+            aspect-ratio: 4/5;
+            object-fit: cover;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            border: 6px solid #fff;
+            background: #e8e4dd;
+            transition: .2s;
+        }
+        .editing .portrait-img { cursor: pointer; outline: 2px dashed rgba(31,58,95,.35); outline-offset: 4px; }
+
+        .hero {
+            padding: 40px 0 48px;
+            background: radial-gradient(circle at 80% 20%, rgba(184,134,11,.06), transparent 30%), linear-gradient(135deg, var(--bg), #ece8e0);
+        }
+        .hero-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 40px; align-items: center; }
+        .hero h1 {
+            font-family: var(--serif);
+            font-size: clamp(2.4rem, 6vw, 4.4rem);
+            line-height: .92;
+            letter-spacing: -.04em;
+            margin: 6px 0 12px;
+        }
+        .hero h1 em { color: var(--accent2); font-style: normal; }
+        .hero .lead { font-size: 1.05rem; color: var(--muted); max-width: 520px; }
+
+        .skill-pill {
+            display: inline-block;
+            padding: 5px 14px;
+            border-radius: 30px;
+            background: #fff;
+            border: 1px solid var(--border);
+            font-weight: 600;
+            font-size: .75rem;
+            margin: 3px 4px 3px 0;
+        }
+
+        /* ----- experience cards ----- */
+        .experience-card {
+            background: var(--card);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            padding: 20px 22px;
+            transition: .2s;
+            position: relative;
+            text-align: left;
+            min-height: auto;
+        }
+        .experience-card:hover { box-shadow: var(--shadow); }
+        .experience-card .exp-header {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 4px;
+        }
+        .experience-card .exp-header h3 {
+            font-family: var(--serif);
+            font-size: 1.15rem;
+            margin: 0;
+            flex: 1;
+            min-width: 140px;
+        }
+        .experience-card .exp-meta {
+            font-size: .8rem;
+            color: var(--muted);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 6px;
+        }
+        .experience-card .exp-meta .exp-type { font-weight: 600; color: var(--accent2); }
+        .experience-card .exp-desc { color: var(--muted); font-size: .92rem; margin-top: 4px; }
+        .exp-remove-btn {
+            display: none;
+            background: rgba(139,26,43,.12);
+            color: var(--accent2);
+            border: none;
+            border-radius: 40px;
+            padding: 4px 12px;
+            font-size: .7rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: .2s;
+            margin-top: 8px;
+        }
+        .exp-remove-btn:hover { background: rgba(139,26,43,.25); }
+        .editing .exp-remove-btn { display: inline-block; }
+
+        /* ----- footer ----- */
+        footer {
+            background: var(--text);
+            color: #fff;
+            padding: 40px 0 32px;
+        }
+        footer .muted { color: #bcc4cc; font-size: .9rem; }
+        footer a { color: var(--gold-light); }
+        footer .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 40px;
+        }
+        @media (max-width: 600px) { .footer-grid { grid-template-columns: 1fr; gap: 20px; } }
+
+        /* ----- responsive ----- */
+        @media (max-width: 860px) {
+            .hero-grid { grid-template-columns: 1fr; text-align: center; }
+            .hero .lead { margin: 0 auto; }
+            .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr 1fr; }
+            .feature-block { padding: 28px 24px; }
+            section { padding: 40px 0 32px; }
+            .experience-card .exp-header h3 { font-size: 1rem; }
+        }
+        @media (max-width: 540px) {
+            .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+            .portrait-img { width: 60vw; }
+            .card { padding: 18px 16px; }
+            .hero { padding: 24px 0 32px; }
+            body { padding-top: 56px; }
+            #navbar { height: 56px; }
+            .nav-brand { font-size: 1rem; }
+            .experience-card { padding: 16px; }
+        }
+
+        /* ----- evidence cards ----- */
+        .evidence-card {
+            background: var(--card);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            overflow: hidden;
+            transition: .2s;
+        }
+        .evidence-card:hover { box-shadow: var(--shadow); }
+        .evidence-card .evidence-preview {
+            width: 100%;
+            aspect-ratio: 16/10;
+            background: #e8e4dd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            font-size: 2.5rem;
+            color: var(--muted);
+        }
+        .evidence-card .evidence-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .evidence-card .evidence-body { padding: 14px 18px 18px; }
+        .evidence-card .evidence-body h4 { font-family: var(--serif); font-size: 1rem; margin-bottom: 2px; }
+        .evidence-card .evidence-body .meta { font-size: .75rem; color: var(--muted); }
+        .evidence-card .evidence-body p { font-size: .88rem; color: var(--muted); margin-top: 4px; }
+
+        .hidden { display: none; }
+        .mt-8 { margin-top: 8px; }
+        .mt-16 { margin-top: 16px; }
+        .mt-24 { margin-top: 24px; }
+        .flex-wrap { display: flex; flex-wrap: wrap; gap: 4px; }
+        .text-center { text-align: center; }
+    </style>
+</head>
+<body>
+
+    <!-- ===== NAVIGATION ===== -->
+    <nav id="navbar">
+        <div class="container">
+            <a class="nav-brand" href="#hero">Krishna<span>.</span></a>
+            <button class="nav-toggle" id="navToggle" aria-label="Menu">☰</button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#hero" class="active">Home</a></li>
+                <li><a href="#academic-journey">Journey</a></li>
+                <li><a href="#why-history">History</a></li>
+                <li><a href="#philosophy">Philosophy</a></li>
+                <li><a href="#history-teaching">Teach History</a></li>
+                <li><a href="#thinkers">Thinkers</a></li>
+                <li><a href="#experiences">Experiences</a></li>
+                <li><a href="#my-work">My Work</a></li>
+                <li><a href="#events">Events</a></li>
+                <li><a href="#professional-dev">Development</a></li>
+                <li><a href="#certificates">Certificates</a></li>
+                <li><a href="#reflection">Reflection</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- ===== MODE BAR ===== -->
+    <div id="modeBar">
+        <span class="mode-status" id="modeStatus">View</span>
+        <button class="mode-btn active" id="viewBtn">View</button>
+        <button class="mode-btn" id="editBtn">Edit</button>
+        <button class="mode-btn save-btn" id="saveBtn" style="display:none;">Save</button>
+        <button class="mode-btn reset-btn" id="resetBtn" style="display:none;">Reset</button>
+        <span class="mode-hint" id="modeHint">Click text to edit · click zones to add images</span>
+        <span class="edit-lock" style="font-size:.7rem;opacity:.4;">🔒</span>
+        <div class="theme-selector">
+            <button class="mode-btn" id="themeBtn">🎨</button>
+            <div class="theme-dropdown" id="themeDropdown">
+                <button class="theme-option" data-theme="default"><span class="color-dot" style="background:#1f3a5f;"></span> Academic</button>
+                <button class="theme-option" data-theme="forest"><span class="color-dot" style="background:#1f4f2f;"></span> Forest</button>
+                <button class="theme-option" data-theme="fort"><span class="color-dot" style="background:#5a4a3a;"></span> Fort</button>
+                <button class="theme-option" data-theme="ocean"><span class="color-dot" style="background:#1a4a6a;"></span> Ocean</button>
+                <button class="theme-option" data-theme="upload"><span>📤 Upload Theme</span><input type="file" accept=".css" id="themeFileInput"></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== HERO ===== -->
+    <section id="hero" class="hero">
+        <div class="container hero-grid">
+            <div>
+                <div class="section-label">B.Ed. · History · Emerging Educator</div>
+                <h1 contenteditable="false" data-editable="hero_title">Krishna<br><em>Mahato</em></h1>
+                <p class="lead" contenteditable="false" data-editable="hero_sub">Studying the past. Understanding the present. Nurturing future learners.</p>
+                <p style="margin-top:8px;font-size:.95rem;color:var(--muted);max-width:480px;" contenteditable="false" data-editable="hero_statement">I believe education is the nurturing of the whole person—and that History, taught well, becomes a discipline of the mind, not merely a record of the past.</p>
+                <div style="margin-top:14px;display:flex;flex-wrap:wrap;gap:6px;">
+                    <span class="tag">📚 History</span>
+                    <span class="tag">🧑‍🏫 B.Ed.</span>
+                    <span class="tag">🍎 Teacher</span>
+                    <span class="tag">🎓 M.A. History</span>
+                </div>
+            </div>
+            <div class="portrait-wrap" style="display:flex;flex-direction:column;align-items:center;">
+                <img class="portrait-img" id="portraitImg" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='500' viewBox='0 0 400 500'%3E%3Crect width='400' height='500' fill='%23e8e4dd'/%3E%3Ctext x='200' y='230' text-anchor='middle' font-family='Georgia,serif' font-size='40' fill='%235a5a7a' font-weight='300'%3E🎓%3C/text%3E%3Ctext x='200' y='280' text-anchor='middle' font-family='Georgia,serif' font-size='22' fill='%235a5a7a' font-weight='300'%3EKrishna Mahato%3C/text%3E%3Ctext x='200' y='320' text-anchor='middle' font-family='Inter,sans-serif' font-size='16' fill='%238b8b9e'%3EClick to upload portrait%3C/text%3E%3C/svg%3E" alt="Portrait of Krishna Mahato">
+                <div class="editing-hint" style="text-align:center;margin-top:4px;">✏️ Click to upload photo</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== ACADEMIC JOURNEY ===== -->
+    <section id="academic-journey">
+        <div class="container">
+            <div class="section-label">01 · Academic Journey</div>
+            <h2 class="section-title" contenteditable="false" data-editable="journey_title">From student to educator</h2>
+            <div class="divider">📜 🏛️ 🎓</div>
+            <div class="grid-2" style="margin-top:12px;">
+                <div class="card">
+                    <p style="font-size:.95rem;" contenteditable="false" data-editable="journey_text1">My academic path began with a strong foundation in the humanities. After completing secondary and senior secondary education with consistent excellence, I pursued a B.A. in History and Economics, graduating with a CGPA of 8.80. This undergraduate experience deepened my engagement with historical sources and economic thought, and shaped my desire to teach.</p>
+                    <p style="font-size:.95rem;margin-top:10px;" contenteditable="false" data-editable="journey_text2">I am now pursuing a B.Ed. at Amity Institute of Education, Amity University, Noida, alongside an M.A. in History. These programmes are helping me connect subject knowledge with classroom practice, and develop a reflective, learner‑centred teaching identity.</p>
+                </div>
+                <div class="timeline">
+                    <div class="timeline-item"><div class="year">2014</div><h3 contenteditable="false" data-editable="t1_title">Class X · Secondary</h3><div class="sub" contenteditable="false" data-editable="t1_sub">Little Angels' School · 87.75%</div></div>
+                    <div class="timeline-item"><div class="year">2017</div><h3 contenteditable="false" data-editable="t2_title">Class XII · Senior Secondary</h3><div class="sub" contenteditable="false" data-editable="t2_sub">CRBVM Senior Secondary School · CBSE · 89%</div></div>
+                    <div class="timeline-item"><div class="year">2018–2021</div><h3 contenteditable="false" data-editable="t3_title">B.A. History &amp; Economics</h3><div class="sub" contenteditable="false" data-editable="t3_sub">Gurukul Kangri Vishwavidyalaya · CGPA 8.80</div></div>
+                    <div class="timeline-item"><div class="year">2025–Present</div><h3 contenteditable="false" data-editable="t4_title">B.Ed. · Amity University</h3><div class="sub" contenteditable="false" data-editable="t4_sub">Amity Institute of Education, Noida</div></div>
+                    <div class="timeline-item"><div class="year">2025–Present</div><h3 contenteditable="false" data-editable="t5_title">M.A. History</h3><div class="sub" contenteditable="false" data-editable="t5_sub">Postgraduate study in History</div></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== WHY HISTORY ===== -->
+    <section id="why-history" style="background:linear-gradient(135deg,var(--bg),#ece8e0);">
+        <div class="container">
+            <div class="section-label">02 · Why History</div>
+            <h2 class="section-title" contenteditable="false" data-editable="why_title">From memorisation to understanding</h2>
+            <div class="card" style="max-width:820px;border-left:4px solid var(--gold);">
+                <p contenteditable="false" data-editable="why_text">History, for me, did not begin as a passion—it began as a strategy. Like many students, I initially approached it as a pathway toward UPSC preparation, a subject to be memorised and reproduced. The turning point came gradually, through the patient guidance of professors who taught me to ask not just <em>what</em> happened, but <em>why</em> it happened—and what it still means. History ceased to be a collection of dates and became a living conversation between the past and the present. Engaging with primary sources—from Kautilya's <em>Arthashastra</em> to accounts of the Partition of India—transformed my understanding of societal change. This shift from rote learning to reflective inquiry is what drew me toward teaching: I want my students to experience the same awakening—to understand that studying the past is, above all, a way of understanding ourselves.</p>
+                <div class="academic-img" id="academicImg1" style="margin-top:14px;aspect-ratio:16/5;">
+                    <svg viewBox="0 0 200 70" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="70" fill="#e8e4dd"/><text x="100" y="44" text-anchor="middle" font-family="Georgia,serif" font-size="32" fill="#b8860b" opacity="0.35">📜 ✍️ 📖</text></svg>
+                    <span class="upload-label">📸 Replace image</span>
+                    <span class="upload-sub">Click to upload (Edit mode)</span>
+                    <input type="file" accept="image/*" style="display:none;" class="academic-img-input">
+                    <div class="img-caption" contenteditable="false" data-caption="academicImg1">Add a caption or description for this image.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== TEACHING PHILOSOPHY ===== -->
+    <section id="philosophy">
+        <div class="container">
+            <div class="section-label">03 · Teaching Philosophy</div>
+            <h2 class="section-title" contenteditable="false" data-editable="phil_title">Nurturing the whole person</h2>
+            <div class="grid-3" style="margin-top:14px;">
+                <div class="card" style="border-bottom:3px solid var(--accent);">
+                    <div class="academic-icon">🌟</div>
+                    <div class="card-label">Holistic Development</div>
+                    <p contenteditable="false" data-editable="phil1">Education develops the whole person—character, personality, intellect, and values. A learner is not merely a student of a subject but a growing human being shaped by every interaction in the classroom.</p>
+                </div>
+                <div class="card" style="border-bottom:3px solid var(--gold);">
+                    <div class="academic-icon">🔍</div>
+                    <div class="card-label">Seeing Potential</div>
+                    <p contenteditable="false" data-editable="phil2">Every learner carries unique strengths. A teacher's role is to look beyond surface performance and recognise the best in each student—nurturing confidence, curiosity, and the capacity for independent thought.</p>
+                </div>
+                <div class="card" style="border-bottom:3px solid var(--accent2);">
+                    <div class="academic-icon">🛤️</div>
+                    <div class="card-label">Differentiation</div>
+                    <p contenteditable="false" data-editable="phil3">Every learner brings a unique set of strengths and ways of engaging with knowledge. Differentiation does not mean lowering expectations—it means offering different pathways to the same depth of understanding.</p>
+                </div>
+            </div>
+            <div class="feature-block" style="margin-top:20px;">
+                <p style="font-size:1rem;max-width:760px;" contenteditable="false" data-editable="enc_text">Reinforcement should motivate, not discourage. Every learner carries within them the seed of potential—and it is the educator's responsibility to nurture that seed with care, patience, and genuine encouragement. Before we point to what is lacking, we must first acknowledge what is growing.</p>
+                <p style="margin-top:12px;color:#d4dce0;font-style:italic;" contenteditable="false" data-editable="enc_quote">"A learner who feels seen and supported will reach further than one who feels judged. Teaching is, above all, an act of belief in another person's capacity to grow."</p>
+                <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;">
+                    <span class="tag" style="background:rgba(255,255,255,.10);color:#fff;">🌱 Encourage improvement</span>
+                    <span class="tag" style="background:rgba(255,255,255,.10);color:#fff;">👏 Acknowledge effort</span>
+                    <span class="tag" style="background:rgba(255,255,255,.10);color:#fff;">🔍 Identify growth areas</span>
+                    <span class="tag" style="background:rgba(255,255,255,.10);color:#fff;">❤️ Preserve confidence</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== MY HISTORY TEACHING APPROACH ===== -->
+    <section id="history-teaching" style="background:linear-gradient(135deg,var(--bg),#ece8e0);">
+        <div class="container">
+            <div class="section-label">04 · My History Teaching Approach</div>
+            <h2 class="section-title" contenteditable="false" data-editable="ht_title">Teaching History as a discipline of the mind</h2>
+            <div class="grid-2" style="margin-top:14px;">
+                <div class="card">
+                    <h3 contenteditable="false" data-editable="ht1_title">Beyond Dates &amp; Events</h3>
+                    <p contenteditable="false" data-editable="ht1_text">True historical learning asks students to question—<em>Why did this happen?</em> To compare—<em>How was this different elsewhere?</em> To interpret—<em>What did this mean to those who lived it?</em> I want my students to connect the past with the present, to reflect on what they have understood, and to reconsider their assumptions.</p>
+                    <div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:4px;">
+                        <span class="tag">❓ Questioning</span>
+                        <span class="tag">🔍 Comparison</span>
+                        <span class="tag">💭 Interpretation</span>
+                        <span class="tag">📜 Primary sources</span>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3 contenteditable="false" data-editable="ht2_title">Inquiry &amp; Differentiation</h3>
+                    <p contenteditable="false" data-editable="ht2_text">I intend to teach History through inquiry, discussion, and creative engagement—using timelines, visual sources, and primary documents to make the past tangible. For academically strong learners, I offer deeper research and comparative analysis. For creatively inclined learners, I use paintings, photographs, and storytelling to bring history to life. Every student reaches the same destination through a path suited to them.</p>
+                    <div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:4px;">
+                        <span class="tag">🗺️ Timelines</span>
+                        <span class="tag">🖼️ Visual sources</span>
+                        <span class="tag">📖 Storytelling</span>
+                        <span class="tag">🔎 Inquiry</span>
+                    </div>
+                </div>
+            </div>
+            <div class="card" style="margin-top:16px;border:1px solid var(--border);">
+                <h3 style="font-family:var(--serif);font-size:1.1rem;" contenteditable="false" data-editable="demo_title">Teaching Democracy Differently — One Concept, Different Pathways</h3>
+                <div style="display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:12px;align-items:center;margin-top:12px;text-align:center;">
+                    <div style="background:var(--accent);color:#fff;padding:16px 12px;border-radius:12px;"><strong>📘 Concept</strong><br><span style="font-size:.85rem;">Democracy</span></div>
+                    <span style="font-size:1.5rem;color:var(--gold);">→</span>
+                    <div style="background:var(--accent2);color:#fff;padding:16px 12px;border-radius:12px;"><strong>🛤️ Pathways</strong><br><span style="font-size:.8rem;">Academically Strong · Creatively Inclined</span></div>
+                    <span style="font-size:1.5rem;color:var(--gold);">→</span>
+                    <div style="background:var(--gold);color:#1a1a2e;padding:16px 12px;border-radius:12px;"><strong>🎯 Same Outcome</strong><br><span style="font-size:.8rem;">Deep Understanding</span></div>
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px;">
+                    <div style="background:var(--bg);padding:12px 16px;border-radius:10px;border-left:3px solid var(--accent);">
+                        <strong contenteditable="false" data-editable="demo1_title">Academically Strong</strong>
+                        <p style="font-size:.85rem;color:var(--muted);margin-top:2px;" contenteditable="false" data-editable="demo1_text">Explore reference books, compare perspectives from global political thinkers, engage with primary sources, debate historical contexts.</p>
+                    </div>
+                    <div style="background:var(--bg);padding:12px 16px;border-radius:10px;border-left:3px solid var(--gold);">
+                        <strong contenteditable="false" data-editable="demo2_title">Creatively Inclined</strong>
+                        <p style="font-size:.85rem;color:var(--muted);margin-top:2px;" contenteditable="false" data-editable="demo2_text">Use paintings, photographs, and videos linking creativity to democracy. Visual sources and creative activities make abstract concepts tangible.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== THINKERS ===== -->
+    <section id="thinkers">
+        <div class="container">
+            <div class="section-label">05 · Thinkers Who Influence Me</div>
+            <h2 class="section-title" contenteditable="false" data-editable="think_title">Guided by great minds</h2>
+            <div class="grid-2" style="margin-top:14px;">
+                <div class="card" style="border-top:3px solid var(--accent2);">
+                    <div style="display:flex;align-items:center;gap:14px;margin-bottom:6px;">
+                        <span style="font-size:2.5rem;">🕊️</span>
+                        <div><h3 contenteditable="false" data-editable="tagore_title" style="margin:0;">Rabindranath Tagore</h3></div>
+                    </div>
+                    <p contenteditable="false" data-editable="tagore_text">Education should take place in open, natural spaces that nurture the whole person. Tagore believed in freedom, creativity, and learning beyond rigid classroom walls—ideas that inspire my holistic approach.</p>
+                    <div class="academic-img" id="academicImg2" style="margin-top:10px;aspect-ratio:16/5;">
+                        <svg viewBox="0 0 200 70" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="70" fill="#e8e4dd"/><text x="100" y="44" text-anchor="middle" font-family="Georgia,serif" font-size="28" fill="#8b1a2b" opacity="0.3">🕊️ 🌿</text></svg>
+                        <span class="upload-label">📸 Replace image</span>
+                        <span class="upload-sub">Click to upload (Edit mode)</span>
+                        <input type="file" accept="image/*" style="display:none;" class="academic-img-input">
+                        <div class="img-caption" contenteditable="false" data-caption="academicImg2">Add a caption or description for this image.</div>
+                    </div>
+                </div>
+                <div class="card" style="border-top:3px solid var(--accent);">
+                    <div style="display:flex;align-items:center;gap:14px;margin-bottom:6px;">
+                        <span style="font-size:2.5rem;">🧠</span>
+                        <div><h3 contenteditable="false" data-editable="vygotsky_title" style="margin:0;">Lev Vygotsky</h3></div>
+                    </div>
+                    <p contenteditable="false" data-editable="vygotsky_text">Learning is a social process shaped by interaction and guided support. Vygotsky's concept of the Zone of Proximal Development reminds me that a teacher's role is to scaffold growth through meaningful dialogue.</p>
+                    <div class="academic-img" id="academicImg3" style="margin-top:10px;aspect-ratio:16/5;">
+                        <svg viewBox="0 0 200 70" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="70" fill="#e8e4dd"/><text x="100" y="44" text-anchor="middle" font-family="Georgia,serif" font-size="28" fill="#1f3a5f" opacity="0.3">🧠 💬</text></svg>
+                        <span class="upload-label">📸 Replace image</span>
+                        <span class="upload-sub">Click to upload (Edit mode)</span>
+                        <input type="file" accept="image/*" style="display:none;" class="academic-img-input">
+                        <div class="img-caption" contenteditable="false" data-caption="academicImg3">Add a caption or description for this image.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="card" style="margin-top:16px;background:var(--accent);color:#fff;border-color:var(--accent);">
+                <p style="color:#d4dce0;font-size:1rem;" contenteditable="false" data-editable="synthesis"><strong>✨ My Synthesis:</strong> Holistic growth + guided interaction + freedom + reflection = meaningful education.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== EXPERIENCES / INTERNSHIPS (UPDATED) ===== -->
+    <section id="experiences" style="background:linear-gradient(135deg,var(--bg),#ece8e0);">
+        <div class="container">
+            <div class="section-label">06 · Experiences / Internships</div>
+            <h2 class="section-title" contenteditable="false" data-editable="exp_title">Teaching &amp; Community Internships</h2>
+
+            <div style="margin-top:16px;">
+                <div id="experiencesContainer" class="grid-2">
+                    <!-- rendered by JavaScript -->
+                </div>
+                <button class="add-experience-btn" id="addExperienceBtn">＋ Add Experience</button>
+            </div>
+
+            <div class="divider" style="margin:24px 0 16px;">📸 Classroom Evidence</div>
+
+            <div class="grid-3" style="margin-top:14px;">
+                <div class="card"><div class="academic-icon">👀</div><h3 contenteditable="false" data-editable="tp1_title">Classroom Observation</h3><p contenteditable="false" data-editable="tp1_text">Observed diverse teaching methods, questioning techniques, and classroom management across multiple History and Social Science lessons.</p></div>
+                <div class="card"><div class="academic-icon">🏫</div><h3 contenteditable="false" data-editable="tp2_title">School Environment</h3><p contenteditable="false" data-editable="tp2_text">Explored school culture, infrastructure, co‑curricular integration, and the broader learning ecosystem that shapes student development.</p></div>
+                <div class="card"><div class="academic-icon">🪞</div><h3 contenteditable="false" data-editable="tp3_title">Reflective Practice</h3><p contenteditable="false" data-editable="tp3_text">Each day deepened my understanding of what it means to be an educator—connecting theory with real classroom dynamics.</p></div>
+            </div>
+            <div class="upload-zone" id="exposureUpload" style="margin-top:16px;text-align:center;">
+                <div id="exposurePreview" style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;"></div>
+                <span class="upload-label">📸 Add classroom / school photographs</span>
+                <span class="upload-sub">Click to upload images (Edit mode)</span>
+                <input type="file" accept="image/*" multiple style="display:none;" id="exposureInput">
+                <div class="img-caption" contenteditable="false" data-caption="exposureUpload">Add a caption or description for this set of images.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== MY WORK / TEACHING EVIDENCE ===== -->
+    <section id="my-work">
+        <div class="container">
+            <div class="section-label">07 · My Work / Teaching Evidence</div>
+            <h2 class="section-title" contenteditable="false" data-editable="work_title">Evidence from the classroom</h2>
+            <p style="color:var(--muted);margin-bottom:14px;" contenteditable="false" data-editable="work_desc">Lesson plans, worksheets, timelines, teaching materials, classroom activities, and other B.Ed. work.</p>
+            <div class="grid-3" id="workGrid">
+                <div class="evidence-card">
+                    <div class="evidence-preview" id="workPreview1"><span>📝</span></div>
+                    <div class="evidence-body">
+                        <h4 contenteditable="false" data-editable="work1_title">Lesson Plans</h4>
+                        <div class="meta" contenteditable="false" data-editable="work1_meta">History · B.Ed.</div>
+                        <p contenteditable="false" data-editable="work1_text">Add lesson plans, teaching reflections, and instructional materials.</p>
+                        <div class="upload-zone" id="workUpload1" style="margin-top:8px;padding:8px;min-height:60px;">
+                            <div id="workPreview1_upload"></div>
+                            <span class="upload-label" style="font-size:.7rem;">📄 Upload</span>
+                            <span class="upload-sub" style="font-size:.6rem;">Click to add</span>
+                            <input type="file" accept="image/*" style="display:none;" id="workInput1">
+                            <div class="img-caption" contenteditable="false" data-caption="workUpload1">Add a caption or description for this evidence.</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="evidence-card">
+                    <div class="evidence-preview" id="workPreview2"><span>🖼️</span></div>
+                    <div class="evidence-body">
+                        <h4 contenteditable="false" data-editable="work2_title">Teaching Resources</h4>
+                        <div class="meta" contenteditable="false" data-editable="work2_meta">Worksheets · Timelines · Posters</div>
+                        <p contenteditable="false" data-editable="work2_text">Add worksheets, maps, timelines, posters, and digital activities.</p>
+                        <div class="upload-zone" id="workUpload2" style="margin-top:8px;padding:8px;min-height:60px;">
+                            <div id="workPreview2_upload"></div>
+                            <span class="upload-label" style="font-size:.7rem;">📄 Upload</span>
+                            <span class="upload-sub" style="font-size:.6rem;">Click to add</span>
+                            <input type="file" accept="image/*" style="display:none;" id="workInput2">
+                            <div class="img-caption" contenteditable="false" data-caption="workUpload2">Add a caption or description for this evidence.</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="evidence-card">
+                    <div class="evidence-preview" id="workPreview3"><span>📊</span></div>
+                    <div class="evidence-body">
+                        <h4 contenteditable="false" data-editable="work3_title">Presentations &amp; Activities</h4>
+                        <div class="meta" contenteditable="false" data-editable="work3_meta">Smart‑board · Assessments</div>
+                        <p contenteditable="false" data-editable="work3_text">Add presentations, smart‑board activities, assessments, and diagnostic tests.</p>
+                        <div class="upload-zone" id="workUpload3" style="margin-top:8px;padding:8px;min-height:60px;">
+                            <div id="workPreview3_upload"></div>
+                            <span class="upload-label" style="font-size:.7rem;">📄 Upload</span>
+                            <span class="upload-sub" style="font-size:.6rem;">Click to add</span>
+                            <input type="file" accept="image/*" style="display:none;" id="workInput3">
+                            <div class="img-caption" contenteditable="false" data-caption="workUpload3">Add a caption or description for this evidence.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="add-image-btn" data-target="workGrid" data-template="workTemplate">＋ Add Evidence Item</button>
+            <div id="workTemplate" style="display:none;">
+                <div class="evidence-card">
+                    <div class="evidence-preview"><span>📄</span></div>
+                    <div class="evidence-body">
+                        <h4>New Evidence</h4>
+                        <div class="meta">Add description</div>
+                        <p>Upload your teaching material.</p>
+                        <div class="upload-zone" style="margin-top:8px;padding:8px;min-height:60px;">
+                            <div></div>
+                            <span class="upload-label" style="font-size:.7rem;">📄 Upload</span>
+                            <span class="upload-sub" style="font-size:.6rem;">Click to add</span>
+                            <input type="file" accept="image/*" style="display:none;" class="work-input">
+                            <div class="img-caption" contenteditable="false" data-caption="">Add a caption or description.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== EVENTS & ACTIVITIES ===== -->
+    <section id="events" style="background:linear-gradient(135deg,var(--bg),#ece8e0);">
+        <div class="container">
+            <div class="section-label">08 · Events &amp; Activities</div>
+            <h2 class="section-title" contenteditable="false" data-editable="events_title">Miscellaneous moments &amp; participation</h2>
+            <p style="color:var(--muted);margin-bottom:14px;" contenteditable="false" data-editable="events_desc">Add photographs from academic events, seminars, competitions, cultural activities, or any other memorable moments that don't fit elsewhere.</p>
+            <div class="grid-3" id="eventsGrid">
+                <div class="upload-zone" id="eventUpload1" style="min-height:180px;">
+                    <div id="eventPreview1"></div>
+                    <span class="upload-label">📸 Event Photo</span>
+                    <span class="upload-sub">Click to upload</span>
+                    <input type="file" accept="image/*" style="display:none;" id="eventInput1">
+                    <div class="img-caption" contenteditable="false" data-caption="eventUpload1">Add a caption (e.g., "Seminar on Indian Knowledge Systems")</div>
+                </div>
+                <div class="upload-zone" id="eventUpload2" style="min-height:180px;">
+                    <div id="eventPreview2"></div>
+                    <span class="upload-label">📸 Event Photo</span>
+                    <span class="upload-sub">Click to upload</span>
+                    <input type="file" accept="image/*" style="display:none;" id="eventInput2">
+                    <div class="img-caption" contenteditable="false" data-caption="eventUpload2">Add a caption (e.g., "Quiz Contest at Amity Youth Fest")</div>
+                </div>
+                <div class="upload-zone" id="eventUpload3" style="min-height:180px;">
+                    <div id="eventPreview3"></div>
+                    <span class="upload-label">📸 Event Photo</span>
+                    <span class="upload-sub">Click to upload</span>
+                    <input type="file" accept="image/*" style="display:none;" id="eventInput3">
+                    <div class="img-caption" contenteditable="false" data-caption="eventUpload3">Add a caption (e.g., "Chess competition at Amity Sangathan")</div>
+                </div>
+                <div class="upload-zone" id="eventUpload4" style="min-height:180px;">
+                    <div id="eventPreview4"></div>
+                    <span class="upload-label">📸 Event Photo</span>
+                    <span class="upload-sub">Click to upload</span>
+                    <input type="file" accept="image/*" style="display:none;" id="eventInput4">
+                    <div class="img-caption" contenteditable="false" data-caption="eventUpload4">Add a caption (e.g., "International Seminar presentation")</div>
+                </div>
+                <div class="upload-zone" id="eventUpload5" style="min-height:180px;">
+                    <div id="eventPreview5"></div>
+                    <span class="upload-label">📸 Event Photo</span>
+                    <span class="upload-sub">Click to upload</span>
+                    <input type="file" accept="image/*" style="display:none;" id="eventInput5">
+                    <div class="img-caption" contenteditable="false" data-caption="eventUpload5">Add a caption (e.g., "Workshop participation")</div>
+                </div>
+                <div class="upload-zone" id="eventUpload6" style="min-height:180px;">
+                    <div id="eventPreview6"></div>
+                    <span class="upload-label">📸 Event Photo</span>
+                    <span class="upload-sub">Click to upload</span>
+                    <input type="file" accept="image/*" style="display:none;" id="eventInput6">
+                    <div class="img-caption" contenteditable="false" data-caption="eventUpload6">Add a caption (e.g., "Cultural event participation")</div>
+                </div>
+            </div>
+            <button class="add-image-btn" data-target="eventsGrid" data-template="eventsTemplate">＋ Add Event Slot</button>
+            <div id="eventsTemplate" style="display:none;">
+                <div class="upload-zone" style="min-height:180px;">
+                    <div></div>
+                    <span class="upload-label">📸 Event Photo</span>
+                    <span class="upload-sub">Click to upload</span>
+                    <input type="file" accept="image/*" style="display:none;" class="event-input">
+                    <div class="img-caption" contenteditable="false" data-caption="">Add a caption for this event.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== PROFESSIONAL DEVELOPMENT ===== -->
+    <section id="professional-dev">
+        <div class="container">
+            <div class="section-label">09 · Professional Development</div>
+            <h2 class="section-title" contenteditable="false" data-editable="pd_title">Skills &amp; Certifications</h2>
+            <div class="grid-2" style="margin-top:14px;">
+                <div class="card" style="border-top:3px solid var(--accent);">
+                    <div class="academic-icon">📋</div>
+                    <h3 contenteditable="false" data-editable="pd1_title">Pedagogical Skills</h3>
+                    <div class="flex-wrap" style="margin-top:6px;">
+                        <span class="skill-pill">Lesson Planning</span>
+                        <span class="skill-pill">Curriculum Design</span>
+                        <span class="skill-pill">Classroom Management</span>
+                        <span class="skill-pill">Pedagogical Knowledge</span>
+                        <span class="skill-pill">Online Assessment</span>
+                    </div>
+                </div>
+                <div class="card" style="border-top:3px solid var(--gold);">
+                    <div class="academic-icon">💻</div>
+                    <h3 contenteditable="false" data-editable="pd2_title">Digital &amp; Professional Skills</h3>
+                    <div class="flex-wrap" style="margin-top:6px;">
+                        <span class="skill-pill">Canva</span>
+                        <span class="skill-pill">MS Office</span>
+                        <span class="skill-pill">Online Classroom</span>
+                        <span class="skill-pill">Communication</span>
+                        <span class="skill-pill">Leadership</span>
+                        <span class="skill-pill">Mentoring</span>
+                    </div>
+                </div>
+            </div>
+            <div class="grid-2" style="margin-top:16px;">
+                <div class="card" style="border-left:3px solid var(--accent);">
+                    <div class="card-label">🤖 AI in Education</div>
+                    <h3 contenteditable="false" data-editable="cert1_title">Leveraging AI for Transforming School Education</h3>
+                    <p contenteditable="false" data-editable="cert1_text">Explored how AI tools can enhance lesson design, personalise learning, and support assessment. Gained practical insight into responsible and reflective use of technology in the classroom.</p>
+                    <div class="cert-upload" id="cert1Upload" style="margin-top:10px;">
+                        <div id="cert1Preview"></div>
+                        <span class="upload-label">📄 Upload certificate</span>
+                        <span class="upload-sub">Click to add (Edit mode)</span>
+                        <input type="file" accept="image/*" style="display:none;" id="cert1Input">
+                        <div class="img-caption" contenteditable="false" data-caption="cert1Upload">Add a caption (e.g., "Certificate from NCERT / DIKSHA")</div>
+                    </div>
+                </div>
+                <div class="card" style="border-left:3px solid var(--gold);">
+                    <div class="card-label">💡 Life Skills Teaching</div>
+                    <h3 contenteditable="false" data-editable="cert2_title">Life Skills / Holistic Teaching</h3>
+                    <p contenteditable="false" data-editable="cert2_text">Deepened understanding of education beyond academics: nurturing empathy, resilience, communication, and self‑awareness in learners. Reinforced my belief that a teacher shapes the whole person.</p>
+                    <div class="cert-upload" id="cert2Upload" style="margin-top:10px;">
+                        <div id="cert2Preview"></div>
+                        <span class="upload-label">📄 Upload certificate</span>
+                        <span class="upload-sub">Click to add (Edit mode)</span>
+                        <input type="file" accept="image/*" style="display:none;" id="cert2Input">
+                        <div class="img-caption" contenteditable="false" data-caption="cert2Upload">Add a caption (e.g., "Certificate from Institute of Teacher's Education")</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== CERTIFICATE WALL ===== -->
+    <section id="certificates" style="background:linear-gradient(135deg,var(--bg),#ece8e0);">
+        <div class="container">
+            <div class="section-label">10 · Certificate Wall</div>
+            <h2 class="section-title" contenteditable="false" data-editable="certwall_title">Academic Certificates &amp; Credentials</h2>
+            <p style="color:var(--muted);margin-bottom:14px;" contenteditable="false" data-editable="certwall_desc">Upload scans or photos of your academic certificates, workshop completions, seminar participations, and professional development credentials.</p>
+            <div class="grid-3" id="certWallGrid">
+                <div class="cert-upload" id="certWall1">
+                    <div id="certWall1Preview"></div>
+                    <span class="upload-label">📜 Certificate</span>
+                    <span class="upload-sub">Click to upload</span>
+                    <input type="file" accept="image/*" style="display:none;" id="certWallInput1">
+                    <div class="img-caption" contenteditable="false" data-caption="certWall1">Add a caption (e.g., "AI in Education Certificate")</div>
+                </div>
+                <div class="cert-upload" id="certWall2">
+                    <div id="certWall2Preview"></div>
+                    <span class="upload-label">📜 Certificate</span>
+                    <span class="upload-sub">Click to upload</span>
+                    <input type="file" accept="image/*" style="display:none;" id="certWallInput2">
+                    <div class="img-caption" contenteditable="false" data-caption="certWall2">Add a caption (e.g., "Life Skills Teaching Certificate")</div>
+                </div>
+                <div class="cert-upload" id="certWall3">
+                    <div id="certWall3Preview"></div>
+                    <span class="upload-label">📜 Certificate</span>
+                    <span class="upload-sub">Click to upload</span>
+                    <input type="file" accept="image/*" style="display:none;" id="certWallInput3">
+                    <div class="img-caption" contenteditable="false" data-caption="certWall3">Add a caption (e.g., "Seminar Participation")</div>
+                </div>
+                <div class="cert-upload" id="certWall4">
+                    <div id="certWall4Preview"></div>
+                    <span class="upload-label">📜 Certificate</span>
+                    <span class="upload-sub">Click to upload</span>
+                    <input type="file" accept="image/*" style="display:none;" id="certWallInput4">
+                    <div class="img-caption" contenteditable="false" data-caption="certWall4">Add a caption (e.g., "Workshop Completion")</div>
+                </div>
+                <div class="cert-upload" id="certWall5">
+                    <div id="certWall5Preview"></div>
+                    <span class="upload-label">📜 Certificate</span>
+                    <span class="upload-sub">Click to upload</span>
+                    <input type="file" accept="image/*" style="display:none;" id="certWallInput5">
+                    <div class="img-caption" contenteditable="false" data-caption="certWall5">Add a caption (e.g., "Academic Achievement")</div>
+                </div>
+                <div class="cert-upload" id="certWall6">
+                    <div id="certWall6Preview"></div>
+                    <span class="upload-label">📜 Certificate</span>
+                    <span class="upload-sub">Click to upload</span>
+                    <input type="file" accept="image/*" style="display:none;" id="certWallInput6">
+                    <div class="img-caption" contenteditable="false" data-caption="certWall6">Add a caption (e.g., "Extra-curricular Recognition")</div>
+                </div>
+            </div>
+            <button class="add-image-btn" data-target="certWallGrid" data-template="certWallTemplate">＋ Add Certificate Slot</button>
+            <div id="certWallTemplate" style="display:none;">
+                <div class="cert-upload">
+                    <div></div>
+                    <span class="upload-label">📜 Certificate</span>
+                    <span class="upload-sub">Click to upload</span>
+                    <input type="file" accept="image/*" style="display:none;" class="cert-wall-input">
+                    <div class="img-caption" contenteditable="false" data-caption="">Add a caption for this certificate.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== REFLECTION & GROWTH ===== -->
+    <section id="reflection">
+        <div class="container">
+            <div class="section-label">11 · Reflection &amp; Growth</div>
+            <h2 class="section-title" contenteditable="false" data-editable="refl_title">Learning through honest reflection</h2>
+            <div class="grid-2" style="margin-top:14px;">
+                <div class="card" style="border-left:3px solid var(--accent);">
+                    <div class="academic-icon">❓</div>
+                    <h3 contenteditable="false" data-editable="refl1_title">What happened?</h3>
+                    <p contenteditable="false" data-editable="refl1_text">Describe the experience objectively. What did you observe or participate in?</p>
+                </div>
+                <div class="card" style="border-left:3px solid var(--gold);">
+                    <div class="academic-icon">💡</div>
+                    <h3 contenteditable="false" data-editable="refl2_title">What did I learn?</h3>
+                    <p contenteditable="false" data-editable="refl2_text">Record new knowledge, skills, or understanding gained from the experience.</p>
+                </div>
+                <div class="card" style="border-left:3px solid var(--accent2);">
+                    <div class="academic-icon">✅</div>
+                    <h3 contenteditable="false" data-editable="refl3_title">What worked well?</h3>
+                    <p contenteditable="false" data-editable="refl3_text">Identify successful strategies, decisions, or moments that felt effective.</p>
+                </div>
+                <div class="card" style="border-left:3px solid var(--accent);">
+                    <div class="academic-icon">🔄</div>
+                    <h3 contenteditable="false" data-editable="refl4_title">What will I change?</h3>
+                    <p contenteditable="false" data-editable="refl4_text">Turn the experience into an action for future practice—concrete and specific.</p>
+                </div>
+            </div>
+            <div class="feature-block" style="margin-top:20px;background:var(--text);">
+                <p style="font-size:1.05rem;max-width:800px;font-family:var(--serif);" contenteditable="false" data-editable="future_quote">"To become an educator who sees potential in every learner and helps each child grow towards a direction that is meaningful and suited to them."</p>
+                <p style="max-width:760px;margin-top:10px;" contenteditable="false" data-editable="future_text">This is not simply a career goal—it is a commitment rooted in everything I have studied, observed, and come to believe about the purpose of education. Every learner carries within them the seed of something remarkable. My role as an educator is not to impose a fixed path, but to nurture, guide, and illuminate possibilities—so that each student may grow in the direction that is truly their own.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <div class="section-label" style="color:var(--gold-light);">Contact</div>
+                    <h2 style="font-family:var(--serif);font-size:clamp(1.6rem,3vw,2.4rem);margin:4px 0 8px;color:#fff;" contenteditable="false" data-editable="footer_title">Krishna Mahato</h2>
+                    <p class="muted" contenteditable="false" data-editable="footer_text">B.Ed. · History · Emerging Educator</p>
+                    <p style="margin-top:8px;"><a href="mailto:krishnamahato704@gmail.com" contenteditable="false" data-editable="footer_email">krishnamahato704@gmail.com</a></p>
+                </div>
+                <div style="text-align:right;">
+                    <p class="muted small" style="font-size:.8rem;" contenteditable="false" data-editable="footer_lang">English · Hindi · Nepali · Maithili</p>
+                    <p class="muted small" style="font-size:.75rem;opacity:.5;margin-top:4px;">Academic E‑Portfolio</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        (function() {
+            const STORAGE_KEY = 'krishna_portfolio_v4';
+            const PASSWORD = 'krishna2026';
+            const EXPERIENCES_KEY = 'krishna_experiences';
+
+            // ---- DOM refs ----
+            const viewBtn = document.getElementById('viewBtn');
+            const editBtn = document.getElementById('editBtn');
+            const saveBtn = document.getElementById('saveBtn');
+            const resetBtn = document.getElementById('resetBtn');
+            const modeStatus = document.getElementById('modeStatus');
+            const modeHint = document.getElementById('modeHint');
+            const body = document.body;
+            const themeBtn = document.getElementById('themeBtn');
+            const themeDropdown = document.getElementById('themeDropdown');
+            const themeFileInput = document.getElementById('themeFileInput');
+            const navToggle = document.getElementById('navToggle');
+            const navLinks = document.getElementById('navLinks');
+            const experiencesContainer = document.getElementById('experiencesContainer');
+            const addExperienceBtn = document.getElementById('addExperienceBtn');
+
+            const editableEls = document.querySelectorAll('[contenteditable="false"][data-editable]');
+            const portrait = document.getElementById('portraitImg');
+            const captionEls = document.querySelectorAll('.img-caption');
+
+            let currentMode = 'view';
+            let zoneCounter = 0;
+            let experiences = [];
+
+            // ---- DEFAULT EXPERIENCES (UPDATED) ----
+            function getDefaultExperiences() {
+                return [
+                    {
+                        id: 'exp_1',
+                        title: '1‑Week Observation Internship – Amity International School, Mayur Vihar',
+                        type: 'Observation',
+                        duration: 'May 2026 (1 Week)',
+                        status: 'Completed',
+                        description: 'Observed diverse teaching methods, student engagement strategies, questioning techniques, and classroom management across multiple History and Social Science lessons. Explored school culture, infrastructure, and co‑curricular integration.'
+                    },
+                    {
+                        id: 'exp_2',
+                        title: 'NTCC Internship – Pehchaan The Street School (5 Weeks)',
+                        type: 'Internship',
+                        duration: '1 June – 6 July 2026',
+                        status: 'Completed',
+                        description: 'Taught KG students (Nursery, LKG, UKG) foundational literacy and numeracy through competency‑based, activity‑based methods. Also conducted adult literacy sessions (ULLAS programme) for five learners. Gained practical teaching skills, classroom management, and community engagement experience.'
+                    }
+                ];
+            }
+
+            // ---- load experiences ----
+            function loadExperiences() {
+                const stored = localStorage.getItem(EXPERIENCES_KEY);
+                if (stored) {
+                    try {
+                        const parsed = JSON.parse(stored);
+                        if (Array.isArray(parsed) && parsed.length) {
+                            experiences = parsed;
+                            return;
+                        }
+                    } catch (e) {}
+                }
+                experiences = getDefaultExperiences();
+                saveExperiences();
+            }
+
+            function saveExperiences() {
+                localStorage.setItem(EXPERIENCES_KEY, JSON.stringify(experiences));
+            }
+
+            // ---- render experiences ----
+            function renderExperiences() {
+                if (!experiencesContainer) return;
+                if (!experiences.length) {
+                    experiencesContainer.innerHTML =
+                        `<div class="card" style="grid-column:1/-1;text-align:center;padding:30px;color:var(--muted);">
+                            <p style="font-size:1rem;">No experiences added yet. Click <strong>＋ Add Experience</strong> to document your teaching placements.</p>
+                        </div>`;
+                    return;
+                }
+                let html = '';
+                experiences.forEach((exp, index) => {
+                    const statusClass = exp.status === 'Completed' ? 'completed' : exp.status === 'In Progress' ? 'in-progress' : 'upcoming';
+                    html += `
+                        <div class="experience-card" data-id="${exp.id}" data-index="${index}">
+                            <div class="exp-header">
+                                <h3 contenteditable="false" data-exp-field="title">${exp.title}</h3>
+                                <span class="exp-status ${statusClass}" contenteditable="false" data-exp-field="status">${exp.status}</span>
+                            </div>
+                            <div class="exp-meta">
+                                <span class="exp-type" contenteditable="false" data-exp-field="type">${exp.type}</span>
+                                <span contenteditable="false" data-exp-field="duration">${exp.duration}</span>
+                            </div>
+                            <div class="exp-desc" contenteditable="false" data-exp-field="description">${exp.description}</div>
+                            <button class="exp-remove-btn" data-id="${exp.id}">✕ Remove</button>
+                        </div>
+                    `;
+                });
+                experiencesContainer.innerHTML = html;
+
+                document.querySelectorAll('.exp-remove-btn').forEach(btn => {
+                    btn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        if (currentMode !== 'edit') return;
+                        const id = this.dataset.id;
+                        if (!id) return;
+                        if (!confirm('Remove this experience?')) return;
+                        experiences = experiences.filter(e => e.id !== id);
+                        saveExperiences();
+                        renderExperiences();
+                        if (currentMode === 'edit') saveFullState();
+                    });
+                });
+
+                if (currentMode === 'edit') {
+                    document.querySelectorAll('.experience-card [contenteditable="false"][data-exp-field]').forEach(el => {
+                        el.contentEditable = 'true';
+                        el.addEventListener('input', function() {
+                            const card = this.closest('.experience-card');
+                            if (!card) return;
+                            const id = card.dataset.id;
+                            const field = this.dataset.expField;
+                            const exp = experiences.find(e => e.id === id);
+                            if (exp && field) {
+                                exp[field] = this.innerText.trim();
+                                saveExperiences();
+                                if (currentMode === 'edit') saveFullState();
+                            }
+                        });
+                    });
+                }
+            }
+
+            // ---- add experience ----
+            function addExperience() {
+                const newExp = {
+                    id: 'exp_' + Date.now(),
+                    title: 'New Teaching Experience',
+                    type: 'Internship',
+                    duration: 'Add duration',
+                    status: 'Upcoming',
+                    description: 'Add a description of this teaching experience.'
+                };
+                experiences.push(newExp);
+                saveExperiences();
+                renderExperiences();
+                if (currentMode === 'edit') saveFullState();
+                const cards = experiencesContainer.querySelectorAll('.experience-card');
+                if (cards.length) {
+                    cards[cards.length - 1].scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
+
+            // ---- nav toggle ----
+            navToggle.addEventListener('click', () => { navLinks.classList.toggle('open'); });
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.addEventListener('click', () => { navLinks.classList.remove('open'); });
+            });
+
+            // ---- theme ----
+            function applyTheme(name) {
+                body.classList.remove('theme-forest', 'theme-fort', 'theme-ocean', 'theme-custom');
+                if (name && name !== 'default') body.classList.add('theme-' + name);
+                localStorage.setItem('portfolio-theme', name || 'default');
+                document.querySelectorAll('.theme-option').forEach(b => {
+                    b.style.background = b.dataset.theme === name ? 'rgba(255,255,255,.12)' : 'transparent';
+                });
+            }
+            function loadTheme() {
+                const saved = localStorage.getItem('portfolio-theme') || 'default';
+                if (saved !== 'default') body.classList.add('theme-' + saved);
+                document.querySelectorAll('.theme-option').forEach(b => {
+                    b.style.background = b.dataset.theme === saved ? 'rgba(255,255,255,.12)' : 'transparent';
+                });
+            }
+            themeFileInput.addEventListener('change', function() {
+                const file = this.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    let s = document.getElementById('customThemeStyle');
+                    if (!s) { s = document.createElement('style'); s.id = 'customThemeStyle'; document.head.appendChild(s); }
+                    s.textContent = e.target.result;
+                    body.classList.remove('theme-forest', 'theme-fort', 'theme-ocean');
+                    body.classList.add('theme-custom');
+                    localStorage.setItem('portfolio-theme', 'custom');
+                    document.querySelectorAll('.theme-option').forEach(b => {
+                        b.style.background = b.dataset.theme === 'custom' ? 'rgba(255,255,255,.12)' : 'transparent';
+                    });
+                    themeDropdown.classList.remove('open');
+                    alert('Custom theme applied!');
+                };
+                reader.readAsText(file);
+                this.value = '';
+            });
+            themeBtn.addEventListener('click', e => { e.stopPropagation(); themeDropdown.classList.toggle('open'); });
+            document.addEventListener('click', () => themeDropdown.classList.remove('open'));
+            themeDropdown.addEventListener('click', e => e.stopPropagation());
+            document.querySelectorAll('.theme-option').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    const t = this.dataset.theme;
+                    if (t === 'upload') { themeFileInput.click(); return; }
+                    applyTheme(t);
+                    themeDropdown.classList.remove('open');
+                });
+            });
+            loadTheme();
+
+            // ---- mode ----
+            function setMode(mode) {
+                currentMode = mode;
+                body.classList.remove('view-mode', 'editing');
+                if (mode === 'view') {
+                    body.classList.add('view-mode');
+                    modeStatus.textContent = 'View';
+                    viewBtn.classList.add('active');
+                    editBtn.classList.remove('active');
+                    saveBtn.style.display = 'none';
+                    resetBtn.style.display = 'none';
+                    modeHint.classList.remove('show');
+                    editableEls.forEach(el => el.contentEditable = 'false');
+                    captionEls.forEach(el => el.contentEditable = 'false');
+                    document.querySelectorAll('.experience-card [contenteditable="true"][data-exp-field]').forEach(el => {
+                        el.contentEditable = 'false';
+                    });
+                } else {
+                    body.classList.add('editing');
+                    modeStatus.textContent = 'Edit';
+                    editBtn.classList.add('active');
+                    viewBtn.classList.remove('active');
+                    saveBtn.style.display = '';
+                    resetBtn.style.display = '';
+                    modeHint.classList.add('show');
+                    editableEls.forEach(el => el.contentEditable = 'true');
+                    captionEls.forEach(el => el.contentEditable = 'true');
+                    document.querySelectorAll('.experience-card [contenteditable="false"][data-exp-field]').forEach(el => {
+                        el.contentEditable = 'true';
+                    });
+                }
+                document.querySelectorAll('.add-image-btn, .add-experience-btn').forEach(b => b.style.display = (mode === 'edit') ? 'inline-block' : 'none');
+                document.querySelectorAll('.upload-zone, .cert-upload, .academic-img').forEach(z => {
+                    const l = z.querySelector('.upload-label'), s = z.querySelector('.upload-sub');
+                    if (l) l.style.display = mode === 'edit' ? '' : 'none';
+                    if (s) s.style.display = mode === 'edit' ? '' : 'none';
+                });
+                renderExperiences();
+            }
+
+            function promptPassword() {
+                const pwd = prompt('Enter edit password:');
+                if (pwd === PASSWORD) return true;
+                if (pwd !== null) alert('Incorrect password.');
+                return false;
+            }
+
+            // ---- snapshot / restore (mode is NOT restored) ----
+            function saveFullState() {
+                saveToStorage();
+            }
+
+            // ---- image remove helper ----
+            function removeImage(zone, imgElement, src) {
+                const preview = zone.querySelector('div[id$="Preview"]') || zone.querySelector('div[id$="Preview"]');
+                if (preview) {
+                    // remove the image from preview
+                    const imgs = preview.querySelectorAll('img');
+                    let found = false;
+                    imgs.forEach(img => {
+                        if (img.src === src) {
+                            img.remove();
+                            found = true;
+                        }
+                    });
+                    if (!found) {
+                        // fallback: remove any img inside zone
+                        const directImg = zone.querySelector('img');
+                        if (directImg && directImg.src === src) directImg.remove();
+                    }
+                } else {
+                    // academic-img: remove the img directly
+                    const directImg = zone.querySelector('img');
+                    if (directImg && directImg.src === src) directImg.remove();
+                    // if no images left, restore placeholder SVG
+                    if (!zone.querySelector('img')) {
+                        const svg = zone.querySelector('svg');
+                        if (svg) svg.style.display = '';
+                    }
+                }
+                // update storage
+                if (currentMode === 'edit') saveFullState();
+            }
+
+            function snapshot() {
+                const data = { editable: {}, images: {}, captions: {} };
+                editableEls.forEach(el => { data.editable[el.dataset.editable] = el.innerHTML; });
+                data.images.portrait = portrait.src;
+
+                document.querySelectorAll('.upload-zone, .cert-upload, .academic-img').forEach(z => {
+                    const id = z.id;
+                    if (!id) return;
+                    const imgs = z.querySelectorAll('img');
+                    if (imgs.length) {
+                        data.images[id] = [];
+                        imgs.forEach(img => { if (img.src && !img.closest('input')) data.images[id].push(img.src); });
+                        if (data.images[id].length === 0) delete data.images[id];
+                    }
+                    const caption = z.querySelector('.img-caption');
+                    if (caption) {
+                        data.captions[id] = caption.innerText;
+                    }
+                });
+                data.experiences = experiences;
+                return data;
+            }
+
+            function restore(data) {
+                if (!data) return;
+                if (data.editable) {
+                    editableEls.forEach(el => {
+                        if (data.editable[el.dataset.editable] !== undefined) el.innerHTML = data.editable[el.dataset.editable];
+                    });
+                }
+                if (data.images) {
+                    if (data.images.portrait) portrait.src = data.images.portrait;
+                    Object.keys(data.images).forEach(id => {
+                        if (id === 'portrait') return;
+                        const zone = document.getElementById(id);
+                        if (!zone) return;
+                        const srcs = data.images[id] || [];
+                        if (!srcs.length) return;
+                        let preview = zone.querySelector('div[id$="Preview"]') || zone.querySelector('div[id$="Preview"]');
+                        if (preview) {
+                            preview.innerHTML = srcs.map(s => {
+                                return `<div style="position:relative;display:inline-block;margin:2px;">
+                                    <img src="${s}" style="width:100%;height:auto;border-radius:8px;">
+                                    <button class="img-remove-btn" data-src="${s}">✕</button>
+                                </div>`;
+                            }).join('');
+                            // re-bind remove buttons
+                            preview.querySelectorAll('.img-remove-btn').forEach(btn => {
+                                btn.addEventListener('click', function(e) {
+                                    e.stopPropagation();
+                                    if (currentMode !== 'edit') return;
+                                    const src = this.dataset.src;
+                                    if (!src) return;
+                                    removeImage(zone, null, src);
+                                });
+                            });
+                        } else {
+                            // academic-img style
+                            const label = zone.querySelector('.upload-label');
+                            const existing = zone.querySelector('img');
+                            if (existing && !existing.classList.contains('academic-img-input')) existing.remove();
+                            const svg = zone.querySelector('svg');
+                            if (svg) svg.style.display = 'none';
+                            const img = document.createElement('img');
+                            img.src = srcs[0];
+                            img.style.width = '100%';
+                            img.style.height = 'auto';
+                            img.style.borderRadius = '8px';
+                            img.style.display = 'block';
+                            // remove button
+                            const removeBtn = document.createElement('button');
+                            removeBtn.className = 'img-remove-btn';
+                            removeBtn.dataset.src = srcs[0];
+                            removeBtn.textContent = '✕';
+                            removeBtn.style.position = 'absolute';
+                            removeBtn.style.top = '4px';
+                            removeBtn.style.right = '4px';
+                            removeBtn.style.background = 'rgba(139,26,43,.85)';
+                            removeBtn.style.color = '#fff';
+                            removeBtn.style.border = 'none';
+                            removeBtn.style.borderRadius = '50%';
+                            removeBtn.style.width = '24px';
+                            removeBtn.style.height = '24px';
+                            removeBtn.style.fontSize = '.75rem';
+                            removeBtn.style.fontWeight = '700';
+                            removeBtn.style.cursor = 'pointer';
+                            removeBtn.style.zIndex = '5';
+                            removeBtn.style.display = 'none';
+                            removeBtn.addEventListener('click', function(e) {
+                                e.stopPropagation();
+                                if (currentMode !== 'edit') return;
+                                const src = this.dataset.src;
+                                if (!src) return;
+                                removeImage(zone, null, src);
+                            });
+                            zone.style.position = 'relative';
+                            zone.insertBefore(img, label);
+                            zone.appendChild(removeBtn);
+                            if (currentMode === 'edit') removeBtn.style.display = 'flex';
+                            else removeBtn.style.display = 'none';
+                        }
+                    });
+                }
+                if (data.captions) {
+                    Object.keys(data.captions).forEach(id => {
+                        const zone = document.getElementById(id);
+                        if (!zone) return;
+                        const caption = zone.querySelector('.img-caption');
+                        if (caption) {
+                            caption.innerText = data.captions[id];
+                        }
+                    });
+                }
+                if (data.experiences && Array.isArray(data.experiences) && data.experiences.length) {
+                    experiences = data.experiences;
+                    saveExperiences();
+                } else {
+                    loadExperiences();
+                }
+                // always start in view mode
+                setMode('view');
+                renderExperiences();
+            }
+
+            function saveToStorage() {
+                const data = snapshot();
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+                modeStatus.textContent = 'Saved ✓';
+                setTimeout(() => { if (currentMode === 'edit') modeStatus.textContent = 'Edit'; }, 1000);
+            }
+
+            function resetStorage() {
+                if (!confirm('Reset all saved edits, images, captions, and experiences?')) return;
+                localStorage.removeItem(STORAGE_KEY);
+                localStorage.removeItem('portfolio-theme');
+                localStorage.removeItem(EXPERIENCES_KEY);
+                location.reload();
+            }
+
+            // ---- upload helpers (with remove button) ----
+            function setupUpload(zoneId, inputId, previewId, multiple = false) {
+                const zone = document.getElementById(zoneId);
+                const input = document.getElementById(inputId);
+                const preview = document.getElementById(previewId);
+                if (!zone || !input || !preview) return;
+                zone.addEventListener('click', e => {
+                    if (currentMode !== 'edit') return;
+                    if (e.target.tagName === 'IMG') return;
+                    if (e.target.classList.contains('img-remove-btn')) return;
+                    input.click();
+                });
+                input.addEventListener('change', () => {
+                    if (currentMode !== 'edit') return;
+                    const files = input.files;
+                    if (!files.length) return;
+                    const reader = (file) => new Promise(resolve => { const r = new FileReader(); r.onload = e => resolve(e.target.result); r.readAsDataURL(file); });
+                    Promise.all(Array.from(files).map(f => reader(f))).then(srcs => {
+                        const existing = preview.querySelectorAll('img');
+                        const existingSrcs = Array.from(existing).map(img => img.src);
+                        const allSrcs = [...existingSrcs, ...srcs];
+                        preview.innerHTML = allSrcs.map(s => {
+                            return `<div style="position:relative;display:inline-block;margin:2px;">
+                                <img src="${s}" style="width:100%;height:auto;border-radius:8px;">
+                                <button class="img-remove-btn" data-src="${s}">✕</button>
+                            </div>`;
+                        }).join('');
+                        // bind remove buttons
+                        preview.querySelectorAll('.img-remove-btn').forEach(btn => {
+                            btn.addEventListener('click', function(e) {
+                                e.stopPropagation();
+                                if (currentMode !== 'edit') return;
+                                const src = this.dataset.src;
+                                if (!src) return;
+                                removeImage(zone, preview, src);
+                            });
+                        });
+                        if (currentMode === 'edit') saveToStorage();
+                    });
+                    input.value = '';
+                });
+                const caption = zone.querySelector('.img-caption');
+                if (caption) {
+                    caption.addEventListener('input', () => {
+                        if (currentMode === 'edit') saveToStorage();
+                    });
+                }
+            }
+
+            function setupAcademicUpload(zoneId) {
+                const zone = document.getElementById(zoneId);
+                if (!zone) return;
+                const input = zone.querySelector('.academic-img-input');
+                if (!input) return;
+                zone.addEventListener('click', e => {
+                    if (currentMode !== 'edit') return;
+                    if (e.target.tagName === 'IMG') return;
+                    if (e.target.classList.contains('img-remove-btn')) return;
+                    input.click();
+                });
+                input.addEventListener('change', () => {
+                    if (currentMode !== 'edit') return;
+                    const file = input.files[0];
+                    if (!file) return;
+                    const reader = new FileReader();
+                    reader.onload = e => {
+                        const existing = zone.querySelector('img');
+                        if (existing && !existing.classList.contains('academic-img-input')) existing.remove();
+                        const svg = zone.querySelector('svg');
+                        if (svg) svg.style.display = 'none';
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        img.style.width = '100%';
+                        img.style.height = 'auto';
+                        img.style.borderRadius = '8px';
+                        img.style.display = 'block';
+                        const label = zone.querySelector('.upload-label');
+                        zone.insertBefore(img, label);
+                        // remove button
+                        let removeBtn = zone.querySelector('.img-remove-btn');
+                        if (!removeBtn) {
+                            removeBtn = document.createElement('button');
+                            removeBtn.className = 'img-remove-btn';
+                            removeBtn.textContent = '✕';
+                            removeBtn.style.position = 'absolute';
+                            removeBtn.style.top = '4px';
+                            removeBtn.style.right = '4px';
+                            removeBtn.style.background = 'rgba(139,26,43,.85)';
+                            removeBtn.style.color = '#fff';
+                            removeBtn.style.border = 'none';
+                            removeBtn.style.borderRadius = '50%';
+                            removeBtn.style.width = '24px';
+                            removeBtn.style.height = '24px';
+                            removeBtn.style.fontSize = '.75rem';
+                            removeBtn.style.fontWeight = '700';
+                            removeBtn.style.cursor = 'pointer';
+                            removeBtn.style.zIndex = '5';
+                            removeBtn.style.display = 'none';
+                            zone.style.position = 'relative';
+                            zone.appendChild(removeBtn);
+                            if (currentMode === 'edit') removeBtn.style.display = 'flex';
+                            else removeBtn.style.display = 'none';
+                        }
+                        removeBtn.dataset.src = e.target.result;
+                        removeBtn.addEventListener('click', function(ev) {
+                            ev.stopPropagation();
+                            if (currentMode !== 'edit') return;
+                            const src = this.dataset.src;
+                            if (!src) return;
+                            removeImage(zone, null, src);
+                        });
+                        if (currentMode === 'edit') saveToStorage();
+                    };
+                    reader.readAsDataURL(file);
+                    input.value = '';
+                });
+                const caption = zone.querySelector('.img-caption');
+                if (caption) {
+                    caption.addEventListener('input', () => {
+                        if (currentMode === 'edit') saveToStorage();
+                    });
+                }
+            }
+
+            // ---- dynamic add ----
+            function addSlot(targetId, templateId) {
+                const grid = document.getElementById(targetId);
+                const template = document.getElementById(templateId);
+                if (!grid || !template) return;
+                const clone = template.cloneNode(true);
+                clone.style.display = 'block';
+                zoneCounter++;
+                const newId = 'dynamic_' + zoneCounter;
+                const zoneDiv = clone.querySelector('.upload-zone, .cert-upload, .evidence-card');
+                if (zoneDiv) {
+                    zoneDiv.id = newId;
+                    const preview = zoneDiv.querySelector('div[id$="Preview"]') || zoneDiv.querySelector('div');
+                    if (preview && preview.id) preview.id = 'preview_' + zoneCounter;
+                    const input = zoneDiv.querySelector('input[type="file"]');
+                    if (input) input.id = 'input_' + zoneCounter;
+                    const newInput = document.getElementById(input?.id);
+                    const newPreview = document.getElementById(preview?.id);
+                    const caption = zoneDiv.querySelector('.img-caption');
+                    if (newInput && newPreview) {
+                        zoneDiv.addEventListener('click', e => {
+                            if (currentMode !== 'edit') return;
+                            if (e.target.tagName === 'IMG') return;
+                            if (e.target.classList.contains('img-remove-btn')) return;
+                            newInput.click();
+                        });
+                        newInput.addEventListener('change', () => {
+                            if (currentMode !== 'edit') return;
+                            const files = newInput.files;
+                            if (!files.length) return;
+                            const reader = (file) => new Promise(resolve => { const r = new FileReader(); r.onload = e => resolve(e.target.result); r.readAsDataURL(file); });
+                            Promise.all(Array.from(files).map(f => reader(f))).then(srcs => {
+                                newPreview.innerHTML = srcs.map(s => {
+                                    return `<div style="position:relative;display:inline-block;margin:2px;">
+                                        <img src="${s}" style="width:100%;height:auto;border-radius:8px;">
+                                        <button class="img-remove-btn" data-src="${s}">✕</button>
+                                    </div>`;
+                                }).join('');
+                                newPreview.querySelectorAll('.img-remove-btn').forEach(btn => {
+                                    btn.addEventListener('click', function(e) {
+                                        e.stopPropagation();
+                                        if (currentMode !== 'edit') return;
+                                        const src = this.dataset.src;
+                                        if (!src) return;
+                                        removeImage(zoneDiv, newPreview, src);
+                                    });
+                                });
+                                if (currentMode === 'edit') saveToStorage();
+                            });
+                            newInput.value = '';
+                        });
+                    }
+                    if (caption) {
+                        caption.addEventListener('input', () => {
+                            if (currentMode === 'edit') saveToStorage();
+                        });
+                    }
+                }
+                grid.appendChild(clone);
+                if (currentMode === 'edit') saveToStorage();
+            }
+
+            // ---- portrait ----
+            portrait.addEventListener('click', () => {
+                if (currentMode !== 'edit') return;
+                const input = document.createElement('input');
+                input.type = 'file';
+                input.accept = 'image/*';
+                input.style.display = 'none';
+                document.body.appendChild(input);
+                input.click();
+                input.onchange = () => {
+                    const file = input.files[0];
+                    if (!file) { input.remove(); return; }
+                    const reader = new FileReader();
+                    reader.onload = e => { portrait.src = e.target.result; if (currentMode === 'edit') saveToStorage(); input.remove(); };
+                    reader.readAsDataURL(file);
+                };
+            });
+
+            // ---- init ----
+            loadExperiences();
+
+            setupUpload('exposureUpload', 'exposureInput', 'exposurePreview', true);
+            setupUpload('cert1Upload', 'cert1Input', 'cert1Preview');
+            setupUpload('cert2Upload', 'cert2Input', 'cert2Preview');
+            for (let i = 1; i <= 6; i++) {
+                setupUpload('certWall' + i, 'certWallInput' + i, 'certWall' + i + 'Preview');
+                setupUpload('workUpload' + i, 'workInput' + i, 'workPreview' + i + '_upload');
+                setupUpload('eventUpload' + i, 'eventInput' + i, 'eventPreview' + i);
+            }
+            for (let i = 1; i <= 3; i++) setupAcademicUpload('academicImg' + i);
+
+            document.querySelectorAll('.add-image-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const target = this.dataset.target;
+                    const template = this.dataset.template;
+                    if (target && template) addSlot(target, template);
+                });
+            });
+
+            addExperienceBtn.addEventListener('click', addExperience);
+
+            viewBtn.addEventListener('click', () => setMode('view'));
+            editBtn.addEventListener('click', () => { if (currentMode !== 'edit' && promptPassword()) setMode('edit'); });
+            saveBtn.addEventListener('click', saveToStorage);
+            resetBtn.addEventListener('click', resetStorage);
+
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) {
+                try {
+                    const data = JSON.parse(saved);
+                    restore(data);
+                } catch (e) {
+                    setMode('view');
+                    renderExperiences();
+                }
+            } else {
+                setMode('view');
+                renderExperiences();
+            }
+
+            editableEls.forEach(el => {
+                el.addEventListener('input', () => { if (currentMode === 'edit') saveToStorage(); });
+            });
+
+            console.log('📚 Portfolio loaded. Edit password is not logged.');
+            window.__portfolio = { snapshot, restore, saveToStorage, resetStorage, setMode, applyTheme, addSlot, addExperience, experiences };
+        })();
+    </script>
+</body>
+</html>
