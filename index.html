@@ -151,6 +151,8 @@
         .mode-btn.save-btn:hover { background: #2a4a7a; }
         .mode-btn.reset-btn { background: rgba(139,26,43,.5); }
         .mode-btn.reset-btn:hover { background: rgba(139,26,43,.8); }
+        .section-add-btn { display:none; background:var(--gold); color:#1a1a2e; }
+        .editing .section-add-btn { display:inline-block; }
         .mode-hint { font-size: .65rem; opacity: .5; display: none; }
         .mode-hint.show { display: inline; }
         @media (max-width: 700px) {
@@ -604,10 +606,16 @@
         /* Uploaded media controls its own box height; never crop or stretch it. */
         .upload-zone, .cert-upload, .academic-img { height:auto !important; min-height:0 !important; aspect-ratio:auto !important; }
         .editing .upload-zone, .editing .cert-upload, .editing .academic-img { min-height:110px !important; }
-        .upload-zone img, .cert-upload img, .academic-img img { width:100% !important; height:auto !important; max-height:520px !important; object-fit:contain !important; object-position:center; }
+        .upload-zone img, .cert-upload img, .academic-img img { width:100% !important; height:auto !important; max-height:360px !important; object-fit:contain !important; object-position:center; }
         .evidence-card .evidence-preview { aspect-ratio:auto !important; height:auto !important; min-height:72px; padding:18px; }
-        .evidence-card .evidence-preview img { width:100% !important; height:auto !important; max-height:520px !important; object-fit:contain !important; }
-        .portrait-img { aspect-ratio:auto !important; height:auto !important; max-height:520px; object-fit:contain !important; }
+        .evidence-card .evidence-preview img { width:100% !important; height:auto !important; max-height:360px !important; object-fit:contain !important; }
+        .portrait-img { aspect-ratio:auto !important; height:auto !important; max-height:360px; object-fit:contain !important; }
+        .section-controls { display:none; gap:6px; align-items:center; margin-bottom:10px; }
+        .editing .section-controls { display:flex; }
+        .deleted-section { display:none !important; }
+        .section-control-btn { border:1px solid var(--border); background:var(--card); color:var(--accent); border-radius:8px; padding:5px 10px; cursor:pointer; font-size:.78rem; font-weight:700; }
+        .section-control-btn.delete { color:#fff; border-color:#8b1a2b; background:#8b1a2b; }
+        .section-control-btn:hover { filter:brightness(.96); transform:translateY(-1px); }
         .view-mode .upload-zone, .view-mode .cert-upload, .view-mode .academic-img { padding:0 !important; }
         /* Retain old saved certificate fields for migration, but show one clean section. */
         .legacy-certificate-layout, .legacy-professional-development { display:none !important; }
@@ -651,6 +659,7 @@
         <button class="mode-btn" id="editBtn">Edit</button>
         <button class="mode-btn save-btn" id="saveBtn" style="display:none;">Save</button>
         <button class="mode-btn reset-btn" id="resetBtn" style="display:none;">Reset</button>
+        <button class="mode-btn section-add-btn" id="sectionAddBtn">＋ Add Section</button>
         <span class="mode-hint" id="modeHint">Click text to edit · use upload areas to add evidence</span>
         <span class="edit-lock" style="font-size:.7rem;opacity:.4;">🔒</span>
     </div>
@@ -1196,15 +1205,131 @@
             const navLinks = document.getElementById('navLinks');
             const experiencesContainer = document.getElementById('experiencesContainer');
             const addExperienceBtn = document.getElementById('addExperienceBtn');
+            const sectionAddBtn = document.getElementById('sectionAddBtn');
 
-            const editableEls = document.querySelectorAll('[contenteditable="false"][data-editable]');
             const portrait = document.getElementById('portraitImg');
-            const captionEls = document.querySelectorAll('.img-caption');
 
             let currentMode = 'view';
             let zoneCounter = 0;
             let experiences = [];
             let resources = { workResources1: [], workResources2: [] };
+            let deletedSections = [];
+
+            function editableElements() {
+                return document.querySelectorAll('[data-editable]');
+            }
+
+            function sectionDescription(section) {
+                return section.querySelector('.section-desc') || section.querySelector('.container > p');
+            }
+
+            function removeSectionNav(sectionId) {
+                document.querySelectorAll('.nav-links a').forEach(link => {
+                    if (link.getAttribute('href') === '#' + sectionId) link.closest('li')?.remove();
+                });
+            }
+
+            function addSectionNav(section) {
+                if (!section || !section.id || !navLinks) return;
+                if (navLinks.querySelector('a[href="#' + section.id + '"]')) return;
+                const li = document.createElement('li');
+                const link = document.createElement('a');
+                link.href = '#' + section.id;
+                link.textContent = section.querySelector('.section-label')?.textContent?.trim() || 'Section';
+                link.addEventListener('click', () => navLinks.classList.remove('open'));
+                li.appendChild(link);
+                navLinks.appendChild(li);
+            }
+
+            function refreshSectionControls() {
+                document.querySelectorAll('body > section').forEach(section => {
+                    if (!section.id || section.classList.contains('legacy-certificate-layout') || section.classList.contains('legacy-professional-development')) return;
+                    const container = section.querySelector(':scope > .container');
+                    if (!container) return;
+                    let controls = container.querySelector(':scope > .section-controls');
+                    if (!controls) {
+                        controls = document.createElement('div');
+                        controls.className = 'section-controls';
+                        controls.innerHTML = '<button type="button" class="section-control-btn section-edit-btn">Edit section</button><button type="button" class="section-control-btn delete section-delete-btn">Delete section</button>';
+                        container.insertBefore(controls, container.firstChild);
+                        controls.querySelector('.section-edit-btn').addEventListener('click', () => {
+                            if (currentMode !== 'edit') return;
+                            const labelEl = section.querySelector('.section-label');
+                            const titleEl = section.querySelector('.section-title');
+                            const descEl = sectionDescription(section);
+                            const label = prompt('Section label:', labelEl?.textContent?.trim() || 'Section');
+                            if (label === null) return;
+                            const title = prompt('Section title:', titleEl?.textContent?.trim() || label);
+                            if (title === null) return;
+                            const description = prompt('Section description:', descEl?.textContent?.trim() || '');
+                            if (labelEl) labelEl.textContent = label.trim() || 'Section';
+                            if (titleEl) titleEl.textContent = title.trim() || label.trim() || 'Section';
+                            if (descEl && description !== null) descEl.textContent = description.trim();
+                            const navLink = navLinks.querySelector('a[href="#' + section.id + '"]');
+                            if (navLink) navLink.textContent = label.trim() || 'Section';
+                            saveToStorage();
+                        });
+                        controls.querySelector('.section-delete-btn').addEventListener('click', () => {
+                            if (currentMode !== 'edit') return;
+                            if (!confirm('Delete this section from the portfolio?')) return;
+                            if (!deletedSections.includes(section.id)) deletedSections.push(section.id);
+                            section.classList.add('deleted-section');
+                            removeSectionNav(section.id);
+                            saveToStorage();
+                        });
+                    }
+                });
+            }
+
+            function applyDeletedSections() {
+                document.querySelectorAll('body > section').forEach(section => {
+                    if (!section.id) return;
+                    section.classList.toggle('deleted-section', deletedSections.includes(section.id));
+                    if (deletedSections.includes(section.id)) removeSectionNav(section.id);
+                });
+            }
+
+            function createCustomSection(spec) {
+                const id = spec.id || ('custom-section-' + Date.now());
+                const section = document.createElement('section');
+                section.id = id;
+                section.dataset.customSection = 'true';
+                section.innerHTML = `<div class="container">
+                    <div class="section-label"></div>
+                    <h2 class="section-title" contenteditable="false" data-editable="${id}_title"></h2>
+                    <p class="section-desc" contenteditable="false" data-editable="${id}_description"></p>
+                    <div class="card" style="margin-top:18px;"><p contenteditable="false" data-editable="${id}_body">Add your content here.</p></div>
+                </div>`;
+                section.querySelector('.section-label').textContent = (spec.label || 'New Section').trim();
+                section.querySelector('.section-title').textContent = (spec.title || spec.label || 'New Section').trim();
+                section.querySelector('.section-desc').textContent = (spec.description || '').trim();
+                const bodyEl = section.querySelector('[data-editable$="_body"]');
+                if (bodyEl && spec.body !== undefined) bodyEl.innerHTML = spec.body;
+                document.querySelector('footer')?.before(section);
+                addSectionNav(section);
+                return section;
+            }
+
+            function addSection() {
+                if (currentMode !== 'edit') return;
+                const label = prompt('New section label:', 'New Section');
+                if (label === null) return;
+                const title = prompt('Section title:', label);
+                if (title === null) return;
+                const description = prompt('Section description:', 'Add a short description for this section.');
+                if (description === null) return;
+                const section = createCustomSection({
+                    id: 'custom-section-' + Date.now(),
+                    label,
+                    title,
+                    description,
+                    body: 'Add your content here.'
+                });
+                refreshSectionControls();
+                setMode('edit');
+                saveToStorage();
+                section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
 
             // ---- DEFAULT EXPERIENCES (UPDATED) ----
             function getDefaultExperiences() {
@@ -1349,8 +1474,8 @@
                     saveBtn.style.display = 'none';
                     resetBtn.style.display = 'none';
                     modeHint.classList.remove('show');
-                    editableEls.forEach(el => el.contentEditable = 'false');
-                    captionEls.forEach(el => el.contentEditable = 'false');
+                    editableElements().forEach(el => el.contentEditable = 'false');
+                    document.querySelectorAll('.img-caption').forEach(el => el.contentEditable = 'false');
                     document.querySelectorAll('.experience-card [contenteditable="true"][data-exp-field]').forEach(el => {
                         el.contentEditable = 'false';
                     });
@@ -1362,8 +1487,8 @@
                     saveBtn.style.display = '';
                     resetBtn.style.display = '';
                     modeHint.classList.add('show');
-                    editableEls.forEach(el => el.contentEditable = 'true');
-                    captionEls.forEach(el => el.contentEditable = 'true');
+                    editableElements().forEach(el => el.contentEditable = 'true');
+                    document.querySelectorAll('.img-caption').forEach(el => el.contentEditable = 'true');
                     document.querySelectorAll('.experience-card [contenteditable="false"][data-exp-field]').forEach(el => {
                         el.contentEditable = 'true';
                     });
@@ -1374,12 +1499,40 @@
                     if (l) l.style.display = mode === 'edit' ? '' : 'none';
                     if (s) s.style.display = mode === 'edit' ? '' : 'none';
                 });
+                refreshSectionControls();
                 renderExperiences();
             }
 
             // ---- snapshot / restore (mode is NOT restored) ----
             function saveFullState() {
                 saveToStorage();
+            }
+
+            function customSectionSnapshot() {
+                return Array.from(document.querySelectorAll('section[data-custom-section]')).map(section => ({
+                    id: section.id,
+                    label: section.querySelector('.section-label')?.textContent || 'New Section',
+                    title: section.querySelector('.section-title')?.innerHTML || 'New Section',
+                    description: section.querySelector('.section-desc')?.innerHTML || '',
+                    body: section.querySelector('[data-editable$="_body"]')?.innerHTML || ''
+                }));
+            }
+
+            function restoreCustomSections(list) {
+                document.querySelectorAll('section[data-custom-section]').forEach(section => {
+                    removeSectionNav(section.id);
+                    section.remove();
+                });
+                if (!Array.isArray(list)) return;
+                list.forEach(spec => {
+                    if (!spec || !spec.id) return;
+                    const section = createCustomSection(spec);
+                    const title = section.querySelector('.section-title');
+                    const description = section.querySelector('.section-desc');
+                    if (title && spec.title !== undefined) title.innerHTML = spec.title;
+                    if (description && spec.description !== undefined) description.innerHTML = spec.description;
+                });
+                refreshSectionControls();
             }
 
             // ---- image remove helper ----
@@ -1415,8 +1568,8 @@
             }
 
             function snapshot() {
-                const data = { editable: {}, images: {}, captions: {}, resources: resources };
-                editableEls.forEach(el => { data.editable[el.dataset.editable] = el.innerHTML; });
+                const data = { editable: {}, images: {}, captions: {}, resources: resources, deletedSections: deletedSections.slice(), customSections: customSectionSnapshot() };
+                editableElements().forEach(el => { data.editable[el.dataset.editable] = el.innerHTML; });
                 data.images.portrait = portrait.src;
 
                 document.querySelectorAll('.upload-zone, .cert-upload, .academic-img').forEach(z => {
@@ -1440,8 +1593,10 @@
             function restore(data) {
                 if (!data) return;
                 const wasEditing = currentMode === 'edit';
+                deletedSections = Array.isArray(data.deletedSections) ? data.deletedSections.filter(id => typeof id === 'string') : [];
+                restoreCustomSections(data.customSections);
                 if (data.editable) {
-                    editableEls.forEach(el => {
+                    editableElements().forEach(el => {
                         if (data.editable[el.dataset.editable] !== undefined) el.innerHTML = data.editable[el.dataset.editable];
                     });
                 }
@@ -1538,6 +1693,8 @@
                     ? data.resources
                     : { workResources1: [], workResources2: [] };
                 renderAllResources();
+                refreshSectionControls();
+                applyDeletedSections();
                 setMode(wasEditing ? 'edit' : 'view');
                 renderExperiences();
             }
@@ -1872,6 +2029,8 @@
             });
             saveBtn.addEventListener('click', saveToStorage);
             resetBtn.addEventListener('click', resetStorage);
+            sectionAddBtn?.addEventListener('click', addSection);
+            refreshSectionControls();
 
             const saved = localStorage.getItem(STORAGE_KEY);
             if (saved) {
@@ -1887,12 +2046,15 @@
                 renderExperiences();
             }
 
-            editableEls.forEach(el => {
+            editableElements().forEach(el => {
                 el.addEventListener('input', () => { if (currentMode === 'edit') saveToStorage(); });
+            });
+            document.addEventListener('input', event => {
+                if (currentMode === 'edit' && event.target.closest('[data-editable]')) saveToStorage();
             });
 
             console.log('📚 Portfolio loaded.');
-            window.__portfolio = { snapshot, restore, saveToStorage, resetStorage, setMode, addSlot, addExperience, experiences };
+            window.__portfolio = { snapshot, restore, saveToStorage, resetStorage, setMode, addSlot, addExperience, addSection, experiences };
         })();
     </script>
     <script src="supabase-storage.js?v=59d37f0"></script>
