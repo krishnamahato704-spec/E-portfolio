@@ -1,22 +1,32 @@
 (function () {
   'use strict';
 
-  // NEW PORTFOLIO DATA SPACE — intentionally starts completely empty.
+  // CLOUD-ONLY PORTFOLIO STORAGE
+  // No portfolio data is persisted in browser localStorage.
+  // The existing editor still calls localStorage, so we intercept those calls:
+  // saves are sent directly to Supabase and reads are supplied from the cloud.
   const SUPABASE_URL = 'https://oyqevsygintkjrkfbzpx.supabase.co';
   const SUPABASE_KEY = 'sb_publishable_CZOIotDHbTM9m4e8vHZ9Aw_H3-G9mAd';
   const BUCKET = 'portfolio-media';
-  const STATE_KEY = 'krishna_portfolio_v5';
+  const EDITOR_STATE_KEY = 'krishna_portfolio_v4';
   const REMOTE_STATE_PATH = 'state/portfolio-v5.json';
-  const OLD_KEYS = ['krishna_portfolio_v4', 'krishna_portfolio_pending_upload', 'krishna_experiences', 'portfolio-theme'];
-  const ORIGINAL_SET = Storage.prototype.setItem;
-  const ORIGINAL_GET = Storage.prototype.getItem;
-  let syncing = false;
-  let resetDone = false;
+
+  const ORIGINAL = {
+    getItem: Storage.prototype.getItem,
+    setItem: Storage.prototype.setItem,
+    removeItem: Storage.prototype.removeItem,
+    clear: Storage.prototype.clear,
+    key: Storage.prototype.key
+  };
 
   const headers = {
     apikey: SUPABASE_KEY,
     Authorization: 'Bearer ' + SUPABASE_KEY
   };
+
+  let remoteState = null;
+  let syncing = false;
+  let initialized = false;
 
   function publicUrl(path) {
     return SUPABASE_URL + '/storage/v1/object/public/' + BUCKET + '/' + path;
@@ -31,38 +41,21 @@
     const binary = atob(body);
     const bytes = new Uint8Array(binary.length);
     for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
-    return new Blob([bytes], { type: mime });
+    return new Blob([bytes], {type: mime});
   }
 
-  async function uploadDataUrl(dataUrl, label) {
+  async function uploadImage(dataUrl, label) {
     const blob = dataUrlToBlob(dataUrl);
     const ext = (blob.type.split('/')[1] || 'bin').replace(/[^a-z0-9]/gi, '').toLowerCase() || 'bin';
-    const safeLabel = String(label || 'image').replace(/[^a-z0-9_-]/gi, '_').slice(0, 60);
-    const path = 'portfolio-v5/' + safeLabel + '_' + Date.now() + '_' + Math.random().toString(36).slice(2, 9) + '.' + ext;
+    const safe = String(label || 'image').replace(/[^a-z0-9_-]/gi, '_').slice(0, 60);
+    const path = 'portfolio-v5/' + safe + '_' + Date.now() + '_' + Math.random().toString(36).slice(2, 9) + '.' + ext;
     const response = await fetch(SUPABASE_URL + '/storage/v1/object/' + BUCKET + '/' + path, {
       method: 'POST',
       headers: Object.assign({}, headers, {'Content-Type': blob.type || 'application/octet-stream', 'x-upsert': 'true'}),
       body: blob
     });
-    if (!response.ok) throw new Error('Image upload failed (' + response.status + '): ' + await response.text().catch(() => ''));
+    if (!response.ok) throw new Error('Image upload failed (' + response.status + ')');
     return publicUrl(path);
-  }
-
-  async function uploadStateJson(state) {
-    const blob = new Blob([JSON.stringify(state)], { type: 'application/json' });
-    const response = await fetch(SUPABASE_URL + '/storage/v1/object/' + BUCKET + '/' + REMOTE_STATE_PATH, {
-      method: 'POST',
-      headers: Object.assign({}, headers, {'Content-Type': 'application/json', 'x-upsert': 'true', 'cache-control': 'no-cache'}),
-      body: blob
-    });
-    if (!response.ok) throw new Error('State upload failed (' + response.status + '): ' + await response.text().catch(() => ''));
-  }
-
-  async function fetchRemoteState() {
-    const response = await fetch(SUPABASE_URL + '/storage/v1/object/' + BUCKET + '/' + REMOTE_STATE_PATH + '?t=' + Date.now(), {headers});
-    if (response.status === 404) return null;
-    if (!response.ok) throw new Error('Remote state fetch failed (' + response.status + ')');
-    return await response.json();
   }
 
   async function migrateImages(state) {
@@ -70,73 +63,128 @@
     const jobs = [];
     const replace = (value, label) => {
       if (typeof value !== 'string' || !value.startsWith('data:image/')) return Promise.resolve(value);
-      return uploadDataUrl(value, label);
+      return uploadImage(value, label);
     };
+
     if (typeof state.images.portrait === 'string' && state.images.portrait.startsWith('data:image/')) {
       jobs.push(replace(state.images.portrait, 'portrait').then(url => { state.images.portrait = url; }));
     }
+
     Object.keys(state.images).forEach(id => {
       if (id === 'portrait' || !Array.isArray(state.images[id])) return;
       state.images[id] = state.images[id].slice();
       state.images[id].forEach((src, index) => {
-        if (typeof src === 'string' && src.startsWith('data:image/')) jobs.push(replace(src, id + '_' + index).then(url => { state.images[id][index] = url; }));
+        if (typeof src === 'string' && src.startsWith('data:image/')) {
+          jobs.push(replace(src, id + '_' + index).then(url => { state.images[id][index] = url; }));
+        }
       });
     });
+
     await Promise.all(jobs);
     return state;
   }
 
-  function saveLocal(state) {
-    ORIGINAL_SET.call(localStorage, STATE_KEY, JSON.stringify(state));
-  }
-
-  async function pushState(raw) {
+  async function saveRemote(raw) {
     if (syncing) return;
     let state;
     try { state = JSON.parse(raw); } catch (_) { return; }
+
     syncing = true;
     const status = document.getElementById('modeStatus');
     try {
       state = await migrateImages(state);
-      saveLocal(state);
-      await uploadStateJson(state);
+      remoteState = state;
+
+      const blob = new Blob([JSON.stringify(state)], {type: 'application/json'});
+      const response = await fetch(SUPABASE_URL + '/storage/v1/object/' + BUCKET + '/' + REMOTE_STATE_PATH, {
+        method: 'POST',
+        headers: Object.assign({}, headers, {
+          'Content-Type': 'application/json',
+          'x-upsert': 'true',
+          'cache-control': 'no-cache'
+        }),
+        body: blob
+      });
+      if (!response.ok) throw new Error('Cloud state save failed (' + response.status + '): ' + await response.text().catch(() => ''));
+
+      // Put the uploaded public URLs back into the visible editor without
+      // writing the state to browser storage.
+      if (window.__portfolio && typeof window.__portfolio.restore === 'function') {
+        window.__portfolio.restore(state);
+      }
       if (status && document.body.classList.contains('editing')) status.textContent = 'Saved online ✓';
     } catch (error) {
       console.error('Portfolio cloud save error:', error);
-      if (status && document.body.classList.contains('editing')) status.textContent = 'Saved locally · cloud save failed';
-    } finally { syncing = false; }
-  }
-
-  async function bootSync() {
-    if (resetDone) return;
-    resetDone = true;
-
-    // Remove ALL previous local portfolio history. This deliberately does not
-    // migrate v4 data. The new v5 portfolio starts clean.
-    OLD_KEYS.forEach(key => localStorage.removeItem(key));
-
-    const status = document.getElementById('modeStatus');
-    try {
-      const remote = await fetchRemoteState();
-      if (remote) {
-        saveLocal(remote);
-        if (status) status.textContent = 'New portfolio synced ✓';
-        setTimeout(() => location.reload(), 50);
-      } else if (status) {
-        status.textContent = 'New portfolio · ready';
-      }
-    } catch (error) {
-      console.error('Portfolio cloud sync error:', error);
-      if (status) status.textContent = 'New portfolio · ready';
+      if (status && document.body.classList.contains('editing')) status.textContent = 'Cloud save failed — please try again';
+    } finally {
+      syncing = false;
     }
   }
 
-  Storage.prototype.setItem = function (key, value) {
-    ORIGINAL_SET.call(this, key, value);
-    if (this !== localStorage || key !== 'krishna_portfolio_v4' || syncing) return;
-    // The old editor still writes v4. Mirror it into the NEW v5 cloud state.
-    pushState(value);
+  async function loadRemote() {
+    const status = document.getElementById('modeStatus');
+    try {
+      const response = await fetch(SUPABASE_URL + '/storage/v1/object/' + BUCKET + '/' + REMOTE_STATE_PATH + '?t=' + Date.now(), {headers});
+      if (response.status === 404) {
+        initialized = true;
+        if (status) status.textContent = 'New portfolio · ready';
+        return;
+      }
+      if (!response.ok) throw new Error('Cloud state load failed (' + response.status + ')');
+
+      remoteState = await response.json();
+      initialized = true;
+
+      // Restore the cloud state directly. Nothing is written to localStorage.
+      if (window.__portfolio && typeof window.__portfolio.restore === 'function') {
+        window.__portfolio.restore(remoteState);
+      }
+      if (status) status.textContent = 'Synced online ✓';
+    } catch (error) {
+      console.error('Portfolio cloud load error:', error);
+      initialized = true;
+      if (status) status.textContent = 'Cloud unavailable';
+    }
+  }
+
+  // Disable browser persistence for this portfolio. All getItem calls return
+  // null so old device-specific history can never override cloud data.
+  Storage.prototype.getItem = function (key) {
+    if (this === localStorage) return null;
+    return ORIGINAL.getItem.call(this, key);
   };
 
-  window.addEventListener('load', () => setTimeout(bootSync, 150));
+  Storage.prototype.setItem = function (key, value) {
+    if (this === localStorage) {
+      if (key === EDITOR_STATE_KEY && typeof value === 'string' && !syncing) saveRemote(value);
+      return;
+    }
+    return ORIGINAL.setItem.call(this, key, value);
+  };
+
+  Storage.prototype.removeItem = function (key) {
+    if (this === localStorage) return;
+    return ORIGINAL.removeItem.call(this, key);
+  };
+
+  Storage.prototype.clear = function () {
+    if (this === localStorage) return;
+    return ORIGINAL.clear.call(this);
+  };
+
+  // Erase any old browser-local portfolio keys that were created before the
+  // cloud-only version. This is intentionally best-effort and never stores new data.
+  try {
+    ['krishna_portfolio_v4', 'krishna_portfolio_v5', 'krishna_portfolio_pending_upload', 'krishna_experiences', 'portfolio-theme'].forEach(k => ORIGINAL.removeItem.call(localStorage, k));
+  } catch (_) {}
+
+  // The editor script is loaded before this file, so wait until its public API
+  // exists, then fetch the authoritative cloud state and restore it directly.
+  window.addEventListener('load', () => {
+    const wait = () => {
+      if (window.__portfolio && typeof window.__portfolio.restore === 'function') loadRemote();
+      else setTimeout(wait, 50);
+    };
+    wait();
+  });
 })();
