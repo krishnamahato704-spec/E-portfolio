@@ -1,17 +1,23 @@
 (function () {
   'use strict';
 
-  // Persistent image storage for the portfolio. Images are uploaded to Supabase
-  // Storage; the portfolio's existing editor continues to use localStorage for
-  // text/state, but saved image data URLs are transparently replaced by public URLs.
+  // Persistent image/state storage for the portfolio.
+  // Images live in Supabase Storage and the complete portfolio state is stored
+  // in a small JSON document in Storage, so text, captions, experiences and
+  // image URLs are available on every device.
   const SUPABASE_URL = 'https://oyqevsygintkjrkfbzpx.supabase.co';
-  const SUPABASE_KEY = 'sb_publishable_CZOIotDHbTM9m4E8vHZ9Aw_H3-G9mAd';
+  const SUPABASE_KEY = 'sb_publishable_CZOIotDHbTM9m4e8vHZ9Aw_H3-G9mAd';
   const BUCKET = 'portfolio-media';
   const STATE_KEY = 'krishna_portfolio_v4';
-  const PENDING_KEY = 'krishna_portfolio_pending_upload';
+  const REMOTE_STATE_PATH = 'state/portfolio.json';
   const ORIGINAL_SET = Storage.prototype.setItem;
   const ORIGINAL_GET = Storage.prototype.getItem;
-  let handling = false;
+  let syncing = false;
+
+  const headers = {
+    apikey: SUPABASE_KEY,
+    Authorization: 'Bearer ' + SUPABASE_KEY
+  };
 
   function publicUrl(path) {
     return SUPABASE_URL + '/storage/v1/object/public/' + BUCKET + '/' + path;
@@ -36,95 +42,116 @@
     const path = 'portfolio/' + safeLabel + '_' + Date.now() + '_' + Math.random().toString(36).slice(2, 9) + '.' + ext;
     const response = await fetch(SUPABASE_URL + '/storage/v1/object/' + BUCKET + '/' + path, {
       method: 'POST',
-      headers: {
-        apikey: SUPABASE_KEY,
-        Authorization: 'Bearer ' + SUPABASE_KEY,
+      headers: Object.assign({}, headers, {
         'Content-Type': blob.type || 'application/octet-stream',
         'x-upsert': 'true'
-      },
+      }),
       body: blob
     });
-    if (!response.ok) {
-      const text = await response.text().catch(() => '');
-      throw new Error('Upload failed (' + response.status + '): ' + text);
-    }
+    if (!response.ok) throw new Error('Image upload failed (' + response.status + '): ' + await response.text().catch(() => ''));
     return publicUrl(path);
   }
 
-  async function migrateState(raw) {
-    let state;
-    try { state = JSON.parse(raw); } catch (_) { return raw; }
-    if (!state || !state.images) return raw;
+  async function uploadStateJson(state) {
+    const blob = new Blob([JSON.stringify(state)], { type: 'application/json' });
+    const response = await fetch(SUPABASE_URL + '/storage/v1/object/' + BUCKET + '/' + REMOTE_STATE_PATH, {
+      method: 'POST',
+      headers: Object.assign({}, headers, {
+        'Content-Type': 'application/json',
+        'x-upsert': 'true',
+        'cache-control': 'no-cache'
+      }),
+      body: blob
+    });
+    if (!response.ok) throw new Error('State upload failed (' + response.status + '): ' + await response.text().catch(() => ''));
+  }
 
+  async function fetchRemoteState() {
+    const response = await fetch(SUPABASE_URL + '/storage/v1/object/' + BUCKET + '/' + REMOTE_STATE_PATH + '?t=' + Date.now(), {
+      headers: Object.assign({}, headers, { 'Cache-Control': 'no-cache' })
+    });
+    if (response.status === 404) return null;
+    if (!response.ok) throw new Error('Remote state fetch failed (' + response.status + ')');
+    return await response.json();
+  }
+
+  async function migrateImages(state) {
+    if (!state || !state.images) return state;
     const jobs = [];
-    const replaceImage = (value, label) => {
+    const replace = (value, label) => {
       if (typeof value !== 'string' || !value.startsWith('data:image/')) return Promise.resolve(value);
       return uploadDataUrl(value, label);
     };
 
     if (typeof state.images.portrait === 'string' && state.images.portrait.startsWith('data:image/')) {
-      jobs.push(replaceImage(state.images.portrait, 'portrait').then(url => { state.images.portrait = url; }));
+      jobs.push(replace(state.images.portrait, 'portrait').then(url => { state.images.portrait = url; }));
     }
-
     Object.keys(state.images).forEach(id => {
-      if (id === 'portrait') return;
-      const value = state.images[id];
-      if (!Array.isArray(value)) return;
-      state.images[id] = value.slice();
-      value.forEach((src, index) => {
+      if (id === 'portrait' || !Array.isArray(state.images[id])) return;
+      state.images[id] = state.images[id].slice();
+      state.images[id].forEach((src, index) => {
         if (typeof src === 'string' && src.startsWith('data:image/')) {
-          jobs.push(replaceImage(src, id + '_' + index).then(url => { state.images[id][index] = url; }));
+          jobs.push(replace(src, id + '_' + index).then(url => { state.images[id][index] = url; }));
         }
       });
     });
-
-    if (!jobs.length) return raw;
     await Promise.all(jobs);
-    return JSON.stringify(state);
+    return state;
   }
 
-  async function persistRemotely(raw) {
+  function saveLocal(state) {
+    ORIGINAL_SET.call(localStorage, STATE_KEY, JSON.stringify(state));
+  }
+
+  async function pushState(raw) {
+    if (syncing) return;
+    let state;
+    try { state = JSON.parse(raw); } catch (_) { return; }
+    syncing = true;
+    const status = document.getElementById('modeStatus');
     try {
-      ORIGINAL_SET.call(localStorage, PENDING_KEY, raw);
-      const migrated = await migrateState(raw);
-      ORIGINAL_SET.call(localStorage, STATE_KEY, migrated);
-      ORIGINAL_SET.call(localStorage, PENDING_KEY, '');
-      const status = document.getElementById('modeStatus');
+      state = await migrateImages(state);
+      saveLocal(state);
+      await uploadStateJson(state);
       if (status && document.body.classList.contains('editing')) status.textContent = 'Saved online ✓';
     } catch (error) {
-      console.error('Supabase image upload error:', error);
-      const status = document.getElementById('modeStatus');
-      if (status && document.body.classList.contains('editing')) status.textContent = 'Saved locally · upload retry needed';
+      console.error('Portfolio cloud save error:', error);
+      if (status && document.body.classList.contains('editing')) status.textContent = 'Saved locally · cloud save failed';
+    } finally {
+      syncing = false;
     }
   }
 
+  async function bootSync() {
+    const status = document.getElementById('modeStatus');
+    try {
+      const remote = await fetchRemoteState();
+      const localRaw = ORIGINAL_GET.call(localStorage, STATE_KEY);
+
+      if (remote) {
+        // Cloud is authoritative when it exists. This is what makes the same
+        // portfolio appear on a second browser/device.
+        saveLocal(remote);
+        if (status) status.textContent = 'Synced online ✓';
+        setTimeout(() => location.reload(), 50);
+        return;
+      }
+
+      // First device: migrate its existing local data into cloud storage.
+      if (localRaw) await pushState(localRaw);
+    } catch (error) {
+      console.error('Portfolio cloud sync error:', error);
+      if (status) status.textContent = 'Offline · local data preserved';
+    }
+  }
+
+  // Intercept the portfolio's existing localStorage saves. Whenever an image
+  // or edit is saved, mirror the resulting state to Supabase.
   Storage.prototype.setItem = function (key, value) {
     ORIGINAL_SET.call(this, key, value);
-    if (this !== localStorage || key !== STATE_KEY || handling) return;
-    if (typeof value !== 'string' || value.indexOf('data:image/') === -1) return;
-    handling = true;
-    persistRemotely(value).finally(() => { handling = false; });
+    if (this !== localStorage || key !== STATE_KEY || syncing) return;
+    pushState(value);
   };
 
-  async function bootMigration() {
-    const pending = ORIGINAL_GET.call(localStorage, PENDING_KEY);
-    const current = ORIGINAL_GET.call(localStorage, STATE_KEY);
-    const raw = pending || current;
-    if (!raw || raw.indexOf('data:image/') === -1) return;
-    handling = true;
-    try {
-      const migrated = await migrateState(raw);
-      ORIGINAL_SET.call(localStorage, STATE_KEY, migrated);
-      ORIGINAL_SET.call(localStorage, PENDING_KEY, '');
-      // Reload once so the portfolio restores the new public URLs everywhere.
-      if (current && current.indexOf('data:image/') !== -1) location.reload();
-    } catch (error) {
-      console.error('Supabase migration error:', error);
-    } finally {
-      handling = false;
-    }
-  }
-
-  // Retry/migrate existing locally saved images shortly after the page loads.
-  window.addEventListener('load', () => setTimeout(bootMigration, 250));
+  window.addEventListener('load', () => setTimeout(bootSync, 150));
 })();
