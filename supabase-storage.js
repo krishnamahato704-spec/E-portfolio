@@ -64,6 +64,7 @@
       if (!nav) return;
       const contact = nav.querySelector('a[href="#contact"]')?.closest('li');
       if (contact) nav.appendChild(contact);
+
       let cv = nav.querySelector('.nav-cv-link');
       if (!cv) {
         const li = document.createElement('li');
@@ -75,7 +76,27 @@
         const contactLi = nav.querySelector('a[href="#contact"]')?.closest('li');
         if (contactLi) nav.insertBefore(li, contactLi); else nav.appendChild(li);
       }
-      cv.onclick = () => nav.classList.remove('open');
+      const galleryLink = nav.querySelector('a[href="#portfolio-gallery"]');
+      if (!galleryLink) {
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+        a.href = '#portfolio-gallery';
+        a.textContent = 'Gallery';
+        a.onclick = () => nav.classList.remove('open');
+        li.appendChild(a);
+        const contactLi = nav.querySelector('a[href="#contact"]')?.closest('li');
+        if (contactLi) nav.insertBefore(li, contactLi); else nav.appendChild(li);
+      }
+      nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => nav.classList.remove('open')));
+    }
+
+    function fixSectionNumbers() {
+      const school = document.querySelector('#school-fit .section-label');
+      const gallery = document.querySelector('#portfolio-gallery .section-label');
+      const contact = document.querySelector('#contact .section-label');
+      if (school) school.textContent = '14 · What I Bring to a School';
+      if (gallery) gallery.textContent = '15 · Gallery';
+      if (contact) contact.textContent = '16 · Contact';
     }
 
     function moveCvToTop() {
@@ -118,7 +139,7 @@
       section.id = 'portfolio-gallery';
       section.innerHTML = `
         <div class="container">
-          <div class="section-label">14 · Gallery</div>
+          <div class="section-label">15 · Gallery</div>
           <h2 class="section-title">Classroom &amp; Professional Gallery</h2>
           <p class="section-desc">Add selected internship, teaching, professional-development, and classroom photographs. Use only photographs you are permitted to publish.</p>
           <div id="portfolioGalleryGrid" class="gallery-grid"></div>
@@ -221,6 +242,7 @@
         renderGallery();
         ensureCompletionYear();
         fixNavigation();
+        fixSectionNumbers();
         moveCvToTop();
       };
       window.__portfolio.saveToStorage = savePortfolioState;
@@ -242,6 +264,7 @@
       renderGallery();
       ensureCompletionYear();
       fixNavigation();
+      fixSectionNumbers();
       moveCvToTop();
       patchPresentationActivities();
       document.querySelectorAll('.resource-item').forEach(item => {
@@ -254,12 +277,11 @@
     loadCore()
       .then(() => {
         finish();
-        window.addEventListener('load', finish, { once: false });
+        window.addEventListener('load', finish);
         setTimeout(finish, 1200);
       })
       .catch(error => {
         console.error('Portfolio cloud bootstrap failed:', error);
-        // The visual fixes still work if the cloud core is temporarily unavailable.
         finish();
       });
   }
