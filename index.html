@@ -550,6 +550,8 @@
             .feature-block { padding: 28px 24px; }
             section { padding: 40px 0 32px; }
             .experience-card .exp-header h3 { font-size: 1rem; }
+            .card > div[style*="grid-template-columns:1fr auto 1fr auto 1fr"] { grid-template-columns:1fr !important; }
+            .card > div[style*="grid-template-columns:1fr auto 1fr auto 1fr"] > span { display:none; }
         }
         @media (max-width: 540px) {
             .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }

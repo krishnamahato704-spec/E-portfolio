@@ -32,6 +32,8 @@
         #experiences .grid-2, #experiences .grid-3 { grid-template-columns:1fr !important; }
         #history-teaching .card > div[style*="grid-template-columns:1fr auto 1fr auto 1fr"] { grid-template-columns:1fr !important; }
         #history-teaching .card > div[style*="grid-template-columns:1fr auto 1fr auto 1fr"] > span { display:none; }
+        .card > div[style*="grid-template-columns:1fr auto 1fr auto 1fr"] { grid-template-columns:1fr !important; }
+        .card > div[style*="grid-template-columns:1fr auto 1fr auto 1fr"] > span { display:none; }
       }
 
       /* Clean recruiter-facing CV placement: directly above the portrait. */
@@ -212,7 +214,7 @@
     function patchPresentationActivities() {
       document.querySelectorAll('h1,h2,h3,h4,h5,h6,.card,.experience-card,.evidence-card').forEach(el => {
         const text = (el.textContent || '').trim().toLowerCase();
-        if (text.includes('presentation') || text.includes('activities')) (el.closest('.card, .experience-card, .evidence-card') || el).classList.add('presentation-activities');
+        if (/presentation\s*(?:and|&)\s*activities/.test(text)) (el.closest('.card, .experience-card, .evidence-card') || el).classList.add('presentation-activities');
       });
     }
 
