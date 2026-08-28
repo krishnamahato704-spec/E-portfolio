@@ -1,8 +1,6 @@
 (function () {
   'use strict';
 
-  // Load the stable cloud-storage core from the last known-good commit, then
-  // apply the portfolio UI fixes without rewriting index.html.
   const CORE_URL = 'https://raw.githubusercontent.com/krishnamahato704-spec/E-portfolio/c6029eeca2fe1344591e7d735604b1d2a7e719ba/supabase-storage.js';
   const STORAGE_KEY = 'krishna_portfolio_v4';
   let gallery = [];
@@ -26,7 +24,6 @@
     const style = document.createElement('style');
     style.id = 'portfolio-final-fixes';
     style.textContent = `
-      /* Fix clipped Presentation / Activities-style content and long text. */
       #experiences, #experiences .container, #experiences .card, #experiences .experience-card,
       #experiences .grid-2, #experiences .grid-3, #history-teaching, #history-teaching .card,
       .presentation-activities, .presentation-activities * { overflow: visible !important; height: auto !important; min-height: 0; }
@@ -89,7 +86,7 @@
         { target:'experiences', label:'03 · Experience & Evidence', title:'Experience, internships & professional evidence', sources:[] },
         { target:'my-work', label:'04 · Teaching Practice', title:'Teaching evidence, assessment & inclusive practice', sources:['assessment','differentiation'] },
         { target:'why-history', label:'05 · History & Teaching Approach', title:'History, teaching philosophy & intellectual influences', sources:['philosophy','history-teaching','thinkers'] },
-        { target:'skills', label:'06 · Skills & Professional Development', title:'Skills, competencies & professional development', sources:['certificates'] },
+        { target:'skills', label:'06 · Skills & Professional Development', title:'Skills, competencies & professional development', sources:['certificates','school-fit'] },
         { target:'reflection', label:'07 · Reflection & Growth', title:'Reflection, learning & professional growth', sources:[] },
       ];
 
@@ -112,9 +109,8 @@
           block.dataset.mergedFrom = sourceId;
           Array.from(sourceContainer.children).forEach(child => {
             if (child.classList && child.classList.contains('section-controls')) return;
-            if (child.classList && child.classList.contains('section-label')) {
-              child.className = 'merged-subsection-label';
-            } else if (child.classList && child.classList.contains('section-title')) {
+            if (child.classList && child.classList.contains('section-label')) child.className = 'merged-subsection-label';
+            else if (child.classList && child.classList.contains('section-title')) {
               child.classList.remove('section-title');
               child.classList.add('merged-subtitle');
             }
@@ -129,9 +125,7 @@
       const experienceTarget = document.getElementById('experiences');
       if (gallery && experienceTarget) {
         const experienceContainer = experienceTarget.querySelector(':scope > .container');
-        if (experienceContainer && !experienceContainer.querySelector('#portfolio-gallery')) {
-          experienceContainer.appendChild(gallery);
-        }
+        if (experienceContainer && !experienceContainer.querySelector('#portfolio-gallery')) experienceContainer.appendChild(gallery);
       }
 
       const contactLabel = document.querySelector('#contact .section-label');
@@ -218,9 +212,7 @@
     function patchPresentationActivities() {
       document.querySelectorAll('h1,h2,h3,h4,h5,h6,.card,.experience-card,.evidence-card').forEach(el => {
         const text = (el.textContent || '').trim().toLowerCase();
-        if (text.includes('presentation') || text.includes('activities')) {
-          (el.closest('.card, .experience-card, .evidence-card') || el).classList.add('presentation-activities');
-        }
+        if (text.includes('presentation') || text.includes('activities')) (el.closest('.card, .experience-card, .evidence-card') || el).classList.add('presentation-activities');
       });
     }
 
@@ -271,10 +263,7 @@
         caption.className = 'gallery-caption';
         caption.contentEditable = document.body.classList.contains('editing') ? 'true' : 'false';
         caption.textContent = item.caption || 'Add a caption.';
-        caption.addEventListener('input', () => {
-          item.caption = caption.textContent;
-          savePortfolioState();
-        });
+        caption.addEventListener('input', () => { item.caption = caption.textContent; savePortfolioState(); });
         card.appendChild(caption);
         grid.appendChild(card);
       });
@@ -294,11 +283,8 @@
         }
         renderGallery();
         savePortfolioState();
-      } catch (error) {
-        alert(error.message || 'Gallery upload failed.');
-      } finally {
-        if (status) status.textContent = 'Edit';
-      }
+      } catch (error) { alert(error.message || 'Gallery upload failed.'); }
+      finally { if (status) status.textContent = 'Edit'; }
     }
 
     async function removeGalleryItem(index) {
@@ -310,9 +296,7 @@
         gallery.splice(index, 1);
         renderGallery();
         savePortfolioState();
-      } catch (error) {
-        alert(error.message || 'The image could not be removed.');
-      }
+      } catch (error) { alert(error.message || 'The image could not be removed.'); }
     }
 
     function savePortfolioState() {
@@ -326,8 +310,6 @@
       if (!window.__portfolio || originalRestore) return;
       originalRestore = window.__portfolio.restore;
       window.__portfolio.restore = function (data) {
-        // Critical fix: cloud autosave must not rebuild the editable DOM while the
-        // user is typing. Rebuilding was what sent the caption caret back to word 1.
         const active = document.activeElement;
         if (document.body.classList.contains('editing') && active && active.isContentEditable) return;
         if (data && Array.isArray(data.gallery)) gallery = data.gallery.filter(x => x && x.url);
@@ -375,10 +357,7 @@
         window.addEventListener('load', finish);
         setTimeout(finish, 1200);
       })
-      .catch(error => {
-        console.error('Portfolio cloud bootstrap failed:', error);
-        finish();
-      });
+      .catch(error => { console.error('Portfolio cloud bootstrap failed:', error); finish(); });
   }
 
   installFixes();
