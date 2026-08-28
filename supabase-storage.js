@@ -7,6 +7,7 @@
   const STORAGE_KEY = 'krishna_portfolio_v4';
   let gallery = [];
   let originalRestore = null;
+  let sectionsConsolidated = false;
 
   function loadCore() {
     return fetch(CORE_URL, { cache: 'no-store' })
@@ -36,10 +37,31 @@
         #history-teaching .card > div[style*="grid-template-columns:1fr auto 1fr auto 1fr"] > span { display:none; }
       }
 
-      /* Put the CV where a recruiter expects it: prominently in the hero. */
-      #navbar .nav-cv-link { color:#fff !important; background:var(--accent2) !important; font-weight:800 !important; }
-      .hero-cta .cv-download-link { order:-10; background:var(--accent2); border-color:var(--accent2); box-shadow:0 6px 18px rgba(139,26,43,.18); }
+      /* Clean recruiter-facing CV placement: directly above the portrait. */
+      .hero-cta .cv-download-link, .hero-cta .cv-disabled { display:none !important; }
+      .cv-top-wrap { display:flex; flex-direction:column; align-items:center; gap:8px; margin-bottom:12px; width:min(240px,50vw); }
+      .cv-top-wrap .cv-download-link { width:100%; background:var(--accent2); border-color:var(--accent2); box-shadow:0 6px 18px rgba(139,26,43,.18); }
+      .cv-top-wrap .cv-download-link:hover, .cv-top-wrap .cv-download-link:focus-visible { background:#6f1322; border-color:#6f1322; }
+      .cv-top-wrap .cv-download-link.cv-disabled { background:#e8e4dd; color:var(--muted); border-color:var(--border); box-shadow:none; cursor:not-allowed; }
+      .cv-top-wrap .cv-edit-control { width:100%; }
       footer .cv-download-link, footer .cv-disabled, footer .cv-edit-control { display:none !important; }
+      #navbar .nav-cv-link { color:#fff !important; background:var(--accent2) !important; font-weight:800 !important; }
+
+      /* Compact 8-section recruiter structure. */
+      body > section.merged-source-section { display:none !important; }
+      .merged-subsection { margin-top:30px; padding-top:26px; border-top:1px solid var(--border); }
+      .merged-subsection:first-of-type { margin-top:20px; padding-top:0; border-top:0; }
+      .merged-subsection .merged-subsection-label { font-size:.68rem; text-transform:uppercase; letter-spacing:.13em; color:var(--accent2); font-weight:800; margin-bottom:3px; }
+      .merged-subsection .merged-subtitle { font-family:var(--serif); font-size:clamp(1.45rem,2.8vw,2.05rem); line-height:1.1; letter-spacing:-.02em; margin:3px 0 9px; }
+      .merged-subsection .section-desc { max-width:760px; }
+      .merged-subsection > .container { width:100%; margin:0; padding:0; }
+      .merged-subsection > .container > .section-controls { display:none !important; }
+      #profile, #academic-journey, #experiences, #my-work, #why-history, #skills, #reflection { scroll-margin-top:76px; }
+      #experiences #portfolio-gallery { background:none; padding:30px 0 0; border:0; }
+      #experiences #portfolio-gallery > .container { width:100%; padding:0; }
+      #experiences #portfolio-gallery .section-label, #experiences #portfolio-gallery .section-title, #experiences #portfolio-gallery > .container > .section-desc { display:none; }
+      #experiences #portfolio-gallery .gallery-grid { margin-top:14px; }
+      @media (max-width:760px) { .cv-top-wrap { width:min(280px,70vw); } }
 
       /* Final gallery */
       #portfolio-gallery { background:linear-gradient(135deg,var(--bg),#ece8e0); }
@@ -59,55 +81,126 @@
     `;
     document.head.appendChild(style);
 
+    function consolidateSections() {
+      if (sectionsConsolidated) return;
+      const groups = [
+        { target:'profile', label:'01 · Profile', title:'At a glance', sources:[] },
+        { target:'academic-journey', label:'02 · Qualifications', title:'Qualifications & academic foundation', sources:[] },
+        { target:'experiences', label:'03 · Experience & Evidence', title:'Experience, internships & professional evidence', sources:[] },
+        { target:'my-work', label:'04 · Teaching Practice', title:'Teaching evidence, assessment & inclusive practice', sources:['assessment','differentiation'] },
+        { target:'why-history', label:'05 · History & Teaching Approach', title:'History, teaching philosophy & intellectual influences', sources:['philosophy','history-teaching','thinkers'] },
+        { target:'skills', label:'06 · Skills & Professional Development', title:'Skills, competencies & professional development', sources:['certificates'] },
+        { target:'reflection', label:'07 · Reflection & Growth', title:'Reflection, learning & professional growth', sources:[] },
+      ];
+
+      groups.forEach(group => {
+        const target = document.getElementById(group.target);
+        if (!target) return;
+        const label = target.querySelector(':scope > .container > .section-label');
+        const title = target.querySelector(':scope > .container > .section-title');
+        if (label) label.textContent = group.label;
+        if (title) title.textContent = group.title;
+
+        group.sources.forEach(sourceId => {
+          const source = document.getElementById(sourceId);
+          if (!source || source === target) return;
+          const sourceContainer = source.querySelector(':scope > .container');
+          const targetContainer = target.querySelector(':scope > .container');
+          if (!sourceContainer || !targetContainer) return;
+          const block = document.createElement('div');
+          block.className = 'merged-subsection';
+          block.dataset.mergedFrom = sourceId;
+          Array.from(sourceContainer.children).forEach(child => {
+            if (child.classList && child.classList.contains('section-controls')) return;
+            if (child.classList && child.classList.contains('section-label')) {
+              child.className = 'merged-subsection-label';
+            } else if (child.classList && child.classList.contains('section-title')) {
+              child.classList.remove('section-title');
+              child.classList.add('merged-subtitle');
+            }
+            block.appendChild(child);
+          });
+          targetContainer.appendChild(block);
+          source.classList.add('merged-source-section');
+        });
+      });
+
+      const gallery = document.getElementById('portfolio-gallery');
+      const experienceTarget = document.getElementById('experiences');
+      if (gallery && experienceTarget) {
+        const experienceContainer = experienceTarget.querySelector(':scope > .container');
+        if (experienceContainer && !experienceContainer.querySelector('#portfolio-gallery')) {
+          experienceContainer.appendChild(gallery);
+        }
+      }
+
+      const contactLabel = document.querySelector('#contact .section-label');
+      if (contactLabel) contactLabel.textContent = '08 · Contact';
+      sectionsConsolidated = true;
+    }
+
     function fixNavigation() {
       const nav = document.getElementById('navLinks');
       if (!nav) return;
-      const contact = nav.querySelector('a[href="#contact"]')?.closest('li');
-      if (contact) nav.appendChild(contact);
-
-      let cv = nav.querySelector('.nav-cv-link');
-      if (!cv) {
-        const li = document.createElement('li');
-        cv = document.createElement('a');
-        cv.className = 'nav-cv-link';
-        cv.href = '#hero';
-        cv.textContent = 'CV';
-        li.appendChild(cv);
-        const contactLi = nav.querySelector('a[href="#contact"]')?.closest('li');
-        if (contactLi) nav.insertBefore(li, contactLi); else nav.appendChild(li);
-      }
-      const galleryLink = nav.querySelector('a[href="#portfolio-gallery"]');
-      if (!galleryLink) {
-        const li = document.createElement('li');
-        const a = document.createElement('a');
-        a.href = '#portfolio-gallery';
-        a.textContent = 'Gallery';
-        a.onclick = () => nav.classList.remove('open');
-        li.appendChild(a);
-        const contactLi = nav.querySelector('a[href="#contact"]')?.closest('li');
-        if (contactLi) nav.insertBefore(li, contactLi); else nav.appendChild(li);
-      }
+      nav.innerHTML = `
+        <li><a href="#hero">Home</a></li>
+        <li><a href="#profile">Profile</a></li>
+        <li><a href="#academic-journey">Qualifications</a></li>
+        <li><a href="#experiences">Experience &amp; Evidence</a></li>
+        <li><a href="#my-work">Teaching Practice</a></li>
+        <li><a href="#why-history">History &amp; Approach</a></li>
+        <li><a href="#skills">Skills &amp; Development</a></li>
+        <li><a href="#reflection">Reflection</a></li>
+        <li><a href="#contact">Contact</a></li>
+        <li><a class="nav-cv-link" href="#hero">CV</a></li>`;
       nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => nav.classList.remove('open')));
     }
 
     function fixSectionNumbers() {
-      const school = document.querySelector('#school-fit .section-label');
-      const gallery = document.querySelector('#portfolio-gallery .section-label');
+      consolidateSections();
+      const map = {
+        profile:'01 · Profile',
+        'academic-journey':'02 · Qualifications',
+        experiences:'03 · Experience & Evidence',
+        'my-work':'04 · Teaching Practice',
+        'why-history':'05 · History & Teaching Approach',
+        skills:'06 · Skills & Professional Development',
+        reflection:'07 · Reflection & Growth'
+      };
+      Object.keys(map).forEach(id => {
+        const el = document.querySelector('#' + id + ' > .container > .section-label');
+        if (el) el.textContent = map[id];
+      });
       const contact = document.querySelector('#contact .section-label');
-      if (school) school.textContent = '14 · What I Bring to a School';
-      if (gallery) gallery.textContent = '15 · Gallery';
-      if (contact) contact.textContent = '16 · Contact';
+      if (contact) contact.textContent = '08 · Contact';
     }
 
     function moveCvToTop() {
-      const hero = document.querySelector('.hero-cta');
-      if (!hero) return;
-      const cv = hero.querySelector('.cv-download-link');
-      if (cv) {
-        hero.prepend(cv);
-        cv.textContent = 'Download CV';
+      const portraitWrap = document.querySelector('.portrait-wrap');
+      if (!portraitWrap) return;
+      let top = portraitWrap.querySelector('.cv-top-wrap');
+      if (!top) {
+        top = document.createElement('div');
+        top.className = 'cv-top-wrap';
+        portraitWrap.insertBefore(top, portraitWrap.firstChild);
       }
-      document.querySelectorAll('#contact .cv-download-link, #contact .cv-disabled').forEach(el => el.remove());
+      const cv = document.querySelector('.hero-cta .cv-download-link, .cv-top-wrap .cv-download-link');
+      if (cv && cv.parentElement !== top) top.appendChild(cv);
+      const edit = document.querySelector('.hero-cta .cv-edit-control, .cv-top-wrap .cv-edit-control');
+      if (edit && edit.parentElement !== top) top.appendChild(edit);
+      const disabled = document.querySelector('.hero-cta .cv-disabled');
+      if (disabled && !top.querySelector('.cv-download-link')) {
+        disabled.classList.remove('cv-disabled');
+        disabled.classList.add('cv-download-link');
+        disabled.textContent = 'Download CV';
+        top.appendChild(disabled);
+      }
+      const link = top.querySelector('.cv-download-link');
+      if (link) {
+        link.textContent = 'Download CV';
+        link.setAttribute('aria-label', 'Download CV');
+      }
+      document.querySelectorAll('#contact .cv-download-link, #contact .cv-disabled, #contact .cv-edit-control').forEach(el => el.remove());
     }
 
     function ensureCompletionYear() {
@@ -139,7 +232,7 @@
       section.id = 'portfolio-gallery';
       section.innerHTML = `
         <div class="container">
-          <div class="section-label">15 · Gallery</div>
+          <div class="section-label">Gallery</div>
           <h2 class="section-title">Classroom &amp; Professional Gallery</h2>
           <p class="section-desc">Add selected internship, teaching, professional-development, and classroom photographs. Use only photographs you are permitted to publish.</p>
           <div id="portfolioGalleryGrid" class="gallery-grid"></div>
@@ -239,6 +332,7 @@
         if (document.body.classList.contains('editing') && active && active.isContentEditable) return;
         if (data && Array.isArray(data.gallery)) gallery = data.gallery.filter(x => x && x.url);
         originalRestore.call(window.__portfolio, data);
+        consolidateSections();
         renderGallery();
         ensureCompletionYear();
         fixNavigation();
@@ -261,6 +355,7 @@
       buildGallery();
       applyLocalGallery();
       patchRestore();
+      consolidateSections();
       renderGallery();
       ensureCompletionYear();
       fixNavigation();
