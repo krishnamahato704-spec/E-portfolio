@@ -1264,7 +1264,7 @@
             </div>
             <div class="feature-block" style="margin-top:20px;background:var(--text);">
                 <p style="font-size:1.05rem;max-width:800px;font-family:var(--serif);" contenteditable="false" data-editable="future_quote">"To become an educator who sees potential in every learner and helps each child grow towards a direction that is meaningful and suited to them."</p>
-                <p style="max-width:760px;margin-top:10px;" contenteditable="false" data-editable="future_text">This is not simply a career goal—it is a commitment rooted in everything I have studied, observed, and come to believe about the purpose of education. Every learner carries within them the seed of something remarkable. My role as an educator is not to impose a fixed path, but to nurture, guide, and illuminate possibilities—so that each student may grow in the direction that is truly their own.</p>
+                <p style="max-width:760px;margin-top:10px;" contenteditable="false" data-editable="future_text">As an early-career teacher, I am continuing to learn from study, observation, feedback, and classroom experience. Reflection helps me turn each experience into a specific next step for planning, teaching, and assessment.</p>
             </div>
         </div>
     </section>
@@ -1486,6 +1486,17 @@
                 localStorage.setItem(EXPERIENCES_KEY, JSON.stringify(experiences));
             }
 
+            function experienceDescription(exp) {
+                const description = String(exp.description || '');
+                if ((exp.id === 'exp_1' || /Observation Internship/i.test(exp.title || '')) && !description.includes('<br>') && description.includes('Observed diverse')) {
+                    return '• Classroom observation across History and Social Science lessons<br>• Noted questioning, student engagement, and classroom-management strategies<br>• Explored school culture, infrastructure, and co-curricular integration';
+                }
+                if ((exp.id === 'exp_2' || /Pehchaan The Street School/i.test(exp.title || '')) && !description.includes('<br>') && description.includes('Taught KG')) {
+                    return '• Taught Nursery, LKG, and UKG learners foundational literacy and numeracy<br>• Used competency-based and activity-based methods<br>• Conducted ULLAS adult-literacy sessions for five learners<br>• Developed classroom-management and community-engagement experience';
+                }
+                return description;
+            }
+
             // ---- render experiences ----
             function renderExperiences() {
                 if (!experiencesContainer) return;
@@ -1510,7 +1521,7 @@
                                 <span contenteditable="false" data-exp-field="duration">${exp.duration}</span>
                             </div>
                             <div class="card-label" style="margin-top:8px;">Experience evidence</div>
-                            <div class="exp-desc" contenteditable="false" data-exp-field="description">${exp.description}</div>
+                            <div class="exp-desc" contenteditable="false" data-exp-field="description">${experienceDescription(exp)}</div>
                             <button class="exp-remove-btn" data-id="${exp.id}">✕ Remove</button>
                         </div>
                     `;
@@ -1636,6 +1647,31 @@
                 }));
             }
 
+            function migrateRecruitmentCopy(data) {
+                if (!data || !data.editable) return;
+                const updates = {
+                    hero_sub: ['Studying the past.', 'History educator with an academic foundation in History and Economics, teacher education experience, and practical classroom exposure.'],
+                    hero_statement: ['I believe education is the nurturing', 'Developing historical thinking through inquiry, discussion, evidence-based learning, and reflective classroom practice in secondary settings.'],
+                    journey_title: ['From student to educator', 'Qualifications & academic foundation'],
+                    why_text: ['History, for me, did not begin as a passion', 'My study of History moved from memorising events to asking why they happened, how we know, and what they mean for people in different contexts. Working with sources such as Kautilya\'s <em>Arthashastra</em> and accounts of Partition strengthened my interest in teaching History as evidence-based inquiry that connects past and present.'],
+                    phil1: ['Education develops the whole person', 'I plan for the whole learner: subject knowledge, confidence, curiosity, and respectful participation. Classroom interactions should help learners grow as people as well as historians.'],
+                    phil2: ['Every learner carries unique strengths', 'I look for strengths as well as gaps, then use clear feedback and encouragement to help learners take the next step toward independent thought.'],
+                    phil3: ['Every learner brings a unique set of strengths', 'Differentiation means offering different routes—scaffolded prompts, visual sources, discussion, or deeper comparison—toward the same meaningful understanding.'],
+                    enc_text: ['Reinforcement should motivate', 'A practical cycle guides my teaching: notice what learners can already do, make the next idea visible, invite them to practise, and use evidence from their responses to plan the next step.'],
+                    enc_quote: ['A learner who feels seen and supported', 'Encouragement should preserve confidence while feedback stays specific enough to improve the work.'],
+                    tagore_text: ['Education should take place in open', '<strong>Influence:</strong> holistic education, curiosity, freedom, and creative learning. I use this lens to keep History connected to the whole learner.'],
+                    vygotsky_text: ['Learning is a social process shaped', '<strong>Influence:</strong> social learning and scaffolding. Dialogue, guided source work, and peer interaction can help learners move toward independent historical reasoning.'],
+                    synthesis: ['✨ My Synthesis:', '<strong>My classroom translation:</strong> make the question visible, scaffold the evidence, let learners discuss interpretations, and reflect on what changed in their thinking.'],
+                    future_text: ['This is not simply a career goal', 'As an early-career teacher, I am continuing to learn from study, observation, feedback, and classroom experience. Reflection helps me turn each experience into a specific next step for planning, teaching, and assessment.'],
+                    work_desc: ['Lesson plans, worksheets, timelines', 'Use the evidence cards to show the complete teaching cycle: lesson plans, teaching resources, assessment tasks, and the reflections that connect them.'],
+                    certwall_desc: ['Upload scans or photos of your academic certificates', 'Keep only meaningful credentials here. Use each caption for the certificate title, issuing organisation, date, and the teaching practice it supported; leave any unknown field blank rather than guessing.']
+                };
+                Object.keys(updates).forEach(key => {
+                    const [marker, replacement] = updates[key];
+                    if (typeof data.editable[key] === 'string' && data.editable[key].includes(marker)) data.editable[key] = replacement;
+                });
+            }
+
             function restoreCustomSections(list) {
                 document.querySelectorAll('section[data-custom-section]').forEach(section => {
                     removeSectionNav(section.id);
@@ -1713,6 +1749,7 @@
                 const wasEditing = currentMode === 'edit';
                 deletedSections = Array.isArray(data.deletedSections) ? data.deletedSections.filter(id => typeof id === 'string') : [];
                 restoreCustomSections(data.customSections);
+                migrateRecruitmentCopy(data);
                 if (data.editable) {
                     editableElements().forEach(el => {
                         if (data.editable[el.dataset.editable] !== undefined) el.innerHTML = data.editable[el.dataset.editable];
