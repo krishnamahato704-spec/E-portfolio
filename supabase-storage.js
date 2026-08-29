@@ -96,6 +96,10 @@
         try {
           return await originalDelete(path);
         } catch (firstError) {
+          // A previous delete may have removed the object while its metadata
+          // remained in the portfolio row. Treat that stale-object response as
+          // already deleted so the metadata can still be cleaned up.
+          if (/\(400\)|not found|does not exist/i.test(firstError?.message || '')) return;
           // Supabase access tokens can expire while the editor tab remains open.
           // Re-authenticate once, then retry the same delete request.
           try {
