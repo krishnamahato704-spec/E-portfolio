@@ -2,6 +2,8 @@
   'use strict';
 
   const CORE_URL = 'https://raw.githubusercontent.com/krishnamahato704-spec/E-portfolio/c6029eeca2fe1344591e7d735604b1d2a7e719ba/supabase-storage.js';
+  const SUPABASE_URL = 'https://oyqevsygintkjrkfbzpx.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_CZOIotDHbTM9m4E8vHZ9Aw_H3-G9mAd';
   const STORAGE_KEY = 'krishna_portfolio_v4';
   let gallery = [];
   let originalRestore = null;
@@ -43,6 +45,7 @@
       .cv-top-wrap .cv-download-link:hover, .cv-top-wrap .cv-download-link:focus-visible { background:#6f1322; border-color:#6f1322; }
       .cv-top-wrap .cv-download-link.cv-disabled { background:#e8e4dd; color:var(--muted); border-color:var(--border); box-shadow:none; cursor:not-allowed; }
       .cv-top-wrap .cv-edit-control { width:100%; }
+      .cv-top-wrap .cv-delete-control { width:100%; background:transparent; color:var(--accent2); border:1px solid var(--accent2); }
       footer .cv-download-link, footer .cv-disabled, footer .cv-edit-control { display:none !important; }
       #navbar .nav-cv-link { color:#fff !important; background:var(--accent2) !important; font-weight:800 !important; }
 
@@ -56,18 +59,14 @@
       .merged-subsection > .container { width:100%; margin:0; padding:0; }
       .merged-subsection > .container > .section-controls { display:none !important; }
       #profile, #academic-journey, #experiences, #my-work, #why-history, #skills, #reflection { scroll-margin-top:76px; }
-      #experiences #portfolio-gallery { background:none; padding:30px 0 0; border:0; }
-      #experiences #portfolio-gallery > .container { width:100%; padding:0; }
-      #experiences #portfolio-gallery .section-label, #experiences #portfolio-gallery .section-title, #experiences #portfolio-gallery > .container > .section-desc { display:none; }
-      #experiences #portfolio-gallery .gallery-grid { margin-top:14px; }
       @media (max-width:760px) { .cv-top-wrap { width:min(280px,70vw); } }
 
       /* Final gallery */
       #portfolio-gallery { background:linear-gradient(135deg,var(--bg),#ece8e0); }
-      #portfolio-gallery .gallery-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:18px; margin-top:18px; }
+      #portfolio-gallery .gallery-grid { display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:14px; margin-top:18px; }
       #portfolio-gallery .gallery-card { position:relative; background:var(--card); border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; box-shadow:var(--shadow); min-width:0; }
-      #portfolio-gallery .gallery-image-wrap { aspect-ratio:4/3; background:#e8e4dd; display:flex; align-items:center; justify-content:center; overflow:hidden; }
-      #portfolio-gallery .gallery-image-wrap img { width:100%; height:100%; object-fit:cover; }
+      #portfolio-gallery .gallery-image-wrap { min-height:120px; background:#e8e4dd; display:flex; align-items:center; justify-content:center; overflow:hidden; }
+      #portfolio-gallery .gallery-image-wrap img { width:100%; height:auto; max-height:280px; object-fit:contain; }
       #portfolio-gallery .gallery-caption { padding:10px 12px 13px; color:var(--muted); font-size:.86rem; min-height:42px; }
       .editing #portfolio-gallery .gallery-caption { outline:1px dashed var(--border); outline-offset:-3px; background:rgba(31,58,95,.03); }
       #portfolio-gallery .gallery-remove { display:none; position:absolute; right:8px; top:8px; z-index:2; border:0; background:rgba(139,26,43,.92); color:#fff; border-radius:7px; padding:6px 9px; cursor:pointer; font-size:.75rem; font-weight:700; }
@@ -75,13 +74,14 @@
       #portfolio-gallery .gallery-empty { padding:30px 18px; text-align:center; color:var(--muted); border:1px dashed var(--border); border-radius:12px; background:rgba(255,255,255,.5); }
       #portfolio-gallery .gallery-upload { margin-top:14px; display:none; padding:14px; border:2px dashed rgba(31,58,95,.3); border-radius:12px; text-align:center; color:var(--muted); cursor:pointer; background:var(--card); }
       .editing #portfolio-gallery .gallery-upload { display:block; }
-      @media (max-width:760px) { #portfolio-gallery .gallery-grid { grid-template-columns:1fr 1fr; } }
-      @media (max-width:500px) { #portfolio-gallery .gallery-grid { grid-template-columns:1fr; } }
+      @media (max-width:980px) { #portfolio-gallery .gallery-grid { grid-template-columns:repeat(3,minmax(0,1fr)); } }
+      @media (max-width:640px) { #portfolio-gallery .gallery-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; } }
+      @media (max-width:420px) { #portfolio-gallery .gallery-grid { grid-template-columns:1fr; } }
     `;
     document.head.appendChild(style);
 
     function consolidateSections() {
-      if (sectionsConsolidated) return;
+      if (sectionsConsolidated && !document.getElementById('school-fit')) return;
       const groups = [
         { target:'profile', label:'01 · Profile', title:'At a glance', sources:[] },
         { target:'academic-journey', label:'02 · Qualifications', title:'Qualifications & academic foundation', sources:[] },
@@ -102,7 +102,7 @@
 
         group.sources.forEach(sourceId => {
           const source = document.getElementById(sourceId);
-          if (!source || source === target) return;
+          if (!source || source === target || source.classList.contains('merged-source-section')) return;
           const sourceContainer = source.querySelector(':scope > .container');
           const targetContainer = target.querySelector(':scope > .container');
           if (!sourceContainer || !targetContainer) return;
@@ -111,7 +111,19 @@
           block.dataset.mergedFrom = sourceId;
           Array.from(sourceContainer.children).forEach(child => {
             if (child.classList && child.classList.contains('section-controls')) return;
-            if (child.classList && child.classList.contains('section-label')) child.className = 'merged-subsection-label';
+            if (child.classList && child.classList.contains('section-label')) {
+              child.className = 'merged-subsection-label';
+              const mergedLabels = {
+                assessment:'Assessment practice',
+                differentiation:'Inclusive practice',
+                philosophy:'Teaching philosophy',
+                'history-teaching':'Subject expertise',
+                thinkers:'Intellectual influences',
+                certificates:'Certificates & professional development',
+                'school-fit':'What I bring to a school'
+              };
+              child.textContent = mergedLabels[sourceId] || child.textContent.replace(/^\d+\s*[·.-]\s*/, '');
+            }
             else if (child.classList && child.classList.contains('section-title')) {
               child.classList.remove('section-title');
               child.classList.add('merged-subtitle');
@@ -124,11 +136,8 @@
       });
 
       const gallery = document.getElementById('portfolio-gallery');
-      const experienceTarget = document.getElementById('experiences');
-      if (gallery && experienceTarget) {
-        const experienceContainer = experienceTarget.querySelector(':scope > .container');
-        if (experienceContainer && !experienceContainer.querySelector('#portfolio-gallery')) experienceContainer.appendChild(gallery);
-      }
+      const reflectionTarget = document.getElementById('reflection');
+      if (gallery && reflectionTarget && gallery.previousElementSibling !== reflectionTarget) reflectionTarget.after(gallery);
 
       const contactLabel = document.querySelector('#contact .section-label');
       if (contactLabel) contactLabel.textContent = '08 · Contact';
@@ -199,6 +208,52 @@
       document.querySelectorAll('#contact .cv-download-link, #contact .cv-disabled, #contact .cv-edit-control').forEach(el => el.remove());
     }
 
+    function sessionHeaders() {
+      let token = '';
+      try { token = JSON.parse(sessionStorage.getItem('portfolio_editor_session') || 'null')?.access_token || ''; } catch (_) {}
+      const headers = { apikey: SUPABASE_KEY, 'Content-Type': 'application/json', Prefer: 'resolution=merge-duplicates,return=minimal' };
+      if (token) headers.Authorization = 'Bearer ' + token;
+      return headers;
+    }
+
+    async function deleteCv() {
+      const meta = window.PortfolioCloud && window.PortfolioCloud.getCv ? window.PortfolioCloud.getCv() : null;
+      if (!meta || !meta.url) return;
+      if (!confirm('Delete the current CV from the portfolio?')) return;
+      const status = document.getElementById('modeStatus');
+      try {
+        if (status) status.textContent = 'Deleting CV…';
+        if (meta.path && window.PortfolioCloud.deleteFile) await window.PortfolioCloud.deleteFile(meta.path);
+        const state = window.__portfolio.snapshot();
+        state.gallery = gallery;
+        state.cv = null;
+        const response = await fetch(SUPABASE_URL + '/rest/v1/portfolio_state?id=eq.1', {
+          method: 'PATCH', headers: sessionHeaders(), body: JSON.stringify({ data: state, updated_at: new Date().toISOString() })
+        });
+        if (!response.ok) throw new Error('The CV record could not be updated in Supabase.');
+        alert('CV deleted. The page will refresh now.');
+        location.reload();
+      } catch (error) {
+        if (status) status.textContent = 'CV delete failed';
+        alert(error.message || 'The CV could not be deleted.');
+      }
+    }
+
+    function ensureCvDeleteControl() {
+      const top = document.querySelector('.cv-top-wrap');
+      if (!top || top.querySelector('.cv-delete-control')) return;
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'cta-button cv-delete-control';
+      button.textContent = 'Delete current CV';
+      button.style.display = 'none';
+      button.addEventListener('click', deleteCv);
+      top.appendChild(button);
+      const sync = () => { button.style.display = document.body.classList.contains('editing') && window.PortfolioCloud?.getCv?.() ? 'inline-block' : 'none'; };
+      sync();
+      new MutationObserver(sync).observe(document.body, { attributes:true, childList:true, subtree:true, attributeFilter:['class','style'] });
+    }
+
     function ensureCompletionYear() {
       [['t4_title'], ['t5_title']].forEach(([key]) => {
         const el = document.querySelector('[data-editable="' + key + '"]');
@@ -265,7 +320,10 @@
         caption.className = 'gallery-caption';
         caption.contentEditable = document.body.classList.contains('editing') ? 'true' : 'false';
         caption.textContent = item.caption || 'Add a caption.';
-        caption.addEventListener('input', () => { item.caption = caption.textContent; savePortfolioState(); });
+        caption.addEventListener('input', () => {
+          item.caption = caption.textContent;
+          if (window.__portfolio && typeof window.__portfolio.markDirty === 'function') window.__portfolio.markDirty();
+        });
         card.appendChild(caption);
         grid.appendChild(card);
       });
@@ -306,6 +364,9 @@
       const base = window.__portfolio.snapshot();
       base.gallery = gallery;
       localStorage.setItem(STORAGE_KEY, JSON.stringify(base));
+      if (typeof window.__portfolio.markSaved === 'function') window.__portfolio.markSaved();
+      const status = document.getElementById('modeStatus');
+      if (status && document.body.classList.contains('editing')) status.textContent = 'Saving…';
     }
 
     function patchRestore() {
@@ -336,6 +397,7 @@
     }
 
     function finish() {
+      if (document.getElementById('school-fit') && !document.querySelector('[data-merged-from="school-fit"]')) sectionsConsolidated = false;
       buildGallery();
       applyLocalGallery();
       patchRestore();
@@ -345,6 +407,7 @@
       fixNavigation();
       fixSectionNumbers();
       moveCvToTop();
+      ensureCvDeleteControl();
       patchPresentationActivities();
       document.querySelectorAll('.resource-item').forEach(item => {
         item.style.minWidth = '0';

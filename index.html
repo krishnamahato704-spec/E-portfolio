@@ -291,7 +291,7 @@
         }
 
         /* ----- typography & layout ----- */
-        section { padding: 56px 0 48px; border-bottom: 1px solid var(--border); }
+        section { padding: 44px 0 36px; border-bottom: 1px solid var(--border); }
         section:last-of-type { border-bottom: none; }
         .section-label {
             font-size: .65rem;
@@ -456,7 +456,7 @@
         .profile-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-top:16px; }
         .profile-item { padding:14px 16px; background:rgba(255,255,255,.72); border:1px solid var(--border); border-radius:12px; min-height:92px; }
         .profile-item strong { display:block; color:var(--accent); font-size:.74rem; text-transform:uppercase; letter-spacing:.08em; margin-bottom:4px; }
-        .profile-item span { color:var(--text); font-size:.9rem; }
+        .profile-item span { color:var(--text); font-size:1rem; }
         .profile-note { color:var(--muted); font-size:.9rem; max-width:820px; }
         .evidence-sequence { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin:10px 0 16px; color:var(--accent); font-size:.78rem; font-weight:700; letter-spacing:.03em; }
         .evidence-sequence span { padding:6px 10px; border:1px solid var(--border); border-radius:8px; background:var(--card); }
@@ -700,6 +700,7 @@
                 <div style="margin-top:14px;display:flex;flex-wrap:wrap;gap:6px;">
                     <span class="tag">TGT History / Social Science</span>
                     <span class="tag">PGT History</span>
+                    <span class="tag">Economics · English</span>
                     <span class="tag">B.Ed. · M.A. History</span>
                 </div>
                 <div class="hero-cta">
@@ -720,12 +721,14 @@
         <div class="container">
             <div class="section-label">01 · Recruiter Profile</div>
             <h2 class="section-title" contenteditable="false" data-editable="profile_title">At a glance</h2>
-            <p class="profile-note" contenteditable="false" data-editable="profile_note">A developing History teacher candidate bringing subject study, teacher education, and practical exposure together. This profile highlights the evidence a school recruitment team may want to review first.</p>
+            <p class="profile-note" contenteditable="false" data-editable="profile_note">A developing teacher candidate for History, Economics and English, bringing subject study, teacher education, internship experience, and reflective classroom practice together for a CBSE/ICSE school setting.</p>
             <div class="profile-grid">
                 <div class="profile-item"><strong>Target roles</strong><span contenteditable="false" data-editable="profile_roles">TGT History / Social Science<br>PGT History</span></div>
                 <div class="profile-item"><strong>Academic background</strong><span contenteditable="false" data-editable="profile_qualifications">B.A. History &amp; Economics<br>B.Ed. · M.A. History</span></div>
-                <div class="profile-item"><strong>Teaching exposure</strong><span contenteditable="false" data-editable="profile_experience">School observation experience<br>5-week teaching internship</span></div>
+                <div class="profile-item"><strong>Subjects I can teach</strong><span contenteditable="false" data-editable="profile_subjects">History · Economics · English<br>English as second B.Ed. pedagogy with internship teaching exposure</span></div>
+                <div class="profile-item"><strong>Teaching exposure</strong><span contenteditable="false" data-editable="profile_experience">School observation experience<br>5-week teaching internship, including English teaching</span></div>
                 <div class="profile-item"><strong>Core strengths</strong><span contenteditable="false" data-editable="profile_strengths">Historical thinking · Lesson planning · Assessment · Differentiated support</span></div>
+                <div class="profile-item"><strong>Additional preparation</strong><span contenteditable="false" data-editable="profile_preparation">Five years of UPSC preparation<br>Knowledge of Indian polity, governance and public affairs</span></div>
             </div>
         </div>
     </section>
@@ -968,11 +971,11 @@
                 <div class="evidence-card">
                     <div class="evidence-preview" id="workPreview3"><span>✓</span></div>
                     <div class="evidence-body">
-                        <h4 contenteditable="false" data-editable="work3_title">Assessment Evidence</h4>
-                        <div class="meta" contenteditable="false" data-editable="work3_meta">Source questions · Worksheets · Exit tickets</div>
-                        <p contenteditable="false" data-editable="work3_text">Add formative checks, comprehension tasks, source-based questions, assessment prompts, or feedback reflections.</p>
+                        <h4 contenteditable="false" data-editable="work3_title">Presentation &amp; Activities</h4>
+                        <div class="meta" contenteditable="false" data-editable="work3_meta">Slides · Activity sheets · Classroom media</div>
+                        <p contenteditable="false" data-editable="work3_text">Add presentations, activity sheets, classroom photographs, or other evidence of learner engagement.</p>
                         <div class="resource-list" id="workResources3" aria-live="polite"></div>
-                        <label class="file-upload-zone" for="workInput3">📎 Add assessment files<br><small>PDF, Word, PowerPoint, images and documents</small></label>
+                        <label class="file-upload-zone" for="workInput3">📎 Add presentation / activity files<br><small>PDF, Word, PowerPoint, images and documents</small></label>
                         <input type="file" id="workInput3" multiple accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.csv,.txt,image/*" hidden>
                     </div>
                 </div>
@@ -1315,6 +1318,7 @@
             const portrait = document.getElementById('portraitImg');
 
             let currentMode = 'view';
+            let isDirty = false;
             let zoneCounter = 0;
             let experiences = [];
             let resources = { workResources1: [], workResources2: [], workResources3: [] };
@@ -1322,6 +1326,18 @@
 
             function editableElements() {
                 return document.querySelectorAll('[data-editable]');
+            }
+
+            // Keep edits in memory while typing. The Save button persists one
+            // complete snapshot so the caret never jumps and cloud writes stay calm.
+            function markDirty() {
+                if (currentMode !== 'edit') return;
+                isDirty = true;
+                modeStatus.textContent = 'Unsaved changes';
+            }
+
+            function markSaved() {
+                isDirty = false;
             }
 
             function sectionDescription(section) {
@@ -1372,7 +1388,7 @@
                             if (descEl && description !== null) descEl.textContent = description.trim();
                             const navLink = navLinks.querySelector('a[href="#' + section.id + '"]');
                             if (navLink) navLink.textContent = label.trim() || 'Section';
-                            saveToStorage();
+                            markDirty();
                         });
                         controls.querySelector('.section-delete-btn').addEventListener('click', () => {
                             if (currentMode !== 'edit') return;
@@ -1380,7 +1396,7 @@
                             if (!deletedSections.includes(section.id)) deletedSections.push(section.id);
                             section.classList.add('deleted-section');
                             removeSectionNav(section.id);
-                            saveToStorage();
+                            markDirty();
                         });
                     }
                 });
@@ -1432,7 +1448,7 @@
                 });
                 refreshSectionControls();
                 setMode('edit');
-                saveToStorage();
+                markDirty();
                 section.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
 
@@ -1538,9 +1554,8 @@
                         if (!id) return;
                         if (!confirm('Remove this experience?')) return;
                         experiences = experiences.filter(e => e.id !== id);
-                        saveExperiences();
                         renderExperiences();
-                        if (currentMode === 'edit') saveFullState();
+                        if (currentMode === 'edit') markDirty();
                     });
                 });
 
@@ -1555,8 +1570,7 @@
                             const exp = experiences.find(e => e.id === id);
                             if (exp && field) {
                                 exp[field] = this.innerText.trim();
-                                saveExperiences();
-                                if (currentMode === 'edit') saveFullState();
+                                markDirty();
                             }
                         });
                     });
@@ -1574,9 +1588,8 @@
                     description: 'Add a description of this teaching experience.'
                 };
                 experiences.push(newExp);
-                saveExperiences();
                 renderExperiences();
-                if (currentMode === 'edit') saveFullState();
+                if (currentMode === 'edit') markDirty();
                 const cards = experiencesContainer.querySelectorAll('.experience-card');
                 if (cards.length) {
                     cards[cards.length - 1].scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -1653,6 +1666,12 @@
                 if (!data || !data.editable) return;
                 const updates = {
                     hero_sub: ['Studying the past.', 'History educator with an academic foundation in History and Economics, teacher education experience, and practical classroom exposure.'],
+                    profile_note: ['A developing History teacher candidate', 'A developing teacher candidate for History, Economics and English, bringing subject study, teacher education, internship experience, and reflective classroom practice together for a CBSE/ICSE school setting.'],
+                    profile_subjects: ['History · Economics', 'History · Economics · English<br>English as second B.Ed. pedagogy with internship teaching exposure'],
+                    profile_preparation: ['UPSC preparation', 'Five years of UPSC preparation<br>Knowledge of Indian polity, governance and public affairs'],
+                    work3_title: ['Assessment Evidence', 'Presentation & Activities'],
+                    work3_meta: ['Source questions · Worksheets · Exit tickets', 'Slides · Activity sheets · Classroom media'],
+                    work3_text: ['Add formative checks', 'Add presentations, activity sheets, classroom photographs, or other evidence of learner engagement.'],
                     hero_statement: ['I believe education is the nurturing', 'Developing historical thinking through inquiry, discussion, evidence-based learning, and reflective classroom practice in secondary settings.'],
                     journey_title: ['From student to educator', 'Qualifications & academic foundation'],
                     why_text: ['History, for me, did not begin as a passion', 'My study of History moved from memorising events to asking why they happened, how we know, and what they mean for people in different contexts. Working with sources such as Kautilya\'s <em>Arthashastra</em> and accounts of Partition strengthened my interest in teaching History as evidence-based inquiry that connects past and present.'],
@@ -1720,7 +1739,7 @@
                     }
                 }
                 // update storage
-                if (currentMode === 'edit') saveFullState();
+                if (currentMode === 'edit') markDirty();
             }
 
             function snapshot() {
@@ -1860,8 +1879,9 @@
             function saveToStorage() {
                 const data = snapshot();
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+                isDirty = false;
                 modeStatus.textContent = 'Saved ✓';
-                setTimeout(() => { if (currentMode === 'edit') modeStatus.textContent = 'Edit'; }, 1000);
+                setTimeout(() => { if (currentMode === 'edit' && !isDirty) modeStatus.textContent = 'Edit'; }, 1000);
             }
 
             function fileIcon(file) {
@@ -1914,7 +1934,7 @@
                         if (file.path && window.PortfolioCloud) await window.PortfolioCloud.deleteFile(file.path);
                         resources[collection].splice(index, 1);
                         renderResources(collection);
-                        saveToStorage();
+                        markDirty();
                     } catch (error) {
                         alert('The file could not be deleted. Please check your Supabase editor login and try again.');
                         this.disabled = false;
@@ -1940,7 +1960,7 @@
                         const uploaded = await Promise.all(files.map(file => window.PortfolioCloud.uploadFile(file, folder)));
                         resources[listId] = (resources[listId] || []).concat(uploaded);
                         renderResources(listId);
-                        saveToStorage();
+                        markDirty();
                     } catch (error) {
                         console.error('Evidence upload failed:', error);
                         alert(error.message || 'The file could not be uploaded.');
@@ -1994,15 +2014,13 @@
                                 removeImage(zone, preview, src);
                             });
                         });
-                        if (currentMode === 'edit') saveToStorage();
+                        if (currentMode === 'edit') markDirty();
                     });
                     input.value = '';
                 });
                 const caption = zone.querySelector('.img-caption');
                 if (caption) {
-                    caption.addEventListener('input', () => {
-                        if (currentMode === 'edit') saveToStorage();
-                    });
+                    caption.addEventListener('input', markDirty);
                 }
             }
 
@@ -2069,16 +2087,14 @@
                             if (!src) return;
                             removeImage(zone, null, src);
                         });
-                        if (currentMode === 'edit') saveToStorage();
+                        if (currentMode === 'edit') markDirty();
                     };
                     reader.readAsDataURL(file);
                     input.value = '';
                 });
                 const caption = zone.querySelector('.img-caption');
                 if (caption) {
-                    caption.addEventListener('input', () => {
-                        if (currentMode === 'edit') saveToStorage();
-                    });
+                    caption.addEventListener('input', markDirty);
                 }
             }
 
@@ -2129,19 +2145,17 @@
                                         removeImage(zoneDiv, newPreview, src);
                                     });
                                 });
-                                if (currentMode === 'edit') saveToStorage();
+                                if (currentMode === 'edit') markDirty();
                             });
                             newInput.value = '';
                         });
                     }
                     if (caption) {
-                        caption.addEventListener('input', () => {
-                            if (currentMode === 'edit') saveToStorage();
-                        });
+                        caption.addEventListener('input', markDirty);
                     }
                 }
                 grid.appendChild(clone);
-                if (currentMode === 'edit') saveToStorage();
+                if (currentMode === 'edit') markDirty();
             }
 
             // ---- portrait ----
@@ -2157,7 +2171,7 @@
                     const file = input.files[0];
                     if (!file) { input.remove(); return; }
                     const reader = new FileReader();
-                    reader.onload = e => { portrait.src = e.target.result; if (currentMode === 'edit') saveToStorage(); input.remove(); };
+                    reader.onload = e => { portrait.src = e.target.result; if (currentMode === 'edit') markDirty(); input.remove(); };
                     reader.readAsDataURL(file);
                 };
             });
@@ -2185,7 +2199,11 @@
 
             addExperienceBtn.addEventListener('click', addExperience);
 
-            viewBtn.addEventListener('click', () => setMode('view'));
+            viewBtn.addEventListener('click', () => {
+                if (currentMode === 'edit' && isDirty && !confirm('You have unsaved changes. Leave edit mode and discard them?')) return;
+                setMode('view');
+                isDirty = false;
+            });
             editBtn.addEventListener('click', async () => {
                 if (currentMode === 'edit') return;
                 if (!window.PortfolioCloud) { alert('The editor is still loading. Please try again.'); return; }
@@ -2196,7 +2214,10 @@
                     if (error.message) alert(error.message);
                 }
             });
-            saveBtn.addEventListener('click', saveToStorage);
+            saveBtn.addEventListener('click', () => {
+                if (window.__portfolio && typeof window.__portfolio.saveToStorage === 'function') window.__portfolio.saveToStorage();
+                else saveToStorage();
+            });
             resetBtn.addEventListener('click', resetStorage);
             sectionAddBtn?.addEventListener('click', addSection);
             orderSectionsForRecruiters();
@@ -2217,14 +2238,14 @@
             }
 
             editableElements().forEach(el => {
-                el.addEventListener('input', () => { if (currentMode === 'edit') saveToStorage(); });
+                el.addEventListener('input', markDirty);
             });
             document.addEventListener('input', event => {
-                if (currentMode === 'edit' && event.target.closest('[data-editable]')) saveToStorage();
+                if (currentMode === 'edit' && event.target.closest('[data-editable]')) markDirty();
             });
 
             console.log('📚 Portfolio loaded.');
-            window.__portfolio = { snapshot, restore, saveToStorage, resetStorage, setMode, addSlot, addExperience, addSection, experiences };
+            window.__portfolio = { snapshot, restore, saveToStorage, resetStorage, setMode, addSlot, addExperience, addSection, experiences, markDirty, markSaved };
         })();
     </script>
     <script src="supabase-storage.js?v=2608da3"></script>
