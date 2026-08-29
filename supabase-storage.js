@@ -1,7 +1,7 @@
 (function () {
   'use strict';
 
-  const CORE_URL = 'https://raw.githubusercontent.com/krishnamahato704-spec/E-portfolio/c6029eeca2fe1344591e7d735604b1d2a7e719ba/supabase-storage.js';
+  const CORE_URL = 'https://cdn.jsdelivr.net/gh/krishnamahato704-spec/E-portfolio@c6029eeca2fe1344591e7d735604b1d2a7e719ba/supabase-storage.js';
   const SUPABASE_URL = 'https://oyqevsygintkjrkfbzpx.supabase.co';
   const SUPABASE_KEY = 'sb_publishable_CZOIotDHbTM9m4E8vHZ9Aw_H3-G9mAd';
   const STORAGE_KEY = 'krishna_portfolio_v4';
