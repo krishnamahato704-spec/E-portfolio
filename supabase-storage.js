@@ -9,14 +9,15 @@
   let originalRestore = null;
   let sectionsConsolidated = false;
 
-  function loadCore() {
-    return fetch(CORE_URL, { cache: 'no-store' })
-      .then(r => { if (!r.ok) throw new Error('Could not load portfolio cloud core.'); return r.text(); })
-      .then(code => {
-        const script = document.createElement('script');
-        script.textContent = code + '\n//# sourceURL=supabase-storage-core.js';
-        document.head.appendChild(script);
-      });
+    function loadCore() {
+    return new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = CORE_URL + '?v=1';
+      script.async = false;
+      script.onload = resolve;
+      script.onerror = () => reject(new Error('Could not load portfolio cloud core.'));
+      document.head.appendChild(script);
+    });
   }
 
   function installFixes() {
