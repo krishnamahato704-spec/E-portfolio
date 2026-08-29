@@ -42,6 +42,7 @@ insert into storage.buckets (id, name, public, file_size_limit)
 values ('portfolio-media', 'portfolio-media', true, 26214400)
 on conflict (id) do update set public = true, file_size_limit = 26214400;
 
+drop policy if exists "Portfolio media public upload" on storage.objects;
 drop policy if exists "Portfolio owner can upload evidence" on storage.objects;
 drop policy if exists "Portfolio owner can update evidence" on storage.objects;
 drop policy if exists "Portfolio owner can delete evidence" on storage.objects;
@@ -71,5 +72,8 @@ on storage.objects for delete
 to authenticated
 using (
   bucket_id = 'portfolio-media'
-  and (select auth.jwt() ->> 'email') = 'krishnamahato704@gmail.com'
+  and (
+    owner_id = (select auth.uid()::text)
+    or (select auth.jwt() ->> 'email') = 'krishnamahato704@gmail.com'
+  )
 );

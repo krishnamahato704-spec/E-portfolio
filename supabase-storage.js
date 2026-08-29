@@ -8,6 +8,7 @@
   let gallery = [];
   let originalRestore = null;
   let sectionsConsolidated = false;
+  let cloudDeletePatched = false;
 
     function loadCore() {
     return new Promise((resolve, reject) => {
@@ -64,6 +65,13 @@
 
       /* Final gallery */
       #portfolio-gallery { background:linear-gradient(135deg,var(--bg),#ece8e0); }
+      body { background:radial-gradient(circle at 18% 8%,rgba(184,134,11,.18),transparent 24%),linear-gradient(135deg,#f8f5ed 0%,#dce5ec 52%,#f4efe7 100%) !important; }
+      body::after { content:""; position:fixed; inset:0; pointer-events:none; z-index:-1; opacity:.18; background:linear-gradient(115deg,transparent 0 45%,rgba(31,58,95,.11) 45.2% 45.5%,transparent 45.7% 100%); }
+      section:not(#hero) { background:rgba(255,255,255,.42); }
+      section:nth-of-type(odd):not(#hero) { background:linear-gradient(135deg,rgba(255,255,255,.72),rgba(230,236,239,.58)); }
+      .card, .evidence-card, .profile-item { box-shadow:0 14px 30px rgba(26,45,70,.11), 0 2px 0 rgba(184,134,11,.18); }
+      .card:hover, .evidence-card:hover { transform:translateY(-8px) rotateX(1.5deg) rotateY(-1.5deg); box-shadow:0 24px 46px rgba(26,45,70,.2), 0 3px 0 rgba(184,134,11,.3); }
+      .section-title { text-shadow:1px 2px 0 rgba(184,134,11,.14); }
       #portfolio-gallery .gallery-grid { display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:14px; margin-top:18px; }
       #portfolio-gallery .gallery-card { position:relative; background:var(--card); border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; box-shadow:var(--shadow); min-width:0; }
       #portfolio-gallery .gallery-image-wrap { min-height:120px; background:#e8e4dd; display:flex; align-items:center; justify-content:center; overflow:hidden; }
@@ -80,6 +88,37 @@
       @media (max-width:420px) { #portfolio-gallery .gallery-grid { grid-template-columns:1fr; } }
     `;
     document.head.appendChild(style);
+
+    function patchCloudDelete() {
+      if (cloudDeletePatched || !window.PortfolioCloud || typeof window.PortfolioCloud.deleteFile !== 'function') return;
+      const originalDelete = window.PortfolioCloud.deleteFile;
+      window.PortfolioCloud.deleteFile = async function (path) {
+        try {
+          return await originalDelete(path);
+        } catch (firstError) {
+          // Supabase access tokens can expire while the editor tab remains open.
+          // Re-authenticate once, then retry the same delete request.
+          try {
+            sessionStorage.removeItem('portfolio_editor_session');
+            await window.PortfolioCloud.signInEditor();
+            return await originalDelete(path);
+          } catch (secondError) {
+            throw new Error('File deletion failed after re-authentication. Please confirm the storage DELETE policy is installed in Supabase.');
+          }
+        }
+      };
+      cloudDeletePatched = true;
+    }
+
+    function addTeachingScope() {
+      const profile = document.querySelector('#profile > .container');
+      if (!profile || profile.querySelector('.teaching-scope-card')) return;
+      const card = document.createElement('div');
+      card.className = 'card teaching-scope-card';
+      card.style.cssText = 'margin-top:18px;border-left:4px solid var(--accent2);';
+      card.innerHTML = '<div class="card-label">Teaching scope</div><h3>History · Economics · English</h3><p>History and Economics are supported by academic study, while English is my second B.Ed. pedagogy with internship teaching exposure. Five years of UPSC preparation also support informed teaching of Indian polity, governance and public affairs.</p>';
+      profile.appendChild(card);
+    }
 
     function consolidateSections() {
       if (sectionsConsolidated && !document.getElementById('school-fit')) return;
@@ -402,7 +441,9 @@
       buildGallery();
       applyLocalGallery();
       patchRestore();
+      patchCloudDelete();
       consolidateSections();
+      addTeachingScope();
       renderGallery();
       ensureCompletionYear();
       fixNavigation();

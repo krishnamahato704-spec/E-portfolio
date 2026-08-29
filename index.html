@@ -1388,7 +1388,7 @@
                             if (descEl && description !== null) descEl.textContent = description.trim();
                             const navLink = navLinks.querySelector('a[href="#' + section.id + '"]');
                             if (navLink) navLink.textContent = label.trim() || 'Section';
-                            markDirty();
+                            saveToStorage();
                         });
                         controls.querySelector('.section-delete-btn').addEventListener('click', () => {
                             if (currentMode !== 'edit') return;
@@ -1396,7 +1396,7 @@
                             if (!deletedSections.includes(section.id)) deletedSections.push(section.id);
                             section.classList.add('deleted-section');
                             removeSectionNav(section.id);
-                            markDirty();
+                            saveToStorage();
                         });
                     }
                 });
@@ -1448,7 +1448,7 @@
                 });
                 refreshSectionControls();
                 setMode('edit');
-                markDirty();
+                saveToStorage();
                 section.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
 
@@ -1555,7 +1555,7 @@
                         if (!confirm('Remove this experience?')) return;
                         experiences = experiences.filter(e => e.id !== id);
                         renderExperiences();
-                        if (currentMode === 'edit') markDirty();
+                        if (currentMode === 'edit') saveFullState();
                     });
                 });
 
@@ -1589,7 +1589,7 @@
                 };
                 experiences.push(newExp);
                 renderExperiences();
-                if (currentMode === 'edit') markDirty();
+                if (currentMode === 'edit') saveFullState();
                 const cards = experiencesContainer.querySelectorAll('.experience-card');
                 if (cards.length) {
                     cards[cards.length - 1].scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -1739,7 +1739,7 @@
                     }
                 }
                 // update storage
-                if (currentMode === 'edit') markDirty();
+                if (currentMode === 'edit') saveToStorage();
             }
 
             function snapshot() {
@@ -1934,9 +1934,9 @@
                         if (file.path && window.PortfolioCloud) await window.PortfolioCloud.deleteFile(file.path);
                         resources[collection].splice(index, 1);
                         renderResources(collection);
-                        markDirty();
+                        saveToStorage();
                     } catch (error) {
-                        alert('The file could not be deleted. Please check your Supabase editor login and try again.');
+                        alert(error.message || 'The file could not be deleted. Please check your Supabase editor login and storage DELETE policy.');
                         this.disabled = false;
                     }
                 }));
@@ -1960,7 +1960,7 @@
                         const uploaded = await Promise.all(files.map(file => window.PortfolioCloud.uploadFile(file, folder)));
                         resources[listId] = (resources[listId] || []).concat(uploaded);
                         renderResources(listId);
-                        markDirty();
+                        saveToStorage();
                     } catch (error) {
                         console.error('Evidence upload failed:', error);
                         alert(error.message || 'The file could not be uploaded.');
@@ -2014,7 +2014,7 @@
                                 removeImage(zone, preview, src);
                             });
                         });
-                        if (currentMode === 'edit') markDirty();
+                        if (currentMode === 'edit') saveToStorage();
                     });
                     input.value = '';
                 });
@@ -2087,7 +2087,7 @@
                             if (!src) return;
                             removeImage(zone, null, src);
                         });
-                        if (currentMode === 'edit') markDirty();
+                        if (currentMode === 'edit') saveToStorage();
                     };
                     reader.readAsDataURL(file);
                     input.value = '';
@@ -2145,7 +2145,7 @@
                                         removeImage(zoneDiv, newPreview, src);
                                     });
                                 });
-                                if (currentMode === 'edit') markDirty();
+                                if (currentMode === 'edit') saveToStorage();
                             });
                             newInput.value = '';
                         });
@@ -2155,7 +2155,7 @@
                     }
                 }
                 grid.appendChild(clone);
-                if (currentMode === 'edit') markDirty();
+                if (currentMode === 'edit') saveToStorage();
             }
 
             // ---- portrait ----
@@ -2171,7 +2171,7 @@
                     const file = input.files[0];
                     if (!file) { input.remove(); return; }
                     const reader = new FileReader();
-                    reader.onload = e => { portrait.src = e.target.result; if (currentMode === 'edit') markDirty(); input.remove(); };
+                    reader.onload = e => { portrait.src = e.target.result; if (currentMode === 'edit') saveToStorage(); input.remove(); };
                     reader.readAsDataURL(file);
                 };
             });
@@ -2248,6 +2248,6 @@
             window.__portfolio = { snapshot, restore, saveToStorage, resetStorage, setMode, addSlot, addExperience, addSection, experiences, markDirty, markSaved };
         })();
     </script>
-    <script src="supabase-storage.js?v=cdn-core-1"></script>
+    <script src="supabase-storage.js?v=cdn-core-2"></script>
 </body>
 </html>
