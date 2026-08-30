@@ -115,6 +115,22 @@
       @media (prefers-reduced-motion: no-preference) { .hero-scene .scene-globe { animation:sceneFloat 7s ease-in-out infinite; } .hero-scene .scene-book { animation:sceneBook 8s ease-in-out infinite; } }
       @keyframes sceneFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-7px)} }
       @keyframes sceneBook { 0%,100%{transform:rotate(-8deg) rotateX(40deg)} 50%{transform:rotate(-5deg) rotateX(40deg) translateY(-3px)} }
+      /* Visitor mode is the default: editing controls are opt-in. */
+      body:not(.editing) #modeBar { display:none !important; }
+      .editor-launch { position:fixed; right:16px; bottom:16px; z-index:998; width:34px; height:34px; border:1px solid rgba(31,58,95,.28); border-radius:50%; background:rgba(255,255,255,.78); color:var(--accent); box-shadow:0 5px 16px rgba(20,36,54,.16); cursor:pointer; font-size:.92rem; }
+      .editing .editor-launch { display:none; }
+      body:not(.editing) .view-only-placeholder { display:none !important; }
+      .view-mode .upload-zone:not(:has(img)):not(:has(.resource-item)), .view-mode .academic-img:not(:has(img)) { display:none !important; }
+      .view-mode .cert-upload:not(:has(img)) { display:none !important; }
+      #profile, #academic-journey, #why-history, #philosophy, #history-teaching, #my-work, #assessment, #differentiation, #skills, #reflection { position:relative; }
+      #academic-journey::before, #why-history::before, #philosophy::before, #history-teaching::before, #my-work::before, #reflection::before { content:""; position:absolute; inset:0; pointer-events:none; opacity:.26; background-image:linear-gradient(90deg,transparent 49.8%,rgba(184,134,11,.18) 50%,transparent 50.2%); background-size:100% 100%; }
+      .thinking-lab { margin-top:18px; padding:26px 18px 20px; border-radius:18px; background:linear-gradient(145deg,rgba(31,58,95,.98),rgba(20,40,62,.94)); color:#fff; box-shadow:0 20px 38px rgba(20,36,54,.2); text-align:center; }
+      .thinking-lab .lab-core { display:inline-flex; align-items:center; justify-content:center; width:150px; height:76px; border:2px solid var(--gold-light); border-radius:50%; background:rgba(184,134,11,.2); font:700 1.05rem Georgia,serif; letter-spacing:.08em; text-transform:uppercase; box-shadow:0 0 0 10px rgba(184,134,11,.06),0 12px 22px rgba(0,0,0,.18); }
+      .thinking-lab .lab-nodes { display:flex; flex-wrap:wrap; justify-content:center; gap:8px; margin-top:18px; }
+      .thinking-lab button { border:1px solid rgba(255,255,255,.3); border-radius:999px; padding:8px 12px; background:rgba(255,255,255,.09); color:#fff; cursor:pointer; font:600 .78rem var(--font); transition:.2s; }
+      .thinking-lab button:hover, .thinking-lab button.active { background:var(--gold-light); color:#1a1a2e; transform:translateY(-2px); }
+      .thinking-lab .lab-note { min-height:1.4em; margin-top:12px; color:#dce5ec; font-size:.9rem; }
+      @media (max-width:600px) { .editor-launch { right:12px; bottom:12px; } .thinking-lab .lab-core { width:132px; height:68px; font-size:.9rem; } }
     `;
     document.head.appendChild(style);
 
@@ -164,6 +180,25 @@
         ['reflection',['WHAT HAPPENED?','WHAT DID I LEARN?','WHAT WILL I CHANGE?']]
       ];
       rails.forEach(([id, steps]) => { const section = document.getElementById(id); const container = section?.querySelector(':scope > .container'); if (!container || container.querySelector('.process-rail')) return; const rail = document.createElement('div'); rail.className='process-rail'; rail.setAttribute('aria-label','Teaching process'); rail.innerHTML=steps.map((s,i)=>(i?'<i aria-hidden="true">→</i>':'')+'<span>'+s+'</span>').join(''); const title=container.querySelector('.section-title, .merged-subtitle'); (title?.parentElement || container).appendChild(rail); });
+    }
+
+    function addEditorLauncher() {
+      if (document.querySelector('.editor-launch')) return;
+      const button = document.createElement('button');
+      button.className = 'editor-launch'; button.type = 'button'; button.title = 'Open editor'; button.setAttribute('aria-label','Open portfolio editor'); button.textContent = '✎';
+      button.addEventListener('click', () => document.getElementById('editBtn')?.click());
+      document.body.appendChild(button);
+    }
+
+    function addThinkingLab() {
+      const section = document.getElementById('history-teaching');
+      const container = section?.querySelector(':scope > .container');
+      if (!container || container.querySelector('.thinking-lab')) return;
+      const lab = document.createElement('div'); lab.className='thinking-lab';
+      lab.innerHTML = '<div class="card-label" style="color:var(--gold-light);">History Thinking Laboratory</div><div class="lab-core">Historical<br>Thinking</div><div class="lab-nodes"><button type="button">Questioning</button><button type="button">Comparison</button><button type="button">Interpretation</button><button type="button">Primary sources</button><button type="button">Evidence-based reasoning</button></div><div class="lab-note" aria-live="polite">Select a concept to see how it supports deeper understanding.</div>';
+      const note = lab.querySelector('.lab-note');
+      lab.querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => { lab.querySelectorAll('button').forEach(x=>x.classList.remove('active')); btn.classList.add('active'); note.textContent = btn.textContent + ' connects learners to Historical Thinking and deeper understanding.'; }));
+      container.appendChild(lab);
     }
 
     function patchCloudDelete() {
@@ -523,6 +558,8 @@
       addHeroScene();
       addRecruiterSnapshot();
       addProcessRails();
+      addEditorLauncher();
+      addThinkingLab();
       applyLocalGallery();
       patchRestore();
       patchCloudDelete();
