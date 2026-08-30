@@ -86,8 +86,85 @@
       @media (max-width:980px) { #portfolio-gallery .gallery-grid { grid-template-columns:repeat(3,minmax(0,1fr)); } }
       @media (max-width:640px) { #portfolio-gallery .gallery-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; } }
       @media (max-width:420px) { #portfolio-gallery .gallery-grid { grid-template-columns:1fr; } }
+
+      /* Museum-inspired depth: purposeful objects, not decorative clutter. */
+      .hero { position:relative; overflow:hidden; isolation:isolate; }
+      .hero::before { content:""; position:absolute; inset:0; z-index:-2; background:radial-gradient(circle at 78% 32%,rgba(184,134,11,.22),transparent 23%),linear-gradient(115deg,rgba(31,58,95,.08),transparent 52%); }
+      .hero::after { content:""; position:absolute; right:-8%; bottom:-44%; width:58%; height:90%; z-index:-1; border-radius:50%; background:radial-gradient(ellipse at center,rgba(31,58,95,.16),transparent 68%); transform:rotate(-10deg); pointer-events:none; }
+      .hero-scene { position:absolute; inset:6% 0 0; pointer-events:none; perspective:900px; }
+      .hero-scene .scene-surface { position:absolute; right:2%; bottom:9%; width:58%; height:17%; border-radius:50%; background:linear-gradient(160deg,#6e4b32,#3c291e); box-shadow:0 24px 24px rgba(23,27,35,.22); transform:rotateX(62deg) rotateZ(-5deg); }
+      .hero-scene .scene-book { position:absolute; right:25%; bottom:26%; width:24%; height:13%; background:#f8f1df; border:3px solid #bca77b; box-shadow:8px 10px 0 rgba(61,40,28,.18); transform:rotate(-8deg) rotateX(40deg); }
+      .hero-scene .scene-book::after { content:"HISTORY"; position:absolute; inset:28% 8%; color:#7d2c2c; font:700 .65rem Georgia,serif; letter-spacing:.12em; text-align:center; }
+      .hero-scene .scene-globe { position:absolute; right:8%; bottom:28%; width:70px; height:70px; border-radius:50%; background:radial-gradient(circle at 32% 28%,#8fb0b8 0 14%,#315d73 42%,#1d3a4b 75%); border:4px solid #b8860b; box-shadow:0 8px 10px rgba(25,35,45,.24); }
+      .hero-scene .scene-paper { position:absolute; right:46%; bottom:31%; width:14%; height:12%; background:#f5ead0; border-left:4px solid #8b1a2b; box-shadow:5px 7px 0 rgba(61,40,28,.14); transform:rotate(7deg); }
+      .hero-scene .scene-pen { position:absolute; right:42%; bottom:25%; width:16%; height:5px; background:#8b1a2b; transform:rotate(-22deg); border-radius:5px; }
+      .hero .portrait-wrap { position:relative; z-index:1; }
+      .hero .portrait-img { box-shadow:0 24px 55px rgba(20,36,54,.24), 0 0 0 8px rgba(255,255,255,.5); }
+      .recruiter-snapshot { background:linear-gradient(135deg,#1f3a5f,#14283e) !important; color:#fff; }
+      .recruiter-snapshot .section-label, .recruiter-snapshot .section-title { color:#fff; }
+      .snapshot-grid { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:12px; margin-top:16px; }
+      .snapshot-item { padding:16px 14px; border:1px solid rgba(255,255,255,.2); border-top:3px solid var(--gold-light); border-radius:12px; background:rgba(255,255,255,.08); box-shadow:0 12px 22px rgba(0,0,0,.14); }
+      .snapshot-item strong { display:block; color:var(--gold-light); font-size:.7rem; text-transform:uppercase; letter-spacing:.12em; margin-bottom:6px; }
+      .snapshot-item span { font-size:.94rem; line-height:1.45; }
+      .process-rail { display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin:16px 0 4px; }
+      .process-rail span { padding:8px 12px; border-radius:999px; background:rgba(184,134,11,.12); border:1px solid rgba(184,134,11,.32); color:var(--accent); font-size:.76rem; font-weight:800; letter-spacing:.08em; text-transform:uppercase; }
+      .process-rail i { color:var(--gold); font-style:normal; font-size:1.1rem; }
+      @media (max-width:980px) { .snapshot-grid { grid-template-columns:repeat(3,minmax(0,1fr)); } .hero-scene { opacity:.5; } }
+      @media (max-width:600px) { .snapshot-grid { grid-template-columns:1fr 1fr; } .snapshot-item { padding:12px; } .hero-scene { display:none; } .process-rail { gap:5px; } .process-rail span { font-size:.68rem; padding:7px 9px; } }
+      @media (max-width:420px) { .snapshot-grid { grid-template-columns:1fr; } }
+      @media (prefers-reduced-motion: no-preference) { .hero-scene .scene-globe { animation:sceneFloat 7s ease-in-out infinite; } .hero-scene .scene-book { animation:sceneBook 8s ease-in-out infinite; } }
+      @keyframes sceneFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-7px)} }
+      @keyframes sceneBook { 0%,100%{transform:rotate(-8deg) rotateX(40deg)} 50%{transform:rotate(-5deg) rotateX(40deg) translateY(-3px)} }
     `;
     document.head.appendChild(style);
+
+    function replaceEmojiIcons() {
+      const map = {'📜':'▤','🏛️':'▥','🎓':'▣','🌟':'✦','🔍':'⌕','🛤️':'↗','🌱':'↗','👏':'＋','❤️':'♥','❓':'?','💭':'◌','📖':'▤','🗺️':'⊞','🖼️':'▧','📘':'▤','🎯':'◎','✍️':'✎','📸':'▧','✏️':'✎','🔎':'⌕','🔒':'▣'};
+      const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+      const nodes = []; let node;
+      while ((node = walker.nextNode())) nodes.push(node);
+      nodes.forEach(textNode => { let value = textNode.nodeValue; Object.keys(map).forEach(icon => { value = value.split(icon).join(map[icon]); }); textNode.nodeValue = value; });
+    }
+
+    function addHeroScene() {
+      const wrap = document.querySelector('#hero .hero-grid');
+      if (!wrap || wrap.querySelector('.hero-scene')) return;
+      const heroLabel = document.querySelector('#hero .section-label');
+      if (heroLabel) heroLabel.textContent = 'History Educator · Social Science · Emerging Educator';
+      const cta = document.querySelector('#hero .hero-cta');
+      if (cta && !cta.querySelector('.explore-portfolio')) {
+        const link = document.createElement('a');
+        link.className = 'cta-button secondary explore-portfolio';
+        link.href = '#profile';
+        link.textContent = 'Explore my portfolio';
+        cta.insertBefore(link, cta.firstChild);
+      }
+      const scene = document.createElement('div');
+      scene.className = 'hero-scene'; scene.setAttribute('aria-hidden','true');
+      scene.innerHTML = '<div class="scene-surface"></div><div class="scene-book"></div><div class="scene-paper"></div><div class="scene-pen"></div><div class="scene-globe"></div>';
+      wrap.appendChild(scene);
+    }
+
+    function addRecruiterSnapshot() {
+      if (document.getElementById('recruiter-snapshot')) return;
+      const hero = document.getElementById('hero');
+      const profile = document.getElementById('profile');
+      if (!hero || !profile) return;
+      const section = document.createElement('section');
+      section.id = 'recruiter-snapshot'; section.className = 'recruiter-snapshot';
+      section.innerHTML = '<div class="container"><div class="section-label">Recruiter Snapshot</div><h2 class="section-title">The essentials at a glance</h2><div class="snapshot-grid"><div class="snapshot-item"><strong>Target roles</strong><span>TGT History / Social Science<br>PGT History</span></div><div class="snapshot-item"><strong>Subjects</strong><span>History · Economics · English</span></div><div class="snapshot-item"><strong>Academic background</strong><span>B.A. History &amp; Economics<br>B.Ed. · M.A. History</span></div><div class="snapshot-item"><strong>Core strengths</strong><span>Historical Thinking<br>Lesson Planning · Assessment · Differentiated Support</span></div><div class="snapshot-item"><strong>Teaching exposure</strong><span>School Observation<br>Teaching Internship</span></div></div></div>';
+      hero.after(section);
+    }
+
+    function addProcessRails() {
+      const rails = [
+        ['my-work',['PLAN','TEACH','ASSESS','REFLECT']],
+        ['assessment',['CHECK UNDERSTANDING','ANALYSE EVIDENCE','GIVE FEEDBACK','ADJUST INSTRUCTION','CHECK AGAIN']],
+        ['differentiation',['SCAFFOLD','OFFER CHOICE','EXTEND','DEEP UNDERSTANDING']],
+        ['reflection',['WHAT HAPPENED?','WHAT DID I LEARN?','WHAT WILL I CHANGE?']]
+      ];
+      rails.forEach(([id, steps]) => { const section = document.getElementById(id); const container = section?.querySelector(':scope > .container'); if (!container || container.querySelector('.process-rail')) return; const rail = document.createElement('div'); rail.className='process-rail'; rail.setAttribute('aria-label','Teaching process'); rail.innerHTML=steps.map((s,i)=>(i?'<i aria-hidden="true">→</i>':'')+'<span>'+s+'</span>').join(''); const title=container.querySelector('.section-title, .merged-subtitle'); (title?.parentElement || container).appendChild(rail); });
+    }
 
     function patchCloudDelete() {
       if (cloudDeletePatched || !window.PortfolioCloud || typeof window.PortfolioCloud.deleteFile !== 'function') return;
@@ -443,6 +520,9 @@
     function finish() {
       if (document.getElementById('school-fit') && !document.querySelector('[data-merged-from="school-fit"]')) sectionsConsolidated = false;
       buildGallery();
+      addHeroScene();
+      addRecruiterSnapshot();
+      addProcessRails();
       applyLocalGallery();
       patchRestore();
       patchCloudDelete();
@@ -455,6 +535,7 @@
       moveCvToTop();
       ensureCvDeleteControl();
       patchPresentationActivities();
+      replaceEmojiIcons();
       document.querySelectorAll('.resource-item').forEach(item => {
         item.style.minWidth = '0';
         const link = item.querySelector('.resource-link');
