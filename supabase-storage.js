@@ -7,7 +7,6 @@
   const STORAGE_KEY = 'krishna_portfolio_v4';
   let gallery = [];
   let originalRestore = null;
-  let sectionsConsolidated = false;
   let cloudDeletePatched = false;
 
     function loadCore() {
@@ -48,19 +47,11 @@
       .cv-top-wrap .cv-download-link.cv-disabled { background:#e8e4dd; color:var(--muted); border-color:var(--border); box-shadow:none; cursor:not-allowed; }
       .cv-top-wrap .cv-edit-control { width:100%; }
       .cv-top-wrap .cv-delete-control { width:100%; background:transparent; color:var(--accent2); border:1px solid var(--accent2); }
+      body:not(.editing) .cv-edit-control, body:not(.editing) .cv-delete-control { display:none !important; }
       footer .cv-download-link, footer .cv-disabled, footer .cv-edit-control { display:none !important; }
       #navbar .nav-cv-link { color:#fff !important; background:var(--accent2) !important; font-weight:800 !important; }
 
-      /* Compact 8-section recruiter structure. */
-      body > section.merged-source-section { display:none !important; }
-      .merged-subsection { margin-top:30px; padding-top:26px; border-top:1px solid var(--border); }
-      .merged-subsection:first-of-type { margin-top:20px; padding-top:0; border-top:0; }
-      .merged-subsection .merged-subsection-label { font-size:.68rem; text-transform:uppercase; letter-spacing:.13em; color:var(--accent2); font-weight:800; margin-bottom:3px; }
-      .merged-subsection .merged-subtitle { font-family:var(--serif); font-size:clamp(1.45rem,2.8vw,2.05rem); line-height:1.1; letter-spacing:-.02em; margin:3px 0 9px; }
-      .merged-subsection .section-desc { max-width:760px; }
-      .merged-subsection > .container { width:100%; margin:0; padding:0; }
-      .merged-subsection > .container > .section-controls { display:none !important; }
-      #profile, #academic-journey, #experiences, #my-work, #why-history, #skills, #reflection { scroll-margin-top:76px; }
+      section { scroll-margin-top:76px; }
       @media (max-width:760px) { .cv-top-wrap { width:min(280px,70vw); } }
 
       /* Final gallery */
@@ -86,12 +77,13 @@
       @media (max-width:420px) { #portfolio-gallery .gallery-grid { grid-template-columns:1fr; } }
 
       .hero .portrait-img { box-shadow:0 10px 24px rgba(20,36,54,.16); }
-      .recruiter-snapshot { background:#1f3a5f !important; color:#fff; }
-      .recruiter-snapshot .section-label, .recruiter-snapshot .section-title { color:#fff; }
+      .recruiter-snapshot { background:#fffdf8 !important; color:var(--text); border-top:1px solid var(--border); border-bottom:1px solid var(--border); }
+      .recruiter-snapshot .section-label { color:var(--accent2); }
+      .recruiter-snapshot .section-title { color:var(--accent); }
       .snapshot-grid { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:12px; margin-top:16px; }
-      .snapshot-item { padding:16px 14px; border:1px solid rgba(255,255,255,.2); border-top:3px solid var(--gold-light); border-radius:12px; background:rgba(255,255,255,.08); box-shadow:0 12px 22px rgba(0,0,0,.14); }
-      .snapshot-item strong { display:block; color:var(--gold-light); font-size:.7rem; text-transform:uppercase; letter-spacing:.12em; margin-bottom:6px; }
-      .snapshot-item span { font-size:.94rem; line-height:1.45; }
+      .snapshot-item { padding:16px 14px; border:1px solid var(--border); border-top:3px solid var(--accent2); background:#fff; box-shadow:none; }
+      .snapshot-item strong { display:block; color:var(--accent); font-size:.7rem; text-transform:uppercase; letter-spacing:.12em; margin-bottom:6px; }
+      .snapshot-item span { color:#263444; font-size:.94rem; line-height:1.45; }
       .process-rail { display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin:16px 0 4px; }
       .process-rail span { padding:8px 12px; border-radius:999px; background:rgba(184,134,11,.12); border:1px solid rgba(184,134,11,.32); color:var(--accent); font-size:.76rem; font-weight:800; letter-spacing:.08em; text-transform:uppercase; }
       .process-rail i { color:var(--gold); font-style:normal; font-size:1.1rem; }
@@ -100,25 +92,28 @@
       @media (max-width:420px) { .snapshot-grid { grid-template-columns:1fr; } }
       /* Visitor mode is the default: editing controls are opt-in. */
       body:not(.editing) #modeBar { display:none !important; }
-      .editor-launch { position:fixed; right:16px; bottom:16px; z-index:998; width:34px; height:34px; border:1px solid rgba(31,58,95,.28); border-radius:50%; background:rgba(255,255,255,.78); color:var(--accent); box-shadow:0 5px 16px rgba(20,36,54,.16); cursor:pointer; font-size:.92rem; }
-      .editing .editor-launch { display:none; }
       body:not(.editing) .view-only-placeholder { display:none !important; }
       .view-mode .upload-zone:not(:has(img)):not(:has(.resource-item)), .view-mode .academic-img:not(:has(img)) { display:none !important; }
       .view-mode .cert-upload:not(:has(img)) { display:none !important; }
-      #profile, #academic-journey, #why-history, #philosophy, #history-teaching, #my-work, #assessment, #differentiation, #skills, #reflection { position:relative; }
-      #academic-journey::before, #why-history::before, #philosophy::before, #history-teaching::before, #my-work::before, #reflection::before { content:""; position:absolute; inset:0; pointer-events:none; opacity:.26; background-image:linear-gradient(90deg,transparent 49.8%,rgba(184,134,11,.18) 50%,transparent 50.2%); background-size:100% 100%; }
       .thinking-lab { margin-top:18px; padding:26px 18px 20px; border:1px solid rgba(31,58,95,.2); border-top:3px solid var(--gold); background:#fbf8f1; color:var(--text); box-shadow:0 8px 20px rgba(20,36,54,.08); text-align:center; }
       .thinking-lab .lab-core { display:inline-flex; align-items:center; justify-content:center; width:190px; padding:10px 16px; border-bottom:2px solid var(--gold); color:var(--accent); font:700 1.05rem Georgia,serif; letter-spacing:.08em; text-transform:uppercase; }
       .thinking-lab .lab-nodes { display:flex; flex-wrap:wrap; justify-content:center; gap:8px; margin-top:18px; }
       .thinking-lab button { border:1px solid rgba(31,58,95,.28); padding:8px 12px; background:#fff; color:var(--accent); cursor:pointer; font:600 .78rem var(--font); transition:.2s; }
       .thinking-lab button:hover, .thinking-lab button.active { background:var(--gold-light); color:#1a1a2e; transform:translateY(-2px); }
       .thinking-lab .lab-note { min-height:1.4em; margin-top:12px; color:var(--muted); font-size:.9rem; }
-      @media (max-width:600px) { .editor-launch { right:12px; bottom:12px; } .thinking-lab .lab-core { width:132px; height:68px; font-size:.9rem; } }
+      #profile .profile-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+      #thinkers .card > div:first-child > span { display:inline-flex; width:52px; height:52px; align-items:center; justify-content:center; border:1px solid var(--border); color:var(--accent2); font-family:var(--serif); font-size:1rem !important; font-weight:700; }
+      .public-empty-state { margin-top:14px; padding:18px; border:1px solid var(--border); border-left:3px solid var(--gold); color:#374151; background:#fffdf8; }
+      .editing .public-empty-state { display:none !important; }
+      :focus-visible { outline:3px solid #8b1a2b; outline-offset:3px; }
+      html, body { max-width:100%; overflow-x:hidden; }
+      @media (max-width:600px) { #profile .profile-grid { grid-template-columns:1fr; } .thinking-lab .lab-core { width:132px; font-size:.9rem; } .process-rail { align-items:stretch; } .process-rail span { flex:1 1 100%; text-align:center; } .process-rail i { display:none; } }
+      @media (prefers-reduced-motion:reduce) { *, *::before, *::after { animation-duration:.01ms !important; animation-iteration-count:1 !important; scroll-behavior:auto !important; transition-duration:.01ms !important; } }
     `;
     document.head.appendChild(style);
 
     function replaceEmojiIcons() {
-      const map = {'📜':'▤','🏛️':'▥','🎓':'▣','🌟':'✦','🔍':'⌕','🛤️':'↗','🌱':'↗','👏':'＋','❤️':'♥','❓':'?','💭':'◌','📖':'▤','🗺️':'⊞','🖼️':'▧','📘':'▤','🎯':'◎','✍️':'✎','📸':'▧','✏️':'✎','🔎':'⌕','🔒':'▣'};
+      const map = {'📜':'▤','🏛️':'▥','🎓':'▣','🌟':'✦','🔍':'⌕','🛤️':'↗','🌱':'↗','👏':'＋','❤️':'♥','❓':'?','💭':'◌','📖':'▤','🗺️':'⊞','🖼️':'▧','📘':'▤','🎯':'◎','✍️':'✎','📸':'▧','✏️':'✎','🔎':'⌕','🔒':'▣','🕊️':'RT','🌿':'','🧠':'LV'};
       const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
       const nodes = []; let node;
       while ((node = walker.nextNode())) nodes.push(node);
@@ -143,26 +138,29 @@
       if (!hero || !profile) return;
       const section = document.createElement('section');
       section.id = 'recruiter-snapshot'; section.className = 'recruiter-snapshot';
-      section.innerHTML = '<div class="container"><div class="section-label">Recruiter Snapshot</div><h2 class="section-title">The essentials at a glance</h2><div class="snapshot-grid"><div class="snapshot-item"><strong>Target roles</strong><span>TGT History / Social Science<br>PGT History</span></div><div class="snapshot-item"><strong>Subjects</strong><span>History · Economics · English</span></div><div class="snapshot-item"><strong>Academic background</strong><span>B.A. History &amp; Economics<br>B.Ed. · M.A. History</span></div><div class="snapshot-item"><strong>Core strengths</strong><span>Historical Thinking<br>Lesson Planning · Assessment · Differentiated Support</span></div><div class="snapshot-item"><strong>Teaching exposure</strong><span>School Observation<br>Teaching Internship</span></div></div></div>';
+      section.innerHTML = '<div class="container"><div class="section-label">Recruiter Snapshot</div><h2 class="section-title">The essentials at a glance</h2><div class="snapshot-grid"><div class="snapshot-item"><strong>Target roles</strong><span>TGT History / Social Science<br>PGT History</span></div><div class="snapshot-item"><strong>Subjects</strong><span>History · Economics · English</span></div><div class="snapshot-item"><strong>Academic background</strong><span>B.A. History &amp; Economics<br>B.Ed. · M.A. History</span></div><div class="snapshot-item"><strong>Core strengths</strong><span>Historical Thinking<br>Lesson Planning · Assessment · Differentiated Support</span></div><div class="snapshot-item"><strong>Teaching exposure</strong><span>School Observation<br>5-week Teaching Internship</span></div></div></div>';
       hero.after(section);
     }
 
     function addProcessRails() {
       const rails = [
+        ['why-history',['MEMORISATION','QUESTIONING','EVIDENCE','INTERPRETATION','UNDERSTANDING']],
+        ['philosophy',['THE WHOLE LEARNER','HOLISTIC DEVELOPMENT','SEEING POTENTIAL','DIFFERENTIATION','REFLECTIVE PRACTICE']],
         ['my-work',['PLAN','TEACH','ASSESS','REFLECT']],
         ['assessment',['CHECK UNDERSTANDING','ANALYSE EVIDENCE','GIVE FEEDBACK','ADJUST INSTRUCTION','CHECK AGAIN']],
         ['differentiation',['SCAFFOLD','OFFER CHOICE','EXTEND','DEEP UNDERSTANDING']],
-        ['reflection',['WHAT HAPPENED?','WHAT DID I LEARN?','WHAT WILL I CHANGE?']]
+        ['reflection',['WHAT HAPPENED?','WHAT DID I LEARN?','WHAT WORKED WELL?','WHAT WILL I CHANGE?']]
       ];
-      rails.forEach(([id, steps]) => { const section = document.getElementById(id); const container = section?.querySelector(':scope > .container'); if (!container || container.querySelector('.process-rail')) return; const rail = document.createElement('div'); rail.className='process-rail'; rail.setAttribute('aria-label','Teaching process'); rail.innerHTML=steps.map((s,i)=>(i?'<i aria-hidden="true">→</i>':'')+'<span>'+s+'</span>').join(''); const title=container.querySelector('.section-title, .merged-subtitle'); (title?.parentElement || container).appendChild(rail); });
+      rails.forEach(([id, steps]) => { const section = document.getElementById(id); const container = section?.querySelector(':scope > .container'); if (!container || container.querySelector('.process-rail')) return; const rail = document.createElement('div'); rail.className='process-rail'; rail.setAttribute('aria-label','Teaching process'); rail.innerHTML=steps.map((s,i)=>(i?'<i aria-hidden="true">→</i>':'')+'<span>'+s+'</span>').join(''); const title=container.querySelector('.section-title'); (title?.parentElement || container).appendChild(rail); });
     }
 
-    function addEditorLauncher() {
-      if (document.querySelector('.editor-launch')) return;
-      const button = document.createElement('button');
-      button.className = 'editor-launch'; button.type = 'button'; button.title = 'Open editor'; button.setAttribute('aria-label','Open portfolio editor'); button.textContent = '✎';
-      button.addEventListener('click', () => document.getElementById('editBtn')?.click());
-      document.body.appendChild(button);
+    function installEditorEntry() {
+      if (document.body.dataset.editorEntryReady === '1') return;
+      document.body.dataset.editorEntryReady = '1';
+      document.addEventListener('keydown', event => {
+        if (event.ctrlKey && event.altKey && event.key.toLowerCase() === 'e') document.getElementById('editBtn')?.click();
+      });
+      if (new URLSearchParams(location.search).get('edit') === '1') document.getElementById('editBtn')?.click();
     }
 
     function addThinkingLab() {
@@ -170,10 +168,36 @@
       const container = section?.querySelector(':scope > .container');
       if (!container || container.querySelector('.thinking-lab')) return;
       const lab = document.createElement('div'); lab.className='thinking-lab';
-      lab.innerHTML = '<div class="card-label" style="color:var(--gold-light);">History Thinking Laboratory</div><div class="lab-core">Historical<br>Thinking</div><div class="lab-nodes"><button type="button">Questioning</button><button type="button">Comparison</button><button type="button">Interpretation</button><button type="button">Primary sources</button><button type="button">Evidence-based reasoning</button></div><div class="lab-note" aria-live="polite">Select a concept to see how it supports deeper understanding.</div>';
+      lab.innerHTML = '<div class="card-label">History Thinking Map</div><div class="lab-core">Historical<br>Thinking</div><div class="lab-nodes"><button type="button">Questioning</button><button type="button">Comparison</button><button type="button">Interpretation</button><button type="button">Primary Sources</button><button type="button">Chronology</button><button type="button">Cause &amp; Consequence</button><button type="button">Change &amp; Continuity</button><button type="button">Source Analysis</button><button type="button">Evidence-Based Reasoning</button><button type="button">Argumentation</button></div><div class="lab-note" aria-live="polite">Select a concept to see how it supports deeper understanding.</div>';
       const note = lab.querySelector('.lab-note');
       lab.querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => { lab.querySelectorAll('button').forEach(x=>x.classList.remove('active')); btn.classList.add('active'); note.textContent = btn.textContent + ' connects learners to Historical Thinking and deeper understanding.'; }));
       container.appendChild(lab);
+    }
+
+    function updatePublicEmptyStates() {
+      const certificates = document.getElementById('certificates');
+      if (certificates) {
+        let empty = certificates.querySelector('.public-empty-state');
+        const hasCertificate = !!certificates.querySelector('.cert-upload img');
+        if (!empty) {
+          empty = document.createElement('p');
+          empty.className = 'public-empty-state';
+          empty.textContent = 'Professional credentials will be added here as they become available.';
+          certificates.querySelector('.container')?.appendChild(empty);
+        }
+        empty.hidden = hasCertificate;
+      }
+      document.querySelectorAll('#my-work .evidence-card').forEach(card => {
+        let empty = card.querySelector('.public-empty-state');
+        const hasEvidence = !!card.querySelector('.resource-item, .evidence-preview img');
+        if (!empty) {
+          empty = document.createElement('p');
+          empty.className = 'public-empty-state';
+          empty.textContent = 'Selected teaching evidence will appear here when available.';
+          card.appendChild(empty);
+        }
+        empty.hidden = hasEvidence;
+      });
     }
 
     function patchCloudDelete() {
@@ -211,74 +235,6 @@
       profile.appendChild(card);
     }
 
-    function consolidateSections() {
-      /* Keep the author's complete section structure intact. The visitor brief
-         explicitly asks for the existing rooms to remain separate. */
-      if (sectionsConsolidated) return;
-      sectionsConsolidated = true;
-      return;
-      const groups = [
-        { target:'profile', label:'01 · Profile', title:'At a glance', sources:[] },
-        { target:'academic-journey', label:'02 · Qualifications', title:'Qualifications & academic foundation', sources:[] },
-        { target:'experiences', label:'03 · Experience & Evidence', title:'Experience, internships & professional evidence', sources:[] },
-        { target:'my-work', label:'04 · Teaching Practice', title:'Teaching evidence, assessment & inclusive practice', sources:['assessment','differentiation'] },
-        { target:'why-history', label:'05 · History & Teaching Approach', title:'History, teaching philosophy & intellectual influences', sources:['philosophy','history-teaching','thinkers'] },
-        { target:'skills', label:'06 · Skills & Professional Development', title:'Skills, competencies & professional development', sources:['certificates','school-fit'] },
-        { target:'reflection', label:'07 · Reflection & Growth', title:'Reflection, learning & professional growth', sources:[] },
-      ];
-
-      groups.forEach(group => {
-        const target = document.getElementById(group.target);
-        if (!target) return;
-        const label = target.querySelector(':scope > .container > .section-label');
-        const title = target.querySelector(':scope > .container > .section-title');
-        if (label) label.textContent = group.label;
-        if (title) title.textContent = group.title;
-
-        group.sources.forEach(sourceId => {
-          const source = document.getElementById(sourceId);
-          if (!source || source === target || source.classList.contains('merged-source-section')) return;
-          const sourceContainer = source.querySelector(':scope > .container');
-          const targetContainer = target.querySelector(':scope > .container');
-          if (!sourceContainer || !targetContainer) return;
-          const block = document.createElement('div');
-          block.className = 'merged-subsection';
-          block.dataset.mergedFrom = sourceId;
-          Array.from(sourceContainer.children).forEach(child => {
-            if (child.classList && child.classList.contains('section-controls')) return;
-            if (child.classList && child.classList.contains('section-label')) {
-              child.className = 'merged-subsection-label';
-              const mergedLabels = {
-                assessment:'Assessment practice',
-                differentiation:'Inclusive practice',
-                philosophy:'Teaching philosophy',
-                'history-teaching':'Subject expertise',
-                thinkers:'Intellectual influences',
-                certificates:'Certificates & professional development',
-                'school-fit':'What I bring to a school'
-              };
-              child.textContent = mergedLabels[sourceId] || child.textContent.replace(/^\d+\s*[·.-]\s*/, '');
-            }
-            else if (child.classList && child.classList.contains('section-title')) {
-              child.classList.remove('section-title');
-              child.classList.add('merged-subtitle');
-            }
-            block.appendChild(child);
-          });
-          targetContainer.appendChild(block);
-          source.classList.add('merged-source-section');
-        });
-      });
-
-      const gallery = document.getElementById('portfolio-gallery');
-      const reflectionTarget = document.getElementById('reflection');
-      if (gallery && reflectionTarget && gallery.previousElementSibling !== reflectionTarget) reflectionTarget.after(gallery);
-
-      const contactLabel = document.querySelector('#contact .section-label');
-      if (contactLabel) contactLabel.textContent = '08 · Contact';
-      sectionsConsolidated = true;
-    }
-
     function fixNavigation() {
       const nav = document.getElementById('navLinks');
       if (!nav) return;
@@ -297,13 +253,12 @@
         <li><a href="#skills">Competencies</a></li>
         <li><a href="#certificates">Certificates</a></li>
         <li><a href="#reflection">Reflection</a></li>
-        <li><a href="#contact">Contact</a></li>
-        <li><a class="nav-cv-link" href="#hero">CV</a></li>`;
+        <li><a href="#contact">Contact</a></li>`;
+      if (window.PortfolioCloud?.getCv?.()) nav.insertAdjacentHTML('beforeend', '<li><a class="nav-cv-link" href="#hero">CV</a></li>');
       nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => nav.classList.remove('open')));
     }
 
     function fixSectionNumbers() {
-      consolidateSections();
       const map = {
         profile:'01 · Profile',
         'academic-journey':'02 · Qualifications',
@@ -316,16 +271,15 @@
         assessment:'09 · Assessment',
         differentiation:'10 · Inclusive Practice',
         skills:'11 · Competencies',
-        'school-fit':'12 · Professional Development',
-        certificates:'13 · Certificates',
-        reflection:'14 · Reflection & Growth'
+        certificates:'12 · Certificates',
+        reflection:'13 · Reflection & Growth'
       };
       Object.keys(map).forEach(id => {
         const el = document.querySelector('#' + id + ' > .container > .section-label');
         if (el) el.textContent = map[id];
       });
       const contact = document.querySelector('#contact .section-label');
-      if (contact) contact.textContent = '08 · Contact';
+      if (contact) contact.textContent = '14 · Contact';
     }
 
     function moveCvToTop() {
@@ -341,13 +295,7 @@
       if (cv && cv.parentElement !== top) top.appendChild(cv);
       const edit = document.querySelector('.hero-cta .cv-edit-control, .cv-top-wrap .cv-edit-control');
       if (edit && edit.parentElement !== top) top.appendChild(edit);
-      const disabled = document.querySelector('.hero-cta .cv-disabled');
-      if (disabled && !top.querySelector('.cv-download-link')) {
-        disabled.classList.remove('cv-disabled');
-        disabled.classList.add('cv-download-link');
-        disabled.textContent = 'Download CV';
-        top.appendChild(disabled);
-      }
+      document.querySelectorAll('.hero-cta .cv-disabled').forEach(el => el.remove());
       const link = top.querySelector('.cv-download-link');
       if (link) {
         link.textContent = 'Download CV';
@@ -525,8 +473,8 @@
         if (document.body.classList.contains('editing') && active && active.isContentEditable) return;
         if (data && Array.isArray(data.gallery)) gallery = data.gallery.filter(x => x && x.url);
         originalRestore.call(window.__portfolio, data);
-        consolidateSections();
         renderGallery();
+        updatePublicEmptyStates();
         ensureCompletionYear();
         fixNavigation();
         fixSectionNumbers();
@@ -545,17 +493,16 @@
     }
 
     function finish() {
-      if (document.getElementById('school-fit') && !document.querySelector('[data-merged-from="school-fit"]')) sectionsConsolidated = false;
       buildGallery();
       polishHero();
       addRecruiterSnapshot();
       addProcessRails();
-      addEditorLauncher();
+      installEditorEntry();
       addThinkingLab();
+      updatePublicEmptyStates();
       applyLocalGallery();
       patchRestore();
       patchCloudDelete();
-      consolidateSections();
       addTeachingScope();
       renderGallery();
       ensureCompletionYear();
