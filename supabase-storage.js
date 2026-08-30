@@ -272,14 +272,22 @@
         differentiation:'10 · Inclusive Practice',
         skills:'11 · Competencies',
         certificates:'12 · Certificates',
-        reflection:'13 · Reflection & Growth'
+        reflection:'13 · Reflection & Growth',
+        'school-fit':'14 · What I Bring to a School'
       };
       Object.keys(map).forEach(id => {
         const el = document.querySelector('#' + id + ' > .container > .section-label');
         if (el) el.textContent = map[id];
       });
       const contact = document.querySelector('#contact .section-label');
-      if (contact) contact.textContent = '14 · Contact';
+      if (contact) contact.textContent = '15 · Contact';
+    }
+
+    function orderEditorialSections() {
+      const footer = document.querySelector('footer');
+      if (!footer) return;
+      ['hero','recruiter-snapshot','profile','academic-journey','why-history','philosophy','history-teaching','thinkers','experiences','my-work','assessment','differentiation','skills','certificates','reflection','portfolio-gallery','school-fit']
+        .forEach(id => { const section = document.getElementById(id); if (section) footer.before(section); });
     }
 
     function moveCvToTop() {
@@ -475,6 +483,7 @@
         originalRestore.call(window.__portfolio, data);
         renderGallery();
         updatePublicEmptyStates();
+        orderEditorialSections();
         ensureCompletionYear();
         fixNavigation();
         fixSectionNumbers();
@@ -500,6 +509,7 @@
       installEditorEntry();
       addThinkingLab();
       updatePublicEmptyStates();
+      orderEditorialSections();
       applyLocalGallery();
       patchRestore();
       patchCloudDelete();
