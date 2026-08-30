@@ -64,14 +64,12 @@
       @media (max-width:760px) { .cv-top-wrap { width:min(280px,70vw); } }
 
       /* Final gallery */
-      #portfolio-gallery { background:linear-gradient(135deg,var(--bg),#ece8e0); }
-      body { background:radial-gradient(circle at 18% 8%,rgba(184,134,11,.18),transparent 24%),linear-gradient(135deg,#f8f5ed 0%,#dce5ec 52%,#f4efe7 100%) !important; }
-      body::after { content:""; position:fixed; inset:0; pointer-events:none; z-index:-1; opacity:.18; background:linear-gradient(115deg,transparent 0 45%,rgba(31,58,95,.11) 45.2% 45.5%,transparent 45.7% 100%); }
-      section:not(#hero) { background:rgba(255,255,255,.42); }
-      section:nth-of-type(odd):not(#hero) { background:linear-gradient(135deg,rgba(255,255,255,.72),rgba(230,236,239,.58)); }
-      .card, .evidence-card, .profile-item { box-shadow:0 14px 30px rgba(26,45,70,.11), 0 2px 0 rgba(184,134,11,.18); }
-      .card:hover, .evidence-card:hover { transform:translateY(-8px) rotateX(1.5deg) rotateY(-1.5deg); box-shadow:0 24px 46px rgba(26,45,70,.2), 0 3px 0 rgba(184,134,11,.3); }
-      .section-title { text-shadow:1px 2px 0 rgba(184,134,11,.14); }
+      #portfolio-gallery { background:#fbf8f1; }
+      body { background:#f6f1e8 !important; }
+      section:not(#hero) { background:#f6f1e8 !important; }
+      section:nth-of-type(odd):not(#hero) { background:#fbf8f1 !important; }
+      .card, .evidence-card, .profile-item { box-shadow:0 6px 18px rgba(26,45,70,.08); }
+      .card:hover, .evidence-card:hover { transform:translateY(-3px); box-shadow:0 12px 28px rgba(26,45,70,.12); }
       #portfolio-gallery .gallery-grid { display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:14px; margin-top:18px; }
       #portfolio-gallery .gallery-card { position:relative; background:var(--card); border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; box-shadow:var(--shadow); min-width:0; }
       #portfolio-gallery .gallery-image-wrap { min-height:120px; background:#e8e4dd; display:flex; align-items:center; justify-content:center; overflow:hidden; }
@@ -87,20 +85,8 @@
       @media (max-width:640px) { #portfolio-gallery .gallery-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; } }
       @media (max-width:420px) { #portfolio-gallery .gallery-grid { grid-template-columns:1fr; } }
 
-      /* Museum-inspired depth: purposeful objects, not decorative clutter. */
-      .hero { position:relative; overflow:hidden; isolation:isolate; }
-      .hero::before { content:""; position:absolute; inset:0; z-index:-2; background:radial-gradient(circle at 78% 32%,rgba(184,134,11,.22),transparent 23%),linear-gradient(115deg,rgba(31,58,95,.08),transparent 52%); }
-      .hero::after { content:""; position:absolute; right:-8%; bottom:-44%; width:58%; height:90%; z-index:-1; border-radius:50%; background:radial-gradient(ellipse at center,rgba(31,58,95,.16),transparent 68%); transform:rotate(-10deg); pointer-events:none; }
-      .hero-scene { position:absolute; inset:6% 0 0; pointer-events:none; perspective:900px; }
-      .hero-scene .scene-surface { position:absolute; right:2%; bottom:9%; width:58%; height:17%; border-radius:50%; background:linear-gradient(160deg,#6e4b32,#3c291e); box-shadow:0 24px 24px rgba(23,27,35,.22); transform:rotateX(62deg) rotateZ(-5deg); }
-      .hero-scene .scene-book { position:absolute; right:25%; bottom:26%; width:24%; height:13%; background:#f8f1df; border:3px solid #bca77b; box-shadow:8px 10px 0 rgba(61,40,28,.18); transform:rotate(-8deg) rotateX(40deg); }
-      .hero-scene .scene-book::after { content:"HISTORY"; position:absolute; inset:28% 8%; color:#7d2c2c; font:700 .65rem Georgia,serif; letter-spacing:.12em; text-align:center; }
-      .hero-scene .scene-globe { position:absolute; right:8%; bottom:28%; width:70px; height:70px; border-radius:50%; background:radial-gradient(circle at 32% 28%,#8fb0b8 0 14%,#315d73 42%,#1d3a4b 75%); border:4px solid #b8860b; box-shadow:0 8px 10px rgba(25,35,45,.24); }
-      .hero-scene .scene-paper { position:absolute; right:46%; bottom:31%; width:14%; height:12%; background:#f5ead0; border-left:4px solid #8b1a2b; box-shadow:5px 7px 0 rgba(61,40,28,.14); transform:rotate(7deg); }
-      .hero-scene .scene-pen { position:absolute; right:42%; bottom:25%; width:16%; height:5px; background:#8b1a2b; transform:rotate(-22deg); border-radius:5px; }
-      .hero .portrait-wrap { position:relative; z-index:1; }
-      .hero .portrait-img { box-shadow:0 24px 55px rgba(20,36,54,.24), 0 0 0 8px rgba(255,255,255,.5); }
-      .recruiter-snapshot { background:linear-gradient(135deg,#1f3a5f,#14283e) !important; color:#fff; }
+      .hero .portrait-img { box-shadow:0 10px 24px rgba(20,36,54,.16); }
+      .recruiter-snapshot { background:#1f3a5f !important; color:#fff; }
       .recruiter-snapshot .section-label, .recruiter-snapshot .section-title { color:#fff; }
       .snapshot-grid { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:12px; margin-top:16px; }
       .snapshot-item { padding:16px 14px; border:1px solid rgba(255,255,255,.2); border-top:3px solid var(--gold-light); border-radius:12px; background:rgba(255,255,255,.08); box-shadow:0 12px 22px rgba(0,0,0,.14); }
@@ -109,12 +95,9 @@
       .process-rail { display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin:16px 0 4px; }
       .process-rail span { padding:8px 12px; border-radius:999px; background:rgba(184,134,11,.12); border:1px solid rgba(184,134,11,.32); color:var(--accent); font-size:.76rem; font-weight:800; letter-spacing:.08em; text-transform:uppercase; }
       .process-rail i { color:var(--gold); font-style:normal; font-size:1.1rem; }
-      @media (max-width:980px) { .snapshot-grid { grid-template-columns:repeat(3,minmax(0,1fr)); } .hero-scene { opacity:.5; } }
-      @media (max-width:600px) { .snapshot-grid { grid-template-columns:1fr 1fr; } .snapshot-item { padding:12px; } .hero-scene { display:none; } .process-rail { gap:5px; } .process-rail span { font-size:.68rem; padding:7px 9px; } }
+      @media (max-width:980px) { .snapshot-grid { grid-template-columns:repeat(3,minmax(0,1fr)); } }
+      @media (max-width:600px) { .snapshot-grid { grid-template-columns:1fr 1fr; } .snapshot-item { padding:12px; } .process-rail { gap:5px; } .process-rail span { font-size:.68rem; padding:7px 9px; } }
       @media (max-width:420px) { .snapshot-grid { grid-template-columns:1fr; } }
-      @media (prefers-reduced-motion: no-preference) { .hero-scene .scene-globe { animation:sceneFloat 7s ease-in-out infinite; } .hero-scene .scene-book { animation:sceneBook 8s ease-in-out infinite; } }
-      @keyframes sceneFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-7px)} }
-      @keyframes sceneBook { 0%,100%{transform:rotate(-8deg) rotateX(40deg)} 50%{transform:rotate(-5deg) rotateX(40deg) translateY(-3px)} }
       /* Visitor mode is the default: editing controls are opt-in. */
       body:not(.editing) #modeBar { display:none !important; }
       .editor-launch { position:fixed; right:16px; bottom:16px; z-index:998; width:34px; height:34px; border:1px solid rgba(31,58,95,.28); border-radius:50%; background:rgba(255,255,255,.78); color:var(--accent); box-shadow:0 5px 16px rgba(20,36,54,.16); cursor:pointer; font-size:.92rem; }
@@ -124,12 +107,12 @@
       .view-mode .cert-upload:not(:has(img)) { display:none !important; }
       #profile, #academic-journey, #why-history, #philosophy, #history-teaching, #my-work, #assessment, #differentiation, #skills, #reflection { position:relative; }
       #academic-journey::before, #why-history::before, #philosophy::before, #history-teaching::before, #my-work::before, #reflection::before { content:""; position:absolute; inset:0; pointer-events:none; opacity:.26; background-image:linear-gradient(90deg,transparent 49.8%,rgba(184,134,11,.18) 50%,transparent 50.2%); background-size:100% 100%; }
-      .thinking-lab { margin-top:18px; padding:26px 18px 20px; border-radius:18px; background:linear-gradient(145deg,rgba(31,58,95,.98),rgba(20,40,62,.94)); color:#fff; box-shadow:0 20px 38px rgba(20,36,54,.2); text-align:center; }
-      .thinking-lab .lab-core { display:inline-flex; align-items:center; justify-content:center; width:150px; height:76px; border:2px solid var(--gold-light); border-radius:50%; background:rgba(184,134,11,.2); font:700 1.05rem Georgia,serif; letter-spacing:.08em; text-transform:uppercase; box-shadow:0 0 0 10px rgba(184,134,11,.06),0 12px 22px rgba(0,0,0,.18); }
+      .thinking-lab { margin-top:18px; padding:26px 18px 20px; border:1px solid rgba(31,58,95,.2); border-top:3px solid var(--gold); background:#fbf8f1; color:var(--text); box-shadow:0 8px 20px rgba(20,36,54,.08); text-align:center; }
+      .thinking-lab .lab-core { display:inline-flex; align-items:center; justify-content:center; width:190px; padding:10px 16px; border-bottom:2px solid var(--gold); color:var(--accent); font:700 1.05rem Georgia,serif; letter-spacing:.08em; text-transform:uppercase; }
       .thinking-lab .lab-nodes { display:flex; flex-wrap:wrap; justify-content:center; gap:8px; margin-top:18px; }
-      .thinking-lab button { border:1px solid rgba(255,255,255,.3); border-radius:999px; padding:8px 12px; background:rgba(255,255,255,.09); color:#fff; cursor:pointer; font:600 .78rem var(--font); transition:.2s; }
+      .thinking-lab button { border:1px solid rgba(31,58,95,.28); padding:8px 12px; background:#fff; color:var(--accent); cursor:pointer; font:600 .78rem var(--font); transition:.2s; }
       .thinking-lab button:hover, .thinking-lab button.active { background:var(--gold-light); color:#1a1a2e; transform:translateY(-2px); }
-      .thinking-lab .lab-note { min-height:1.4em; margin-top:12px; color:#dce5ec; font-size:.9rem; }
+      .thinking-lab .lab-note { min-height:1.4em; margin-top:12px; color:var(--muted); font-size:.9rem; }
       @media (max-width:600px) { .editor-launch { right:12px; bottom:12px; } .thinking-lab .lab-core { width:132px; height:68px; font-size:.9rem; } }
     `;
     document.head.appendChild(style);
@@ -142,23 +125,15 @@
       nodes.forEach(textNode => { let value = textNode.nodeValue; Object.keys(map).forEach(icon => { value = value.split(icon).join(map[icon]); }); textNode.nodeValue = value; });
     }
 
-    function addHeroScene() {
-      const wrap = document.querySelector('#hero .hero-grid');
-      if (!wrap || wrap.querySelector('.hero-scene')) return;
+    function polishHero() {
       const heroLabel = document.querySelector('#hero .section-label');
       if (heroLabel) heroLabel.textContent = 'History Educator · Social Science · Emerging Educator';
       const cta = document.querySelector('#hero .hero-cta');
       if (cta && !cta.querySelector('.explore-portfolio')) {
         const link = document.createElement('a');
-        link.className = 'cta-button secondary explore-portfolio';
-        link.href = '#profile';
-        link.textContent = 'Explore my portfolio';
+        link.className = 'cta-button secondary explore-portfolio'; link.href = '#profile'; link.textContent = 'Explore my portfolio';
         cta.insertBefore(link, cta.firstChild);
       }
-      const scene = document.createElement('div');
-      scene.className = 'hero-scene'; scene.setAttribute('aria-hidden','true');
-      scene.innerHTML = '<div class="scene-surface"></div><div class="scene-book"></div><div class="scene-paper"></div><div class="scene-pen"></div><div class="scene-globe"></div>';
-      wrap.appendChild(scene);
     }
 
     function addRecruiterSnapshot() {
@@ -237,7 +212,11 @@
     }
 
     function consolidateSections() {
-      if (sectionsConsolidated && !document.getElementById('school-fit')) return;
+      /* Keep the author's complete section structure intact. The visitor brief
+         explicitly asks for the existing rooms to remain separate. */
+      if (sectionsConsolidated) return;
+      sectionsConsolidated = true;
+      return;
       const groups = [
         { target:'profile', label:'01 · Profile', title:'At a glance', sources:[] },
         { target:'academic-journey', label:'02 · Qualifications', title:'Qualifications & academic foundation', sources:[] },
@@ -307,10 +286,16 @@
         <li><a href="#hero">Home</a></li>
         <li><a href="#profile">Profile</a></li>
         <li><a href="#academic-journey">Qualifications</a></li>
-        <li><a href="#experiences">Experience &amp; Evidence</a></li>
-        <li><a href="#my-work">Teaching Practice</a></li>
-        <li><a href="#why-history">History &amp; Approach</a></li>
-        <li><a href="#skills">Skills &amp; Development</a></li>
+        <li><a href="#why-history">Why History</a></li>
+        <li><a href="#philosophy">Teaching Philosophy</a></li>
+        <li><a href="#history-teaching">Subject Expertise</a></li>
+        <li><a href="#thinkers">Thinkers</a></li>
+        <li><a href="#experiences">Experience</a></li>
+        <li><a href="#my-work">Teaching Evidence</a></li>
+        <li><a href="#assessment">Assessment</a></li>
+        <li><a href="#differentiation">Inclusive Practice</a></li>
+        <li><a href="#skills">Competencies</a></li>
+        <li><a href="#certificates">Certificates</a></li>
         <li><a href="#reflection">Reflection</a></li>
         <li><a href="#contact">Contact</a></li>
         <li><a class="nav-cv-link" href="#hero">CV</a></li>`;
@@ -322,11 +307,18 @@
       const map = {
         profile:'01 · Profile',
         'academic-journey':'02 · Qualifications',
-        experiences:'03 · Experience & Evidence',
-        'my-work':'04 · Teaching Practice',
-        'why-history':'05 · History & Teaching Approach',
-        skills:'06 · Skills & Professional Development',
-        reflection:'07 · Reflection & Growth'
+        'why-history':'03 · Why History',
+        philosophy:'04 · Teaching Philosophy',
+        'history-teaching':'05 · Subject Expertise',
+        thinkers:'06 · Thinkers',
+        experiences:'07 · Experience',
+        'my-work':'08 · Teaching Evidence',
+        assessment:'09 · Assessment',
+        differentiation:'10 · Inclusive Practice',
+        skills:'11 · Competencies',
+        'school-fit':'12 · Professional Development',
+        certificates:'13 · Certificates',
+        reflection:'14 · Reflection & Growth'
       };
       Object.keys(map).forEach(id => {
         const el = document.querySelector('#' + id + ' > .container > .section-label');
@@ -555,7 +547,7 @@
     function finish() {
       if (document.getElementById('school-fit') && !document.querySelector('[data-merged-from="school-fit"]')) sectionsConsolidated = false;
       buildGallery();
-      addHeroScene();
+      polishHero();
       addRecruiterSnapshot();
       addProcessRails();
       addEditorLauncher();

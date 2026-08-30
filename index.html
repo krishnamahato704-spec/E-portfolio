@@ -594,21 +594,17 @@
         .evidence-card .evidence-body .meta { font-size: .75rem; color: var(--muted); }
         .evidence-card .evidence-body p { font-size: .88rem; color: var(--muted); margin-top: 4px; }
 
-        /* Academic 3-D treatment and a more readable baseline */
-        body { font-size: 18px; background: radial-gradient(circle at 12% 10%, rgba(184,134,11,.12), transparent 26%), linear-gradient(135deg, #f7f4ed 0%, #e8edf1 100%); }
-        body::before { content:""; position:fixed; inset:0; pointer-events:none; opacity:.36; z-index:-1; background-image:linear-gradient(rgba(31,58,95,.045) 1px, transparent 1px),linear-gradient(90deg, rgba(31,58,95,.045) 1px, transparent 1px); background-size:28px 28px; }
-        .hero { background:linear-gradient(135deg, rgba(255,255,255,.74), rgba(223,231,235,.84)); perspective:1200px; }
-        .hero-grid > * { transform:translateZ(0); }
-        .hero-grid > :first-child { animation: academicRise .8s ease-out both; }
-        .hero-grid > :last-child { animation: academicRise .8s .12s ease-out both; }
-        .card, .evidence-card, .experience-card { transform-style:preserve-3d; transition:transform .25s ease, box-shadow .25s ease; }
-        .card:hover, .evidence-card:hover, .experience-card:hover { transform:translateY(-7px) rotateX(1.2deg) rotateY(-1.2deg); box-shadow:0 22px 42px rgba(26,45,70,.16); }
+        /* Premium 2-D academic editorial baseline */
+        body { font-size: 18px; background: #f6f1e8; }
+        body::before { content:""; position:fixed; inset:0; pointer-events:none; opacity:.12; z-index:-1; background-image:linear-gradient(rgba(31,58,95,.035) 1px, transparent 1px); background-size:100% 34px; }
+        .hero { background:#fbf8f1; }
+        .card, .evidence-card, .experience-card { transition:transform .2s ease, box-shadow .2s ease; }
+        .card:hover, .evidence-card:hover, .experience-card:hover { transform:translateY(-3px); box-shadow:0 12px 28px rgba(26,45,70,.12); }
         .section-title { font-size:clamp(2.05rem, 4vw, 3.15rem); }
         .section-desc, .card p, .evidence-card .evidence-body p, .experience-card .exp-desc { font-size:1rem; }
         .nav-links a, .tag, .skill-pill, .timeline-item .year, .card .card-label { font-size:.84rem; }
         .evidence-card .evidence-body h4 { font-size:1.22rem; }
         .evidence-card .evidence-body .meta { font-size:.9rem; }
-        @keyframes academicRise { from { opacity:0; transform:translateY(22px) rotateX(-4deg); } to { opacity:1; transform:translateY(0) rotateX(0); } }
         .resource-list { display:grid; gap:8px; margin-top:12px; }
         .resource-item { display:flex; align-items:center; gap:9px; padding:9px 10px; border:1px solid var(--border); border-radius:10px; background:#fff; box-shadow:0 3px 10px rgba(26,45,70,.06); }
         .resource-icon { color:var(--accent); font-size:1.15rem; line-height:1; }
@@ -2248,6 +2244,6 @@
             window.__portfolio = { snapshot, restore, saveToStorage, resetStorage, setMode, addSlot, addExperience, addSection, experiences, markDirty, markSaved };
         })();
     </script>
-    <script src="supabase-storage.js?v=museum-5"></script>
+    <script src="supabase-storage.js?v=editorial-6"></script>
 </body>
 </html>
