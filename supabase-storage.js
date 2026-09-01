@@ -14,6 +14,8 @@
   let cloudDeletePatched = false;
   let uploadValidationPatched = false;
   let editorAuthPatched = false;
+  let cmsDeletedItems = new Set();
+  let cmsRestoring = false;
 
     function loadCore() {
     return new Promise((resolve, reject) => {
@@ -218,6 +220,26 @@
       .editing .upload-zone, .editing .cert-upload, .editing .academic-img { background:#fffdf8; border-color:#819b82; }
       .upload-zone img, .cert-upload img, .academic-img img { max-height:320px !important; object-fit:contain !important; }
 
+      /* Integrated CMS controls: close to the content and absent for visitors. */
+      .cms-item { position:relative; }
+      .cms-item-tools, .cms-collection-tools, .qualification-editor { display:none; }
+      .editing .cms-item-tools { display:flex; position:absolute; z-index:12; top:7px; right:7px; gap:5px; padding:4px; background:rgba(255,253,248,.96); border:1px solid #cdbb9b; box-shadow:0 4px 12px rgba(16,46,39,.12); }
+      .editing .cms-collection-tools { display:flex; justify-content:flex-end; margin:10px 0; }
+      .editing .qualification-editor { display:flex; align-items:center; flex-wrap:wrap; gap:7px; margin:7px 0 10px; }
+      .cms-item-tools button, .cms-collection-tools button { min-height:34px; padding:6px 9px; border:1px solid #819b82; border-radius:2px; background:#fffdf8; color:#173f35; font:800 .7rem var(--font); cursor:pointer; }
+      .cms-item-tools .cms-delete-item { color:#6f2934; border-color:#b78d94; }
+      .qualification-editor label { color:#56635d; font-size:.74rem; font-weight:800; text-transform:uppercase; letter-spacing:.06em; }
+      .qualification-editor select { min-height:38px; padding:6px 32px 6px 10px; border:1px solid #819b82; background:#fffdf8; color:#173f35; font:700 .84rem var(--font); }
+      .qualification-status-badge { display:inline-block; padding:2px 8px; margin-left:4px; background:#e7efe9; color:#173f35; border:1px solid #9fb4a3; font-size:.68rem; font-weight:800; letter-spacing:.05em; text-transform:uppercase; }
+      .qualification-status-badge.in-progress { background:#f5ecd7; color:#72591d; border-color:#cdbb79; }
+      .cms-item-deleted { display:none !important; }
+      .editing [data-editable="true"], .editing [data-editable]:not([data-editable="false"]) { min-width:.5em; }
+      .editing .cms-editable-empty::before { content:"Type here"; color:#7a857f; font-style:italic; }
+      body.editing { padding-top:132px; }
+      body.editing #modeBar { top:74px; bottom:auto; max-width:min(1080px,96vw); }
+      body.editing section, body.editing footer { scroll-margin-top:144px; }
+      #modeBar #saveBtn { display:inline-flex !important; }
+
       @media (max-width:900px) {
         .nav-links { flex-direction:column; flex-wrap:nowrap; background:#102e27 !important; max-height:calc(100vh - 68px); overflow:auto; }
         .nav-links a { display:block; min-height:44px; padding:12px 18px; }
@@ -230,11 +252,20 @@
         .hero .lead, .hero p { margin-left:auto; margin-right:auto; }
         .hero::after { display:none; }
         .snapshot-grid { grid-template-columns:1fr; }
-        #modeBar { bottom:8px; width:calc(100% - 16px); max-height:42vh; overflow:auto; border-radius:3px; padding:9px; }
-        #modeBar .mode-btn { flex:1 1 42%; min-height:44px; }
+        body.editing { padding-top:126px; }
+        body.editing #modeBar { top:70px; bottom:auto; width:calc(100% - 12px); max-height:58px; overflow-x:auto; overflow-y:hidden; flex-wrap:nowrap; justify-content:flex-start; border-radius:3px; padding:7px; }
+        #modeBar .mode-status { flex:0 0 auto; }
+        #modeBar .mode-btn { flex:0 0 auto; min-height:42px; white-space:nowrap; }
+        .editing .cms-item-tools { position:static; width:100%; justify-content:flex-end; margin-bottom:8px; box-shadow:none; }
         .resource-item { align-items:flex-start; flex-wrap:wrap; }
         .resource-actions { width:100%; margin-left:43px; }
         .resource-action { flex:1; min-height:42px; }
+      }
+      @media (max-width:430px) {
+        .editor-dialog { padding:24px 18px 18px; max-height:calc(100vh - 24px); overflow:auto; }
+        .editor-dialog-actions { flex-direction:column-reverse; }
+        .editor-dialog-actions .cta-button { width:100%; }
+        .snapshot-item, .profile-item, .card, .evidence-card { min-width:0; overflow-wrap:anywhere; }
       }
     `;
     document.head.appendChild(style);
@@ -244,12 +275,18 @@
       const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
       const nodes = []; let node;
       while ((node = walker.nextNode())) nodes.push(node);
-      nodes.forEach(textNode => { let value = textNode.nodeValue; Object.keys(map).forEach(icon => { value = value.split(icon).join(map[icon]); }); textNode.nodeValue = value; });
+      nodes.forEach(textNode => {
+        const parent = textNode.parentElement;
+        if (parent?.closest('[contenteditable="true"]')) return;
+        let value = textNode.nodeValue;
+        Object.keys(map).forEach(icon => { value = value.split(icon).join(map[icon]); });
+        if (value !== textNode.nodeValue) textNode.nodeValue = value;
+      });
     }
 
     function polishHero() {
       const heroLabel = document.querySelector('#hero .section-label');
-      if (heroLabel) heroLabel.textContent = 'History Educator · Social Science · Emerging Educator';
+      if (heroLabel && !heroLabel.dataset.editable) heroLabel.textContent = 'History Educator · Social Science · Emerging Educator';
       const cta = document.querySelector('#hero .hero-cta');
       if (cta && !cta.querySelector('.explore-portfolio')) {
         const link = document.createElement('a');
@@ -265,7 +302,18 @@
       if (!hero || !profile) return;
       const section = document.createElement('section');
       section.id = 'recruiter-snapshot'; section.className = 'recruiter-snapshot';
-      section.innerHTML = '<div class="container"><div class="section-label">Recruiter Snapshot</div><h2 class="section-title">The essentials at a glance</h2><div class="snapshot-grid"><div class="snapshot-item"><strong>Target roles</strong><span>TGT History / Social Science<br>PGT History</span></div><div class="snapshot-item"><strong>Subjects</strong><span>History · Economics · English</span></div><div class="snapshot-item"><strong>Academic background</strong><span>B.A. History &amp; Economics<br>B.Ed. · M.A. History</span></div><div class="snapshot-item"><strong>Core strengths</strong><span>Historical Thinking<br>Lesson Planning · Assessment · Differentiated Support</span></div><div class="snapshot-item"><strong>Teaching exposure</strong><span>School Observation<br>5-week Teaching Internship</span></div><div class="snapshot-item"><strong>Languages</strong><span>English · Hindi · Nepali · Maithili</span></div></div></div>';
+      section.innerHTML = `<div class="container">
+        <div class="section-label" data-editable="snapshot_section_label">Recruiter Snapshot</div>
+        <h2 class="section-title" data-editable="snapshot_section_title">The essentials at a glance</h2>
+        <div class="snapshot-grid" data-cms-collection="recruiter-snapshot">
+          <div class="snapshot-item cms-item" data-cms-item-id="snapshot-target-roles"><strong data-editable="snapshot_target_roles_label">Target roles</strong><span data-editable="snapshot_target_roles">TGT History / Social Science<br>PGT History</span></div>
+          <div class="snapshot-item cms-item" data-cms-item-id="snapshot-subjects"><strong data-editable="snapshot_subjects_label">Subjects</strong><span data-editable="snapshot_subjects">History · Economics · English</span></div>
+          <div class="snapshot-item cms-item" data-cms-item-id="snapshot-academics"><strong data-editable="snapshot_academics_label">Academic background</strong><span data-editable="snapshot_academics">B.A. History &amp; Economics<br>B.Ed. · M.A. History</span></div>
+          <div class="snapshot-item cms-item" data-cms-item-id="snapshot-strengths"><strong data-editable="snapshot_strengths_label">Core strengths</strong><span data-editable="snapshot_strengths">Historical Thinking<br>Lesson Planning · Assessment · Differentiated Support</span></div>
+          <div class="snapshot-item cms-item" data-cms-item-id="snapshot-exposure"><strong data-editable="snapshot_exposure_label">Teaching exposure</strong><span data-editable="snapshot_exposure">School Observation<br>5-week Teaching Internship</span></div>
+          <div class="snapshot-item cms-item" data-cms-item-id="snapshot-languages"><strong data-editable="snapshot_languages_label">Languages</strong><span data-editable="snapshot_languages">English · Hindi · Nepali · Maithili</span></div>
+        </div>
+      </div>`;
       hero.after(section);
     }
 
@@ -424,6 +472,8 @@
       if (status) { status.textContent = 'Edit Mode'; status.setAttribute('aria-live', 'polite'); }
       const previewButton = document.getElementById('viewBtn');
       if (previewButton) previewButton.textContent = 'Preview';
+      const saveButton = document.getElementById('saveBtn');
+      if (saveButton) saveButton.textContent = 'Save Changes';
       document.getElementById('editBtn')?.addEventListener('click', () => setTimeout(() => {
         if (document.body.classList.contains('editing') && status) status.textContent = 'Edit Mode';
       }, 0));
@@ -461,6 +511,248 @@
       const note = lab.querySelector('.lab-note');
       lab.querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => { lab.querySelectorAll('button').forEach(x=>x.classList.remove('active')); btn.classList.add('active'); note.textContent = btn.textContent + ' connects learners to Historical Thinking and deeper understanding.'; }));
       container.appendChild(lab);
+    }
+
+    function markCmsDirty() {
+      if (cmsRestoring) return;
+      window.__portfolio?.markDirty?.();
+    }
+
+    function editableCandidateSelector() {
+      return '.section-label,.section-title,.section-desc,h1,h2,h3,h4,p,li,.card-label,.year,.sub,.meta,.tag,.skill-pill,.card strong,.card span,.profile-item > strong,.profile-item > span,.snapshot-item > strong,.snapshot-item > span,.process-rail span,.evidence-sequence span,.expected-2027,.gallery-caption';
+    }
+
+    function isCmsInterface(element) {
+      return !!element.closest('#modeBar,.editor-modal,.section-controls,.cms-item-tools,.cms-collection-tools,.qualification-editor,.resource-list,.resource-actions,.file-upload-zone,.gallery-upload,.editing-hint,.upload-label,.upload-sub,.public-empty-state,nav');
+    }
+
+    function auditEditableContent(root) {
+      const scopes = [];
+      if (root?.matches?.('section[id],footer#contact')) scopes.push(root);
+      (root || document).querySelectorAll?.('section[id],footer#contact').forEach(section => scopes.push(section));
+      scopes.forEach(section => {
+        const sectionId = section.id || 'contact';
+        const candidates = Array.from(section.querySelectorAll(editableCandidateSelector()));
+        candidates.forEach((element, index) => {
+          if (isCmsInterface(element)) return;
+          const editableParent = element.parentElement?.closest('[data-editable]');
+          if (editableParent && section.contains(editableParent)) return;
+          if (element.closest('.upload-zone,.cert-upload,.academic-img') && !element.classList.contains('img-caption')) return;
+          if (!element.dataset.editable) element.dataset.editable = 'cms_' + sectionId.replace(/[^a-z0-9_-]/gi, '_') + '_' + index;
+          element.contentEditable = document.body.classList.contains('editing') ? 'true' : 'false';
+          element.classList.toggle('cms-editable-empty', !element.textContent.trim());
+        });
+      });
+      document.querySelectorAll('#hero .hero-cta a:not(.cv-download-link), #contact a[href^="mailto:"]').forEach((link, index) => {
+        if (!link.dataset.editable) link.dataset.editable = 'cms_action_' + index;
+        link.contentEditable = document.body.classList.contains('editing') ? 'true' : 'false';
+      });
+    }
+
+    function qualificationStatusClass(value) {
+      return /progress/i.test(value) ? 'in-progress' : 'completed';
+    }
+
+    function prepareQualificationItem(item, index) {
+      if (!item.dataset.cmsItemId) item.dataset.cmsItemId = 'qualification-' + (index + 1);
+      item.classList.add('cms-item');
+      const year = item.querySelector(':scope > .year');
+      if (!year) return;
+      if (!year.querySelector('.qualification-period')) {
+        const text = year.textContent.trim();
+        const match = text.match(/^(.*?)(?:\s*·\s*(Completed|In Progress))?$/i);
+        const period = (match?.[1] || text || 'Add years').trim();
+        const status = (match?.[2] || 'In Progress').replace(/\b\w/g, char => char.toUpperCase());
+        year.textContent = '';
+        const periodEl = document.createElement('span');
+        periodEl.className = 'qualification-period'; periodEl.dataset.editable = item.dataset.cmsItemId + '_period'; periodEl.textContent = period;
+        const separator = document.createTextNode(' · ');
+        const statusEl = document.createElement('span');
+        statusEl.className = 'qualification-status-badge ' + qualificationStatusClass(status);
+        statusEl.dataset.editable = item.dataset.cmsItemId + '_status'; statusEl.textContent = status;
+        year.append(periodEl, separator, statusEl);
+      }
+      const statusEl = year.querySelector('.qualification-status-badge');
+      statusEl.classList.toggle('in-progress', /progress/i.test(statusEl.textContent));
+      statusEl.classList.toggle('completed', !/progress/i.test(statusEl.textContent));
+      let editor = item.querySelector(':scope > .qualification-editor');
+      if (!editor) {
+        editor = document.createElement('div'); editor.className = 'qualification-editor'; editor.dataset.cmsInterface = 'true';
+        editor.innerHTML = '<label>Status <select aria-label="Qualification status"><option>Completed</option><option>In Progress</option></select></label>';
+        year.after(editor);
+      }
+      const select = editor.querySelector('select');
+      select.value = /progress/i.test(statusEl.textContent) ? 'In Progress' : 'Completed';
+      if (!select.dataset.bound) {
+        select.dataset.bound = 'true';
+        select.addEventListener('change', () => {
+          statusEl.textContent = select.value;
+          statusEl.className = 'qualification-status-badge ' + qualificationStatusClass(select.value);
+          markCmsDirty();
+        });
+        statusEl.addEventListener('blur', () => {
+          const normalized = /progress/i.test(statusEl.textContent) ? 'In Progress' : 'Completed';
+          statusEl.textContent = normalized; select.value = normalized;
+          statusEl.className = 'qualification-status-badge ' + qualificationStatusClass(normalized);
+        });
+      }
+    }
+
+    function focusCmsItem(item) {
+      const field = item.querySelector('[data-editable]');
+      if (!field) return;
+      field.focus();
+      const selection = window.getSelection();
+      if (selection) { selection.selectAllChildren(field); selection.collapseToEnd(); }
+    }
+
+    function installCmsItemTools(item) {
+      if (!item || item.querySelector(':scope > .cms-item-tools')) return;
+      item.classList.add('cms-item');
+      const tools = document.createElement('div'); tools.className = 'cms-item-tools'; tools.dataset.cmsInterface = 'true';
+      tools.innerHTML = '<button type="button" class="cms-edit-item">Edit</button><button type="button" class="cms-delete-item">Delete</button>';
+      tools.querySelector('.cms-edit-item').addEventListener('click', () => focusCmsItem(item));
+      tools.querySelector('.cms-delete-item').addEventListener('click', () => {
+        if (!confirm('Delete this item from the portfolio?')) return;
+        if (item.dataset.cmsAdded === 'true') item.remove();
+        else { cmsDeletedItems.add(item.dataset.cmsItemId); item.classList.add('cms-item-deleted'); }
+        markCmsDirty();
+      });
+      item.appendChild(tools);
+    }
+
+    function newCmsItem(collectionId) {
+      const id = collectionId + '-' + Date.now();
+      if (collectionId === 'recruiter-snapshot') {
+        const item = document.createElement('div'); item.className = 'snapshot-item cms-item'; item.innerHTML = '<strong>New field</strong><span>Add details</span>'; return item;
+      }
+      if (collectionId === 'profile-items') {
+        const item = document.createElement('div'); item.className = 'profile-item cms-item'; item.innerHTML = '<strong>New field</strong><span>Add details</span>'; return item;
+      }
+      if (collectionId === 'qualifications') {
+        const item = document.createElement('div'); item.className = 'timeline-item cms-item'; item.innerHTML = '<div class="year">Add years · In Progress</div><h3>New qualification</h3><div class="sub">Institution · Result</div>'; return item;
+      }
+      const item = document.createElement('div'); item.className = 'card cms-item';
+      const label = /thinker/i.test(collectionId) ? 'Key idea' : 'New item';
+      const title = /thinker/i.test(collectionId) ? 'Thinker name' : 'Title';
+      item.innerHTML = '<div class="card-label">' + label + '</div><h3>' + title + '</h3><p>Add details here.</p>';
+      item.dataset.cmsItemId = id;
+      return item;
+    }
+
+    function addCmsItem(collection) {
+      const collectionId = collection.dataset.cmsCollection;
+      const item = newCmsItem(collectionId);
+      item.dataset.cmsAdded = 'true';
+      if (!item.dataset.cmsItemId) item.dataset.cmsItemId = collectionId + '-' + Date.now();
+      collection.appendChild(item);
+      if (collectionId === 'qualifications') prepareQualificationItem(item, collection.querySelectorAll('.timeline-item').length - 1);
+      auditEditableContent(item.closest('section'));
+      installCmsItemTools(item);
+      document.body.classList.contains('editing') && item.querySelectorAll('[data-editable]').forEach(el => el.contentEditable = 'true');
+      markCmsDirty();
+      focusCmsItem(item);
+    }
+
+    function registerCmsCollection(collection, collectionId, itemSelector) {
+      if (!collection) return;
+      collection.dataset.cmsCollection = collectionId;
+      Array.from(collection.querySelectorAll(':scope > ' + itemSelector)).forEach((item, index) => {
+        if (!item.dataset.cmsItemId) item.dataset.cmsItemId = collectionId + '-' + (index + 1);
+        item.classList.add('cms-item');
+        if (collectionId === 'qualifications') prepareQualificationItem(item, index);
+        installCmsItemTools(item);
+      });
+      const existing = collection.parentElement?.querySelector(':scope > .cms-collection-tools[data-for="' + collectionId + '"]');
+      if (!existing) {
+        const tools = document.createElement('div'); tools.className = 'cms-collection-tools'; tools.dataset.cmsInterface = 'true'; tools.dataset.for = collectionId;
+        const add = document.createElement('button'); add.type = 'button'; add.textContent = '+ Add item'; add.addEventListener('click', () => addCmsItem(collection));
+        tools.appendChild(add); collection.after(tools);
+      }
+    }
+
+    function registerCmsCollections() {
+      registerCmsCollection(document.querySelector('#recruiter-snapshot .snapshot-grid'), 'recruiter-snapshot', '.snapshot-item');
+      registerCmsCollection(document.querySelector('#profile .profile-grid'), 'profile-items', '.profile-item');
+      registerCmsCollection(document.querySelector('#academic-journey .timeline'), 'qualifications', '.timeline-item');
+      registerCmsCollection(document.querySelector('#thinkers .grid-2'), 'thinkers', '.card');
+      registerCmsCollection(document.querySelector('#skills .grid-2'), 'competencies', '.card');
+      registerCmsCollection(document.querySelector('#philosophy .grid-3'), 'philosophy-principles', '.card');
+      registerCmsCollection(document.querySelector('#assessment .grid-3'), 'assessment-items', '.card');
+      registerCmsCollection(document.querySelector('#reflection .grid-2'), 'reflection-items', '.card');
+      registerCmsCollection(document.querySelector('#school-fit .grid-3'), 'school-contributions', '.card');
+    }
+
+    function cleanCmsClone(item) {
+      const clone = item.cloneNode(true);
+      clone.querySelectorAll('[data-cms-interface],.cms-item-tools,.qualification-editor,.media-action-bar,.img-remove-btn').forEach(el => el.remove());
+      clone.classList.remove('cms-item-deleted');
+      clone.querySelectorAll('[contenteditable]').forEach(el => el.removeAttribute('contenteditable'));
+      return clone.innerHTML;
+    }
+
+    function safeCmsHtml(html) {
+      const template = document.createElement('template'); template.innerHTML = String(html || '');
+      template.content.querySelectorAll('script,style,iframe,object,embed,form').forEach(el => el.remove());
+      template.content.querySelectorAll('*').forEach(el => Array.from(el.attributes).forEach(attr => {
+        if (/^on/i.test(attr.name) || (/^(href|src)$/i.test(attr.name) && /^javascript:/i.test(attr.value))) el.removeAttribute(attr.name);
+      }));
+      return template.innerHTML;
+    }
+
+    function extendCmsSnapshot(data) {
+      data.cms = {
+        deletedItems:Array.from(cmsDeletedItems),
+        addedItems:Array.from(document.querySelectorAll('[data-cms-added="true"]')).map(item => ({
+          collection:item.closest('[data-cms-collection]')?.dataset.cmsCollection || '',
+          id:item.dataset.cmsItemId,
+          className:item.className,
+          html:cleanCmsClone(item)
+        })).filter(item => item.collection && item.id)
+      };
+      return data;
+    }
+
+    function restoreCmsState(state) {
+      cmsRestoring = true;
+      document.querySelectorAll('[data-cms-added="true"]').forEach(item => item.remove());
+      cmsDeletedItems = new Set(Array.isArray(state?.deletedItems) ? state.deletedItems : []);
+      (Array.isArray(state?.addedItems) ? state.addedItems : []).forEach(saved => {
+        const collection = document.querySelector('[data-cms-collection="' + CSS.escape(saved.collection) + '"]');
+        if (!collection || !saved.id) return;
+        const item = document.createElement('div');
+        item.className = String(saved.className || 'card cms-item').replace(/cms-item-deleted/g, '').trim();
+        item.dataset.cmsItemId = saved.id; item.dataset.cmsAdded = 'true'; item.innerHTML = safeCmsHtml(saved.html);
+        collection.appendChild(item);
+      });
+      prepareCms();
+      document.querySelectorAll('[data-cms-item-id]').forEach(item => item.classList.toggle('cms-item-deleted', cmsDeletedItems.has(item.dataset.cmsItemId)));
+      cmsRestoring = false;
+    }
+
+    function prepareCms() {
+      auditEditableContent(document);
+      registerCmsCollections();
+      document.querySelectorAll('[data-cms-item-id]').forEach(installCmsItemTools);
+      auditEditableContent(document);
+    }
+
+    function installCmsBridge() {
+      window.PortfolioCms = { prepare:prepareCms, extendSnapshot:extendCmsSnapshot, restore:restoreCmsState };
+      prepareCms();
+      if (document.body.dataset.cmsDelegatesReady === '1') return;
+      document.body.dataset.cmsDelegatesReady = '1';
+      document.addEventListener('click', event => {
+        const editableLink = event.target.closest('a[data-editable]');
+        if (editableLink && document.body.classList.contains('editing')) event.preventDefault();
+      });
+      document.addEventListener('blur', event => {
+        if (!event.target.matches?.('[data-editable]')) return;
+        event.target.classList.toggle('cms-editable-empty', !event.target.textContent.trim());
+        if (event.target.matches('[data-editable="footer_email"]')) {
+          const email = event.target.textContent.trim(); event.target.href = email ? 'mailto:' + email : '#contact';
+        }
+      }, true);
     }
 
     function updatePublicEmptyStates() {
@@ -559,10 +851,10 @@
       };
       Object.keys(map).forEach(id => {
         const el = document.querySelector('#' + id + ' > .container > .section-label');
-        if (el) el.textContent = map[id];
+        if (el && !el.dataset.editable) el.textContent = map[id];
       });
       const contact = document.querySelector('#contact .section-label');
-      if (contact) contact.textContent = '15 · Contact';
+      if (contact && !contact.dataset.editable) contact.textContent = '15 · Contact';
     }
 
     function orderEditorialSections() {
@@ -979,7 +1271,9 @@
         const active = document.activeElement;
         if (document.body.classList.contains('editing') && active && active.isContentEditable) return;
         if (data && Array.isArray(data.gallery)) gallery = data.gallery.filter(x => x && x.url);
+        prepareCms();
         originalRestore.call(window.__portfolio, data);
+        prepareCms();
         renderGallery();
         updatePublicEmptyStates();
         orderEditorialSections();
@@ -1004,7 +1298,12 @@
       if (document.body.dataset.contentObserverReady === '1') return;
       document.body.dataset.contentObserverReady = '1';
       let scheduled = false;
-      new MutationObserver(() => {
+      new MutationObserver(mutations => {
+        const active = document.activeElement;
+        // Any DOM work while a contenteditable owns focus can disturb the
+        // Selection object, even when the mutation happened in the toolbar.
+        // Defer all enhancement work until focus leaves the editor field.
+        if (document.body.classList.contains('editing') && active?.isContentEditable) return;
         if (scheduled) return;
         scheduled = true;
         requestAnimationFrame(() => {
@@ -1012,6 +1311,7 @@
           manageMediaControls();
           replaceEmojiIcons();
           updatePublicEmptyStates();
+          prepareCms();
         });
       }).observe(document.body, { childList:true, subtree:true });
     }
@@ -1021,6 +1321,7 @@
       polishHero();
       addRecruiterSnapshot();
       addProcessRails();
+      installCmsBridge();
       patchEditorAuthentication();
       installEditorEntry();
       addThinkingLab();
@@ -1060,3 +1361,4 @@
 
   installFixes();
 })();
+
