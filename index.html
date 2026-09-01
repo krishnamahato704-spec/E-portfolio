@@ -645,6 +645,7 @@
         .flex-wrap { display: flex; flex-wrap: wrap; gap: 4px; }
         .text-center { text-align: center; }
     </style>
+    <link rel="stylesheet" href="visual-editor.css?v=portfolio-studio-19">
 </head>
 <body>
 
@@ -1758,11 +1759,17 @@
                     }
                 });
                 data.experiences = experiences;
+                if (window.PortfolioCms && typeof window.PortfolioCms.extendSnapshot === 'function') {
+                    window.PortfolioCms.extendSnapshot(data);
+                }
                 return data;
             }
 
             function restore(data) {
                 if (!data) return;
+                if (window.PortfolioCms && typeof window.PortfolioCms.prepare === 'function') {
+                    window.PortfolioCms.prepare();
+                }
                 const wasEditing = currentMode === 'edit';
                 deletedSections = Array.isArray(data.deletedSections) ? data.deletedSections.filter(id => typeof id === 'string') : [];
                 restoreCustomSections(data.customSections);
@@ -1870,6 +1877,9 @@
                 applyDeletedSections();
                 setMode(wasEditing ? 'edit' : 'view');
                 renderExperiences();
+                if (window.PortfolioCms && typeof window.PortfolioCms.restore === 'function') {
+                    window.PortfolioCms.restore(data.cms || {});
+                }
             }
 
             function saveToStorage() {
@@ -2244,6 +2254,8 @@
             window.__portfolio = { snapshot, restore, saveToStorage, resetStorage, setMode, addSlot, addExperience, addSection, experiences, markDirty, markSaved };
         })();
     </script>
-    <script src="supabase-storage.js?v=forest-library-9"></script>
+    <script src="supabase-storage.js?v=cms-editor-10"></script>
+    <script src="visual-editor.js?v=portfolio-studio-19"></script>
 </body>
 </html>
+
