@@ -44,6 +44,7 @@ on conflict (id) do update set public = true, file_size_limit = 26214400;
 
 drop policy if exists "Portfolio media public upload" on storage.objects;
 drop policy if exists "Portfolio owner can upload evidence" on storage.objects;
+drop policy if exists "Portfolio owner can inspect evidence" on storage.objects;
 drop policy if exists "Portfolio owner can update evidence" on storage.objects;
 drop policy if exists "Portfolio owner can delete evidence" on storage.objects;
 
@@ -51,6 +52,17 @@ create policy "Portfolio owner can upload evidence"
 on storage.objects for insert
 to authenticated
 with check (
+  bucket_id = 'portfolio-media'
+  and (select auth.jwt() ->> 'email') = 'krishnamahato704@gmail.com'
+);
+
+-- Storage upsert/replacement requires SELECT as well as INSERT and UPDATE.
+-- This policy is owner-only; public visitors can still read published files
+-- through the bucket's public object URLs without being able to list objects.
+create policy "Portfolio owner can inspect evidence"
+on storage.objects for select
+to authenticated
+using (
   bucket_id = 'portfolio-media'
   and (select auth.jwt() ->> 'email') = 'krishnamahato704@gmail.com'
 );
@@ -77,3 +89,9 @@ using (
     or (select auth.jwt() ->> 'email') = 'krishnamahato704@gmail.com'
   )
 );
+
+-- Portfolio Studio v2 keeps removed media as a pending orphan reference inside
+-- portfolio_state. Objects are not deleted during an editing session, so Undo,
+-- restore, and saved versions remain safe. Review pending orphans manually only
+-- after confirming that no current or saved page-builder state references them.
+
