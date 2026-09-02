@@ -126,12 +126,12 @@
       }
       html { scroll-padding-top:76px; }
       body { background:#f6f0e3 !important; color:#242b28; font-size:17px; line-height:1.72; }
-      #navbar { height:68px; background:#102e27 !important; border-bottom:2px solid #a88745; backdrop-filter:none; }
-      #navbar .container { width:min(1280px,96%); }
+      #navbar { min-height:68px; height:auto; background:#102e27 !important; border-bottom:2px solid #a88745; backdrop-filter:none; }
+      #navbar .container { width:min(1800px,98%); }
       .nav-brand { font-family:var(--serif); letter-spacing:.02em; }
       .nav-brand span { color:#d7bd7d; }
-      .nav-links { flex-wrap:nowrap; gap:2px; }
-      .nav-links a { color:rgba(255,253,248,.82); border-radius:2px; padding:9px 10px; font-size:.78rem; text-transform:uppercase; letter-spacing:.055em; }
+      .nav-links { flex:1 1 auto; min-width:0; justify-content:flex-end; flex-wrap:wrap; gap:2px; }
+      .nav-links a { color:rgba(255,253,248,.82); border-radius:2px; padding:8px 8px; font-size:.72rem; text-transform:uppercase; letter-spacing:.045em; }
       .nav-links a:hover, .nav-links a:focus-visible, .nav-links a.active { color:#fffdf8; background:rgba(255,253,248,.09); box-shadow:inset 0 -2px #d7bd7d; }
       .nav-editor-entry { border:1px solid rgba(215,189,125,.72) !important; color:#fffdf8 !important; background:transparent !important; font-weight:800 !important; cursor:pointer; }
       .nav-editor-entry:hover { background:#a88745 !important; color:#102e27 !important; }
@@ -240,9 +240,11 @@
       body.editing section, body.editing footer { scroll-margin-top:144px; }
       #modeBar #saveBtn { display:inline-flex !important; }
 
-      @media (max-width:900px) {
-        .nav-links { flex-direction:column; flex-wrap:nowrap; background:#102e27 !important; max-height:calc(100vh - 68px); overflow:auto; }
+      @media (max-width:1680px) {
+        .nav-links { background:#102e27 !important; max-height:calc(100vh - var(--portfolio-nav-height,68px)); overflow:auto; }
         .nav-links a { display:block; min-height:44px; padding:12px 18px; }
+      }
+      @media (max-width:900px) {
         .snapshot-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
       }
       @media (max-width:700px) {
