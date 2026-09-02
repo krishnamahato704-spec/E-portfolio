@@ -29,6 +29,7 @@ check('Responsive previews and visibility exist', ['desktop','tablet','mobile'].
 check('Visitor and Preview modes hide editor controls', /body:not\(\.builder-editing\)/.test(css) && /builder-preview #portfolioStudio/.test(css));
 check('Design tokens are global and overridable', /DEFAULT_TOKENS/.test(editor) && /applyTokens/.test(editor));
 check('Navigation is rebuilt from section state', /function rebuildNavigation/.test(editor) && /showInNavigation/.test(editor));
+check('Section overview wraps or collapses without horizontal clipping', /ResizeObserver/.test(html) && /--portfolio-nav-height/.test(html) && /max-width:1680px/.test(cloud) && /flex-wrap:wrap/.test(cloud));
 check('Media files stay out of JSON payloads and use Storage metadata', /PortfolioCloud\.uploadFile/.test(editor) && /pendingOrphans/.test(editor) && /filename/.test(editor));
 check('Removed media is queued, not immediately destroyed', /Media reference removed safely/.test(editor) && /cleanupOrphans/.test(editor));
 check('Rich text and URLs are sanitised', /ALLOWED_TAGS/.test(editor) && /sanitizeHtml/.test(editor) && /function safeUrl/.test(editor) && /startsWith\('on'\)/.test(editor));
