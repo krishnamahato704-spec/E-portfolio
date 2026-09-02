@@ -17,7 +17,7 @@
 #builderDeleteDialog,
 #builderRevisionDialog { display: none; }
 
-body.builder-editing { padding-top: calc(68px + var(--builder-top)); }
+body.builder-editing { padding-top: calc(var(--portfolio-nav-height, 68px) + var(--builder-top)); }
 body.builder-editing #navbar { top: var(--builder-top); }
 body.builder-editing #modeBar { display: none !important; }
 
@@ -175,7 +175,7 @@ body.builder-editing.builder-preview .exp-remove-btn,
 body.builder-editing.builder-preview .slot-add-btn,
 body.builder-editing.builder-preview .add-experience-btn,
 body.builder-editing.builder-preview .gallery-upload { display: none !important; }
-body.builder-editing.builder-preview { padding-top: 68px; }
+body.builder-editing.builder-preview { padding-top: var(--portfolio-nav-height, 68px); }
 body.builder-editing.builder-preview #navbar { top: 0; }
 body.builder-editing.builder-preview .builder-canvas-shell { margin: 0; }
 body.builder-editing.builder-device-tablet .builder-canvas-shell { max-width: 820px; margin-left: auto; margin-right: auto; box-shadow: 0 0 0 1px #cbbda5; }
