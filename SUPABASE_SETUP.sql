@@ -29,13 +29,13 @@ using (true);
 create policy "Portfolio owner can insert state"
 on public.portfolio_state for insert
 to authenticated
-with check ((select auth.jwt() ->> 'email') = 'krishnamahato704@gmail.com');
+with check ((select auth.uid()) = 'a8557da7-eeb5-47c8-93c6-b43e4ffa0106'::uuid);
 
 create policy "Portfolio owner can update state"
 on public.portfolio_state for update
 to authenticated
-using ((select auth.jwt() ->> 'email') = 'krishnamahato704@gmail.com')
-with check ((select auth.jwt() ->> 'email') = 'krishnamahato704@gmail.com');
+using ((select auth.uid()) = 'a8557da7-eeb5-47c8-93c6-b43e4ffa0106'::uuid)
+with check ((select auth.uid()) = 'a8557da7-eeb5-47c8-93c6-b43e4ffa0106'::uuid);
 
 -- Public files allow schools and recruiters to download evidence without logging in.
 insert into storage.buckets (id, name, public, file_size_limit)
@@ -53,7 +53,7 @@ on storage.objects for insert
 to authenticated
 with check (
   bucket_id = 'portfolio-media'
-  and (select auth.jwt() ->> 'email') = 'krishnamahato704@gmail.com'
+  and (select auth.uid()) = 'a8557da7-eeb5-47c8-93c6-b43e4ffa0106'::uuid
 );
 
 -- Storage upsert/replacement requires SELECT as well as INSERT and UPDATE.
@@ -64,7 +64,7 @@ on storage.objects for select
 to authenticated
 using (
   bucket_id = 'portfolio-media'
-  and (select auth.jwt() ->> 'email') = 'krishnamahato704@gmail.com'
+  and (select auth.uid()) = 'a8557da7-eeb5-47c8-93c6-b43e4ffa0106'::uuid
 );
 
 create policy "Portfolio owner can update evidence"
@@ -72,11 +72,11 @@ on storage.objects for update
 to authenticated
 using (
   bucket_id = 'portfolio-media'
-  and (select auth.jwt() ->> 'email') = 'krishnamahato704@gmail.com'
+  and (select auth.uid()) = 'a8557da7-eeb5-47c8-93c6-b43e4ffa0106'::uuid
 )
 with check (
   bucket_id = 'portfolio-media'
-  and (select auth.jwt() ->> 'email') = 'krishnamahato704@gmail.com'
+  and (select auth.uid()) = 'a8557da7-eeb5-47c8-93c6-b43e4ffa0106'::uuid
 );
 
 create policy "Portfolio owner can delete evidence"
@@ -86,7 +86,7 @@ using (
   bucket_id = 'portfolio-media'
   and (
     owner_id = (select auth.uid()::text)
-    or (select auth.jwt() ->> 'email') = 'krishnamahato704@gmail.com'
+    or (select auth.uid()) = 'a8557da7-eeb5-47c8-93c6-b43e4ffa0106'::uuid
   )
 );
 
