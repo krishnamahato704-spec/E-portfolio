@@ -1,6 +1,6 @@
 import {loadContent,signIn,signOut,saveContent,uploadFile,validateFile} from './cloud.js';
 import {mergeContent,validateContent} from './content.js';
-import {esc,view} from './views.js';
+import {esc,view} from './views.js?v=experience-20260910';
 let session=null, draft=null, version=null, dirty=false, base='./',busy=false;
 const schemas={
  qualifications:{label:'Education',fields:{title:'Qualification',place:'Institution / result',period:'Study period',status:'Status',expected:'Expected completion (optional)',note:'Progress note (optional)'}},
