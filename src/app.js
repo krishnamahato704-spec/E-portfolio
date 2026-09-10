@@ -11,7 +11,12 @@ document.querySelector('.menu-toggle')?.addEventListener('click',e=>{
  const button=e.currentTarget; const open=button.getAttribute('aria-expanded')!=='true';
  button.setAttribute('aria-expanded',String(open));document.querySelector('#navigation').classList.toggle('is-open',open);
 });
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){document.querySelector('.menu-toggle').setAttribute('aria-expanded','false');document.querySelector('#navigation').classList.remove('is-open');}});
+document.addEventListener('keydown',e=>{
+ const toggle=document.querySelector('.menu-toggle');
+ if(e.key==='Escape' && toggle?.getAttribute('aria-expanded')==='true'){
+  toggle.setAttribute('aria-expanded','false');document.querySelector('#navigation').classList.remove('is-open');toggle.focus();
+ }
+});
 function wire(){
  document.querySelector('#print-resume')?.addEventListener('click',()=>window.print());
  document.querySelector('.copy-email')?.addEventListener('click',async e=>{

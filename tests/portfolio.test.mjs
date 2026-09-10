@@ -42,7 +42,7 @@ test('Every route renders a complete static document with one heading and workin
   const ids=[...html.matchAll(/\bid="([^"]+)"/g)].map(x=>x[1]);assert.equal(ids.length,new Set(ids).size,route+' duplicate IDs');
   for(const [,href] of html.matchAll(/(?:href|src)="([^"]+)"/g)){
    if(/^(https?:|mailto:|data:)/.test(href))continue;
-   const [raw,hash]=href.split('#');let target=raw.startsWith('/E-portfolio/')?path.resolve(root,raw.slice('/E-portfolio/'.length)):raw?path.resolve(path.dirname(file),raw):file;
+   const [pathname,hash]=href.split('#');const raw=pathname.split('?')[0];let target=raw.startsWith('/E-portfolio/')?path.resolve(root,raw.slice('/E-portfolio/'.length)):raw?path.resolve(path.dirname(file),raw):file;
    if(raw.endsWith('/'))target=path.join(target,'index.html');
    await fs.access(target).catch(()=>assert.fail(`${route}: missing ${href}`));
    if(hash){const linked=await fs.readFile(target,'utf8');assert.ok(linked.includes(`id="${hash}"`),`${route}: missing fragment ${href}`);}
