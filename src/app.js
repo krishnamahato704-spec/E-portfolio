@@ -1,6 +1,6 @@
 import {loadContent} from './cloud.js';
 import {mergeContent,validateContent} from './content.js';
-import {view} from './views.js';
+import {view} from './views.js?v=experience-20260910';
 const route=document.body.dataset.route;
 const base=document.body.dataset.base;
 let content=mergeContent();
