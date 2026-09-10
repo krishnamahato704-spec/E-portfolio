@@ -64,12 +64,8 @@
     --pending-bg:#f1e7ce;
     --serif:'Source Serif 4',Georgia,'Times New Roman',serif;
     --sans:'Segoe UI',Arial,sans-serif;
-    --space-1:.5rem;
     --space-2:1rem;
     --space-3:1.5rem;
-    --space-4:2rem;
-    --space-5:3rem;
-    --space-6:4.5rem;
     --gutter:clamp(1.25rem,4vw,4rem);
     --section-space:clamp(3.5rem,6vw,6rem);
     --measure:66ch;
@@ -245,7 +241,8 @@
     background:transparent;
     color:var(--accent)
   }
-  .button.secondary:hover {
+  .button.secondary:hover,
+  .filter:hover {
     background:var(--accent-soft)
   }
   .button.light {
@@ -333,9 +330,6 @@
     background:transparent;
     font-size:.875rem;
     transition:background var(--quick),color var(--quick)
-  }
-  .filter:hover {
-    background:var(--accent-soft)
   }
   .filter[aria-pressed=true] {
     background:var(--accent);
@@ -602,7 +596,9 @@
     gap:30px;
     margin-bottom:38px
   }
-  .section-heading .text-link {
+  .section-heading .text-link,
+  .design-teaser .button,
+  .resource-row a {
     flex-shrink:0
   }
   .section-heading .eyebrow {
@@ -764,7 +760,9 @@
     border-top:4px solid var(--accent);
     background:var(--sheet)
   }
-  .profile-facts h3 {
+  .profile-facts h3,
+  .prose h3,
+  .presentation-callout h2 {
     margin-bottom:16px
   }
   .profile-facts .tag {
@@ -797,7 +795,8 @@
   .qualification .small {
     margin-top:3px
   }
-  .qualification:last-child {
+  .qualification:last-child,
+  .certificate-card:last-child {
     border-bottom:1px solid var(--line)
   }
   .skill-list {
@@ -877,9 +876,6 @@
   .design-teaser h2 {
     margin-bottom:22px
   }
-  .design-teaser .button {
-    flex-shrink:0
-  }
   .breadcrumb {
     margin-top:25px
   }
@@ -921,9 +917,6 @@
   }
   .prose p {
     margin-bottom:20px
-  }
-  .prose h3 {
-    margin-bottom:16px
   }
   .prose .pull-quote {
     font:2rem/1.45 var(--serif);
@@ -1033,17 +1026,11 @@
   .resource-row h3 {
     margin-bottom:10px
   }
-  .resource-row a {
-    flex-shrink:0
-  }
   .presentation-callout {
     border-left:4px solid var(--accent);
     padding:8px 0 8px 28px;
     max-width:900px;
     margin-left:162px
-  }
-  .presentation-callout h2 {
-    margin-bottom:16px
   }
   .certificate-grid {
     display:grid;
@@ -1056,9 +1043,6 @@
     align-items:center;
     padding:42px 0;
     border-top:1px solid var(--line)
-  }
-  .certificate-card:last-child {
-    border-bottom:1px solid var(--line)
   }
   .certificate-image {
     display:block;
@@ -1601,14 +1585,10 @@
     .hero-statement {
       font-size:1.4rem
     }
-    .hero-detail {
-      font-size:.9375rem
-    }
     .hero .actions {
       margin-top:24px
     }
     .hero .button {
-      font-size:.875rem;
       min-height:48px
     }
     .portrait-frame {
@@ -1644,14 +1624,10 @@
       padding-left:18px
     }
     .snapshot-grid .eyebrow {
-      font-size:.75rem;
       letter-spacing:.045em
     }
     .snapshot-grid p:not(.eyebrow) {
       font-size:1.05rem
-    }
-    .snapshot-grid small {
-      font-size:.8125rem
     }
     .section-heading {
       display:block;

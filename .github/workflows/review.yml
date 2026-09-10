@@ -1,7 +1,7 @@
-name: Review redesigned portfolio
+name: Validate portfolio
 on:
   push:
-    branches: ["redesign/**"]
+    branches: ["redesign/**", "refactor/codebase-cleanup"]
   pull_request:
     branches: [main]
 permissions:

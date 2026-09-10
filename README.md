@@ -1,6 +1,6 @@
 # Krishna Mahato — Teaching portfolio
 
-A redesigned, accessible portfolio for school recruitment, built on the existing GitHub Pages repository and Supabase project. Work lives on `redesign/editorial-teaching-portfolio`; production `main` is unchanged pending review.
+A responsive, accessible portfolio for school recruitment, built on the existing GitHub Pages repository and Supabase project. Production is served from `main`; maintenance work is isolated on `refactor/codebase-cleanup`.
 
 ## Run and build
 
@@ -64,12 +64,13 @@ The public contact form prepares a `mailto:` draft for the visitor to review and
 
 The repository previously served the root of `main` through GitHub Pages. Generated pages are committed at that same root; the `/E-portfolio/` subpath and deep links are supported. `.nojekyll`, `robots.txt`, `sitemap.xml`, canonical tags, Open Graph metadata and a project-aware 404 page are included.
 
-1. Review the redesign branch / pull request and local preview.
-2. Confirm the content and owner login using the existing account.
-3. After approval, merge into `main`. Keep GitHub Pages set to deploy from `main` / root.
-4. Verify the published home, nested case studies, Studio and résumé.
+The cleanup task stops at a tested branch. Do not merge it as part of Task 0. Task 1 must start from `refactor/codebase-cleanup`, not `main`:
 
-The review workflow builds, tests and checks generated pages for drift. It does **not** deploy the redesign branch or change production. No additional hosting account is needed.
+`main` → `refactor/codebase-cleanup` → `feature/editorial-motion` → `feature/editorial-identity`
+
+Keep GitHub Pages set to deploy from `main` / root. A later authorized release should verify the published home, nested case studies, Studio and résumé.
+
+The review workflow builds, tests and checks generated pages for drift on review pull requests and the cleanup branch. It does **not** deploy these branches or change production. No additional hosting account is needed.
 
 ## Security
 
@@ -79,4 +80,4 @@ All content is escaped as text, executable URL schemes are rejected, uploads are
 
 Supabase's security advisor reports one existing warning: [leaked-password protection is disabled](https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection). Enable it in Auth settings when supported by the project plan. No service key was requested or exposed.
 
-See `docs/AUDIT.md` and `docs/QA.md` for the audit, recruiter review and verification limits.
+See `docs/CLEANUP_AUDIT.md` and `docs/CLEANUP_REPORT.md` for the maintenance audit, validation and metrics. `docs/AUDIT.md` and `docs/QA.md` retain the earlier redesign audit and recruiter review.
