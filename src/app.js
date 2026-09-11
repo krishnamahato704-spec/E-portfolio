@@ -1,6 +1,7 @@
 import {loadContent} from './cloud.js';
 import {mergeContent,validateContent} from './content.js';
-import {view} from './views.js?v=experience-20260910';
+import {view} from './views.js?v=editorial-motion-20260911';
+import {initMotion,cleanupMotion} from './motion.js';
 const route=document.body.dataset.route;
 const base=document.body.dataset.base;
 let content=mergeContent();
@@ -40,6 +41,9 @@ function wire(){
 if(route==='admin') import('./admin.js').then(x=>x.initStudio(base));
 else {
  wire();
+ initMotion({initial:true});
+ window.addEventListener('pagehide',cleanupMotion);
+ window.addEventListener('pageshow',e=>{if(e.persisted)initMotion();});
  // Keep the complete static document available during requests, failures, and without JS.
  loadContent().then(row=>{
   const candidate=mergeContent(row.content);validateContent(candidate);content=candidate;
@@ -49,7 +53,9 @@ else {
   const caption=document.querySelector('.brand-caption');if(caption?.firstChild)caption.firstChild.textContent=content.profile.name;
   // Avoid interrupting an interaction when a slow request finishes.
   if(!interacted && !document.querySelector('#main').contains(document.activeElement)){
+   cleanupMotion();
    document.querySelector('#main').innerHTML=view(route,content,base);wire();
+   initMotion();
   }
  }).catch(()=>{});
 }

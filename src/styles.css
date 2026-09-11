@@ -2010,38 +2010,113 @@
   }
 }
 @layer motion {
+  /* Finite entrance animations: the resting state is always fully visible. */
+  @keyframes editorial-enter {
+    from { opacity:0; transform:translate(var(--motion-x,0),var(--motion-y,18px)); }
+    to { opacity:1; transform:translate(0,0); }
+  }
+  @keyframes editorial-rule {
+    from { transform:scaleX(0); }
+    to { transform:scaleX(1); }
+  }
   @keyframes arrive {
-    from {
-      transform:translateY(6px)
-    }
-    to {
-      transform:translateY(0)
+    from { transform:translateY(6px); }
+    to { transform:translateY(0); }
+  }
+  .reading-progress {
+    position:fixed;
+    inset:0 0 auto;
+    height:3px;
+    z-index:30;
+    background:var(--accent);
+    pointer-events:none;
+    transform:scaleX(0);
+    transform-origin:left;
+  }
+  .certificate-image:hover img { transform:none; }
+  body:has(.reading-progress) .site-header { border-top-color:var(--line); }
+  /* Keep the current progression; a fine rule joins its archival entries. */
+  .school-stage:not(.current-stage) { border-color:var(--accent); }
+  .school-stage+.school-stage::before { color:var(--accent); }
+  .school-stage:not(.current-stage)::after {
+    content:'';
+    position:absolute;
+    width:20px;
+    height:3px;
+    top:-3px;
+    left:28px;
+    background:var(--gold);
+  }
+  @media(max-width:900px) {
+    .school-stage:not(.current-stage)::after {
+      width:3px;
+      height:20px;
+      left:-3px;
+      top:24px;
     }
   }
-  @keyframes working {
-    50% {
-      opacity:.55
-    }
+  .approach-section .section-heading h2::after {
+    content:'';
+    display:block;
+    width:clamp(48px,8vw,96px);
+    height:2px;
+    margin-top:18px;
+    background:var(--gold);
+    transform-origin:left;
   }
   @media(prefers-reduced-motion:no-preference) {
-    .hero-copy,.page-heading {
-      animation:arrive 450ms var(--ease) both
+    [data-motion=fade] { --motion-x:0px; --motion-y:0px; }
+    [data-motion=fade-left] { --motion-x:18px; --motion-y:0px; }
+    [data-motion=fade-right] { --motion-x:-18px; --motion-y:0px; }
+    [data-motion=fade-up] { --motion-x:0px; --motion-y:18px; }
+    .motion-enter,.motion-hero {
+      animation:editorial-enter var(--slow) var(--ease) backwards;
+      animation-delay:var(--motion-delay,0ms);
     }
-    nav.is-open {
-      animation:arrive 200ms var(--ease) both
+    .motion-enter[data-motion-index="1"] { --motion-delay:45ms; }
+    .motion-enter[data-motion-index="2"] { --motion-delay:90ms; }
+    .motion-hero { animation-duration:480ms; --motion-y:20px; }
+    .motion-hero[data-motion-index="1"] { --motion-delay:45ms; }
+    .motion-hero[data-motion-index="2"] { --motion-delay:90ms; }
+    .motion-hero[data-motion-index="3"] { --motion-delay:135ms; }
+    .motion-hero[data-motion-index="4"] { --motion-delay:180ms; }
+    .motion-hero[data-motion-index="5"] { --motion-delay:225ms; }
+    .approach-section .section-heading.motion-enter h2::after {
+      animation:editorial-rule 480ms var(--ease) backwards;
     }
-    .button:disabled {
-      animation:working 1.4s ease-in-out infinite
+    nav.is-open { animation:arrive 200ms var(--ease) backwards; }
+    .school-stage,.resource-row,.certificate-image,.gallery-grid figure {
+      transition:translate var(--quick) var(--ease),border-color var(--quick),box-shadow var(--quick);
+    }
+    .button:focus-visible span[aria-hidden],
+    .text-link:focus-visible span[aria-hidden],
+    .nav-contact:focus-visible span { transform:translate(3px,-3px); }
+    nav a:focus-visible::after { transform:scaleX(1); }
+    @media(hover:hover) and (pointer:fine) {
+      .school-stage:hover,.gallery-grid figure:hover { translate:0 -2px; }
+      .resource-row:hover { border-color:var(--accent); }
+      .certificate-image:hover { translate:0 -2px; box-shadow:var(--shadow); }
+    }
+    @media(max-width:650px) {
+      .motion-enter,.motion-hero {
+        --motion-x:0px;
+        --motion-y:12px;
+        animation-duration:300ms;
+        animation-delay:0ms;
+      }
     }
   }
   @media(prefers-reduced-motion:reduce) {
-    html {
-      scroll-behavior:auto
-    }
-    *,*::before,*::after {
-      animation:none!important;
-      transition:none!important
-    }
+    html { scroll-behavior:auto; }
+    *,*::before,*::after { animation:none!important; transition:none!important; }
+    .motion-enter,.motion-hero,
+    .button span[aria-hidden],.text-link span[aria-hidden],.nav-contact span,
+    .certificate-image img { transform:none!important; translate:none!important; }
+    .reading-progress { display:none; }
+  }
+  @media print {
+    .reading-progress { display:none; }
+    .motion-enter,.motion-hero { animation:none!important; opacity:1!important; transform:none!important; }
   }
 }
 @layer print {
