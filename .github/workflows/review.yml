@@ -1,7 +1,7 @@
 name: Review redesigned portfolio
 on:
   push:
-    branches: ["redesign/**"]
+    branches: ["redesign/**", "feature/editorial-motion"]
   pull_request:
     branches: [main]
 permissions:
