@@ -3,7 +3,7 @@
 import {defaultContent} from '../src/content.js';
 import {view} from '../src/views.js';
 const mode=new URLSearchParams(location.search).get('case') || 'resources';
-const route=mode==='contact'?'contact':'resources';
+const route=mode==='contact'?'contact':mode==='teaching'?'teaching':'resources';
 document.body.dataset.route=route;
 const main=document.querySelector('#main');
 main.innerHTML=view(route,defaultContent,'../');
@@ -30,6 +30,7 @@ try {
     name.value='Local regression fixture';
     name.dispatchEvent(new Event('input',{bubbles:true}));
   }
+  if(mode==='teaching')main.querySelector('summary').click();
   resolveRead(new Response(JSON.stringify(mode==='failure'?{message:'Fixture unavailable'}:[{content,updated_at:'2026-09-11T00:00:00Z'}]),{status:mode==='failure'?503:200,headers:{'Content-Type':'application/json'}}));
   await new Promise(resolve=>setTimeout(resolve,80));
   assert(calls.length===1 && calls[0].method==='GET' && calls[0].url.includes('/rest/v1/portfolio_public?'),'One public read and no writes');
@@ -43,9 +44,14 @@ try {
     assert(main.querySelector('.resource-row:not([hidden]) h3').textContent==='Test assessment','Correct filtered resource remains');
     main.querySelector('[data-filter=All]').click();
     assert(main.querySelectorAll('.resource-row:not([hidden])').length===2,'All filter restores rows');
+    const search=main.querySelector('#resource-search');search.value='assessment';search.dispatchEvent(new Event('input',{bubbles:true}));
+    assert(main.querySelectorAll('.resource-row:not([hidden])').length===1,'Search works after content replacement');
+    main.querySelector('[data-filter="Lesson plan"]').click();
+    assert(!main.querySelector('#resource-empty').hidden,'Combined search and category show an empty state');
   } else {
     assert(main.firstElementChild===original,'Slow or failed read preserves the existing document');
     if(mode==='contact')assert(main.querySelector('[name=name]').value==='Local regression fixture','Typed form value survives the late read');
+    if(mode==='teaching')assert(main.querySelector('details').open,'Opened activity record survives the late read');
   }
   assert(document.querySelectorAll('.reading-progress').length===1,'Exactly one reading-progress element');
   assert(!main.querySelector('form.motion-enter, input.motion-enter, textarea.motion-enter'),'Form controls are excluded from reveals');

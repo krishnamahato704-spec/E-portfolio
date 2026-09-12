@@ -1,13 +1,14 @@
-import {loadContent} from './cloud.js';
-import {mergeContent,validateContent} from './content.js';
-import {view} from './views.js?v=editorial-identity-20260911';
+import {wireCollections} from './collections.js?v=recruiter-20260912';
+import {loadContent} from './cloud.js?v=recruiter-20260912';
+import {mergeContent,validateContent} from './content.js?v=recruiter-20260912';
+import {view} from './views.js?v=recruiter-20260912';
 import {initMotion,cleanupMotion} from './motion.js';
 const route=document.body.dataset.route;
 const base=document.body.dataset.base;
 let content=mergeContent();
 let interacted=false;
 document.addEventListener('input',()=>{interacted=true},{once:true});
-document.addEventListener('click',e=>{if(e.target.closest('#main button,#main input,#main textarea'))interacted=true;});
+document.addEventListener('click',e=>{if(e.target.closest('#main button,#main input,#main textarea,#main summary'))interacted=true;});
 document.querySelector('.menu-toggle')?.addEventListener('click',e=>{
  const button=e.currentTarget; const open=button.getAttribute('aria-expanded')!=='true';
  button.setAttribute('aria-expanded',String(open));document.querySelector('#navigation').classList.toggle('is-open',open);
@@ -30,16 +31,10 @@ function wire(){
   location.href=`mailto:${content.profile.email}?subject=${encodeURIComponent('Teaching enquiry'+(f.get('school')?' — '+f.get('school'):''))}&body=${encodeURIComponent(body)}`;
   document.querySelector('#contact-status').textContent='Your email draft is ready to open. If no email app opens, use the email address alongside this form. Nothing has been sent by this website.';
  });
- document.querySelectorAll('[data-filter]').forEach(button=>button.addEventListener('click',()=>{
-  const filter=button.dataset.filter;
-  document.querySelectorAll('[data-filter]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));
-  let shown=0; document.querySelectorAll('.resource-row').forEach(row=>{row.hidden=filter!=='All'&&row.dataset.category!==filter;if(!row.hidden) shown++;});
-  const count=document.querySelector('#resource-count');if(count)count.textContent=`${shown} of ${document.querySelectorAll('.resource-row').length} files shown`;
-  const empty=document.querySelector('#resource-empty');empty.hidden=shown>0;if(!shown)empty.textContent=filter==='All'?'Lesson plans and assessment files have not yet been published. Explore the teaching design above.':'No files in this category yet.';
- }));
+ wireCollections();
  document.querySelectorAll('img').forEach(im=>im.addEventListener('error',()=>{const note=document.createElement('p');note.className='image-error';note.textContent=im.alt+' — image temporarily unavailable.';im.replaceWith(note)},{once:true}));
 }
-if(route==='admin') import('./admin.js').then(x=>x.initStudio(base));
+if(route==='admin') import('./admin.js?v=recruiter-20260912').then(x=>x.initStudio(base));
 else {
  wire();
  initMotion({initial:true});

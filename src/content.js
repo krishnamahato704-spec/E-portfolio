@@ -1,5 +1,6 @@
 const storage = 'https://oyqevsygintkjrkfbzpx.supabase.co/storage/v1/object/public/portfolio-media/evidence/images/';
 export const defaultContent = {
+  schemaVersion: 4,
   profile: {
     name: 'Krishna Mahato', email: 'krishnamahato704@gmail.com',
     eyebrow: 'History & Social Science · Emerging educator',
@@ -9,7 +10,9 @@ export const defaultContent = {
     roles: ['TGT History / Social Science', 'PGT History'],
     subjects: ['History', 'Social Science', 'Economics', 'English'],
     languages: ['English', 'Hindi', 'Nepali', 'Maithili'],
-    cv: '', availability: 'May 2027', eligibility: 'CTET applied',
+    cv: '', availability: 'May 2027', eligibility: 'CTET applied · Exam postponed',
+    location: 'Noida', workPreferences: 'Open to relocation anywhere',
+    targetClasses: 'Classes 6–12', targetBoards: 'CBSE, ICSE, Cambridge and IB',
   },
   about: 'My interest in History grew from memorising events to asking why they happened, how we know, and what they mean to different people. Studying historical sources and accounts of Partition shaped my wish to teach the subject through evidence and inquiry.',
   preparation: 'Five years of UPSC preparation strengthened my engagement with Indian polity, governance and public affairs. I now bring that wider humanities perspective to teacher education and classroom practice.',
@@ -21,8 +24,9 @@ export const defaultContent = {
     {title:'Class X',place:"Little Angels’ School · 87.75%",period:'2014',status:'Completed'},
   ],
   experiences: [
-    {id:'pehchaan',title:'NTCC Internship · Pehchaan The Street School',type:'Five-week teaching internship',period:'1 June – 6 July 2026',points:['Taught foundational literacy and numeracy to Nursery, LKG and UKG learners.','Used competency-based and activity-based methods.','Conducted ULLAS adult-literacy sessions for five learners.','Strengthened classroom-management and community-engagement practice.']},
-    {id:'observation',title:'Observation Internship · Amity International School, Mayur Vihar',type:'One-week school observation',period:'May 2026',points:['Observed History and Social Science lessons across classrooms.','Studied questioning, student engagement and classroom-management strategies.','Connected teacher-education theory with daily classroom practice.']},
+    {id:'panchsheel',title:'School Internship · Panchsheel Balak Inter-College',institution:'Panchsheel Balak Inter-College',type:'16-week school internship',period:'Ongoing',status:'Ongoing',category:'Teaching',duration:'16',durationUnit:'Weeks',summary:'My ongoing extended school internship.',points:['Undertaking a 16-week school internship at Panchsheel Balak Inter-College.']},
+    {id:'pehchaan',institution:'Pehchaan The Street School',status:'Completed',category:'Teaching',duration:'5',durationUnit:'Weeks',summary:'Foundational literacy, numeracy and adult-literacy practice.',title:'NTCC Internship · Pehchaan The Street School',type:'Five-week teaching internship',period:'1 June – 6 July 2026',points:['Taught foundational literacy and numeracy to Nursery, LKG and UKG learners.','Used competency-based and activity-based methods.','Conducted ULLAS adult-literacy sessions for five learners.','Strengthened classroom-management and community-engagement practice.']},
+    {id:'observation',institution:'Amity International School, Mayur Vihar',status:'Completed',category:'Observation',duration:'1',durationUnit:'Week',summary:'Observation of History and Social Science classrooms.',title:'Observation Internship · Amity International School, Mayur Vihar',type:'One-week school observation',period:'May 2026',points:['Observed History and Social Science lessons across classrooms.','Studied questioning, student engagement and classroom-management strategies.','Connected teacher-education theory with daily classroom practice.']},
   ],
   practice:[
     {number:'01',title:'Inquiry before recall',text:'I begin with a question, source or puzzle so that dates and events become evidence in an explanation—not isolated facts.'},
@@ -44,6 +48,13 @@ export const defaultContent = {
 export function mergeContent(live = {}) {
   const result={...structuredClone(defaultContent),...live,profile:{...defaultContent.profile,...live.profile}};
   result.experiences=result.experiences.map(e=>({...e,id:e.id||(/pehchaan/i.test(e.title)?'pehchaan':/amity.*mayur/i.test(e.title)?'observation':e.title)}));
+  const experienceMetadata={
+    pehchaan:{institution:'Pehchaan The Street School',status:'Completed',category:'Teaching',duration:'5',durationUnit:'Weeks',summary:'Foundational literacy, numeracy and adult-literacy practice.'},
+    observation:{institution:'Amity International School, Mayur Vihar',status:'Completed',category:'Observation',duration:'1',durationUnit:'Week',summary:'Observation of History and Social Science classrooms.'},
+  };
+  result.experiences=result.experiences.map(e=>({...experienceMetadata[e.id],...e}));
+  // Only upgrade the original legacy pair; explicit removals in saved drafts stay removed.
+  if(!live.schemaVersion && Array.isArray(live.experiences) && result.experiences.length===2 && ['pehchaan','observation'].every(id=>result.experiences.some(e=>e.id===id))) result.experiences.unshift(structuredClone(defaultContent.experiences[0]));
   if(!live.schemaVersion && result.profile.eyebrow==='History educator · Social Science · Emerging educator') result.profile.eyebrow=defaultContent.profile.eyebrow;
   if(Array.isArray(live.certificates)) result.certificates=live.certificates.map(c=>{
     const original=defaultContent.certificates.find(x=>x.image===c.image);
@@ -62,8 +73,10 @@ export function validateContent(c) {
   if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(c.profile.email||'')) throw new Error('Enter a valid contact email.');
   for(const key of ['qualifications','experiences','practice','certificates','resources','gallery','competencies']) if(!Array.isArray(c[key])) throw new Error(`${key} must be a list.`);
   for(const key of ['roles','subjects','languages']) if(!Array.isArray(c.profile[key]) || !c.profile[key].every(x=>typeof x==='string')) throw new Error(`${key} must be a list of text.`);
+  for(const key of ['location','workPreferences','targetClasses','targetBoards','eligibility','availability']) if(c.profile[key]!==undefined && (typeof c.profile[key]!=='string'||c.profile[key].length>1000)) throw new Error(`${key} must be text of at most 1000 characters.`);
   for(const key of ['portrait','cv']) if(c.profile[key] && !/^https:\/\//i.test(c.profile[key])) throw new Error(`${key} must use HTTPS.`);
   for(const e of c.experiences) if(!e?.title?.trim() || !Array.isArray(e.points) || !e.points.every(x=>typeof x==='string')) throw new Error('Each experience needs a title and activity list.');
+  for(const e of c.experiences) for(const key of ['institution','status','category','duration','durationUnit','summary']) if(e[key]!==undefined && (typeof e[key]!=='string'||e[key].length>1000)) throw new Error(`Experience ${key} must be text of at most 1000 characters.`);
   for(const q of c.qualifications) if(!q?.title?.trim() || !q?.status?.trim()) throw new Error('Each qualification needs a title and status.');
   for(const p of c.practice) if(!p?.title?.trim() || typeof p.text!=='string') throw new Error('Each teaching principle needs a title and description.');
   if(!c.competencies.every(x=>typeof x==='string')) throw new Error('Skills must be text.');
