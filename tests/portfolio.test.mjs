@@ -4,7 +4,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import {defaultContent,mergeContent,validateContent} from '../src/content.js';
 import {esc,safeUrl,routes,view} from '../src/views.js';
-import {validateFile,loadContent,saveContent,signIn} from '../src/cloud.js';
+import {validateFile,loadContent,saveContent,signIn,uploadFile} from '../src/cloud.js';
 const root=path.resolve(import.meta.dirname,'..');
 
 test('Published data and supported legacy rows preserve verified metadata',()=>{
@@ -29,9 +29,22 @@ test('Content validation rejects malformed collection entries and unsafe files',
 });
 test('File uploads reject executable types, mismatched MIME and oversized files',()=>{
  assert.equal(validateFile({name:'lesson.pdf',type:'application/pdf',size:1024}),'pdf');
+ assert.equal(validateFile({name:'lesson-plan.docx',type:'',size:1024}),'docx');
+ assert.equal(validateFile({name:'lesson-slides.pptx',type:'application/octet-stream',size:1024}),'pptx');
  assert.throws(()=>validateFile({name:'bad.svg',type:'image/svg+xml',size:200}));
  assert.throws(()=>validateFile({name:'bad.pdf',type:'text/html',size:200}));
  assert.throws(()=>validateFile({name:'large.pdf',type:'application/pdf',size:11*1024*1024}));
+});
+test('Teaching resource uploads normalize document MIME before storage',async()=>{
+ const original=global.fetch;let seen;
+ global.fetch=async(url,options)=>{seen={url:String(url),options};return new Response(JSON.stringify({Key:'redesign/test.docx'}),{status:200,headers:{'Content-Type':'application/json'}})};
+ try {
+  const url=await uploadFile({name:'lesson-plan.docx',type:'',size:1024},'test-token');
+  assert.match(seen.url,/\/storage\/v1\/object\/portfolio-media\/redesign\/.+\.docx$/);
+  assert.equal(seen.options.headers['Content-Type'],'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+  assert.equal(seen.options.headers.Authorization,'Bearer test-token');
+  assert.match(url,/\/storage\/v1\/object\/public\/portfolio-media\/redesign\/.+\.docx$/);
+ } finally {global.fetch=original}
 });
 test('Every route renders a complete static document with one heading and working local links',async()=>{
  for(const [route,meta] of Object.entries(routes)){

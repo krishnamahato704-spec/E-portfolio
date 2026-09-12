@@ -1,5 +1,13 @@
 # Portfolio improvement checkpoint
 
+## 2026-09-12 — Teaching resource upload repair
+
+- Expanded the `portfolio-media` bucket allowlist to accept PDF, DOCX, and PPTX lesson-plan files as well as the supported image formats.
+- Bound storage writes to the configured owner account ID, matching the editor's sign-in check.
+- Normalized missing or generic Windows document MIME values to the safe MIME type implied by the approved extension.
+- Increased the upload timeout to 90 seconds and made timeout failures actionable.
+- Added automated coverage for document MIME normalization and the complete storage request.
+
 Updated: 12 September 2026. Current request: evaluate the dynamic-portfolio prompt, implement worthwhile frontend/backend changes in stages, then review as a web designer and school recruiter.
 
 ## Stage 1 — Audit and choices (complete)
