@@ -109,3 +109,11 @@ test('Editorial records retain owner order and escape document metadata',()=>{
  assert.match(evidence,/<dt>Date<\/dt><dd>Owner date<\/dd>/);
  assert.match(view('resources',c),/id="resource-count"[^>]*role="status"/);
 });
+test('Supabase client library is configured with project URL and public key',async()=>{
+ const {supabase,supabaseUrl,supabaseAnonKey}=await import('../src/supabase.js');
+ assert.ok(supabase);
+ assert.equal(supabaseUrl,'https://oyqevsygintkjrkfbzpx.supabase.co');
+ assert.equal(supabaseAnonKey,'sb_publishable_CZOIotDHbTM9m4E8vHZ9Aw_H3-G9mAd');
+ assert.ok(typeof supabase.from==='function');
+ assert.ok(typeof supabase.auth.signInWithPassword==='function');
+});
