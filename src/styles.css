@@ -3717,11 +3717,63 @@
     padding: clamp(1.25rem, 2.5vw, 2rem);
     box-shadow: 0 4px 16px var(--shadow-ink);
   }
+  .planning-lens-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+  }
+  .planning-lens-header .eyebrow {
+    margin: 0;
+  }
+  .democracy-local-progress {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--sans);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: var(--accent-soft);
+    padding: 0.2rem 0.55rem;
+    border-radius: 2px;
+  }
+  .local-progress-label {
+    color: var(--muted);
+    font-weight: 600;
+  }
   .planning-lens-card h3 {
     font-family: var(--serif);
     font-size: 1.6rem;
     color: var(--ink);
+    margin-top: 0.5rem;
     margin-bottom: 0.75rem;
+  }
+  .active-stage-status-strip {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0.75rem 0 1rem;
+    padding: 0.45rem 0.75rem;
+    background: var(--surface-muted);
+    border-left: 2px solid var(--accent);
+    font-size: 0.8125rem;
+    color: var(--ink);
+    font-family: var(--sans);
+  }
+  .status-indicator-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    display: inline-block;
+    flex-shrink: 0;
+  }
+  .active-stage-title {
+    font-weight: 600;
+    letter-spacing: 0.02em;
   }
   .truth-notice {
     margin: 1.25rem 0;
@@ -3730,10 +3782,37 @@
     border-left: 2px solid var(--line-strong);
   }
   .truth-notice .small { font-size: 0.8125rem; color: var(--muted); line-height: 1.45; }
+  .democracy-nav-track-wrap {
+    position: relative;
+    display: flex;
+    gap: 0.85rem;
+    margin: 1.25rem 0;
+  }
+  .democracy-vertical-rule {
+    width: 2px;
+    background: var(--line);
+    position: relative;
+    border-radius: 1px;
+    flex-shrink: 0;
+    margin: 0.4rem 0;
+  }
+  .democracy-vertical-fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 16.66%;
+    background: var(--accent);
+    border-radius: 1px;
+    transition: height 0.3s ease-out;
+  }
+  .democracy-stage-nav {
+    flex: 1;
+  }
   .democracy-stage-nav ol {
     list-style: none;
     padding: 0;
-    margin: 1.25rem 0;
+    margin: 0;
     display: flex;
     flex-direction: column;
     gap: 0.35rem;
@@ -3752,6 +3831,15 @@
     background: var(--surface-muted);
     color: var(--ink);
   }
+  .democracy-stage-nav a.is-active {
+    background: var(--surface-muted);
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .democracy-stage-nav a.is-active .st-num {
+    color: var(--accent);
+    font-weight: 700;
+  }
   .democracy-stage-nav a .st-num {
     font-family: var(--serif);
     font-size: 0.8125rem;
@@ -3767,8 +3855,21 @@
     padding: clamp(1.75rem, 3.5vw, 2.75rem);
     background: var(--sheet);
     border: 1px solid var(--line);
+    border-left: 3px solid transparent;
     margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
     box-shadow: 0 2px 12px var(--shadow-ink);
+    transition: border-left-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  .democracy-stage.is-active {
+    border-left-color: var(--accent);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  }
+  .democracy-stage.is-active .stage-badge {
+    background: var(--accent);
+    color: #ffffff;
+  }
+  .democracy-stage.is-active .stage-header {
+    border-bottom-color: var(--line-strong);
   }
   .stage-header {
     display: flex;
@@ -3787,6 +3888,7 @@
     color: var(--accent);
     padding: 0.25rem 0.6rem;
     border-radius: 2px;
+    transition: background 0.2s ease, color 0.2s ease;
   }
   .assessment-callout {
     margin-top: 1.25rem;
@@ -4353,6 +4455,10 @@
     .milestone-record.is-active .milestone-node { transform:none!important; }
     .milestone-card { transform:none!important; transition:none!important; }
     .milestone-record.is-active .milestone-card { transform:none!important; }
+    .democracy-vertical-fill { transition:none!important; }
+    .democracy-stage { transition:none!important; }
+    .democracy-stage.is-active { transform:none!important; }
+    .democracy-stage-nav a { transition:none!important; }
   }
 }
 @layer motion { @media(prefers-reduced-motion:no-preference) { .opening-hero h1.motion-hero { animation-name:archive-mask; } } }
@@ -4790,7 +4896,7 @@
   justify-content: space-between;
   align-items: center;
   gap: 20px;
-  padding: 28px 32px;
+  padding: clamp(20px, 4vw, 28px) clamp(16px, 4vw, 32px);
   background: var(--sheet);
   border: 1px solid var(--line);
   border-left: 4px solid var(--accent);

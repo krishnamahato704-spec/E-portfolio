@@ -1,5 +1,6 @@
 import {initTimeline, cleanupTimeline} from './timeline.js?v=opening-20260912';
 import {initPhilosophy, cleanupPhilosophy} from './philosophy.js?v=opening-20260912';
+import {initDemocracy, cleanupDemocracy} from './democracy.js?v=opening-20260912';
 
 // Progressive enhancement: nothing is hidden while waiting for JavaScript or an observer.
 let dispose = () => {};
@@ -8,6 +9,7 @@ let heroPlayed = false;
 export function cleanupMotion() {
   cleanupTimeline();
   cleanupPhilosophy();
+  cleanupDemocracy();
   dispose();
   dispose = () => {};
 }
@@ -18,6 +20,7 @@ export function initMotion({ initial = false } = {}) {
   if (!root || ['admin', 'resume', '404'].includes(document.body.dataset.route)) return;
   initTimeline(root);
   initPhilosophy(root);
+  initDemocracy(root);
   const preference = matchMedia('(prefers-reduced-motion: reduce)');
   const events = new AbortController();
   let observer;
@@ -30,6 +33,7 @@ export function initMotion({ initial = false } = {}) {
     events.abort();
     cleanupTimeline();
     cleanupPhilosophy();
+    cleanupDemocracy();
     observer?.disconnect();
     resizeObserver?.disconnect();
     cancelAnimationFrame(frame);
