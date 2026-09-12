@@ -34,7 +34,7 @@ function wire(){
  wireCollections();
  document.querySelectorAll('img').forEach(im=>im.addEventListener('error',()=>{const note=document.createElement('p');note.className='image-error';note.textContent=im.alt+' — image temporarily unavailable.';im.replaceWith(note)},{once:true}));
 }
-if(route==='admin') import('./admin.js?v=recruiter-20260912').then(x=>x.initStudio(base));
+if(route==='admin') import('./admin.js?v=upload-20260912').then(x=>x.initStudio(base));
 else {
  wire();
  initMotion({initial:true});

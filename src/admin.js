@@ -1,6 +1,6 @@
 import {wireCollections} from './collections.js?v=recruiter-20260912';
 import {recruitmentGaps} from './recruiter.js?v=recruiter-20260912';
-import {loadContent,signIn,signOut,saveContent,uploadFile,validateFile} from './cloud.js?v=recruiter-20260912';
+import {loadContent,signIn,signOut,saveContent,uploadFile,validateFile} from './cloud.js?v=upload-20260912';
 import {mergeContent,validateContent} from './content.js?v=recruiter-20260912';
 import {esc,view} from './views.js?v=recruiter-20260912';
 let session=null, draft=null, version=null, dirty=false, base='./',busy=false;
@@ -43,9 +43,9 @@ function editor(){
  document.querySelectorAll('[data-upload]').forEach(el=>el.addEventListener('change',async()=>{
   const file=el.files[0];if(!file)return;
   try{
-   validateFile(file);
-   if(el.dataset.upload==='cv' && file.type!=='application/pdf')throw new Error('The CV must be a PDF.');
-   if(['image','portrait'].includes(el.dataset.upload) && !file.type.startsWith('image/'))throw new Error('Choose an image for this field.');
+   const ext=validateFile(file);
+   if(el.dataset.upload==='cv' && ext!=='pdf')throw new Error('The CV must be a PDF.');
+   if(['image','portrait'].includes(el.dataset.upload) && !['jpg','jpeg','png','webp'].includes(ext))throw new Error('Choose an image for this field.');
    setBusy(true);status('Uploading file…');
    const url=await uploadFile(file,session.access_token);
    const target=el.dataset.scope==='profile'?draft.profile:draft[el.dataset.scope][Number(el.dataset.index)];target[el.dataset.upload]=url;setDirty();editor();status('File uploaded. Preview, then publish to display it on the portfolio.');
