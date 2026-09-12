@@ -1,5 +1,5 @@
 import {config} from './config.js';
-import {validateContent} from './content.js';
+import {validateContent} from './content.js?v=recruiter-20260912';
 export async function request(path,options={}) {
   const {token,headers,...rest}=options;
   const response=await fetch(config.url+path,{...rest,headers:{apikey:config.key,...(token?{Authorization:`Bearer ${token}`}:{ }),...headers},signal:AbortSignal.timeout(12000)});

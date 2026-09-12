@@ -1,5 +1,5 @@
 /* Teaching journal: paper, oxblood ink, marginal notes and documentary evidence. */
-@layer reset,tokens,base,components,layout,responsive,identity,motion,print;
+@layer reset,tokens,base,components,layout,responsive,identity,recruiter,motion,print;
 @font-face {
   font-family:'Source Serif 4';
   font-style:normal;
@@ -422,17 +422,17 @@
     color:var(--muted);
     letter-spacing:.05em
   }
-  nav {
+  .site-header nav {
     display:flex;
     align-items:center;
     gap:26px
   }
-  nav a {
+  .site-header nav a {
     position:relative;
     font-size:.875rem;
     padding:12px 0
   }
-  nav a:not(.nav-contact)::after {
+  .site-header nav a:not(.nav-contact)::after {
     content:'';
     position:absolute;
     left:0;
@@ -444,14 +444,14 @@
     transform-origin:left;
     transition:transform var(--quick)
   }
-  nav a:hover::after,nav a[aria-current=page]::after {
+  .site-header nav a:hover::after,.site-header nav a[aria-current=page]::after {
     transform:scaleX(1)
   }
-  nav a[aria-current=page] {
+  .site-header nav a[aria-current=page] {
     color:var(--accent);
     font-weight:600
   }
-  nav .nav-contact {
+  .site-header nav .nav-contact {
     padding:10px 16px;
     border:1px solid var(--accent);
     display:flex;
@@ -459,7 +459,7 @@
     color:var(--accent);
     transition:background var(--quick),color var(--quick)
   }
-  nav .nav-contact:hover,nav .nav-contact[aria-current=page] {
+  .site-header nav .nav-contact:hover,.site-header nav .nav-contact[aria-current=page] {
     background:var(--accent);
     color:var(--sheet)
   }
@@ -1434,7 +1434,7 @@
       border-right:0;
       padding-right:0
     }
-    nav {
+    .site-header nav {
       gap:22px
     }
     .hero {
@@ -1513,7 +1513,7 @@
       background:var(--accent);
       color:var(--sheet)
     }
-    nav {
+    .site-header nav {
       display:none;
       position:absolute;
       top:100%;
@@ -1526,19 +1526,19 @@
       border-bottom:2px solid var(--accent);
       box-shadow:var(--shadow)
     }
-    nav.is-open {
+    .site-header nav.is-open {
       display:grid;
       gap:3px
     }
-    nav a {
+    .site-header nav a {
       font-size:1rem;
       padding:12px 4px;
       border-bottom:1px solid var(--line)
     }
-    nav a:not(.nav-contact)::after {
+    .site-header nav a:not(.nav-contact)::after {
       display:none
     }
-    nav .nav-contact {
+    .site-header nav .nav-contact {
       margin-top:12px;
       padding:12px 16px;
       justify-content:space-between
@@ -2015,8 +2015,8 @@
   .header-inner { gap:28px; }
   .brand-caption small { letter-spacing:.07em; }
   .monogram { font-size:2.2rem; }
-  nav a { font-weight:500; }
-  nav .nav-contact { border-color:var(--line-strong); }
+  .site-header nav a { font-weight:500; }
+  .site-header nav .nav-contact { border-color:var(--line-strong); }
 
   /* Opening spread: the portrait is a document, the name is the masthead. */
   .hero {
@@ -2430,6 +2430,56 @@
   }
 }
 
+
+@layer recruiter {
+  .hiring-summary { padding-block:40px 48px; display:grid; grid-template-columns:minmax(0,.85fr) minmax(0,1.6fr); gap:22px 70px; border-bottom:1px solid var(--line-strong); }
+  .hiring-intro h2 { font:400 2.65rem/1.12 var(--serif); letter-spacing:-.035em; margin:16px 0; }
+  .hiring-intro h2 em { color:var(--accent); }
+  .hiring-intro>p:not(.eyebrow) { font-size:.9375rem; color:var(--muted); }
+  .hiring-links { display:flex; flex-direction:column; align-items:start; gap:12px; margin-top:24px; }
+  .hiring-facts { display:grid; grid-template-columns:1fr 1fr; gap:22px 32px; margin:0; }
+  .hiring-facts>div { border-top:1px solid var(--line); padding-top:12px; }
+  .hiring-facts dt { font-size:.6875rem; text-transform:uppercase; letter-spacing:.07em; color:var(--accent); margin-bottom:8px; }
+  .hiring-facts dd { font-size:1rem; line-height:1.55; margin:0; }
+  .hiring-note { grid-column:1/-1; margin:0; padding-top:8px; max-width:96ch; color:var(--muted); font-size:.8125rem; }
+  .evidence-links { display:flex; gap:18px 30px; flex-wrap:wrap; padding:0 0 32px; }
+  .collection-tools { display:grid; grid-template-columns:minmax(210px,.7fr) minmax(0,1fr); align-items:end; gap:24px; margin-bottom:18px; }
+  .collection-tools label,.collection-search { display:grid; gap:8px; font-size:.875rem; font-weight:600; }
+  .collection-tools input,.collection-search input { min-height:48px; width:100%; background:var(--sheet); border:1px solid var(--line-strong); padding:12px 14px; font:400 1rem var(--sans); border-radius:0; }
+  .collection-search { max-width:560px; margin-bottom:24px; }
+  .collection-tools .filters { flex-wrap:wrap; }
+  .experience-timeline { margin-top:24px; }
+  .experience-status:empty { display:none; }
+  .experience-status { font-size:.6875rem; text-transform:uppercase; letter-spacing:.08em; color:var(--accent); margin:0 0 10px; }
+  .experience-body>p:not(.experience-status) { font-size:1rem; margin-top:14px; }
+  .experience-details { border-block:1px solid var(--line); margin:22px 0; }
+  .experience-details summary { color:var(--accent); font-size:.9375rem; font-weight:600; cursor:pointer; padding:14px 0; min-height:48px; }
+  .experience-details[open] summary { border-bottom:1px solid var(--line); }
+  .experience-details .plain-list { padding-inline-start:22px; }
+  .experience-details:has(a:focus-visible) { outline:2px solid var(--accent); }
+  .recruiter-checklist { background:var(--sheet); border:1px solid var(--line); border-left:3px solid var(--accent); padding:24px 28px; margin:24px 0; }
+  .recruiter-checklist h2 { font-size:1.6rem; margin-bottom:12px; }
+  .recruiter-checklist p,.recruiter-checklist li { font-size:.9375rem; }
+  .recruiter-checklist ul { padding-left:20px; margin:12px 0; }
+  @media(max-width:1000px) {
+    .hiring-summary { gap:24px 36px; grid-template-columns:minmax(0,.85fr) minmax(0,1.3fr); }
+    .hiring-facts { gap:18px; }
+    .collection-tools { grid-template-columns:1fr; gap:18px; }
+  }
+  @media(max-width:650px) {
+    .hiring-summary { grid-template-columns:1fr; padding-block:32px; gap:28px; }
+    .hiring-intro h2 { font-size:2.2rem; }
+    .hiring-intro h2 br { display:none; }
+    .hiring-links { gap:12px; margin-top:18px; }
+    .hiring-facts { gap:20px 16px; }
+    .hiring-facts dd { font-size:.9375rem; overflow-wrap:anywhere; }
+    .hiring-note { font-size:.75rem; }
+    .evidence-links { display:grid; grid-template-columns:1fr 1fr; gap:16px; align-items:start; padding-bottom:24px; }
+    .evidence-links .text-link { font-size:.8125rem; gap:8px; min-height:48px; }
+    .experience-details summary { font-size:.875rem; }
+  }
+}
+
 @layer motion {
   /* Finite entrance animations: the resting state is always fully visible. */
   @keyframes editorial-enter {
@@ -2485,14 +2535,14 @@
     .approach-section .section-heading.motion-enter h2::after {
       animation:editorial-rule 480ms var(--ease) backwards;
     }
-    nav.is-open { animation:arrive 200ms var(--ease) backwards; }
+    .site-header nav.is-open { animation:arrive 200ms var(--ease) backwards; }
     .school-stage,.resource-row,.certificate-image,.gallery-grid figure {
       transition:translate var(--quick) var(--ease),border-color var(--quick),box-shadow var(--quick);
     }
     .button:focus-visible span[aria-hidden],
     .text-link:focus-visible span[aria-hidden],
     .nav-contact:focus-visible span { transform:translate(3px,-3px); }
-    nav a:focus-visible::after { transform:scaleX(1); }
+    .site-header nav a:focus-visible::after { transform:scaleX(1); }
     @media(hover:hover) and (pointer:fine) {
       .gallery-grid figure:hover { translate:0 -2px; }
       .resource-row:hover { border-color:var(--accent); }

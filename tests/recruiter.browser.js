@@ -1,0 +1,56 @@
+import {defaultContent,mergeContent} from '../src/content.js';
+import {view} from '../src/views.js';
+import {wireCollections} from '../src/collections.js';
+import {config} from '../src/config.js';
+const main=document.querySelector('#main'),results=[];
+const assert=(pass,name)=>{results.push({name,pass:!!pass});if(!pass)throw Error(name);};
+const input=(el,value)=>{el.value=value;el.dispatchEvent(new Event('input',{bubbles:true}));};
+const nativeFetch=window.fetch,nativeConfirm=window.confirm;
+const calls=[];
+try {
+ const c=mergeContent();
+ main.innerHTML=view('teaching',c,'../');wireCollections(main);
+ main.querySelector('[data-experience-filter=Observation]').click();
+ assert(main.querySelectorAll('.experience-row:not([hidden])').length===1,'Teaching filter isolates observation');
+ input(main.querySelector('#experience-search'),'Pehchaan');
+ assert(!main.querySelector('#experience-empty').hidden,'Combined search and category have an honest empty state');
+ main.querySelector('[data-experience-filter=All]').click();
+ assert(main.querySelectorAll('.experience-row:not([hidden])').length===1,'Search persists when category changes');
+ const detail=main.querySelector('.experience-row:not([hidden]) details');detail.querySelector('summary').click();
+ assert(detail.open,'Native experience disclosure opens');
+ detail.querySelector('summary').click();assert(!detail.open,'Native experience disclosure closes');
+ main.innerHTML=view('credentials',c,'../');wireCollections(main);
+ input(main.querySelector('#credential-search'),'Pehchaan');
+ assert(main.querySelectorAll('.certificate-card:not([hidden])').length===1,'Credential search matches issuer');
+ assert(getComputedStyle(main.querySelector('.certificate-card[hidden]')).display==='none','Filtered credentials remain hidden');
+ assert(main.querySelector('#credential-count').textContent==='1 of 4 credentials shown','Credential count announces the result');
+ main.innerHTML=view('admin',c,'../');
+ window.fetch=async(url,options={})=>{
+   calls.push({url:String(url),method:options.method||'GET',body:options.body});
+   let data;
+   if(String(url).includes('/auth/v1/token'))data={user:{id:config.ownerId},access_token:'isolated-test-token'};
+   else if(options.method==='PATCH')data=[{content:JSON.parse(options.body).content,updated_at:'2026-09-12T12:00:00Z'}];
+   else data=[{content:structuredClone(c),updated_at:'2026-09-12T11:00:00Z'}];
+   return new Response(JSON.stringify(data),{status:200,headers:{'Content-Type':'application/json'}});
+ };
+ window.confirm=()=>true;
+ const {initStudio}=await import('../src/admin.js');initStudio('../');
+ input(main.querySelector('[name=email]'),'test@example.com');input(main.querySelector('[name=password]'),'isolated-test-password');
+ main.querySelector('#login-form').requestSubmit();
+ for(let i=0;i<50&&!main.querySelector('#readiness-list');i++)await new Promise(r=>setTimeout(r,20));
+ assert(!!main.querySelector('#readiness-list'),'Owner editor renders readiness guidance with mocked login');
+ assert(main.querySelector('[data-field=location]').value==='Noida','Confirmed city loads into owner editor');
+ input(main.querySelector('[data-field=location]'),'Local fixture city');
+ main.querySelector('#preview').click();
+ assert(main.querySelector('#preview-content').textContent.includes('Local fixture city'),'Unpublished recruiter edits appear in preview');
+ main.querySelector('#close-preview').click();
+ main.querySelector('#publish').click();
+ for(let i=0;i<50&&!main.querySelector('#studio-status').textContent.includes('Published successfully');i++)await new Promise(r=>setTimeout(r,20));
+ const patch=calls.find(x=>x.method==='PATCH');
+ assert(!!patch&&patch.url.includes('updated_at=eq.'),'Publish retains optimistic version check');
+ const saved=JSON.parse(patch.body).content;
+ assert(saved.schemaVersion===4&&saved.profile.location==='Local fixture city','Mocked publish preserves the new schema and edited field');
+ assert(saved.experiences.some(x=>x.id==='panchsheel'),'Ongoing internship survives mocked save');
+ assert(calls.length===3,'Only mocked auth, read and publish requests occurred');
+}catch(error){results.push({name:String(error),pass:false});}
+finally{window.fetch=nativeFetch;window.confirm=nativeConfirm;document.querySelector('#results').textContent=JSON.stringify(results,null,2);document.body.dataset.testResult=results.every(x=>x.pass)?'pass':'fail';}
