@@ -38,6 +38,8 @@ try {
     assert(main.querySelectorAll('.resource-row').length===2,'New resources rendered');
     main.querySelector('[data-filter=Assessment]').click();
     assert(main.querySelectorAll('.resource-row:not([hidden])').length===1,'Filter handles replaced resource rows');
+    assert(main.querySelector('#resource-count').textContent==='1 of 2 files shown','Live count follows filtered rows');
+    assert(getComputedStyle(main.querySelector('.resource-row[hidden]')).display==='none','Hidden rows stay hidden under the new layout');
     assert(main.querySelector('.resource-row:not([hidden]) h3').textContent==='Test assessment','Correct filtered resource remains');
     main.querySelector('[data-filter=All]').click();
     assert(main.querySelectorAll('.resource-row:not([hidden])').length===2,'All filter restores rows');

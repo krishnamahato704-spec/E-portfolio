@@ -84,3 +84,15 @@ test('Clarified recruiter facts survive loading the legacy public record',()=>{
  const c=mergeContent({qualifications:[{title:'M.A. History',place:'Postgraduate study in History',period:'2025–Present',status:'In progress'}]});
  const html=view('profile',c);assert.match(html,/IGNOU/);assert.match(html,/First year cleared/);assert.match(html,/CTET applied/);assert.match(html,/May 2027/);
 });
+test('Editorial records retain owner order and escape document metadata',()=>{
+ const c=structuredClone(defaultContent);
+ c.experiences.reverse();
+ const teaching=view('teaching',c);
+ assert.ok(teaching.indexOf(esc(c.experiences[0].title))<teaching.indexOf(esc(c.experiences[1].title)));
+ for(const entry of c.experiences)assert.ok(teaching.includes(esc(entry.period)));
+ c.certificates=[{...c.certificates[0],issuer:'<em>Owner issuer</em>',date:'Owner date'}];
+ const evidence=view('credentials',c);
+ assert.match(evidence,/<dt>Issued by<\/dt><dd>&lt;em&gt;Owner issuer&lt;\/em&gt;<\/dd>/);
+ assert.match(evidence,/<dt>Date<\/dt><dd>Owner date<\/dd>/);
+ assert.match(view('resources',c),/id="resource-count"[^>]*role="status"/);
+});
