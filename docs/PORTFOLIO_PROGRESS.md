@@ -27,12 +27,12 @@ Normalize existing public facts into schema version 4, add optional recruiter fi
 
 Expose key facts without extra clicks, make experience/evidence browsing filterable, preserve accessible static fallback, and reflect owner edits consistently across home/profile/résumé/contact.
 
-- Branch `feature/recruiter-experience` created from baseline main. No code commit or PR yet.
+- Branch `feature/recruiter-experience` created from baseline main. Source commit: 373e1b36fa490e971566fcf9676fe62f68622d61. PR: https://github.com/krishnamahato704-spec/E-portfolio/pull/7 (open, unmerged).
 - Local preview: `http://127.0.0.1:4175/E-portfolio/` (server session 41308).
 - Implemented recruiter summary, shared study status, dynamic experience cards, native activity disclosures, searchable/category-filtered experiences and credentials, resource search, and owner readiness guidance.
 - Visual refinements: scoped header navigation rules so mobile evidence links remain visible; made evidence links compact on mobile; removed duplicated status text and fixed heading whitespace.
 
-## Stage 4 — Designer/HR review and tests (complete); GitHub delivery in progress
+## Stage 4 — Designer/HR review, tests and GitHub delivery (complete)
 
 Review desktop/mobile screenshots, verify all routes and dynamic refresh, exercise editor with isolated mocks, run Node/CI tests and record limitations. Create a review PR. A new merge was not requested in this turn; leave code ready for review.
 
@@ -41,7 +41,7 @@ Review desktop/mobile screenshots, verify all routes and dynamic refresh, exerci
 - Review report: `work/E-portfolio-recruiter/docs/RECRUITER_REVIEW.md`.
 - Designer/HR conclusion: suitable professional presentation for an emerging educator; key recruiter facts and evidence access are clearer. No claim that in-progress qualifications establish eligibility for every vacancy.
 - Content still needed from owner: authentic lesson plan/assessment, current internship responsibilities and dates when confirmed, optional current CV PDF. Do not fabricate these.
-- Next action: commit reviewed files to `feature/recruiter-experience`, open one PR to main, verify CI, and record PR/commit here. Backend update is already live; frontend is not yet merged.
+- GitHub build, Node tests and generated-page drift checks passed on source commit 373e1b3 (push run 34675257825; PR run 34675274042). Next action: visual review/merge of PR 7. Backend update is already live; frontend is not yet merged. Further content work should use actual owner-supplied evidence.
 
 ## Resume instructions
 
