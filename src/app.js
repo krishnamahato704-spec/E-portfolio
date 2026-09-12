@@ -1,6 +1,6 @@
 import {loadContent} from './cloud.js';
 import {mergeContent,validateContent} from './content.js';
-import {view} from './views.js?v=editorial-motion-20260911';
+import {view} from './views.js?v=editorial-identity-20260911';
 import {initMotion,cleanupMotion} from './motion.js';
 const route=document.body.dataset.route;
 const base=document.body.dataset.base;
@@ -34,6 +34,7 @@ function wire(){
   const filter=button.dataset.filter;
   document.querySelectorAll('[data-filter]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));
   let shown=0; document.querySelectorAll('.resource-row').forEach(row=>{row.hidden=filter!=='All'&&row.dataset.category!==filter;if(!row.hidden) shown++;});
+  const count=document.querySelector('#resource-count');if(count)count.textContent=`${shown} of ${document.querySelectorAll('.resource-row').length} files shown`;
   const empty=document.querySelector('#resource-empty');empty.hidden=shown>0;if(!shown)empty.textContent=filter==='All'?'Lesson plans and assessment files have not yet been published. Explore the teaching design above.':'No files in this category yet.';
  }));
  document.querySelectorAll('img').forEach(im=>im.addEventListener('error',()=>{const note=document.createElement('p');note.className='image-error';note.textContent=im.alt+' — image temporarily unavailable.';im.replaceWith(note)},{once:true}));
