@@ -38,11 +38,11 @@ export function initMotion({ initial = false } = {}) {
     marked.add(element);
     element.classList.add(hero ? 'motion-hero' : 'motion-enter');
   };
-  root.addEventListener('animationend', e => {
+  document.addEventListener('animationend', e => {
     // Stagger children must finish before their parent drops its trigger.
     if (marked.has(e.target) && e.target.dataset.motion !== 'stagger') finish(e.target);
   }, { signal: events.signal });
-  root.addEventListener('focusin', e => {
+  document.addEventListener('focusin', e => {
     // A keyboard user never has to wait for the focused control to arrive.
     for (let el = e.target; el && el !== root; el = el.parentElement) finish(el);
   }, { signal: events.signal });
@@ -50,8 +50,10 @@ export function initMotion({ initial = false } = {}) {
   const hero = root.querySelector('.hero');
   if (hero && initial && !heroPlayed && scrollY < 24) {
     heroPlayed = true;
-    hero.querySelectorAll('.hero-copy > *, .portrait-frame').forEach((el, i) => {
-      el.dataset.motionIndex = String(Math.min(i, 5));
+    const navigation = document.querySelector('.site-header .header-inner');
+    if (navigation) { navigation.dataset.motionIndex = '0'; enter(navigation, true); }
+    hero.querySelectorAll('[data-hero-step]').forEach(el => {
+      el.dataset.motionIndex = el.dataset.heroStep;
       enter(el, true);
     });
   }

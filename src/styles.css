@@ -1,5 +1,6 @@
 /* Visual foundation: a modern classroom and curated history archive. */
-@layer reset,tokens,base,components,layout,responsive,identity,recruiter,foundation,motion,print;
+@layer reset,tokens,base,components,layout,responsive,identity,recruiter,foundation,opening,motion,print;
+@import url('./opening.css?v=opening-20260912') layer(opening);
 @font-face {
   font-family:'Source Serif 4';
   font-style:normal;
@@ -2734,4 +2735,15 @@
   @media(prefers-reduced-motion:reduce), print {
     [data-motion],[data-motion] > *,[data-parallax],.hover-lift { animation:none!important; transform:none!important; translate:none!important; clip-path:none!important; }
   }
+}
+@layer motion { @media(prefers-reduced-motion:no-preference) { .opening-hero h1.motion-hero { animation-name:archive-mask; } } }
+
+@layer motion {
+ @keyframes opening-resolve { from { opacity:0; transform:translateY(12px); filter:blur(1px); } to { opacity:1; transform:none; filter:blur(0); } }
+ @media(prefers-reduced-motion:no-preference) {
+  .opening-hero .portrait-frame.motion-hero { animation-name:opening-resolve; }
+  .motion-hero[data-motion-index="6"] { --motion-delay:270ms; }
+  .motion-hero[data-motion-index="7"] { --motion-delay:315ms; }
+  @media(max-width:650px) { .motion-hero[data-motion-index] { animation-delay:0ms; animation-duration:300ms; } .opening-hero .portrait-frame.motion-hero { animation-name:editorial-enter; } }
+ }
 }

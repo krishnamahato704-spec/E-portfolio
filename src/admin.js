@@ -2,7 +2,7 @@ import {wireCollections} from './collections.js?v=recruiter-20260912';
 import {recruitmentGaps} from './recruiter.js?v=recruiter-20260912';
 import {loadContent,signIn,signOut,saveContent,uploadFile,validateFile} from './cloud.js?v=upload-20260912';
 import {mergeContent,validateContent} from './content.js?v=recruiter-20260912';
-import {esc,view} from './views.js?v=recruiter-20260912';
+import {esc,view} from './views.js?v=opening-20260912';
 let session=null, draft=null, version=null, dirty=false, base='./',busy=false;
 const schemas={
  qualifications:{label:'Education',fields:{title:'Qualification',place:'Institution / result',period:'Study period',status:'Status',expected:'Expected completion (optional)',note:'Progress note (optional)'}},

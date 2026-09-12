@@ -1,24 +1,16 @@
 import {wireCollections} from './collections.js?v=recruiter-20260912';
 import {loadContent} from './cloud.js?v=recruiter-20260912';
 import {mergeContent,validateContent} from './content.js?v=recruiter-20260912';
-import {view} from './views.js?v=recruiter-20260912';
-import {initMotion,cleanupMotion} from './motion.js';
+import {view} from './views.js?v=opening-20260912';
+import {initNavigation} from './navigation.js?v=opening-20260912';
+import {initMotion,cleanupMotion} from './motion.js?v=opening-20260912';
 const route=document.body.dataset.route;
 const base=document.body.dataset.base;
 let content=mergeContent();
 let interacted=false;
 document.addEventListener('input',()=>{interacted=true},{once:true});
 document.addEventListener('click',e=>{if(e.target.closest('#main button,#main input,#main textarea,#main summary'))interacted=true;});
-document.querySelector('.menu-toggle')?.addEventListener('click',e=>{
- const button=e.currentTarget; const open=button.getAttribute('aria-expanded')!=='true';
- button.setAttribute('aria-expanded',String(open));document.querySelector('#navigation').classList.toggle('is-open',open);
-});
-document.addEventListener('keydown',e=>{
- const toggle=document.querySelector('.menu-toggle');
- if(e.key==='Escape' && toggle?.getAttribute('aria-expanded')==='true'){
-  toggle.setAttribute('aria-expanded','false');document.querySelector('#navigation').classList.remove('is-open');toggle.focus();
- }
-});
+initNavigation();
 function wire(){
  document.querySelector('#print-resume')?.addEventListener('click',()=>window.print());
  document.querySelector('.copy-email')?.addEventListener('click',async e=>{
@@ -34,7 +26,7 @@ function wire(){
  wireCollections();
  document.querySelectorAll('img').forEach(im=>im.addEventListener('error',()=>{const note=document.createElement('p');note.className='image-error';note.textContent=im.alt+' — image temporarily unavailable.';im.replaceWith(note)},{once:true}));
 }
-if(route==='admin') import('./admin.js?v=upload-20260912').then(x=>x.initStudio(base));
+if(route==='admin') import('./admin.js?v=opening-20260912').then(x=>x.initStudio(base));
 else {
  wire();
  initMotion({initial:true});

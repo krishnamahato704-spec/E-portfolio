@@ -33,7 +33,7 @@ try {
   main.innerHTML = view('home',defaultContent,'../');
   await check('Initial hero sequence is finite and completes visibly',async () => {
     initMotion({initial:true});
-    assert(main.querySelectorAll('.motion-hero').length === 6,'Six hero steps expected');
+    assert(main.querySelectorAll('.motion-hero').length === 7,'Seven hero steps expected (navigation is tested separately)');
     await wait(800);
     assert(!main.querySelector('.motion-hero'),'Hero classes must clear');
     assert(getComputedStyle(main.querySelector('h1')).opacity === '1','Headline must remain visible');
