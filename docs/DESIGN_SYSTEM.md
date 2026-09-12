@@ -1,32 +1,28 @@
-# Teaching journal visual system
+# Task 1: visual foundation
 
-This visual update treats Krishna Mahato's portfolio as a considered teaching journal: an oxblood opening spread, warm paper, marginal labels, fine rules and documentary evidence. It suits a History and Social Science educator without adding historical decoration, stock imagery or invented content.
+A modern digital classroom meets a curated history archive. This update changes shared styling only; section markup, factual content, routes and cloud/editor logic are preserved.
 
-## Shared rules
+## Tokens and primitives
 
-- `src/styles.css` owns the full system, ordered as reset, tokens, base, components, layout, responsive, motion and print layers.
-- Paper `#f7f3eb`, document sheet `#fffdf8`, text `#292628`, secondary text `#625d58`, oxblood `#692b36`, dark sections `#30292c`, and restrained gold `#ddbf88`.
-- Source Serif 4 regular and italic provide the literary voice. Both Latin WOFF2 files are self-hosted, total 40,180 bytes, with the SIL Open Font License included. Segoe UI and Arial handle navigation, labels and body text. Georgia remains the serif fallback.
-- Body text starts at 16px with 1.75 line height; labels and controls use readable rem units. Small 12–13px type is reserved for secondary labels and metadata.
-- Fluid gutters and section spacing, a 1240px maximum container, a 66-character prose measure, 2px control corners, and visible rules replace repeated rounded cards.
-- Buttons and filters have a minimum 44px target height. Visible focus uses a 3px outline; dark panels use gold focus outlines. Escape closes the mobile menu and restores focus to its toggle.
-- Brief translation and hover effects stay subtle. Reduced-motion rules disable animation and transitions. Static content remains visible while Supabase loads.
+- Ink #202a2e, ivory #f6f3eb, sheet #fffdf8, brass #756039 (hover #584727), light brass #c8b17d for dark surfaces, sage #4f604b, sage surface #e7ebe1. Legacy surface colors now use semantic CSS tokens.
+- Self-hosted Source Serif 4 for editorial headings; Segoe UI/Arial for body and controls. Seven named type tokens and type-* utility classes cover display, section, subheading, body, label, caption and metadata. Existing hero type composition is retained.
+- 1240px content maximum, fluid gutters, 66ch text measure, fluid 64–128px section-space token, 24–40px card padding and 2px corners. Shared card, stack, auto-grid, text-measure and archive-margin primitives support later tasks.
+- Fine existing rules and extremely faint CSS grain provide archival detail. Existing necessary panels share restrained borders and a soft ink shadow.
 
-## Page treatments
+## Motion usage for future tasks
 
-The home page pairs the introduction and joining availability with a framed authentic portrait. The internship feature reads as field notes; the teaching principles use a dark reading surface. Inner pages use marginal chapter labels. Qualifications stay scannable in ruled rows. Certificates pair complete, uncropped document previews with their existing descriptions. Resources use a distinct planning panel. Contact, résumé and Studio share the same typographic and control vocabulary. Print styling removes navigation and decorative surfaces.
+Use data-motion="fade-up", "masked-text", "image", "stagger", or "section" on an opt-in wrapper inside #main. The existing observer activates these only as content enters view. Stagger applies to direct children, capped at 180ms delay. Use hover-lift for interactive surfaces. data-parallax is an optional desktop CSS scroll-timeline enhancement (8px travel in each direction); unsupported browsers remain static. Do not combine reveal and parallax on the same element; use nested wrappers. Nothing is hidden without JavaScript. Reduced-motion and print disable these effects. No new utilities are attached to section markup in Task 1.
 
-## Preservation and validation
+## Changed files
 
-- Compared all twelve generated HTML pages with production. They match exactly after normalising only the theme-colour value and stylesheet version query.
-- `content.js`, `views.js`, `cloud.js`, `config.js`, `admin.js`, no-script styles, sitemap and robots file remain unchanged.
-- All 12 existing Node tests pass; the link validator now correctly ignores query strings when resolving local files.
-- Browser-checked every route at 320, 768 and 1440px: no horizontal document overflow and no unlabelled form controls. Also visually reviewed the home and owner editor at 390px.
-- Reviewed home, credentials, internship story, contact and the owner editor visually. All four certificates retain original-file links and their existing optimized previews.
-- Checked normal rendered text contrast across eleven public/sign-in pages: no sampled text failed the applicable 4.5:1 or large-text 3:1 threshold. This is a focused check, not a claim of a full WCAG audit.
-- Verified menu open/Escape/focus return, resource filtering, required contact fields and email-copy success feedback.
-- Reviewed print rules, no-script navigation and reduced-motion behavior using isolated local fixtures derived from the exact source. These fixtures were removed before commit. Printed PDF pagination was not tested.
-- The owner editor was reviewed using a local rendering of its existing template. No live owner login, upload or database publish was attempted; no credentials were supplied and no Supabase data was changed.
-- No runtime dependencies were added. No Lighthouse score is claimed.
+- src/styles.css: tokens, shared visual primitives and motion utilities.
+- src/motion.js: prevent child animation completion from prematurely clearing a stagger wrapper.
+- scripts/build.mjs: ink browser theme color and stylesheet cache version.
+- docs/DESIGN_SYSTEM.md: current system and verification record.
+- Generated output: index.html, 404.html, admin/index.html, contact/index.html, credentials/index.html, profile/index.html, resources/index.html, resume/index.html, teaching/index.html, teaching/democracy/index.html, teaching/observation/index.html, teaching/pehchaan/index.html. Only theme color and stylesheet query change in these files.
 
-The recruiter review focused on fast candidate recognition, legible availability and qualifications, clear distinctions between teaching and observation, and evidence that can be examined easily. All factual wording remains the existing reviewed wording.
+## Verification
+
+Build: 12 pages. Node: 18 tests passed. Existing browser suites: 38 assertions passed, including search/filter, mocked owner login/upload/preview/publish, observer lifecycle, keyboard visibility and reduced motion. All 12 routes checked at 320, 390, 768 and 1440px with no horizontal document overflow or JavaScript page errors. Desktop and mobile home screenshots visually reviewed. Supabase project was confirmed ACTIVE_HEALTHY; no data/schema/storage changes were needed. Owner writes were tested with local mocks, not a live account session.
+
+Task 1 only. No section redesign or Task 2 work.

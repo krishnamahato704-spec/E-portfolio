@@ -39,7 +39,8 @@ export function initMotion({ initial = false } = {}) {
     element.classList.add(hero ? 'motion-hero' : 'motion-enter');
   };
   root.addEventListener('animationend', e => {
-    if (marked.has(e.target)) finish(e.target);
+    // Stagger children must finish before their parent drops its trigger.
+    if (marked.has(e.target) && e.target.dataset.motion !== 'stagger') finish(e.target);
   }, { signal: events.signal });
   root.addEventListener('focusin', e => {
     // A keyboard user never has to wait for the focused control to arrive.
