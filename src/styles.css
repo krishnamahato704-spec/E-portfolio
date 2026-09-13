@@ -552,12 +552,14 @@
   }
   .portrait-frame {
     width:100%;
-    max-width:370px;
+    max-width:320px;
     justify-self:end;
     background:var(--sheet);
     color:var(--accent);
-    padding:12px;
-    box-shadow:10px 10px 0 var(--shadow-ink)
+    padding:10px;
+    border:1px solid var(--line);
+    border-radius:4px;
+    box-shadow:0 8px 24px -12px var(--shadow-ink);
   }
   .portrait-top {
     font:500 .75rem/1.4 var(--sans);
@@ -565,28 +567,42 @@
     display:flex;
     justify-content:space-between;
     gap:10px;
-    padding:3px 0 12px
+    padding:3px 0 10px;
   }
-  .portrait-frame .portrait {
-    height:350px;
+  .portrait-window {
+    position:relative;
+    overflow:hidden;
     width:100%;
+    aspect-ratio:4/5;
+    background:var(--paper-warm,#eae4d8);
+    border:1px solid var(--line);
+    border-radius:2px;
+  }
+  .portrait-frame .portrait,
+  .portrait-window .portrait {
+    width:100%;
+    height:100%;
     object-fit:cover;
-    object-position:center 27%;
-    filter:saturate(.82)
+    object-position:50% 16%;
+    filter:saturate(.9);
+    display:block;
   }
   .portrait-frame figcaption {
     display:flex;
     align-items:center;
     justify-content:space-between;
-    gap:15px;
-    padding:17px 4px 5px;
-    font:1.25rem/1.35 var(--serif)
+    gap:12px;
+    padding:10px 4px 2px;
+    font:400 .875rem/1.35 var(--serif);
+    color:var(--ink);
   }
   .portrait-frame strong {
-    font-weight:400
+    font-weight:400;
   }
   .portrait-mark {
-    font:2rem var(--sans)
+    font-size:1.15rem;
+    color:var(--accent);
+    flex-shrink:0;
   }
   .snapshot {
     background:var(--sheet);
@@ -5209,20 +5225,19 @@
   line-height: 1.5;
 }
 
-/* Hero Portrait snug alignment */
+/* Hero Portrait snug alignment & standardized system */
 .opening-visual .portrait-frame {
-  margin-top: 0;
+  margin: 0 auto;
 }
 .opening-visual .portrait-window {
-  aspect-ratio: 4 / 4.7;
-  max-height: 380px;
-  background: transparent;
+  aspect-ratio: 4 / 5;
+  background: var(--paper-warm, #eae4d8);
 }
 .opening-visual .portrait-window img.portrait {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center 20%;
+  object-position: 50% 16%;
   display: block;
 }
 
