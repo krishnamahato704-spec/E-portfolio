@@ -45,7 +45,11 @@ export function initMotion({ initial = false } = {}) {
   // Changing the OS preference immediately stops active motion. Re-enabling
   // does not replay already-read content or add a second listener set.
   preference.addEventListener('change', stop, { signal: events.signal });
-  if (preference.matches) return;
+  if (preference.matches) {
+    const video = root.querySelector('.hero-bg-video');
+    if (video) video.pause();
+    return;
+  }
 
   const enter = (element, hero = false) => {
     marked.add(element);
