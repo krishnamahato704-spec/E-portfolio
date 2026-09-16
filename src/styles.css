@@ -5096,7 +5096,41 @@
 
 
 
-/* Image Placeholders */
+/* Image Placeholders / Classroom Artifacts */
+.image-placeholder {
+  margin: 2rem 0;
+  border: 1px dashed var(--line-strong);
+  border-radius: 4px;
+  background: var(--surface-muted);
+  padding: 8px;
+  box-sizing: border-box;
+}
+.placeholder-box {
+  min-height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--sheet);
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  padding: 1.5rem;
+  text-align: center;
+  color: var(--muted);
+  font: 500 0.8125rem/1.5 var(--sans);
+  letter-spacing: 0.04em;
+}
+.placeholder-box span::before {
+  content: '▤ ';
+  color: var(--accent);
+  margin-right: 4px;
+}
+.image-placeholder figcaption {
+  font: 400 0.8125rem/1.4 var(--serif);
+  color: var(--ink);
+  padding: 8px 4px 2px;
+  font-style: italic;
+}
+
 /* --- Vertical Spacing Polish --- */
 .section-heading {
   display: flex;
