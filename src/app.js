@@ -39,11 +39,5 @@ else {
   const footerEmail=document.querySelector('.email-link');if(footerEmail){footerEmail.href='mailto:'+content.profile.email;footerEmail.textContent=content.profile.email+' ↗';}
   const brand=document.querySelector('.brand');if(brand)brand.setAttribute('aria-label',content.profile.name+' — Home');
   const caption=document.querySelector('.brand-caption');if(caption?.firstChild)caption.firstChild.textContent=content.profile.name;
-  // Avoid interrupting an interaction when a slow request finishes.
-  if(!interacted && !document.querySelector('#main').contains(document.activeElement)){
-   cleanupMotion();
-   document.querySelector('#main').innerHTML=view(route,content,base);wire();
-   initMotion();
-  }
  }).catch(()=>{});
 }

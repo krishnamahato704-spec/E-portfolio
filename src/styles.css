@@ -5097,39 +5097,24 @@
 
 
 /* Image Placeholders */
-.image-placeholder {
-  display: block;
-  margin: 2rem 0;
-  width: 100%;
-}
-.placeholder-box {
-  background: var(--paper-warm, #eae4d8);
-  border: 1px dashed var(--line);
-  aspect-ratio: 16 / 9;
+/* --- Vertical Spacing Polish --- */
+.section-heading {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--accent);
-  font-family: var(--font-sans);
-  font-size: 0.875rem;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: var(--space-4);
+  margin-bottom: var(--space-5);
 }
-.image-placeholder figcaption {
-  font-family: var(--font-sans);
-  font-size: 0.8125rem;
-  color: var(--accent);
-  margin-top: 0.75rem;
-  text-align: center;
+@media(max-width: 650px) {
+  .section-heading {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-3);
+    margin-bottom: var(--space-4);
+  }
 }
-
-/* Gallery Tab */
-.gallery-page .placeholder-gallery-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 2rem;
-  margin-top: 2rem;
-}
-.card-placeholder .placeholder-box {
-  aspect-ratio: 4 / 3;
+.section-heading h2 { margin: 0; }
+.section-heading .eyebrow { margin-bottom: var(--space-2); }
+.stack > * + * {
+  margin-block-start: var(--stack-space, 1.5rem);
 }

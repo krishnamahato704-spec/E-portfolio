@@ -50,6 +50,10 @@ export function initMotion({ initial = false } = {}) {
     if (video) video.pause();
     return;
   }
+  const video = root.querySelector('.hero-bg-video');
+  if (video && video.dataset.src && !video.src) {
+    video.src = video.dataset.src;
+  }
 
   const enter = (element, hero = false) => {
     marked.add(element);
