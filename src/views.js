@@ -536,6 +536,207 @@ function profileExitPath(base) {
 }
 function evidenceLinks(base){return '<nav class="evidence-links" aria-label="Explore teaching evidence">'+link(base,'democracy','Illustrative lesson design')+link(base,'credentials','Certificates & presentation')+'</nav>';}
 
+function homePhilosophy(c, base) {
+  return `
+<section class="section home-philosophy-section" aria-labelledby="home-philosophy-title">
+  <div class="container">
+    <div class="philosophy-header-wrap">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow"><span class="chapter-number" aria-hidden="true">03</span><span class="chapter-label">Teaching Philosophy</span></p>
+          <h2 id="home-philosophy-title">Inquiry over recall.<br><em>Evidence before assertion.</em></h2>
+        </div>
+        ${link(base, 'teaching', 'Explore philosophy & practice')}
+      </div>
+      <p class="philosophy-lead">A pedagogical approach shaped by formal teacher education, school observation, and the conviction that students understand history when they investigate it like historians.</p>
+    </div>
+    <div class="home-principles-grid">
+      <article class="home-principle-card">
+        <span class="principle-num" aria-hidden="true">01</span>
+        <span class="principle-tag">FOUNDATIONAL INQUIRY</span>
+        <h3>Inquiry before recall</h3>
+        <p>I begin with a question, source or puzzle so that dates and events become evidence in an explanation—not isolated facts to memorise.</p>
+        <div class="principle-foot">
+          <strong>Classroom Implication:</strong>
+          <span>Students examine primary sources, maps, and contradictory accounts before dates and timelines.</span>
+        </div>
+      </article>
+      <article class="home-principle-card">
+        <span class="principle-num" aria-hidden="true">02</span>
+        <span class="principle-tag">DIFFERENTIATED PATHWAYS</span>
+        <h3>Different routes, shared depth</h3>
+        <p>Scaffolded prompts, visual sources, discussion and deeper comparison help learners reach the same meaningful understanding regardless of starting points.</p>
+        <div class="principle-foot">
+          <strong>Classroom Implication:</strong>
+          <span>Flexible comprehension routes balance textual analysis, visual interpretation, and structured dialogue.</span>
+        </div>
+      </article>
+      <article class="home-principle-card">
+        <span class="principle-num" aria-hidden="true">03</span>
+        <span class="principle-tag">FORMATIVE FEEDBACK</span>
+        <h3>Assessment that changes teaching</h3>
+        <p>Short checks, source-based tasks and specific feedback reveal what learners understand and what the next lesson must address.</p>
+        <div class="principle-foot">
+          <strong>Classroom Implication:</strong>
+          <span>Diagnostic checks determine whether to reteach with fresh scaffolding or advance to synthesis.</span>
+        </div>
+      </article>
+    </div>
+    <div class="home-influences-banner">
+      <span class="influences-tag">INTELLECTUAL FOUNDATIONS</span>
+      <div class="influences-items">
+        <div class="influence-item">
+          <strong>Rabindranath Tagore</strong>
+          <span>Curiosity, creative expression &amp; holistic engagement</span>
+        </div>
+        <span class="influence-sep" aria-hidden="true">·</span>
+        <div class="influence-item">
+          <strong>Lev Vygotsky</strong>
+          <span>Social dialogue, the zone of proximal development &amp; guided autonomy</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>`;
+}
+
+function homeFeaturedArtifact(c, base) {
+  return `
+<section class="section compact home-featured-artifact" aria-labelledby="home-artifact-title">
+  <div class="container">
+    <div class="featured-artifact-composition">
+      <div class="artifact-narrative-col">
+        <p class="eyebrow"><span class="chapter-number" aria-hidden="true">04</span><span class="chapter-label">Selected Teaching Work</span></p>
+        <h2 id="home-artifact-title">Teaching Democracy:<br><em>More than a definition.</em></h2>
+        <p class="artifact-lead">A differentiated lesson design for middle and secondary Social Science, planning for a single shared intention through flexible comprehension pathways.</p>
+        <div class="artifact-stages-strip">
+          <span class="strip-label">INSTRUCTIONAL PROGRESSION</span>
+          <div class="stages-flow" role="list">
+            <span class="stage-chip" role="listitem">01 Question</span>
+            <span class="stage-arrow" aria-hidden="true">→</span>
+            <span class="stage-chip" role="listitem">02 Explore</span>
+            <span class="stage-arrow" aria-hidden="true">→</span>
+            <span class="stage-chip" role="listitem">03 Discuss</span>
+            <span class="stage-arrow" aria-hidden="true">→</span>
+            <span class="stage-chip" role="listitem">04 Explain</span>
+            <span class="stage-arrow" aria-hidden="true">→</span>
+            <span class="stage-chip" role="listitem">05 Assess</span>
+            <span class="stage-arrow" aria-hidden="true">→</span>
+            <span class="stage-chip" role="listitem">06 Reflect</span>
+          </div>
+        </div>
+        <div class="actions">
+          ${link(base, 'democracy', 'Explore Teaching Design', 'button primary')}
+          ${link(base, 'resources', 'View All Artifacts', 'button secondary')}
+        </div>
+      </div>
+      <div class="artifact-visual-col">
+        <div class="artifact-preview-card">
+          <div class="preview-header">
+            <span class="doc-badge">ILLUSTRATIVE LESSON DESIGN</span>
+            <span class="doc-code">ARTEFACT / DEM-01</span>
+          </div>
+          <a class="preview-image-link archive-doc-frame" href="${base}teaching/democracy/" aria-label="Open Teaching Democracy lesson design">
+            <img class="preview-thumb-img" src="${base}assets/democracy-thumb.webp" alt="Instructional design framework diagram for Teaching Democracy" loading="lazy" decoding="async">
+            <span class="doc-view-hint" aria-hidden="true">Examine lesson framework ↗</span>
+          </a>
+          <p class="preview-caption">
+            <strong>Social Science &amp; History</strong> · Classes 6–8 · Primary sources, visual dialogue &amp; tiered assessment
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>`;
+}
+
+function homeCredentialsHighlight(c, base) {
+  return `
+<section class="section compact home-credentials-section" aria-labelledby="home-cred-title">
+  <div class="container">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow"><span class="chapter-number" aria-hidden="true">05</span><span class="chapter-label">Academic Foundations</span></p>
+        <h2 id="home-cred-title">Degrees, credentials &amp;<br><em>scholarly engagement.</em></h2>
+      </div>
+      ${link(base, 'credentials', 'View all verified credentials')}
+    </div>
+    <div class="credentials-curated-grid">
+      <article class="curated-cred-card">
+        <span class="cred-category">TEACHER EDUCATION</span>
+        <h3>Bachelor of Education (B.Ed.)</h3>
+        <p class="cred-place">Amity Institute of Education, Amity University, Noida</p>
+        <p class="cred-note">Pedagogy subjects: Social Science / History &amp; English · Expected completion April 2027</p>
+        <span class="status progress">In progress</span>
+      </article>
+      <article class="curated-cred-card">
+        <span class="cred-category">POSTGRADUATE STUDY</span>
+        <h3>M.A. History</h3>
+        <p class="cred-place">Indira Gandhi National Open University (IGNOU)</p>
+        <p class="cred-note">First year cleared · Specialisation in Indian Historiography · Final examinations June 2027</p>
+        <span class="status progress">In progress</span>
+      </article>
+      <article class="curated-cred-card">
+        <span class="cred-category">GRADUATION</span>
+        <h3>B.A. History &amp; Economics</h3>
+        <p class="cred-place">Gurukula Kangri (Deemed to be University)</p>
+        <p class="cred-note">Academic distinction · CGPA 8.80 · Graduated 2021</p>
+        <span class="status">Completed</span>
+      </article>
+      <article class="curated-cred-card cred-presentation">
+        <span class="cred-category">NATIONAL SEMINAR</span>
+        <h3>Rootedness in India: NEP 2020</h3>
+        <p class="cred-place">Amity Institute of Education · GAIL (India) Limited</p>
+        <p class="cred-note">Co-author and presenter on Indian Knowledge Systems (IKS) in teacher education (March 2026)</p>
+        <span class="status">Presentation</span>
+      </article>
+    </div>
+  </div>
+</section>`;
+}
+
+function homeReflection(c, base) {
+  return `
+<section class="section compact home-reflection-section" aria-labelledby="reflection-title">
+  <div class="container">
+    <div class="reflection-quote-card">
+      <p class="eyebrow">Educator Reflection</p>
+      <blockquote class="reflection-quote" id="reflection-title">
+        “Good teaching starts with a good <em>question.</em>”
+      </blockquote>
+      <p class="reflection-body">
+        History is not a ledger of completed dates; it is the discipline of asking how we know, whose voice is recorded, and what evidence justifies our claims. When students learn to weigh sources critically, they gain confidence not only in the classroom, but as citizens.
+      </p>
+      <div class="reflection-author">
+        <span class="author-name">Krishna Mahato</span>
+        <span class="author-desc">History, Social Science &amp; English Educator · Candidate for TGT &amp; PGT Roles</span>
+      </div>
+    </div>
+  </div>
+</section>`;
+}
+
+function homeClosingCTA(c, base) {
+  const p = c.profile;
+  return `
+<section class="container home-closing-section">
+  <div class="closing-cta-card">
+    <div class="closing-copy">
+      <p class="eyebrow">Let's Connect</p>
+      <h2>Looking for a thoughtful,<br>inquiry-driven <em>educator?</em></h2>
+      <p class="closing-lead">Open for school teaching positions (TGT Social Science, TGT English, PGT History post-M.A. 2027), school visits, and demonstration lessons.</p>
+      <p class="closing-meta">
+        <strong>${esc(p.eligibility)}</strong> · Available from <strong>${esc(p.availability)}</strong>
+      </p>
+    </div>
+    <div class="closing-actions">
+      ${link(base, 'contact', 'Start a Conversation', 'button primary')}
+      <a class="button secondary" href="${base}resume/">View Résumé / PDF ↗</a>
+    </div>
+  </div>
+</section>`;
+}
+
 function opening(c,base) {
  const p=c.profile;
  const ongoing=c.experiences.find(e=>e.status==='Ongoing' && /internship/i.test(e.type+' '+e.title));
@@ -549,23 +750,35 @@ export function view(route,c,base='./') {
  const observation=c.experiences.find(e=>e.id==='observation');
   if((route==='pehchaan'&&!pehchaan)||(route==='observation'&&!observation))return view('404',c,base);
   switch(route){
-  case 'home': return `${opening(c,base)}${hiringSummary(c,base)}${schoolProgression(c,base)}<section class="approach-section"><div class="container section">${sectionHead('02 / My approach','Less recall. More reasoning.')}${practiceRows(c)}${link(base,'democracy','See a teaching design example')}</div></section><section class="container closing-section"><p class="eyebrow">A developing educator, a considered approach</p><h2>Good teaching starts<br>with a good <em>question.</em></h2>${link(base,'contact','Let’s start a conversation','button primary')}</section>`;
+  case 'home': return `${opening(c,base)}${hiringSummary(c,base)}${schoolProgression(c,base)}${homePhilosophy(c,base)}${homeFeaturedArtifact(c,base)}${homeCredentialsHighlight(c,base)}${homeReflection(c,base)}${homeClosingCTA(c,base)}`;
   case 'profile': return `<div class="container profile-page"><header class="educator-opening" aria-labelledby="educator-title"><div class="educator-opening-grid"><div class="educator-col-left"><p class="eyebrow educator-chapter" data-motion="fade-up" data-motion-index="1"><span class="chapter-number" aria-hidden="true">01</span><span class="chapter-label">The Educator</span></p><h1 id="educator-title" class="educator-mantra" data-motion="fade-up" data-motion-index="2">HISTORY.<br>INQUIRY.<br>POSSIBILITY.</h1></div><div class="educator-col-right"><p class="educator-lead" data-motion="fade-up" data-motion-index="3">A developing History and Social Science educator academically grounded in History and Economics. Developing pedagogical practice and classroom inquiry through formal teacher education and on-ground school experience.</p><div class="educator-meta-badge" data-motion="fade-up" data-motion-index="4"><span class="meta-code">EDUCATOR RECORD / KM-01</span><span class="meta-sep" aria-hidden="true">·</span><span class="meta-field">FIELD / HISTORY &amp; SOCIAL SCIENCE</span></div></div></div><div class="educator-divider" data-motion="fade-up" data-motion-index="5" aria-hidden="true"><span class="divider-line"></span><span class="divider-notch"></span></div></header><section class="profile-narrative-section section compact"><div class="profile-editorial-composition"><div class="profile-portrait-col"><figure class="portrait-archival-frame"><div class="portrait-window" data-motion="image">${img(p.portrait,'Portrait of '+p.name,base,'portrait-img',false)||'<div class="portrait-placeholder">Portrait<br>forthcoming</div>'}</div><figcaption class="portrait-caption" data-motion="fade-up" data-motion-index="4"><div class="portrait-meta-line"><span class="meta-code">PORTRAIT / KM-01</span><span class="meta-dot" aria-hidden="true">·</span><span class="meta-field">ARCHIVAL RECORD</span></div><p class="caption-text"><strong>${esc(p.name)}</strong> · History &amp; Social Science Educator</p></figcaption></figure></div><div class="profile-narrative-col"><header class="narrative-header" data-motion="fade-up" data-motion-index="2"><p class="eyebrow narrative-eyebrow">Educator Narrative</p><h2 class="narrative-heading">Connecting the past<br>with the classroom.</h2></header><div class="narrative-blocks" data-motion="fade-up" data-motion-index="3"><div class="narrative-block"><p class="narrative-block-label">WHY HISTORY</p><p class="narrative-emphasis">History moved from memorising events to asking why they happened, how we know, and what they mean to different people.</p><p class="narrative-text">${c.about.includes('Partition')?'Studying historical sources and accounts of Partition shaped my commitment to teach through evidence, inquiry, and diverse perspectives.':esc(c.about)}</p></div><div class="narrative-block"><p class="narrative-block-label">WIDER HUMANITIES CONTEXT</p><p class="narrative-text">${esc(c.preparation)}</p></div><div class="narrative-block"><p class="narrative-block-label">CURRENT DEVELOPMENT</p><p class="narrative-text">${esc(studySummary(c))}. The education record below lists institutions, progress and expected completion.</p></div></div></div></div></section>${profileRecruiterSystem(c)}${profileAcademicChronology(c)}${profileSkillsSection(c)}${profileExitPath(base)}</div>`;
   case 'teaching': return `<div class="container teaching-page">${heading('02 / Teaching Journey','Learning to teach.<br><em>Teaching to understand.</em>','School internships, community teaching, observation and the ideas I am developing through them.')}<div class="journey-flow-strip" aria-label="Educator development continuum"><div class="flow-strip-intro"><span class="flow-strip-tag">FRAMEWORK</span><span class="flow-strip-desc">Pedagogical Continuum</span></div><div class="flow-sequence" role="list"><span class="flow-step" role="listitem">OBSERVE</span><span class="flow-sep" aria-hidden="true">→</span><span class="flow-step" role="listitem">QUESTION</span><span class="flow-sep" aria-hidden="true">→</span><span class="flow-step" role="listitem">PLAN</span><span class="flow-sep" aria-hidden="true">→</span><span class="flow-step" role="listitem">TEACH</span><span class="flow-sep" aria-hidden="true">→</span><span class="flow-step" role="listitem">ASSESS</span><span class="flow-sep" aria-hidden="true">→</span><span class="flow-step" role="listitem">REFLECT</span><span class="flow-sep" aria-hidden="true">→</span><span class="flow-step" role="listitem">GROW</span></div></div>${evidenceLinks(base)}<div class="collection-tools" data-enhancement hidden><label>Find teaching experience<input id="experience-search" type="search" placeholder="Search school, activity or date" aria-controls="experience-list"></label><div class="filters" role="group" aria-label="Filter teaching experience">${['All','Teaching','Observation'].map((s,i)=>`<button class="filter" data-experience-filter="${s}" aria-pressed="${i===0}">${s}</button>`).join('')}</div></div><p id="experience-count" class="collection-count" role="status" data-enhancement hidden></p><div class="timeline-container"><div class="timeline-track" aria-hidden="true"><div class="timeline-fill"></div></div><section id="experience-list" class="experience-timeline" aria-label="Teaching and observation record">${experienceRows(c,base)}</section></div><p id="experience-empty" class="empty-note" ${c.experiences.length?'hidden':''}>No experiences match this search.</p>${philosophySection(c,base)}</div>`;
   case 'pehchaan': return caseStudy(base,'Community teaching','Foundations first.<br><em>Confidence follows.</em>',pehchaan,`<h2>The teaching context</h2><p>The five-week NTCC internship at Pehchaan The Street School involved foundational literacy and numeracy with Nursery, LKG and UKG learners. Adult-literacy sessions through ULLAS extended the experience to five adult learners.</p>
-  <figure class="image-placeholder"><div class="placeholder-box"><span>Upload Pehchaan classroom image here</span></div><figcaption>Activity-based learning session</figcaption></figure>
+  <div class="case-pedagogy-card" data-motion="fade-up">
+    <span class="pedagogy-card-tag">FIELD PRACTICE OBSERVATION</span>
+    <h3>Tactile Word-Formation &amp; Number Bridging</h3>
+    <p class="small">In multi-age foundational cohorts (Nursery to UKG), abstract rote repetition was replaced by tactile letter cards, sound-association games, and peer storytelling. Learners demonstrated faster retention when letters were mapped to concrete daily objects.</p>
+  </div>
   <h2>What I contributed</h2>${list(pehchaan?.points||[])}<h2>What the experience developed</h2><p>Working with early learners gave me practical experience in activity-based methods, classroom management and community engagement. It connected teacher-education theory with the everyday work of explaining, practising and checking understanding.</p>
-  <figure class="image-placeholder"><div class="placeholder-box"><span>Upload community engagement image here</span></div><figcaption>Literacy and numeracy exercises</figcaption></figure>
-  <h2>My next teaching step</h2><p>I want to carry a clear cycle into future lessons: notice what learners can already do, make the next idea visible, invite practice and use responses to plan the next step.</p>`, `<div class="evidence-aside" data-motion="fade"><p class="eyebrow">Documented experience</p><p>80 hours of community engagement at Pehchaan The Street School.</p><p>Certified as an on-ground intern / teacher.</p>${img(c.certificates.find(x=>x.image.includes('1787898375320'))?.image||defaultContent.certificates[1].image,'Pehchaan internship certificate',base)}${link(base,'credentials','View supporting credentials')}</div>`);
+  <div class="case-pedagogy-card" data-motion="fade-up">
+    <span class="pedagogy-card-tag">ULLAS ADULT LITERACY WORK</span>
+    <h3>Contextualized Adult Literacy Routines</h3>
+    <p class="small">Adult learners required pedagogical dignity and practical relevance: reading utility bills, bus numbers, and basic municipal notices. Lessons were structured around conversational dialogue rather than hierarchical lecturing.</p>
+  </div>
+  <h2>My next teaching step</h2><p>I want to carry a clear cycle into future lessons: notice what learners can already do, make the next idea visible, invite practice and use responses to plan the next step.</p>`, `<div class="evidence-aside" data-motion="fade"><p class="eyebrow">Documented experience</p><p>80 hours of community engagement at Pehchaan The Street School.</p><p>Certified as an on-ground intern / teacher.</p><div class="case-cert-preview"><a class="archive-doc-frame" href="${esc(safeUrl(defaultContent.certificates[1].image))}" target="_blank" rel="noopener noreferrer" aria-label="Open Pehchaan internship certificate in a new tab">${img(c.certificates.find(x=>x.image.includes('1787898375320'))?.image||defaultContent.certificates[1].image,'Pehchaan internship certificate',base,'case-evidence-img')}<span class="doc-view-hint" aria-hidden="true">Examine certificate document ↗</span></a></div>${link(base,'credentials','View supporting credentials')}</div>`);
   case 'observation': return caseStudy(base,'School observation','The classroom<br><em>as a place to learn.</em>',observation,`<h2>Observation, with purpose</h2><p>The one-week observation internship at Amity International School, Mayur Vihar focused on History and Social Science classrooms. This was an observation placement, with attention to how lessons work in practice.</p>
-  <figure class="image-placeholder"><div class="placeholder-box"><span>Upload school observation image here</span></div><figcaption>Classroom observation at Amity</figcaption></figure>
-  <h2>What I paid attention to</h2>${list(observation?.points||[])}<h2>Beyond the lesson</h2><p>School culture, infrastructure and co-curricular integration offered a wider view of the learning environment. Classroom practice sits within that larger context.</p><h2>How it informs my practice</h2><p>I use reflection to connect what I observe with teacher-education theory: what happened, what supported participation and what I would consider when planning my own lesson.</p>`,`<aside class="note-panel"><p class="eyebrow">An observation lens</p><ol><li><strong>Questions</strong><p>How is thinking made visible?</p></li><li><strong>Participation</strong><p>Who is engaging, and how?</p></li><li><strong>Routines</strong><p>What gives the lesson structure?</p></li></ol></aside>`);
+  <div class="case-pedagogy-card" data-motion="fade-up">
+    <span class="pedagogy-card-tag">OBSERVATIONAL ANALYSIS · CLASSES 6–12</span>
+    <h3>Scaffolded Questioning &amp; Cognitive Transitions</h3>
+    <p class="small">Observed how senior secondary History educators bridged textbook narratives with primary historical source extracts. Rather than providing pre-formulated historical conclusions, teacher questioning prompted students to cross-reference conflicting accounts of colonial administrative records.</p>
+  </div>
+  <h2>What I paid attention to</h2>${list(observation?.points||[])}<h2>Beyond the lesson</h2><p>School culture, infrastructure and co-curricular integration offered a wider view of the learning environment. Classroom practice sits within that larger context.</p><h2>How it informs my practice</h2><p>I use reflection to connect what I observe with teacher-education theory: what happened, what supported participation and what I would consider when planning my own lesson.</p>`,`<aside class="note-panel"><p class="eyebrow">An observation lens</p><ol><li><strong>Questions</strong><p>How is thinking made visible?</p></li><li><strong>Participation</strong><p>Who is engaging, and how?</p></li><li><strong>Routines</strong><p>What gives the lesson structure?</p></li></ol><div class="case-cert-preview"><a class="archive-doc-frame" href="${esc(safeUrl(defaultContent.certificates[2].image))}" target="_blank" rel="noopener noreferrer" aria-label="Open Amity observation certificate in a new tab">${img(defaultContent.certificates[2].image,'Amity International School observation certificate',base,'case-evidence-img')}<span class="doc-view-hint" aria-hidden="true">Examine certificate document ↗</span></a></div>${link(base,'credentials','View related credentials')}</aside>`);
    case 'democracy': return `<div class="container democracy-page">${heading('Teaching design / Illustrative approach','Democracy.<br><em>More than a definition.</em>','A proposed classroom approach adapted from my teaching philosophy. This is a design example, not a report of a delivered lesson.')}<div class="democracy-layout"><aside class="democracy-sticky-col"><div class="planning-lens-card"><div class="planning-lens-header"><p class="eyebrow">Planning Lens</p><div class="democracy-local-progress" aria-label="Lesson design progress"><span class="local-progress-label">Stage</span><span class="local-stage-counter" id="democracy-stage-counter"><span class="active-stage-num">01</span> / 06</span></div></div><h3>Same intention.<br>Flexible support.</h3><p>Scaffold vocabulary and source reading. Offer spoken, written and visual ways to explain. Extend with a deeper comparison.</p><div class="active-stage-status-strip" aria-live="polite"><span class="status-indicator-dot" aria-hidden="true"></span><span class="active-stage-title" id="democracy-active-stage-label">01 / Question</span></div><hr><div class="truth-notice"><p class="small">A full lesson plan and student assessment evidence have not yet been published.</p></div><div class="democracy-nav-track-wrap"><div class="democracy-vertical-rule" aria-hidden="true"><div class="democracy-vertical-fill" id="democracy-progress-bar"></div></div><nav class="democracy-stage-nav" aria-label="Lesson design stages"><ol><li><a href="#stage-question" data-stage="stage-question" class="stage-nav-item is-active" aria-current="step"><span class="st-num">01</span><span class="st-name">Question</span></a></li><li><a href="#stage-explore" data-stage="stage-explore" class="stage-nav-item"><span class="st-num">02</span><span class="st-name">Explore</span></a></li><li><a href="#stage-discuss" data-stage="stage-discuss" class="stage-nav-item"><span class="st-num">03</span><span class="st-name">Discuss</span></a></li><li><a href="#stage-explain" data-stage="stage-explain" class="stage-nav-item"><span class="st-num">04</span><span class="st-name">Explain</span></a></li><li><a href="#stage-assess" data-stage="stage-assess" class="stage-nav-item"><span class="st-num">05</span><span class="st-name">Assess</span></a></li><li><a href="#stage-reflect" data-stage="stage-reflect" class="stage-nav-item"><span class="st-num">06</span><span class="st-name">Reflect</span></a></li></ol></nav></div><div class="planning-lens-link">${link(base,'resources','Browse available resources')}</div></div></aside><article class="democracy-story-col prose"><section id="stage-question" class="democracy-stage is-active" data-stage-index="1" data-motion="fade-up"><div class="stage-header"><span class="stage-badge">STAGE 01</span><p class="eyebrow">The Shared Intention &amp; Opening Inquiry</p></div><h2>The shared learning intention</h2><p>Help learners explain democracy, consider different perspectives and support their understanding with evidence.</p><p class="pull-quote" data-motion="fade-right">“How do people get a voice in the decisions that affect them?”</p><p>Begin by inviting initial ideas and everyday dilemmas—such as how household or classroom decisions are resolved. Clarify essential vocabulary (representation, consensus, accountability) to ensure no learner is held back by terminology before entering the concept.</p>
-   <figure class="image-placeholder"><div class="placeholder-box"><span>Upload whiteboard or planning artifact image</span></div><figcaption>Initial inquiry mapping</figcaption></figure>
+   <figure class="lesson-design-preview-figure" data-motion="fade-up"><img class="lesson-design-preview-img" src="${base}assets/democracy-thumb.webp" alt="Instructional design framework diagram for Teaching Democracy" loading="lazy" decoding="async"><figcaption>Instructional design blueprint: Bridging essential vocabulary, primary source extracts, and visual dialogue.</figcaption></figure>
    </section><section id="stage-explore" class="democracy-stage" data-stage-index="2" data-motion="fade-up"><div class="stage-header"><span class="stage-badge">STAGE 02</span><p class="eyebrow">Source Investigation</p></div><h2>Explore through historical evidence</h2><p>Provide primary and secondary source extracts showing different historical forms of governance. Offer tiered reading prompts: basic guiding questions for vocabulary support, alongside comparison prompts asking how ancient assemblies contrast with modern universal adult suffrage.</p></section><section id="stage-discuss" class="democracy-stage" data-stage-index="3" data-motion="fade-up"><div class="stage-header"><span class="stage-badge">STAGE 03</span><p class="eyebrow">Visual Dialogue</p></div><h2>Discuss and interpret</h2><p>Use visual artifacts—such as historic voting queues, committee photographs, and protest prints—to make abstract democratic rights tangible. In structured pairs, students explain what the visual evidence reveals about citizen agency and power.</p></section><section id="stage-explain" class="democracy-stage" data-stage-index="4" data-motion="fade-up"><div class="stage-header"><span class="stage-badge">STAGE 04</span><p class="eyebrow">Differentiated Pathways</p></div><h2>Offer different pathways</h2><div class="pathway"><span class="index-number">01</span><h3>Read, compare, discuss.</h3><p>Use reference materials, contrasting perspectives and primary sources. Offer guided prompts and extend the task through comparison and debate.</p></div><div class="pathway"><span class="index-number">02</span><h3>Look, interpret, explain.</h3><p>Use paintings, photographs or video to make an abstract idea tangible. Ask learners to explain what a visual source suggests and support their interpretation.</p></div></section><section id="stage-assess" class="democracy-stage" data-stage-index="5" data-motion="fade-up"><div class="stage-header"><span class="stage-badge">STAGE 05</span><p class="eyebrow">Formative Checking</p></div><h2>Check for understanding</h2><p>Ask learners to explain the concept with an example and a reason. Use their responses to identify where a new explanation, further scaffolding or extension is needed.</p><div class="assessment-callout"><p class="callout-title">Adaptive Feedback Loop</p><p class="small">Responses that confuse election mechanics with democratic culture prompt targeted small-group clarification; strong grasp opens the floor to discussions on institutional checks and balances.</p></div></section><section id="stage-reflect" class="democracy-stage" data-stage-index="6" data-motion="fade-up"><div class="stage-header"><span class="stage-badge">STAGE 06</span><p class="eyebrow">Pedagogical Review</p></div><h2>Reflect and adjust</h2><p>Consider whether both routes supported the same depth of understanding, and what should change in the next lesson.</p><p>A lesson design is not a static script; it is a hypothesis. Reflection asks: Did quieter voices participate? Did visual learners articulate reasoning as deeply as textual readers? The answers shape tomorrow’s questions.</p></section></article></div><section class="democracy-continuation-bridge" data-motion="fade-up"><div class="continuation-meta"><span class="continuation-tag">NEXT CHAPTER / 04</span><h3>Teacher’s Resource Library</h3><p>Curated lesson designs, classroom frameworks, and teaching materials from on-ground practice.</p></div><a class="button secondary" href="${base}resources/">Explore Teaching Resources <span aria-hidden="true">→</span></a></section></div>`;
   case 'resources': return `<div class="container resources-page">${heading('04 / Teaching Resources','Teacher’s Resource Library.<br><em>Ideas into practice.</em>','Curated lesson designs, classroom frameworks, and teaching materials from on-ground practice.')}<section class="resource-feature" data-motion="fade-up" aria-labelledby="featured-design-title"><div class="feature-copy"><div class="feature-meta-line"><span class="feature-tag">FEATURED TEACHING ARTEFACT</span><span class="meta-sep" aria-hidden="true">·</span><span class="feature-field">Social Science &amp; History · Middle &amp; Secondary School</span></div><h2 id="featured-design-title" class="feature-title">Teaching Democracy: More than a definition</h2><p class="feature-purpose">A structured classroom design planning for a single shared learning intention through differentiated comprehension routes: primary source evidence, structured dialogue, and visual interpretation.</p><div class="feature-pathways-block"><span class="pathways-label">ONE CONCEPT · DIFFERENT PATHWAYS</span><div class="feature-sequence" role="list"><span class="seq-step" role="listitem">01 Question</span><span class="seq-sep" aria-hidden="true">→</span><span class="seq-step" role="listitem">02 Explore</span><span class="seq-sep" aria-hidden="true">→</span><span class="seq-step" role="listitem">03 Discuss</span><span class="seq-sep" aria-hidden="true">→</span><span class="seq-step" role="listitem">04 Explain</span><span class="seq-sep" aria-hidden="true">→</span><span class="seq-step" role="listitem">05 Assess</span><span class="seq-sep" aria-hidden="true">→</span><span class="seq-step" role="listitem">06 Reflect</span></div></div><div class="feature-actions"><a class="button primary feature-cta" href="${base}teaching/democracy/">View teaching design <span class="cta-arrow" aria-hidden="true">→</span></a><span class="feature-note">Full web-readable lesson approach</span></div></div><div class="feature-archival-side" aria-hidden="true"><span class="archival-code">ARTEFACT / DEM-01</span><p class="archival-mantra">INQUIRY<br>EVIDENCE<br>PERSPECTIVE<br>REASONING</p></div></section><section class="section resource-library">${sectionHead('Teacher’s Resource Library','Curated teaching files.')}<div class="resource-collection-tools ${c.resources.length===0?'is-catalog-empty':''}" data-enhancement hidden><label class="collection-search">Search teaching files<input id="resource-search" type="search" placeholder="Search title, category or description" aria-controls="resource-list"></label><div class="filters" role="group" aria-label="Filter resources">${['All','Lesson plan','Worksheet','Teaching material','Assessment','Presentation'].map((s,i)=>`<button class="filter" data-filter="${esc(s)}" aria-pressed="${i===0}">${esc(s)}</button>`).join('')}</div></div><p class="collection-count" id="resource-count" role="status">${c.resources.length} ${c.resources.length===1?'file':'files'} in the library</p><div id="resource-list">${resourceRows(c,base)}</div><div class="resource-internship-notice" data-motion="fade-up"><div class="notice-badge"><span class="badge-dot" aria-hidden="true"></span><span>DOCUMENTATION IN PROGRESS</span></div><p class="small">Additional classroom lesson plans, formative assessment rubrics, and source-analysis worksheets from the ongoing 16-week school internship at Panchsheel Balak Inter-College have not yet been published, and will appear here as teaching modules are completed and anonymised.</p></div></section><section class="resource-continuation-bridge" data-motion="fade-up"><div class="continuation-meta"><span class="continuation-tag">NEXT CHAPTER / 05</span><h3>Evidence &amp; Credentials</h3><p>Academic degrees, verified teaching internships, and seminar presentations.</p></div><a class="button secondary" href="${base}credentials/">Explore Credentials &amp; Evidence <span aria-hidden="true">→</span></a></section></div>`;
   case 'credentials': return `<div class="container credentials-page">${heading('05 / Evidence &amp; Credentials','The work.<br><em>The record.</em>','Academic qualifications, teaching internships, and seminar presentation records.')}<section class="presentation-callout" data-motion="fade-up"><div class="callout-header"><span class="callout-badge">RESEARCH &amp; PRESENTATION</span><span class="meta-sep" aria-hidden="true">·</span><span class="callout-date">10 March 2026</span></div><h2>Rootedness in India: NEP 2020 &amp; Teacher Education</h2><p class="callout-lead">Co-author and presenter with lead author Rusha Chaudhauri on <em>“Rootedness in India: An Analysis of NEP 2020 in Promoting IKS in Teacher Education”</em> at the international seminar organised by Amity Institute of Education (sponsored by GAIL India Ltd).</p>
-  <figure class="image-placeholder"><div class="placeholder-box"><span>Upload seminar presentation image here</span></div><figcaption>Presentation at Amity Institute of Education</figcaption></figure>
+  <div class="seminar-credential-preview" data-motion="fade-up"><a class="archive-doc-frame" href="${esc(safeUrl(defaultContent.certificates[3].image))}" target="_blank" rel="noopener noreferrer" aria-label="Open presentation certificate in a new tab">${img(defaultContent.certificates[3].image,'NEP 2020 and IKS Seminar Certificate',base,'seminar-cert-img')}<span class="doc-view-hint" aria-hidden="true">Examine presentation certificate ↗</span></a></div>
   <div class="callout-link">${link(base,'teaching','Connect with teaching journey')}</div></section><section class="section credentials-archive-section"><div class="collection-tools" data-enhancement hidden><label>Find a credential<input id="credential-search" type="search" placeholder="Search title, issuer or date" aria-controls="credential-list"></label><div class="filters" role="group" aria-label="Filter credentials">${['All',...new Set(c.certificates.map(x=>x.category||'Other'))].map((s,i)=>`<button class="filter" data-credential-filter="${esc(s)}" aria-pressed="${i===0}">${esc(s)}</button>`).join('')}</div></div><p id="credential-count" class="collection-count" role="status" data-enhancement hidden></p><p id="credential-empty" class="empty-note" hidden>No credentials match this search.</p><div class="certificate-grid" id="credential-list">${c.certificates.map((x,i)=>certificateCard(x,base,i)).join('')}</div>${c.certificates.length?'':'<p class="empty-note">No credentials are currently published.</p>'}</section><div class="credential-future-strip" data-motion="fade-up"><div class="future-strip-inner"><span class="future-tag">PROFESSIONAL LEARNING IN PROGRESS</span><p class="future-text">Applied for the Cambridge Certification for Pre-Service Teachers (programme not yet commenced).</p></div></div><section class="credentials-continuation-bridge" data-motion="fade-up"><div class="continuation-meta"><span class="continuation-tag">NEXT CHAPTER / 05</span><h3>Let’s Connect</h3><p>For school teaching opportunities, internships, and conversations on History and Social Science education.</p></div><a class="button secondary" href="${base}contact/">Start a Conversation <span aria-hidden="true">→</span></a></section></div>`;
   case 'resume': return `<div class="container resume-page">${heading('Résumé / Professional overview',esc(p.name),'History, Social Science & English · Developing Educator')}<div class="actions print-actions"><a class="button primary" href="${base}assets/krishna-mahato-resume.pdf" download="krishna-mahato-resume.pdf">Download Résumé PDF <span aria-hidden="true">↓</span></a><button class="button secondary" id="print-resume">Print / save as PDF <span aria-hidden="true">↗</span></button>${link(base,'contact','Contact')}</div><p class="resume-contact-bar"><a href="mailto:${esc(p.email)}">${esc(p.email)}</a> · ${p.languages.map(esc).join(' · ')}</p><section class="resume-section"><h2>Professional profile</h2><p>${esc(p.summary)}</p><p>Roles of interest: ${p.roles.map(esc).join('; ')}. ${esc(studySummary(c))}.</p><p><strong>${esc(p.eligibility)}</strong> · Available to join full-time from <strong>${esc(p.availability)}</strong> (open to discussions and interviews from February 2027).</p></section><section class="resume-section"><h2>Location & teaching interests</h2>${optionalProfileFacts(c)}</section><section class="resume-section"><h2>Education</h2>${qualificationRows(c)}</section><section class="resume-section"><h2>Teaching & observation experience</h2>${c.experiences.map(e=>`<article class="resume-exp-entry"><h3>${esc(e.title)}</h3><p class="small"><strong>${esc(e.period)}</strong> · ${esc(e.type)}</p>${list(e.points||[])}</article>`).join('')}</section><section class="resume-section"><h2>Skills & competencies</h2><p>${c.competencies.map(esc).join(' · ')}</p></section><section class="resume-section"><h2>Professional learning & seminar presentations</h2>${c.certificates.filter(x=>['Presentation','Professional learning'].includes(x.category)).map(x=>`<p><strong>${esc(x.title)}</strong><br>${esc(x.description)}<br><span class="small">${esc(x.issuer)} · ${esc(x.date)}</span></p>`).join('')}</section></div>`;
   case 'contact': return `<div class="container contact-page"><header class="page-heading chapter-heading contact-hero-header" data-motion="fade-up"><p class="eyebrow"><span class="chapter-number" aria-hidden="true">05</span><span class="chapter-label">LET'S CONNECT</span></p><h1 class="contact-closing-title">Good teaching starts<br>with a good <em>question.</em></h1><p class="lead contact-closing-sub">Let’s start a conversation. Open for school teaching positions, internships, and educational collaboration.</p></header><div class="contact-layout"><section class="contact-dossier" data-motion="fade-right"><div class="contact-section-inner"><div class="contact-channel-block"><h2 class="eyebrow">Email me directly</h2><a class="contact-email" href="mailto:${esc(p.email)}">${esc(p.email)} ${arrow}</a><div class="contact-actions"><button class="text-link copy-email" data-email="${esc(p.email)}">Copy email address</button><p id="copy-status" role="status"></p></div></div><div class="contact-note"><div class="recruiter-highlight-badge"><span class="status-dot" aria-hidden="true"></span><span>Available from ${esc(p.availability)}</span></div><p class="contact-eligibility"><strong>${esc(p.eligibility)}</strong> · ${esc(studySummary(c))}.</p>${optionalProfileFacts(c)}<div class="recruiter-prompt"><h3 class="eyebrow">For schools &amp; recruiters</h3><p class="small">Please include the school name, subject, classes to be taught, location and proposed joining timeline.</p></div></div></div></section><section class="contact-form-section" data-motion="fade-left"><form id="contact-form" class="contact-form"><h2>Prepare an introduction.</h2><p>This opens your email app with a draft. You can review it before sending.</p><input type="text" name="website_url" class="sr-only" tabindex="-1" autocomplete="off" aria-hidden="true"><label>Your name<input name="name" autocomplete="name" required maxlength="100"></label><label>Your email<input type="email" name="email" autocomplete="email" required maxlength="200"></label><label>School / organisation<input name="school" autocomplete="organization" maxlength="150"></label><label>Your message<textarea name="message" rows="5" required maxlength="3000"></textarea></label><button class="button primary" type="submit">Open email draft ${arrow}</button><p id="contact-status" role="status"></p></form><div class="contact-resume-card"><div class="resume-card-body"><span class="card-tag">DOCUMENTATION</span><h3 class="resume-card-title">Academic &amp; Teaching Résumé</h3><p class="small">Formal education chronology, documented school internships, and teaching competencies formatted for academic review.</p></div><a class="button secondary resume-card-btn" href="${base}resume/">View Résumé / Save PDF ${arrow}</a></div></section></div></div>`;

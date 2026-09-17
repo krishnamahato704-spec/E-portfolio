@@ -5152,3 +5152,548 @@
 .stack > * + * {
   margin-block-start: var(--stack-space, 1.5rem);
 }
+
+/* ==========================================================================
+   Homepage Editorial Architecture & Polished Components
+   ========================================================================== */
+
+/* 03 / Teaching Philosophy */
+.home-philosophy-section {
+  padding-block: var(--space-7, 4.5rem) var(--space-6, 3.5rem);
+  background: var(--paper);
+  border-top: 1px solid var(--line);
+}
+.philosophy-header-wrap {
+  margin-bottom: var(--space-5, 2.5rem);
+}
+.philosophy-lead {
+  font: 400 clamp(1rem, 1.3vw, 1.125rem)/1.65 var(--serif);
+  color: var(--ink);
+  max-width: 68ch;
+  margin-top: var(--space-2, 0.75rem);
+}
+.home-principles-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-4, 1.75rem);
+  margin-bottom: var(--space-5, 2.25rem);
+}
+@media (max-width: 900px) {
+  .home-principles-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-4, 1.5rem);
+  }
+}
+.home-principle-card {
+  position: relative;
+  background: var(--sheet);
+  border: 1px solid var(--line);
+  border-radius: var(--radius, 4px);
+  padding: var(--space-4, 1.5rem);
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-sm, 0 1px 3px rgba(0,0,0,0.03));
+  transition: transform var(--quick, 0.2s) ease, box-shadow var(--quick, 0.2s) ease;
+}
+.home-principle-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow, 0 4px 14px -4px rgba(0,0,0,0.08));
+  border-color: var(--line-strong);
+}
+.principle-num {
+  font: 400 1.5rem/1 var(--serif);
+  color: var(--accent);
+  margin-bottom: var(--space-2, 0.5rem);
+}
+.principle-tag {
+  font: 600 0.6875rem/1.2 var(--sans);
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  text-transform: uppercase;
+  margin-bottom: var(--space-2, 0.75rem);
+}
+.home-principle-card h3 {
+  font: 500 1.25rem/1.35 var(--serif);
+  color: var(--ink);
+  margin-bottom: var(--space-3, 0.875rem);
+}
+.home-principle-card p {
+  font: 400 0.9375rem/1.6 var(--sans);
+  color: var(--ink);
+  margin-bottom: var(--space-4, 1.25rem);
+  flex-grow: 1;
+}
+.principle-foot {
+  border-top: 1px solid var(--line);
+  padding-top: var(--space-3, 0.75rem);
+  font: 400 0.8125rem/1.5 var(--sans);
+  color: var(--muted);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.principle-foot strong {
+  font-weight: 600;
+  color: var(--ink);
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.home-influences-banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3, 1rem) var(--space-4, 1.5rem);
+  background: var(--surface-muted);
+  border: 1px solid var(--line);
+  border-radius: var(--radius, 4px);
+  padding: var(--space-3, 1rem) var(--space-4, 1.5rem);
+}
+.influences-tag {
+  font: 600 0.6875rem/1.2 var(--sans);
+  letter-spacing: 0.12em;
+  color: var(--accent);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.influences-items {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3, 1rem) var(--space-4, 1.5rem);
+  flex-grow: 1;
+}
+.influence-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 0.875rem;
+}
+.influence-item strong {
+  font-family: var(--serif);
+  font-weight: 500;
+  color: var(--ink);
+}
+.influence-item span {
+  font: 400 0.8125rem/1.4 var(--sans);
+  color: var(--muted);
+}
+.influence-sep {
+  color: var(--line-strong);
+}
+
+/* 04 / Selected Teaching Work (Featured Artifact) */
+.home-featured-artifact {
+  background: var(--sheet);
+  border-top: 1px solid var(--line);
+  padding-block: var(--space-7, 4.5rem) var(--space-6, 3.5rem);
+}
+.featured-artifact-composition {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.95fr);
+  gap: clamp(32px, 5vw, 64px);
+  align-items: center;
+}
+@media (max-width: 960px) {
+  .featured-artifact-composition {
+    grid-template-columns: 1fr;
+    gap: var(--space-5, 2.5rem);
+  }
+}
+.artifact-narrative-col .eyebrow {
+  margin-bottom: var(--space-2, 0.5rem);
+}
+.artifact-narrative-col h2 {
+  font: 400 clamp(1.85rem, 3.2vw, 2.75rem)/1.15 var(--serif);
+  color: var(--ink);
+  margin-bottom: var(--space-3, 1rem);
+}
+.artifact-narrative-col h2 em {
+  font-style: italic;
+  color: var(--accent);
+}
+.artifact-lead {
+  font: 400 clamp(1rem, 1.25vw, 1.125rem)/1.65 var(--serif);
+  color: var(--ink);
+  max-width: 58ch;
+  margin-bottom: var(--space-4, 1.5rem);
+}
+.artifact-stages-strip {
+  background: var(--surface-muted);
+  border: 1px solid var(--line);
+  border-radius: var(--radius, 4px);
+  padding: var(--space-3, 1rem) var(--space-4, 1.25rem);
+  margin-bottom: var(--space-5, 2rem);
+}
+.strip-label {
+  display: block;
+  font: 600 0.6875rem/1.2 var(--sans);
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  text-transform: uppercase;
+  margin-bottom: var(--space-2, 0.625rem);
+}
+.stages-flow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 10px;
+}
+.stage-chip {
+  font: 500 0.8125rem/1.3 var(--sans);
+  color: var(--ink);
+  background: var(--sheet);
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  padding: 4px 8px;
+  white-space: nowrap;
+}
+.stage-arrow {
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+.artifact-visual-col {
+  display: flex;
+  justify-content: center;
+}
+.artifact-preview-card {
+  width: 100%;
+  max-width: 440px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius, 4px);
+  padding: var(--space-3, 1rem);
+  box-shadow: var(--shadow-sm, 0 2px 8px rgba(0,0,0,0.04));
+  display: flex;
+  flex-direction: column;
+}
+.preview-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-2, 0.75rem);
+  font-size: 0.6875rem;
+}
+.doc-badge {
+  font: 600 0.6875rem/1.2 var(--sans);
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  text-transform: uppercase;
+}
+.doc-code {
+  font: 400 0.6875rem/1 var(--sans);
+  color: var(--muted);
+  letter-spacing: 0.06em;
+}
+.preview-image-link {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  border-radius: 2px;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+.preview-thumb-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16/10;
+  object-fit: cover;
+  transition: transform var(--quick, 0.25s) ease;
+}
+.preview-image-link:hover .preview-thumb-img {
+  transform: scale(1.02);
+}
+.preview-caption {
+  font: 400 0.8125rem/1.5 var(--sans);
+  color: var(--ink);
+  margin-top: var(--space-2, 0.75rem);
+  border-top: 1px solid var(--line);
+  padding-top: var(--space-2, 0.625rem);
+}
+.preview-caption strong {
+  font-weight: 600;
+}
+
+/* 05 / Academic Foundations & Curated Credentials */
+.home-credentials-section {
+  background: var(--paper);
+  border-top: 1px solid var(--line);
+  padding-block: var(--space-7, 4.5rem) var(--space-6, 3.5rem);
+}
+.credentials-curated-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4, 1.75rem);
+}
+@media (max-width: 768px) {
+  .credentials-curated-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-4, 1.25rem);
+  }
+}
+.curated-cred-card {
+  background: var(--sheet);
+  border: 1px solid var(--line);
+  border-radius: var(--radius, 4px);
+  padding: var(--space-4, 1.5rem);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  box-shadow: var(--shadow-sm, 0 1px 3px rgba(0,0,0,0.03));
+}
+.cred-category {
+  font: 600 0.6875rem/1.2 var(--sans);
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-bottom: var(--space-2, 0.5rem);
+}
+.curated-cred-card h3 {
+  font: 500 1.25rem/1.3 var(--serif);
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+.cred-place {
+  font: 400 0.875rem/1.4 var(--sans);
+  color: var(--ink);
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+.cred-note {
+  font: 400 0.8125rem/1.5 var(--sans);
+  color: var(--muted);
+  margin-bottom: var(--space-3, 1rem);
+  flex-grow: 1;
+}
+.curated-cred-card .status {
+  align-self: flex-start;
+  font-size: 0.75rem;
+}
+
+/* 06 / Educator Reflection */
+.home-reflection-section {
+  background: var(--sheet);
+  border-top: 1px solid var(--line);
+  padding-block: var(--space-6, 3.5rem);
+}
+.reflection-quote-card {
+  max-width: 780px;
+  margin: 0 auto;
+  text-align: center;
+  padding: var(--space-5, 2.5rem) var(--space-4, 1.5rem);
+  background: var(--surface-muted);
+  border: 1px solid var(--line);
+  border-radius: var(--radius, 4px);
+  position: relative;
+}
+.reflection-quote {
+  font: 400 clamp(1.6rem, 2.8vw, 2.35rem)/1.25 var(--serif);
+  color: var(--ink);
+  margin: var(--space-2, 0.5rem) 0 var(--space-3, 1rem);
+}
+.reflection-quote em {
+  font-style: italic;
+  color: var(--accent);
+}
+.reflection-body {
+  font: 400 clamp(0.9375rem, 1.1vw, 1.0625rem)/1.7 var(--serif);
+  color: var(--ink);
+  max-width: 62ch;
+  margin: 0 auto var(--space-4, 1.5rem);
+}
+.reflection-author {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  border-top: 1px solid var(--line);
+  padding-top: var(--space-3, 0.875rem);
+  max-width: 460px;
+  margin: 0 auto;
+}
+.author-name {
+  font: 600 0.875rem/1.3 var(--sans);
+  color: var(--ink);
+  letter-spacing: 0.04em;
+}
+.author-desc {
+  font: 400 0.8125rem/1.4 var(--sans);
+  color: var(--muted);
+}
+
+/* 07 / Closing Recruiter CTA */
+.home-closing-section {
+  padding-block: var(--space-7, 4.5rem) var(--space-8, 5.5rem);
+}
+.closing-cta-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.8fr);
+  gap: var(--space-5, 2.5rem);
+  align-items: center;
+  background: var(--dark);
+  color: var(--sheet);
+  border: 1px solid var(--dark-line);
+  border-radius: var(--radius, 4px);
+  padding: clamp(28px, 4vw, 48px);
+  box-shadow: 0 12px 36px -12px rgba(0,0,0,0.3);
+}
+@media (max-width: 860px) {
+  .closing-cta-card {
+    grid-template-columns: 1fr;
+    gap: var(--space-4, 1.75rem);
+  }
+}
+.closing-copy .eyebrow {
+  color: var(--gold);
+  margin-bottom: var(--space-2, 0.5rem);
+}
+.closing-copy h2 {
+  font: 400 clamp(1.85rem, 3.2vw, 2.75rem)/1.15 var(--serif);
+  color: var(--sheet);
+  margin-bottom: var(--space-2, 0.75rem);
+}
+.closing-copy h2 em {
+  font-style: italic;
+  color: var(--gold);
+}
+.closing-lead {
+  font: 400 1rem/1.6 var(--serif);
+  color: var(--on-dark);
+  margin-bottom: var(--space-3, 1rem);
+  max-width: 52ch;
+}
+.closing-meta {
+  font: 400 0.875rem/1.5 var(--sans);
+  color: var(--on-dark);
+  opacity: 0.9;
+}
+.closing-meta strong {
+  color: var(--sheet);
+  font-weight: 500;
+}
+.closing-actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3, 1rem);
+  align-items: flex-start;
+}
+.closing-actions .button.primary {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--dark);
+  width: 100%;
+  justify-content: center;
+}
+.closing-actions .button.primary:hover {
+  background: var(--sheet);
+  border-color: var(--sheet);
+  color: var(--dark);
+}
+.closing-actions .button.secondary {
+  color: var(--sheet);
+  background: transparent;
+  border-color: var(--dark-line);
+  width: 100%;
+  justify-content: center;
+}
+.closing-actions .button.secondary:hover {
+  background: var(--dark-line);
+  color: var(--sheet);
+}
+
+/* Field Practice & Observational Analysis Pedagogy Cards */
+.case-pedagogy-card {
+  margin: var(--space-4, 1.75rem) 0;
+  background: var(--surface-muted);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--accent);
+  border-radius: 2px;
+  padding: var(--space-4, 1.25rem) var(--space-4, 1.5rem);
+}
+.pedagogy-card-tag {
+  display: block;
+  font: 600 0.6875rem/1.2 var(--sans);
+  letter-spacing: 0.12em;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.case-pedagogy-card h3 {
+  font: 500 1.125rem/1.35 var(--serif);
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+.case-pedagogy-card p {
+  font: 400 0.875rem/1.6 var(--sans);
+  color: var(--ink);
+  margin: 0;
+}
+
+/* Document Previews in Case Studies and Evidence */
+.archive-doc-frame {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius, 4px);
+  background: #fff;
+  transition: transform var(--quick, 0.2s) ease, box-shadow var(--quick, 0.2s) ease;
+}
+.archive-doc-frame:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow, 0 6px 18px -4px rgba(0,0,0,0.1));
+}
+.doc-view-hint {
+  display: block;
+  text-align: center;
+  font: 500 0.75rem/1.4 var(--sans);
+  color: var(--accent);
+  padding: 6px 8px;
+  background: var(--surface-muted);
+  border-top: 1px solid var(--line);
+}
+.case-cert-preview {
+  margin: var(--space-3, 1rem) 0;
+}
+.case-evidence-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4/3;
+  object-fit: cover;
+}
+.seminar-credential-preview {
+  margin: var(--space-4, 1.5rem) 0;
+  max-width: 520px;
+}
+.seminar-cert-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16/11;
+  object-fit: cover;
+}
+.lesson-design-preview-figure {
+  margin: var(--space-4, 1.75rem) 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius, 4px);
+  background: var(--surface-muted);
+  padding: 8px;
+  box-sizing: border-box;
+}
+.lesson-design-preview-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+  border-radius: 2px;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+.lesson-design-preview-figure figcaption {
+  font: 400 0.8125rem/1.5 var(--serif);
+  color: var(--ink);
+  padding: 8px 4px 2px;
+  font-style: italic;
+}
