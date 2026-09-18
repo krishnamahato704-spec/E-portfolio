@@ -40,15 +40,18 @@ try {
  main.querySelector('#login-form').requestSubmit();
  for(let i=0;i<50&&!main.querySelector('#readiness-list');i++)await new Promise(r=>setTimeout(r,20));
  assert(!!main.querySelector('#readiness-list'),'Owner editor renders readiness guidance with mocked login');
- assert(main.querySelector('[data-field=location]').value==='Noida','Confirmed city loads into owner editor');
+ assert(main.querySelector('[data-field=location]').value==='Noida, India','Confirmed city loads into owner editor');
  main.querySelector('[data-add=resources]').click();
- const upload=main.querySelector('[data-upload=url][data-scope=resources]');
+ const resourceIndex=c.resources.length;
+ const resourceField=key=>main.querySelector(`[data-field="${key}"][data-scope=resources][data-index="${resourceIndex}"]`);
+ const upload=main.querySelector(`[data-upload=url][data-scope=resources][data-index="${resourceIndex}"]`);
  const transfer=new DataTransfer();transfer.items.add(new File([new Uint8Array([80,75,3,4])],'lesson-plan.docx',{type:''}));
  Object.defineProperty(upload,'files',{value:transfer.files});upload.dispatchEvent(new Event('change',{bubbles:true}));
  for(let i=0;i<50&&!main.querySelector('#studio-status').textContent.includes('File uploaded');i++)await new Promise(r=>setTimeout(r,20));
- assert(main.querySelector('[data-field=url][data-scope=resources]').value.endsWith('.docx'),'Owner can attach a Word lesson plan to a teaching resource');
- input(main.querySelector('[data-field=title][data-scope=resources]'),'Class 8 lesson plan');
- input(main.querySelector('[data-field=description][data-scope=resources]'),'A classroom-ready History lesson plan.');
+ assert(resourceField('url').value.endsWith('.docx'),'Owner can attach a Word lesson plan to a teaching resource');
+ input(resourceField('title'),'Class 8 lesson plan');
+ input(resourceField('description'),'A classroom-ready History lesson plan.');
+ input(resourceField('grade'),'Class 8');
  input(main.querySelector('[data-field=location]'),'Local fixture city');
  main.querySelector('#preview').click();
  assert(main.querySelector('#preview-content').textContent.includes('Local fixture city'),'Unpublished recruiter edits appear in preview');
@@ -58,8 +61,9 @@ try {
  const patch=calls.find(x=>x.method==='PATCH');
  assert(!!patch&&patch.url.includes('updated_at=eq.'),'Publish retains optimistic version check');
  const saved=JSON.parse(patch.body).content;
- assert(saved.schemaVersion===4&&saved.profile.location==='Local fixture city','Mocked publish preserves the new schema and edited field');
- assert(saved.resources[0].url.endsWith('.docx'),'Published payload preserves the uploaded lesson plan URL');
+ assert(saved.schemaVersion===6&&saved.profile.location==='Local fixture city','Mocked publish preserves the new schema and edited field');
+ assert(saved.resources[resourceIndex].url.endsWith('.docx')&&saved.resources[resourceIndex].grade==='Class 8','Published payload preserves the uploaded lesson plan URL and class');
+ assert(saved.resources[0].url===c.resources[0].url,'Adding a resource preserves the existing lesson');
  assert(saved.experiences.some(x=>x.id==='panchsheel'),'Ongoing internship survives mocked save');
  assert(calls.length===4,'Only mocked auth, read, upload and publish requests occurred');
 }catch(error){results.push({name:String(error),pass:false});}

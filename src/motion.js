@@ -1,6 +1,6 @@
-import {initTimeline, cleanupTimeline} from './timeline.js?v=opening-20260912';
-import {initPhilosophy, cleanupPhilosophy} from './philosophy.js?v=opening-20260912';
-import {initDemocracy, cleanupDemocracy} from './democracy.js?v=opening-20260912';
+import {initTimeline, cleanupTimeline} from './timeline.js?v=evidence-20260917';
+import {initPhilosophy, cleanupPhilosophy} from './philosophy.js?v=evidence-20260917';
+import {initDemocracy, cleanupDemocracy} from './democracy.js?v=evidence-20260917';
 
 // Progressive enhancement: nothing is hidden while waiting for JavaScript or an observer.
 let dispose = () => {};
@@ -15,6 +15,8 @@ export function cleanupMotion() {
 }
 
 export function initMotion({ initial = false } = {}) {
+  const previousVideo = document.querySelector('#main .hero-bg-video');
+  const resumeVideo = !!previousVideo && !previousVideo.paused;
   cleanupMotion();
   const root = document.querySelector('#main');
   if (!root || ['admin', 'resume', '404'].includes(document.body.dataset.route)) return;
@@ -28,8 +30,12 @@ export function initMotion({ initial = false } = {}) {
   let frame = 0;
   let progress;
   const marked = new Set();
+  const video = root.querySelector('.hero-bg-video');
+  const videoToggle = root.querySelector('.video-toggle');
   const finish = element => element.classList.remove('motion-enter', 'motion-hero');
   const stop = () => {
+    video?.pause();
+    if(videoToggle)videoToggle.hidden=true;
     events.abort();
     cleanupTimeline();
     cleanupPhilosophy();
@@ -46,13 +52,20 @@ export function initMotion({ initial = false } = {}) {
   // does not replay already-read content or add a second listener set.
   preference.addEventListener('change', stop, { signal: events.signal });
   if (preference.matches) {
-    const video = root.querySelector('.hero-bg-video');
     if (video) video.pause();
     return;
   }
-  const video = root.querySelector('.hero-bg-video');
-  if (video && video.dataset.src && !video.src) {
+  if (video && video.dataset.src && !video.src && !navigator.connection?.saveData) {
     video.src = video.dataset.src;
+  }
+  if(video && videoToggle && video.src) {
+    videoToggle.hidden=false;
+    const label=()=>{videoToggle.textContent=video.paused?'Play background video':'Pause background video';videoToggle.setAttribute('aria-pressed',String(video.paused));};
+    video.addEventListener('play',label,{signal:events.signal});
+    video.addEventListener('pause',label,{signal:events.signal});
+    videoToggle.addEventListener('click',()=>{if(video.paused)video.play().catch(()=>{});else video.pause();},{signal:events.signal});
+    if(resumeVideo && video===previousVideo)video.play().catch(()=>{});
+    label();
   }
 
   const enter = (element, hero = false) => {
@@ -73,7 +86,7 @@ export function initMotion({ initial = false } = {}) {
     heroPlayed = true;
     const navigation = document.querySelector('.site-header .header-inner');
     if (navigation) { navigation.dataset.motionIndex = '0'; enter(navigation, true); }
-    hero.querySelectorAll('[data-hero-step]').forEach(el => {
+    hero.querySelectorAll('[data-hero-step]:not(.portrait-frame)').forEach(el => {
       el.dataset.motionIndex = el.dataset.heroStep;
       enter(el, true);
     });

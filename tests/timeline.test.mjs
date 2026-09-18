@@ -127,27 +127,11 @@ test('initTimeline sets up track positioning and active states with mocked DOM e
   }
 });
 
-test('Teaching journey renders evidence-supported reflections and authentic evidence links', async () => {
-  const {view} = await import('../src/views.js');
-  const {defaultContent} = await import('../src/content.js');
-  const html = view('teaching', defaultContent, '../');
-
-  // Reflection labels: grounded in source content
-  assert.ok(html.includes('WHAT I LEARNT'), 'Pehchaan reflects WHAT I LEARNT');
-  assert.ok(html.includes('Activity-based foundational literacy and numeracy'), 'Pehchaan reflection text is preserved');
-  assert.ok(html.includes('WHAT I NOTICED'), 'Observation reflects WHAT I NOTICED');
-  assert.ok(html.includes('Structured teacher questioning that makes historical thinking visible'), 'Observation reflection text is preserved');
-
-  // Ongoing experience only supports activities/learning without invented reflections
-  const panchsheelBlock = html.slice(html.indexOf('Panchsheel Balak Inter-College'), html.indexOf('Pehchaan The Street School'));
-  assert.ok(!panchsheelBlock.includes('class="experience-reflection"'), 'Ongoing Panchsheel does not force an invented reflection');
-  assert.ok(panchsheelBlock.includes('Undertaking a 16-week school internship'), 'Panchsheel includes activities & learning');
-
-  // Meaningful evidence links
-  assert.ok(panchsheelBlock.includes('teaching/democracy/'), 'Panchsheel links to illustrative lesson design');
-  assert.ok(html.includes('teaching/pehchaan/'), 'Pehchaan links to community teaching story');
-  assert.ok(html.includes('teaching/observation/'), 'Observation links to observation notes');
-  assert.ok(html.includes('credentials/'), 'Milestones link to credentials');
+test('Teaching journey preserves owner reflections without inventing default observations', async()=>{
+ const {view}=await import('../src/views.js');const {defaultContent}=await import('../src/content.js');
+ const html=view('teaching',defaultContent,'../');
+ assert.ok(!html.includes('WHAT I LEARNT'));assert.ok(!html.includes('WHAT I NOTICED'));
+ assert.ok(html.includes('Read the published lesson plan'));assert.ok(html.includes('View internship certificate'));
+ const edited=structuredClone(defaultContent);edited.experiences[1].reflection='Owner reflection about an observed response.';
+ assert.ok(view('teaching',edited).includes('Owner reflection about an observed response.'));
 });
-
-

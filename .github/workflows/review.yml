@@ -18,5 +18,7 @@ jobs:
       - run: npm ci
       - run: npm run build
       - run: npm test
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:browser
       - name: Verify committed pages match their source
-        run: git diff --exit-code -- '*.html' sitemap.xml robots.txt
+        run: git diff --exit-code -- '*.html' sitemap.xml robots.txt assets/krishna-mahato-resume.pdf

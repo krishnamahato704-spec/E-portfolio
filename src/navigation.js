@@ -54,4 +54,6 @@ export function initNavigation() {
  // Only the header surface changes; content and menu position remain stable.
  const updateSurface=()=>header.classList.toggle('is-scrolled',scrollY>24);
  window.addEventListener('scroll',updateSurface,{passive:true});updateSurface();
+ // Preserve a menu already opened through the native fallback during loading.
+ if(document.querySelector('.fallback-navigation')?.open&&mobile.matches)toggle.click();
 }

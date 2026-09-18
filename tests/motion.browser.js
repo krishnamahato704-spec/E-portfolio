@@ -33,8 +33,9 @@ try {
   main.innerHTML = view('home',defaultContent,'../');
   await check('Initial hero sequence is finite and completes visibly',async () => {
     initMotion({initial:true});
-    assert(main.querySelectorAll('.motion-hero').length === 7,'Seven hero steps expected (navigation is tested separately)');
-    await wait(800);
+    assert(main.querySelectorAll('.motion-hero').length === 6,'Six text and action steps expected (portrait stays visible)');
+    assert(!main.querySelector('.portrait-frame').classList.contains('motion-hero'),'Portrait must never enter the fade sequence');
+    for(let i=0;i<40&&main.querySelector('.motion-hero');i++)await wait(50);
     assert(!main.querySelector('.motion-hero'),'Hero classes must clear');
     assert(getComputedStyle(main.querySelector('h1')).opacity === '1','Headline must remain visible');
   });
@@ -42,6 +43,17 @@ try {
     for (let i=0; i<8; i++) initMotion();
     assert(observers.size===1 && sizes.size===1,'Duplicate observers');
     assert(document.querySelectorAll('.reading-progress').length===1,'Duplicate progress');
+  });
+  await check('Refresh preserves playing video and a visitor pause',async () => {
+    const video=main.querySelector('.hero-bg-video');
+    await video.play();
+    initMotion();
+    await wait(50);
+    assert(!video.paused,'Refresh stopped a playing video');
+    video.pause();
+    initMotion();
+    await wait(50);
+    assert(video.paused,'Refresh overrode the visitor pause');
   });
   await check('Cloud-style replacement does not replay the hero',() => {
     cleanupMotion();
