@@ -271,7 +271,7 @@ function philosophySection(c,base){
      <div class="chapter-meta">
       <span class="chapter-label">NEXT CHAPTER / LESSON DESIGN</span>
       <h3>One concept. Different pathways.</h3>
-      <p>How I would approach democracy through source work, discussion and visual interpretation.</p>
+      <p>Detailed lesson planning for Class IX-B exploring democracy through source work, discussion and visual interpretation.</p>
      </div>
      <a class="button light chapter-link" href="${base}teaching/democracy/">Explore the Democracy teaching design <span aria-hidden="true">↗</span></a>
     </div>
@@ -342,7 +342,7 @@ function profileExitPath(base) {
           <span class="continuity-chapter">CHAPTER 02</span>
         </div>
         <h2 id="profile-exit-title" class="exit-path-heading">See the pedagogy in practice.</h2>
-        <p class="exit-path-lead">From teacher-education inquiry to on-ground classroom practice: school internships, community teaching, and lesson design.</p>
+        <p class="exit-path-lead">From teacher-education inquiry to on-ground classroom practice: school internships, community teaching, and evidence-based planning.</p>
       </div>
       <div class="exit-path-actions">
         <a class="button primary exit-btn-primary" href="${base}teaching/">VIEW TEACHING JOURNEY <span class="exit-arrow" aria-hidden="true">→</span></a>
