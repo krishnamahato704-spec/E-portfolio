@@ -45,9 +45,9 @@ test('Teaching philosophy renders editorial sequence preserving exactly three pr
 
   // Classroom implications
   assert.ok(html.includes('Classroom Implication'), 'Classroom implication cue is present');
-  assert.ok(html.includes('Students examine primary sources, maps, and contradictory accounts'), 'Principle 1 implication present');
-  assert.ok(html.includes('comprehension routes flex between textual sources, visual interpretations'), 'Principle 2 implication present');
-  assert.ok(html.includes('Checks for understanding directly determine whether to reteach'), 'Principle 3 implication present');
+  assert.ok(html.includes('questions about prior knowledge lead to discussion of elections'), 'Principle 1 implication present');
+  assert.ok(html.includes('a concept diagram, photographs, oral discussion and written responses'), 'Principle 2 implication present');
+  assert.ok(html.includes('diagnostic questions, guided practice and an independent accountability task'), 'Principle 3 implication present');
 });
 
 test('Teaching philosophy presents Tagore and Vygotsky as supporting intellectual influences', async () => {

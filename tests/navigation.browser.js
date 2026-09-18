@@ -104,9 +104,12 @@ try{
       const depth=meta.path.endsWith('/')?meta.path.split('/').filter(Boolean).length:0;
       const base=route==='404'?'/E-portfolio/':depth?'../'.repeat(depth):'./';
       const rendered=fragment(header(route,base,defaultContent));
-      const navLinks=[...rendered.querySelectorAll('nav a')];
+      const navLinks=[...rendered.querySelectorAll('#navigation nav a')];
       assert(navLinks.length===navRoutes.length,`${route}: missing navigation link`);
       navLinks.forEach((link,index)=>assert(link.getAttribute('href')===base+routes[navRoutes[index]].path,`${route}: incorrect ${navRoutes[index]} target`));
+      const fallbackLinks=[...rendered.querySelectorAll('.fallback-navigation nav a')];
+      assert(fallbackLinks.length===navRoutes.length,`${route}: missing native fallback link`);
+      fallbackLinks.forEach((link,index)=>assert(link.getAttribute('href')===base+routes[navRoutes[index]].path,`${route}: incorrect native fallback target`));
       const expected=['pehchaan','observation','democracy'].includes(route)?'teaching':navRoutes.includes(route)?route:null;
       const current=[...rendered.querySelectorAll('a[aria-current="page"]')];
       assert(current.length===(expected?1:0),`${route}: incorrect number of active links`);

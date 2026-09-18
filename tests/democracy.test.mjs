@@ -36,9 +36,9 @@ test('Democracy lesson design renders exactly 6 instructional stages in correct 
   // Verify each stage ID and badge
   const expectedStages = [
     {id: 'stage-question', badge: 'STAGE 01', title: 'The shared learning intention'},
-    {id: 'stage-explore', badge: 'STAGE 02', title: 'Explore through historical evidence'},
-    {id: 'stage-discuss', badge: 'STAGE 03', title: 'Discuss and interpret'},
-    {id: 'stage-explain', badge: 'STAGE 04', title: 'Offer different pathways'},
+    {id: 'stage-explore', badge: 'STAGE 02', title: 'Begin with what learners know'},
+    {id: 'stage-discuss', badge: 'STAGE 03', title: 'Use visuals and questions'},
+    {id: 'stage-explain', badge: 'STAGE 04', title: 'Oral and written ways to respond'},
     {id: 'stage-assess', badge: 'STAGE 05', title: 'Check for understanding'},
     {id: 'stage-reflect', badge: 'STAGE 06', title: 'Reflect and adjust'}
   ];
@@ -72,7 +72,7 @@ test('Democracy sticky planning lens renders stage navigation, local progress, a
 
   // Non-delivered lesson truth notice is preserved
   assert.ok(html.includes('truth-notice'), 'Truth notice is preserved');
-  assert.ok(html.includes('A full lesson plan and student assessment evidence have not yet been published'), 'Truth notice text accurate');
+  assert.ok(html.includes('The lesson plan is available. Completed student work and supervisor feedback are not included.'), 'Truth notice text accurate');
 });
 
 test('Democracy story retains readable content without hiding future stages', async () => {
@@ -81,8 +81,8 @@ test('Democracy story retains readable content without hiding future stages', as
   const html = view('democracy', defaultContent, '../');
 
   // Check pathways in stage 4 are preserved
-  assert.ok(html.includes('Read, compare, discuss'), 'Pathway 1 preserved');
-  assert.ok(html.includes('Look, interpret, explain'), 'Pathway 2 preserved');
+  assert.ok(html.includes('Learners are asked to recall, discuss, explain'), 'Pathway 1 preserved');
+  assert.ok(html.includes('does not specify differentiated tasks'), 'Pathway 2 preserved');
 
   // Continuation bridge to Chapter 04 Resources
   assert.ok(html.includes('NEXT CHAPTER / 04'), 'Continuation bridge tag present');

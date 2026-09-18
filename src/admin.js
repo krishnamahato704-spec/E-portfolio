@@ -1,15 +1,15 @@
-import {wireCollections} from './collections.js?v=recruiter-20260912';
-import {recruitmentGaps} from './recruiter.js?v=recruiter-20260912';
+import {wireCollections} from './collections.js?v=evidence-20260917';
+import {recruitmentGaps} from './recruiter.js?v=evidence-20260917';
 import {loadContent,signIn,signOut,saveContent,uploadFile,validateFile} from './cloud.js?v=upload-20260912';
-import {mergeContent,validateContent} from './content.js?v=recruiter-20260912';
-import {esc,view} from './views.js?v=opening-20260912';
+import {mergeContent,validateContent} from './content.js?v=evidence-20260917';
+import {esc,view} from './views.js?v=evidence-20260917';
 let session=null, draft=null, version=null, dirty=false, base='./',busy=false;
 const schemas={
  qualifications:{label:'Education',fields:{title:'Qualification',place:'Institution / result',period:'Study period',status:'Status',expected:'Expected completion (optional)',note:'Progress note (optional)'}},
  experiences:{label:'Teaching experiences',fields:{institution:'School / institution',category:'Category',status:'Experience status',duration:'Duration number (optional)',durationUnit:'Duration unit (optional)',summary:'Short summary',title:'Experience title',type:'Type / duration',period:'Dates',points:'Activities (one per line)'}},
  practice:{label:'Teaching approach',fields:{title:'Principle',text:'Description'}},
  certificates:{label:'Credentials',fields:{title:'Certificate title',issuer:'Issuing organisation',date:'Date',category:'Category',description:'Description',image:'Certificate image URL'}},
- resources:{label:'Teaching resources',fields:{title:'File title',category:'Category',description:'Description',url:'File URL',image:'Thumbnail / preview image URL (optional)'}},
+ resources:{label:'Teaching resources',fields:{title:'File title',category:'Category',subject:'Subject',grade:'Class / year group',date:'Date',duration:'Duration',evidenceStatus:'Evidence status',context:'Context',description:'Description',url:'File URL',image:'Thumbnail / preview image URL (optional)'}},
  gallery:{label:'Gallery',fields:{title:'Caption / alternative text',image:'Image URL'}},
 };
 const profileFields={location:'Current city',workPreferences:'Work / relocation preferences',targetClasses:'Target classes (interest, not prior experience)',targetBoards:'Boards of interest (not a claim of experience)',availability:'Earliest joining availability',eligibility:'Eligibility exam status',name:'Full name',email:'Contact email',eyebrow:'Profile label',headline:'Main statement',summary:'Professional summary',roles:'Roles of interest (one per line)',subjects:'Subjects (one per line)',languages:'Languages (one per line)',portrait:'Portrait URL',cv:'CV PDF URL (optional)'};
@@ -39,6 +39,7 @@ function editor(){
  document.querySelectorAll('[data-field]').forEach(el=>el.addEventListener('input',()=>{
   const {scope,field:key,index}=el.dataset;const target=scope==='root'?draft:scope==='profile'?draft.profile:draft[scope][Number(index)];
   target[key]=['roles','subjects','languages','competencies','points'].includes(key)?el.value.split('\n').map(x=>x.trim()).filter(Boolean):el.value;
+  if(scope==='resources'&&key==='image')target.thumbnail=el.value;
   setDirty();
  }));
  document.querySelectorAll('[data-add]').forEach(el=>el.addEventListener('click',()=>{
@@ -68,7 +69,7 @@ function editor(){
  document.querySelector('#close-preview').onclick=()=>document.querySelector('dialog').close();
  document.querySelector('#preview-content').onclick=e=>{if(e.target.closest('a,button,form'))e.preventDefault()};
  document.querySelector('#publish').onclick=async()=>{
-  try{validateContent(draft);if(!confirm('Publish this draft to your public portfolio?'))return;setBusy(true);status('Publishing…');draft.schemaVersion=4;const row=await saveContent(draft,session.access_token,version);version=row.updated_at;dirty=false;status('Published successfully. Your portfolio now shows this content.');}
+  try{validateContent(draft);if(!confirm('Publish this draft to your public portfolio?'))return;setBusy(true);status('Publishing…');draft.schemaVersion=6;const row=await saveContent(draft,session.access_token,version);version=row.updated_at;dirty=false;status('Published successfully. Your portfolio now shows this content.');}
   catch(err){status(err.message)}finally{setBusy(false)}
  };
  document.querySelector('#logout').onclick=async()=>{if(dirty&&!confirm('Discard unpublished changes and sign out? Export first if you want to keep them.'))return;try{await signOut(session.access_token)}catch{}session=null;draft=null;dirty=false;location.reload()};

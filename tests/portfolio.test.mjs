@@ -22,6 +22,24 @@ test('Untrusted text and URLs cannot become script markup',()=>{
  const c=structuredClone(defaultContent);c.profile.name='<script>alert(1)</script>';c.profile.portrait='javascript:alert(1)';
  const rendered=view('home',c);assert.ok(!rendered.includes('<script>'));assert.ok(!rendered.includes('src="javascript:'));
 });
+
+test('The bundled résumé is offered only when its source still matches, independent of JSON object order',()=>{
+ const reordered=JSON.parse(JSON.stringify(defaultContent),(_,v)=>v&&!Array.isArray(v)&&typeof v==='object'?Object.fromEntries(Object.entries(v).reverse()):v);
+ assert.match(view('resume',reordered),/href="\.\/assets\/krishna-mahato-resume.pdf"/);
+ reordered.profile.availability='September 2027';
+ assert.doesNotMatch(view('resume',reordered),/href="\.\/assets\/krishna-mahato-resume.pdf"/);
+ assert.match(view('resume',reordered),/Use Print \/ save as PDF for the current résumé/);
+ reordered.profile.cv='https://example.com/current.pdf';
+ assert.match(view('resume',reordered),/href="https:\/\/example.com\/current.pdf"/);
+});
+
+test('Known obsolete preview migrates without overwriting a new owner image or removed artifact',()=>{
+ const r=structuredClone(defaultContent.resources[0]);r.thumbnail='assets/democracy-thumb.webp';
+ assert.equal(mergeContent({schemaVersion:4,resources:[r]}).resources[0].thumbnail,defaultContent.resources[0].thumbnail);
+ r.thumbnail='https://example.com/owner.webp';
+ assert.equal(mergeContent({schemaVersion:4,resources:[r]}).resources[0].thumbnail,r.thumbnail);
+ assert.equal(mergeContent({schemaVersion:6,resources:[]}).resources.length,0);
+});
 test('Content validation rejects malformed collection entries and unsafe files',()=>{
  const c=structuredClone(defaultContent);c.experiences[0].points='invalid';assert.throws(()=>validateContent(c),/activity list/);
  const r=structuredClone(defaultContent);r.resources=[{title:'Bad link',url:'javascript:alert(1)'}];assert.throws(()=>validateContent(r),/HTTPS/);
@@ -58,7 +76,8 @@ test('Every route renders a complete static document with one heading and workin
    const [pathname,hash]=href.split('#');const raw=pathname.split('?')[0];let target=raw.startsWith('/E-portfolio/')?path.resolve(root,raw.slice('/E-portfolio/'.length)):raw?path.resolve(path.dirname(file),raw):file;
    if(raw.endsWith('/'))target=path.join(target,'index.html');
    await fs.access(target).catch(()=>assert.fail(`${route}: missing ${href}`));
-   if(hash){const linked=await fs.readFile(target,'utf8');assert.ok(linked.includes(`id="${hash}"`),`${route}: missing fragment ${href}`);}
+   if(hash && path.extname(target)==='.pdf'){assert.match(hash,/^page=[1-6]$/);const pdf=await fs.readFile(target);assert.equal(pdf.subarray(0,5).toString(),'%PDF-');}
+   else if(hash){const linked=await fs.readFile(target,'utf8');assert.ok(linked.includes(`id="${hash}"`),`${route}: missing fragment ${href}`);}
   }
  }
 });
@@ -95,7 +114,7 @@ test('Stable experience IDs survive reordering and removed cases do not resurfac
 });
 test('Clarified recruiter facts survive loading the legacy public record',()=>{
  const c=mergeContent({qualifications:[{title:'M.A. History',place:'Postgraduate study in History',period:'2025–Present',status:'In progress'}]});
- const html=view('profile',c);assert.match(html,/IGNOU/);assert.match(html,/First year cleared/);assert.match(html,/CTET applied/);assert.match(html,/May 2027/);
+ const html=view('profile',c);assert.match(html,/IGNOU/);assert.match(html,/First year cleared/);assert.match(html,/CTET Paper II applied/);assert.match(html,/May 2027/);
 });
 test('Editorial records retain owner order and escape document metadata',()=>{
  const c=structuredClone(defaultContent);

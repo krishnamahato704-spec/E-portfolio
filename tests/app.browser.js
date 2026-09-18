@@ -3,11 +3,14 @@
 import {defaultContent} from '../src/content.js';
 import {view} from '../src/views.js';
 const mode=new URLSearchParams(location.search).get('case') || 'resources';
-const route=mode==='contact'?'contact':mode==='teaching'?'teaching':'resources';
+const route=mode.startsWith('home')?'home':mode==='contact'?'contact':mode==='teaching'?'teaching':'resources';
 document.body.dataset.route=route;
 const main=document.querySelector('#main');
-main.innerHTML=view(route,defaultContent,'../');
+const initial=structuredClone(defaultContent);
+if(mode==='home-add')initial.profile.portrait='';
+main.innerHTML=view(route,initial,'../');
 const original=main.firstElementChild;
+const originalHero=main.querySelector('.hero'),originalPortrait=main.querySelector('.portrait'),originalVideo=main.querySelector('.hero-bg-video');
 let resolveRead;
 const nativeFetch=window.fetch;
 const calls=[];
@@ -21,6 +24,8 @@ try {
   await import('../src/app.js');
   const content=structuredClone(defaultContent);
   content.schemaVersion=3;
+  content.profile.headline='Updated fixture teaching headline';
+  if(mode==='home-remove')content.profile.portrait='';
   content.resources=[
     {title:'Test lesson',category:'Lesson plan',description:'Local fixture only',url:'https://example.com/lesson.pdf'},
     {title:'Test assessment',category:'Assessment',description:'Local fixture only',url:'https://example.com/assessment.pdf'}
@@ -34,7 +39,16 @@ try {
   resolveRead(new Response(JSON.stringify(mode==='failure'?{message:'Fixture unavailable'}:[{content,updated_at:'2026-09-11T00:00:00Z'}]),{status:mode==='failure'?503:200,headers:{'Content-Type':'application/json'}}));
   await new Promise(resolve=>setTimeout(resolve,80));
   assert(calls.length===1 && calls[0].method==='GET' && calls[0].url.includes('/rest/v1/portfolio_public?'),'One public read and no writes');
-  if(mode==='resources') {
+  if(mode.startsWith('home')) {
+    assert(main.querySelector('.hero')===originalHero,'Cloud refresh preserves the existing hero node');
+    if(mode==='home')assert(main.querySelector('.portrait')===originalPortrait,'Cloud refresh preserves the existing portrait node');
+    if(mode==='home-remove')assert(!main.querySelector('.portrait')&&!!main.querySelector('.portrait-placeholder'),'Cloud refresh respects removal of the portrait');
+    if(mode==='home-add')assert(!!main.querySelector('.portrait')&&!main.querySelector('.portrait-placeholder'),'Cloud refresh adds a newly published portrait');
+    assert(main.querySelector('.hero-bg-video')===originalVideo,'Cloud refresh preserves the existing video node');
+    assert(main.querySelector('.hero-statement').textContent.includes('Updated fixture teaching headline'),'Cloud refresh updates editable hero text');
+    assert(main.querySelectorAll('.hero').length===1,'Cloud refresh leaves exactly one hero');
+    assert(!main.querySelector('.evidence-feature'),'Explicitly replacing evidence removes the old featured artifact');
+  } else if(mode==='resources') {
     assert(main.firstElementChild!==original,'Successful content read replaces markup');
     assert(main.querySelectorAll('.resource-row').length===2,'New resources rendered');
     main.querySelector('[data-filter=Assessment]').click();
