@@ -117,7 +117,36 @@ export const defaultContent = {
       context:'Amity University school practicum · Session 2026–27'
     }
   ],
-  gallery:[],
+  gallery:[
+    {
+      title:'Democracy Lesson Plan · Class IX-B Practicum Framing',
+      image:storage+'democracy_plan_class9.jpeg',
+      category:'Lesson Planning & TLM',
+      description:'Structured pedagogical blueprint for Class IX Social Science integrating inquiry prompts, visual sources, and formative assessment checks.',
+      context:'Amity Institute of Education school practicum 2026'
+    },
+    {
+      title:'NEP 2020 & Indian Knowledge Systems (IKS) in Teacher Education',
+      image:storage+'1787898560665_nhlr6b_certWall4_0.jpeg',
+      category:'Research & Presentations',
+      description:'Paper presentation on embedding Indian Knowledge Systems and experiential inquiry into teacher education at the international seminar sponsored by GAIL India.',
+      context:'Amity Institute of Education · 10 March 2026'
+    },
+    {
+      title:'Foundational Literacy & Numeracy Field Teaching',
+      image:storage+'1787898375320_kx4r62_certWall2_0.jpeg',
+      category:'Field Practice & Community',
+      description:'Documented 80-hour on-ground teaching internship with foundational learners and adult-literacy participants at Pehchaan The Street School.',
+      context:'Pehchaan The Street School · Summer 2026'
+    },
+    {
+      title:'Academic Discipline in History & Economics',
+      image:storage+'1787898353874_955zgr_certWall1_0.jpeg',
+      category:'Academic Foundations',
+      description:'Undergraduate graduation degree with honours in History and Economics, providing the historiographical grounding for classroom pedagogy.',
+      context:'Gurukul Kangri Vishwavidyalaya · CGPA 8.80'
+    }
+  ],
 };
 
 // Merge missing fields only. Known pre-v6 records receive narrowly scoped corrections;

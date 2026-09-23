@@ -1,0 +1,507 @@
+/* ==========================================================================
+   PORTFOLIO REDESIGN SYSTEM: LIGHTSWIND & 3D INTERACTION
+   Elevated typography, generous whitespace, interactive 3D canvas,
+   tactile card depth, category segmentation, and accessible lightbox.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Interactive 3D Hero Canvas & Visual Ecosystem
+   -------------------------------------------------------------------------- */
+.hero-3d-canvas-wrap {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.hero-3d-canvas {
+  position: absolute;
+  top: 50%;
+  right: -5%;
+  transform: translateY(-50%);
+  width: min(650px, 90vw);
+  height: min(650px, 90vw);
+  pointer-events: auto;
+  opacity: 0.85;
+  transition: opacity 0.4s ease;
+}
+
+@media (max-width: 900px) {
+  .hero-3d-canvas {
+    right: 50%;
+    transform: translate(50%, -50%);
+    opacity: 0.35;
+    width: 380px;
+    height: 380px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   2. Lightswind-inspired Custom Magnetic Cursor
+   -------------------------------------------------------------------------- */
+.custom-cursor-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 99999;
+  overflow: hidden;
+}
+
+.cursor-dot {
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  width: 8px;
+  height: 8px;
+  background-color: var(--gold, #c8b17d);
+  border-radius: 50%;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.cursor-ring {
+  position: absolute;
+  top: -20px;
+  left: -20px;
+  width: 40px;
+  height: 40px;
+  border: 1.5px solid rgba(200, 177, 125, 0.5);
+  border-radius: 50%;
+  pointer-events: none;
+  will-change: transform;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: width 0.25s cubic-bezier(0.2, 0.8, 0.2, 1),
+              height 0.25s cubic-bezier(0.2, 0.8, 0.2, 1),
+              top 0.25s cubic-bezier(0.2, 0.8, 0.2, 1),
+              left 0.25s cubic-bezier(0.2, 0.8, 0.2, 1),
+              background-color 0.25s ease,
+              border-color 0.25s ease;
+}
+
+.cursor-ring.is-active {
+  width: 56px;
+  height: 56px;
+  top: -28px;
+  left: -28px;
+  background-color: rgba(200, 177, 125, 0.15);
+  border-color: var(--gold, #c8b17d);
+}
+
+.cursor-ring.is-text {
+  width: 72px;
+  height: 72px;
+  top: -36px;
+  left: -36px;
+  background-color: rgba(32, 42, 46, 0.85);
+  backdrop-filter: blur(4px);
+  border-color: var(--gold, #c8b17d);
+}
+
+.cursor-label {
+  font-family: var(--sans, 'Segoe UI', Arial, sans-serif);
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--gold, #c8b17d);
+  text-transform: uppercase;
+  opacity: 0;
+  transform: scale(0.8);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  pointer-events: none;
+}
+
+.cursor-ring.is-text .cursor-label {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* --------------------------------------------------------------------------
+   3. Accessible Lightbox Modal
+   -------------------------------------------------------------------------- */
+.lightbox-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(18, 24, 27, 0.88);
+  backdrop-filter: blur(8px);
+  z-index: 100000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(16px, 4vw, 40px);
+  animation: lightboxFadeIn 0.25s ease forwards;
+}
+
+@keyframes lightboxFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.lightbox-dialog {
+  position: relative;
+  background: var(--sheet, #fffdf8);
+  border: 1px solid var(--line-strong, #918a78);
+  border-radius: 6px;
+  max-width: min(960px, 94vw);
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 24px 60px -12px rgba(0, 0, 0, 0.45);
+  animation: lightboxPop 0.25s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+@keyframes lightboxPop {
+  from { transform: scale(0.95) translateY(10px); }
+  to { transform: scale(1) translateY(0); }
+}
+
+.lightbox-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--line, #d8d5c9);
+  background: var(--paper, #f6f3eb);
+}
+
+.lightbox-category {
+  font-family: var(--sans);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--accent, #756039);
+  text-transform: uppercase;
+  display: block;
+}
+
+.lightbox-title {
+  font-family: var(--serif);
+  font-size: 1.15rem;
+  color: var(--ink, #202a2e);
+  margin: 2px 0 0;
+}
+
+.lightbox-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.lightbox-external-btn {
+  font-family: var(--sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--ink);
+  padding: 6px 12px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.lightbox-external-btn:hover {
+  background: var(--surface-muted);
+  border-color: var(--line-strong);
+}
+
+.lightbox-close-btn {
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  line-height: 1;
+  color: var(--ink);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.lightbox-close-btn:hover {
+  background: var(--danger-soft, #f7e9e6);
+  border-color: var(--danger, #882b29);
+  color: var(--danger, #882b29);
+}
+
+.lightbox-media-container {
+  overflow: auto;
+  padding: 24px;
+  background: #111517;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-height: calc(90vh - 140px);
+}
+
+.lightbox-img {
+  max-width: 100%;
+  max-height: calc(85vh - 160px);
+  object-fit: contain;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  border-radius: 2px;
+}
+
+.lightbox-footer {
+  padding: 12px 24px;
+  background: var(--paper, #f6f3eb);
+  border-top: 1px solid var(--line);
+}
+
+.lightbox-caption {
+  font-family: var(--serif);
+  font-size: 0.875rem;
+  font-style: italic;
+  color: var(--muted);
+  margin: 0;
+}
+
+/* --------------------------------------------------------------------------
+   4. Tactile 3D Card Depth & Lightswind Card Presentation
+   -------------------------------------------------------------------------- */
+.interactive-3d-card {
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s ease;
+  transform-style: preserve-3d;
+}
+
+.milestone-card,
+.archive-record,
+.resource-row,
+.curated-cred-card {
+  transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1),
+              box-shadow 0.25s ease,
+              border-color 0.25s ease;
+}
+
+.milestone-card:hover,
+.archive-record:hover,
+.curated-cred-card:hover {
+  box-shadow: 0 16px 36px -10px rgba(32, 42, 46, 0.12);
+  border-color: var(--line-strong);
+}
+
+/* --------------------------------------------------------------------------
+   5. Elevated Segmented Filter Controls
+   -------------------------------------------------------------------------- */
+.filters {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  background: var(--surface-muted, #ece8dc);
+  padding: 4px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+}
+
+.filter {
+  font-family: var(--sans);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  padding: 6px 14px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.filter:hover {
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.filter[aria-pressed="true"] {
+  background: var(--sheet, #fffdf8);
+  color: var(--ink);
+  border-color: var(--line);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  font-weight: 600;
+}
+
+/* --------------------------------------------------------------------------
+   6. Academic Skill Clusters (Anti-Pill & Editorial Hierarchy)
+   -------------------------------------------------------------------------- */
+.skill-cluster-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  margin-top: 24px;
+}
+
+.skill-cluster-card {
+  background: var(--sheet);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 24px;
+  transition: all 0.25s ease;
+}
+
+.skill-cluster-card:hover {
+  border-color: var(--line-strong);
+  box-shadow: 0 8px 24px -6px rgba(32, 42, 46, 0.08);
+}
+
+.skill-cluster-tag {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--accent);
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.skill-cluster-title {
+  font-family: var(--serif);
+  font-size: 1.25rem;
+  color: var(--ink);
+  margin-bottom: 12px;
+}
+
+.skill-cluster-items {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.skill-cluster-item {
+  font-family: var(--sans);
+  font-size: 0.875rem;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.skill-cluster-item::before {
+  content: '—';
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* --------------------------------------------------------------------------
+   7. Gallery & TLM Masonry System
+   -------------------------------------------------------------------------- */
+.tlm-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 28px;
+  margin: 32px 0;
+}
+
+.tlm-card {
+  background: var(--sheet);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.25s ease;
+}
+
+.tlm-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 32px -8px rgba(32, 42, 46, 0.12);
+  border-color: var(--line-strong);
+}
+
+.tlm-image-frame {
+  position: relative;
+  aspect-ratio: 16/10;
+  overflow: hidden;
+  background: var(--surface-muted);
+}
+
+.tlm-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.tlm-card:hover .tlm-img {
+  transform: scale(1.03);
+}
+
+.tlm-body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.tlm-meta-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.tlm-title {
+  font-family: var(--serif);
+  font-size: 1.2rem;
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+
+.tlm-description {
+  font-family: var(--serif);
+  font-size: 0.875rem;
+  color: var(--muted);
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+
+.tlm-pedagogy {
+  font-family: var(--sans);
+  font-size: 0.75rem;
+  color: var(--ink);
+  background: var(--paper);
+  padding: 10px 12px;
+  border-radius: 4px;
+  border-left: 2px solid var(--accent);
+  margin-top: auto;
+}
+
+/* --------------------------------------------------------------------------
+   8. Refined Hero Layout with 3D Depth
+   -------------------------------------------------------------------------- */
+.opening-hero .opening-inner {
+  position: relative;
+  z-index: 1;
+}
+
+.opening-hero .portrait-frame {
+  position: relative;
+  z-index: 2;
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.opening-hero .portrait-frame:hover {
+  transform: translateY(-4px) scale(1.01);
+}
+
+/* Print Overrides */
+@media print {
+  .hero-3d-canvas-wrap,
+  .custom-cursor-container,
+  .lightbox-overlay {
+    display: none !important;
+  }
+}

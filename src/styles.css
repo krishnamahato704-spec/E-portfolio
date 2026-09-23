@@ -2,6 +2,7 @@
 @layer reset,tokens,base,components,layout,responsive,identity,recruiter,foundation,opening,evidence,motion,print;
 @import url('./evidence.css?v=evidence-20260917');
 @import url('./opening.css?v=opening-20260912') layer(opening);
+@import url('./redesign.css?v=evidence-20260917');
 @font-face {
   font-family:'Source Serif 4';
   font-style:normal;
