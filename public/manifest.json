@@ -1,0 +1,27 @@
+{
+  "https://oyqevsygintkjrkfbzpx.supabase.co/storage/v1/object/public/portfolio-media/evidence/images/1787826897958_3tk4ud_portrait.jpeg": {
+    "path": "assets/portrait.webp",
+    "width": 1154,
+    "height": 1400
+  },
+  "https://oyqevsygintkjrkfbzpx.supabase.co/storage/v1/object/public/portfolio-media/evidence/images/1787898353874_955zgr_certWall1_0.jpeg": {
+    "path": "assets/certificate-1.webp",
+    "width": 902,
+    "height": 1400
+  },
+  "https://oyqevsygintkjrkfbzpx.supabase.co/storage/v1/object/public/portfolio-media/evidence/images/1787898375320_kx4r62_certWall2_0.jpeg": {
+    "path": "assets/certificate-2.webp",
+    "width": 990,
+    "height": 1400
+  },
+  "https://oyqevsygintkjrkfbzpx.supabase.co/storage/v1/object/public/portfolio-media/evidence/images/1787898492438_n15fxx_certWall3_0.jpeg": {
+    "path": "assets/certificate-3.webp",
+    "width": 1400,
+    "height": 1045
+  },
+  "https://oyqevsygintkjrkfbzpx.supabase.co/storage/v1/object/public/portfolio-media/evidence/images/1787898560665_nhlr6b_certWall4_0.jpeg": {
+    "path": "assets/certificate-4.webp",
+    "width": 1344,
+    "height": 1029
+  }
+}

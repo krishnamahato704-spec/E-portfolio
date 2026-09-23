@@ -4,10 +4,10 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "node scripts/build.mjs",
-    "dev": "node scripts/serve.mjs",
-    "start": "node scripts/serve.mjs",
-    "lint": "node --test tests/*.test.mjs",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview --port 3000",
+    "lint": "tsc --noEmit",
     "test": "node --test tests/*.test.mjs",
     "test:browser": "node scripts/check-browser.mjs"
   },
@@ -15,10 +15,22 @@
     "node": ">=22"
   },
   "dependencies": {
-    "@supabase/supabase-js": "2.116.0"
+    "@react-three/drei": "^10.7.8",
+    "@react-three/fiber": "^9.8.0",
+    "@supabase/supabase-js": "2.116.0",
+    "gsap": "^3.15.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "three": "^0.186.0"
   },
   "devDependencies": {
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@types/three": "^0.186.0",
+    "@vitejs/plugin-react": "^6.1.1",
     "pdfkit": "0.20.2",
-    "playwright": "1.62.1"
+    "playwright": "1.62.1",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.0"
   }
 }

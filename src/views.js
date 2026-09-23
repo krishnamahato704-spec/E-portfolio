@@ -49,9 +49,10 @@ export function header(route,base,c){
     {r:'teaching',num:'02',label:'Teaching'},
     {r:'resources',num:'03',label:'Teaching Artifacts'},
     {r:'credentials',num:'04',label:'Credentials'},
+    {r:'gallery',num:'05',label:'Gallery'},
     {r:'resume',num:'—',label:'Résumé'}
   ];
-  return `<a class="skip-link" href="#main">Skip to content</a><header class="site-header"><div class="container header-inner"><a class="brand" href="${base}" aria-label="${esc(c.profile.name)} — Home"><span class="monogram" aria-hidden="true">KM<span>.</span></span><span class="brand-caption">${esc(c.profile.name)}<small>History, Social Science & English</small></span></a><details class="fallback-navigation"><summary>Menu</summary><nav aria-label="Main navigation">${[...navItems,{r:'contact',label:'Let’s Connect'}].map(it=>`<a href="${base}${routes[it.r].path}">${it.label}</a>`).join('')}</nav></details><button class="menu-toggle" aria-expanded="false" aria-controls="navigation">Menu <span class="menu-lines" aria-hidden="true"></span></button><div id="navigation" class="navigation-panel"><div class="navigation-top"><p id="navigation-title" class="eyebrow">Explore the portfolio</p><button class="menu-close" aria-label="Close navigation">Close <span aria-hidden="true">×</span></button></div><nav class="navigation-links" aria-label="Main navigation">${navItems.map(it=>`<a ${route===it.r || (it.r==='teaching'&&['pehchaan','observation','democracy'].includes(route))?'aria-current="page"':''} href="${base}${routes[it.r].path}"><span class="nav-index" aria-hidden="true">${it.num}</span>${it.label}</a>`).join('')}<a class="nav-contact" ${route==='contact'?'aria-current="page"':''} href="${base}contact/"><span class="nav-index" aria-hidden="true">05</span>Let’s Connect ${arrow}</a></nav><p class="navigation-note">History. Inquiry. Possibility.</p></div></div></header>`;
+  return `<a class="skip-link" href="#main">Skip to content</a><header class="site-header"><div class="container header-inner"><a class="brand" href="${base}" aria-label="${esc(c.profile.name)} — Home"><span class="monogram" aria-hidden="true">KM<span>.</span></span><span class="brand-caption">${esc(c.profile.name)}<small>History, Social Science & English</small></span></a><details class="fallback-navigation"><summary>Menu</summary><nav aria-label="Main navigation">${[...navItems,{r:'contact',label:'Let’s Connect'}].map(it=>`<a href="${base}${routes[it.r].path}">${it.label}</a>`).join('')}</nav></details><button class="menu-toggle" aria-expanded="false" aria-controls="navigation">Menu <span class="menu-lines" aria-hidden="true"></span></button><div id="navigation" class="navigation-panel"><div class="navigation-top"><p id="navigation-title" class="eyebrow">Explore the portfolio</p><button class="menu-close" aria-label="Close navigation">Close <span aria-hidden="true">×</span></button></div><nav class="navigation-links" aria-label="Main navigation">${navItems.map(it=>`<a ${route===it.r || (it.r==='teaching'&&['pehchaan','observation','democracy'].includes(route))?'aria-current="page"':''} href="${base}${routes[it.r].path}"><span class="nav-index" aria-hidden="true">${it.num}</span>${it.label}</a>`).join('')}<a class="nav-contact" ${route==='contact'?'aria-current="page"':''} href="${base}contact/"><span class="nav-index" aria-hidden="true">06</span>Let’s Connect ${arrow}</a></nav><p class="navigation-note">History. Inquiry. Possibility.</p></div></div></header>`;
 }
 export function footer(base,c){return `<footer class="site-footer"><div class="container footer-top"><div><a class="footer-name" href="${base}">${esc(c.profile.name)}</a><p>History. Inquiry. Possibility.</p></div><div><p class="eyebrow">Start a conversation</p><a class="email-link" href="mailto:${esc(c.profile.email)}">${esc(c.profile.email)} ${arrow}</a></div></div><div class="container footer-bottom"><span>© ${new Date().getFullYear()} ${esc(c.profile.name)} · Teaching portfolio</span><div>${link(base,'resume','Résumé')}${link(base,'admin','Owner sign in')}</div></div></footer>`}
 function qualificationRows(c){return c.qualifications.map(q=>`<article class="qualification"><p class="period">${esc(q.period)}</p><div><h3>${esc(q.title)}</h3><p>${esc(q.place)}</p>${q.note?`<p class="small">${esc(q.note)}</p>`:''}${q.expected?`<p class="small">Expected completion: ${esc(q.expected)}</p>`:''}</div><span class="status ${/progress/i.test(q.status)?'progress':''}">${esc(q.status)}</span></article>`).join('')}
@@ -383,6 +384,182 @@ function homeCredentialsHighlight(c,base){return `<section class="section contai
 
 function homeReflection(c,base){return `<section class="section compact container home-reflection-section"><div class="reflection-quote-card"><p class="eyebrow">Professional development</p><h2 id="reflection-title">Making reflection<br><em>part of the record.</em></h2><p class="reflection-body">My next evidence priority is a completed lesson reflection: the question I asked, what learners’ responses showed, and the change I would make. The published Democracy plan includes prompts for this review.</p>${link(base,'democracy','Read the reflection section')}</div></section>`;}
 
+function homeAboutPreview(c, base) {
+  const p = c.profile;
+  return `
+<section class="section container home-about-preview" aria-labelledby="home-about-title">
+  <div class="about-preview-grid">
+    <div class="about-preview-visual">
+      <div class="about-card-badge"><span class="badge-code">ARCHIVE / KM-01</span><span class="badge-label">EDUCATOR PROFILE</span></div>
+      <figure class="about-portrait-frame interactive-3d-card">
+        <div class="portrait-window">
+          ${img(p.portrait, 'Portrait of ' + p.name, base, 'about-preview-img', false) || '<div class="portrait-placeholder">Portrait<br>forthcoming</div>'}
+        </div>
+        <figcaption class="about-frame-caption">
+          <span class="caption-name">${esc(p.name)}</span>
+          <span class="caption-role">History, Social Science &amp; English Educator</span>
+        </figcaption>
+      </figure>
+    </div>
+    <div class="about-preview-copy">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">About the Educator</p>
+          <h2 id="home-about-title">Connecting historical depth<br><em>with classroom curiosity.</em></h2>
+        </div>
+      </div>
+      <p class="lead">${esc(c.about)}</p>
+      <p class="about-detail">${esc(c.preparation)}</p>
+      <div class="about-pillars">
+        <div class="pillar-item"><span class="pillar-tag">DISCIPLINARY ROOTS</span><p class="pillar-desc">Honours background in History and Economics from Gurukul Kangri, grounding secondary teaching in authentic historiography.</p></div>
+        <div class="pillar-item"><span class="pillar-tag">TEACHER EDUCATION</span><p class="pillar-desc">B.Ed. at Amity Institute of Education (2025–2027), active in school internship, lesson planning, and action research.</p></div>
+      </div>
+      <div class="about-actions">
+        ${link(base, 'profile', 'Read Full Profile & Chronology', 'button primary')}
+        <a class="button secondary" href="${base}resume/">View Résumé</a>
+      </div>
+    </div>
+  </div>
+</section>`;
+}
+
+function homeResearchPreview(c, base) {
+  const cert = c.certificates.find(x => x.category === 'Presentation') || c.certificates[3];
+  return `
+<section class="section container home-research-preview" aria-labelledby="home-research-title">
+  <div class="research-header-flex">
+    <div>
+      <div class="research-eyebrow-line">
+        <span class="research-badge">ACADEMIC RESEARCH &amp; PRESENTATIONS</span>
+        <span class="meta-sep" aria-hidden="true">·</span>
+        <span class="research-date">10 March 2026</span>
+      </div>
+      <h2 id="home-research-title">Rootedness in India:<br><em>NEP 2020 &amp; Teacher Education</em></h2>
+      <p class="lead">Scholarly paper presentation at the International Seminar organised by Amity Institute of Education, sponsored by GAIL India Ltd.</p>
+    </div>
+    <div class="research-head-link">
+      ${link(base, 'credentials', 'View seminar certificate & credentials', 'button secondary')}
+    </div>
+  </div>
+  <div class="research-dossier-grid">
+    <div class="research-meta-col">
+      <div class="research-frame interactive-3d-card">
+        <a class="archive-doc-frame" href="${esc(safeUrl(cert?.image || ''))}" target="_blank" rel="noopener noreferrer" data-title="NEP 2020 &amp; IKS Seminar Presentation" data-category="ACADEMIC RESEARCH" data-caption="International seminar certificate on NEP 2020 &amp; IKS in Teacher Education">
+          ${img(cert?.image, 'NEP 2020 and IKS Seminar Certificate', base, 'research-cert-img')}
+          <span class="doc-view-hint" aria-hidden="true">Examine presentation certificate ↗</span>
+        </a>
+      </div>
+      <div class="research-authorship">
+        <p class="authorship-label">CO-AUTHOR &amp; PRESENTER</p>
+        <p class="authorship-names"><strong>Krishna Mahato</strong> (Co-author &amp; Presenter)<br>with <strong>Rusha Chaudhauri</strong> (Lead Author)</p>
+        <p class="small">Sponsored by <strong>GAIL (India) Limited</strong> · Amity Institute of Education</p>
+      </div>
+    </div>
+    <div class="research-content-col">
+      <div class="research-matrix">
+        <div class="matrix-cell">
+          <span class="matrix-tag">RESEARCH PROBLEM</span>
+          <h4>Integrating Indian Knowledge Systems</h4>
+          <p>Examining how teacher education curricula can meaningfully translate the National Education Policy 2020 mandate of experiential, culturally rooted inquiry into everyday secondary classrooms without reducing history to rote memorization.</p>
+        </div>
+        <div class="matrix-cell">
+          <span class="matrix-tag">METHODOLOGY &amp; ANALYSIS</span>
+          <h4>Pedagogical &amp; Policy Inquiry</h4>
+          <p>Comparative curriculum review of secondary pedagogical frameworks, analyzing how multi-perspective source materials, indigenous scientific traditions, and dialogic questioning enhance learner engagement.</p>
+        </div>
+        <div class="matrix-cell">
+          <span class="matrix-tag">CLASSROOM IMPLICATIONS</span>
+          <h4>From Policy to Practicum</h4>
+          <p>Directly informed the instructional design of Class IX Social Science units, using local constitutional and civic examples to encourage democratic reasoning and evidence-based historical debate.</p>
+        </div>
+      </div>
+      <div class="research-footer-callout">
+        <p class="callout-quote"><em>"Teacher preparation is not merely content delivery; it is equipping young educators to nurture critical judgment, cultural awareness, and democratic participation."</em></p>
+      </div>
+    </div>
+  </div>
+</section>`;
+}
+
+function homeSkillsPreview(c, base) {
+  const clusters = [
+    {
+      tag: 'TEACHING & PEDAGOGY',
+      title: 'Classroom & Instructional Design',
+      items: ['Inquiry-based lesson design', 'Differentiated instruction', 'Formative & diagnostic assessment', 'Interactive classroom facilitation']
+    },
+    {
+      tag: 'DISCIPLINARY PRACTICE',
+      title: 'Historical & Social Inquiry',
+      items: ['Primary historical source criticism', 'Multiple perspectives analysis', 'Civic & constitutional governance', 'Cartographic & visual source literacy']
+    },
+    {
+      tag: 'EDUCATIONAL TECHNOLOGY',
+      title: 'Digital Tools & Learning Media',
+      items: ['Canva & visual TLM design', 'Microsoft Office & academic presentations', 'Online classroom coordination', 'Digital document curation']
+    }
+  ];
+
+  return `
+<section class="section container home-skills-preview" aria-labelledby="home-skills-title">
+  <div class="section-heading">
+    <div>
+      <p class="eyebrow">Professional Competencies</p>
+      <h2 id="home-skills-title">Pedagogical skills &amp;<br><em>disciplinary preparation.</em></h2>
+    </div>
+    ${link(base, 'profile', 'View academic background')}
+  </div>
+  <p class="lead">Prepared through rigorous teacher education, undergraduate humanities study, and school internship practice.</p>
+  <div class="skill-cluster-grid">
+    ${clusters.map(cluster => `
+      <article class="skill-cluster-card interactive-3d-card" data-motion="fade-up">
+        <span class="skill-cluster-tag">${cluster.tag}</span>
+        <h3 class="skill-cluster-title">${cluster.title}</h3>
+        <ul class="skill-cluster-items">
+          ${cluster.items.map(item => `<li class="skill-cluster-item">${item}</li>`).join('')}
+        </ul>
+      </article>
+    `).join('')}
+  </div>
+</section>`;
+}
+
+function homeGalleryPreview(c, base) {
+  const items = c.gallery.slice(0, 3);
+  if (!items.length) return '';
+  return `
+<section class="section container home-gallery-preview" aria-labelledby="home-gallery-title">
+  <div class="section-heading">
+    <div>
+      <p class="eyebrow">Visual Evidence &amp; Materials</p>
+      <h2 id="home-gallery-title">Classroom activities,<br><em>TLMs &amp; field practice.</em></h2>
+    </div>
+    ${link(base, 'gallery', 'View all gallery documentation')}
+  </div>
+  <p class="lead">Visual artifacts from school practicum, community education, seminar presentations, and instructional planning.</p>
+  <div class="tlm-gallery-grid">
+    ${items.map(x => `
+      <article class="tlm-card interactive-3d-card">
+        <div class="tlm-image-frame">
+          <a class="archive-doc-frame" href="${esc(safeUrl(x.image))}" target="_blank" rel="noopener noreferrer" data-title="${esc(x.title)}" data-category="${esc(x.category || 'GALLERY')}" data-caption="${esc(x.description || '')}">
+            ${img(x.image, x.title, base, 'tlm-img')}
+            <span class="doc-view-hint" aria-hidden="true">Examine record ↗</span>
+          </a>
+        </div>
+        <div class="tlm-body">
+          <div class="tlm-meta-line">
+            <span class="tlm-category-badge">${esc(x.category || 'Classroom')}</span>
+            ${x.context ? `<span class="meta-sep" aria-hidden="true">·</span><span class="tlm-context">${esc(x.context)}</span>` : ''}
+          </div>
+          <h3 class="tlm-title">${esc(x.title)}</h3>
+          ${x.description ? `<p class="tlm-description">${esc(x.description)}</p>` : ''}
+        </div>
+      </article>
+    `).join('')}
+  </div>
+</section>`;
+}
+
 function homeClosingCTA(c, base) {
   const p = c.profile;
   return `
@@ -428,7 +605,7 @@ export function view(route,c,base='./') {
  const observation=c.experiences.find(e=>e.id==='observation');
   if((route==='pehchaan'&&!pehchaan)||(route==='observation'&&!observation))return view('404',c,base);
   switch(route){
-  case 'home': return `${opening(c,base)}${hiringSummary(c,base)}${schoolProgression(c,base)}${homePhilosophy(c,base)}${homeFeaturedArtifact(c,base)}${homeCredentialsHighlight(c,base)}${homeReflection(c,base)}${homeClosingCTA(c,base)}`;
+  case 'home': return `${opening(c,base)}${hiringSummary(c,base)}${homeAboutPreview(c,base)}${schoolProgression(c,base)}${homePhilosophy(c,base)}${homeFeaturedArtifact(c,base)}${homeResearchPreview(c,base)}${homeSkillsPreview(c,base)}${homeGalleryPreview(c,base)}${homeCredentialsHighlight(c,base)}${homeReflection(c,base)}${homeClosingCTA(c,base)}`;
   case 'profile': return `<div class="container profile-page"><header class="educator-opening" aria-labelledby="educator-title"><div class="educator-opening-grid"><div class="educator-col-left"><p class="eyebrow educator-chapter" data-motion="fade-up" data-motion-index="1"><span class="chapter-number" aria-hidden="true">01</span><span class="chapter-label">The Educator</span></p><h1 id="educator-title" class="educator-mantra" data-motion="fade-up" data-motion-index="2">HISTORY.<br>INQUIRY.<br>POSSIBILITY.</h1></div><div class="educator-col-right"><p class="educator-lead" data-motion="fade-up" data-motion-index="3">${esc(p.summary)}</p><div class="educator-meta-badge" data-motion="fade-up" data-motion-index="4"><span class="meta-code">EDUCATOR RECORD / KM-01</span><span class="meta-sep" aria-hidden="true">·</span><span class="meta-field">FIELD / HISTORY &amp; SOCIAL SCIENCE</span></div></div></div><div class="educator-divider" data-motion="fade-up" data-motion-index="5" aria-hidden="true"><span class="divider-line"></span><span class="divider-notch"></span></div></header><section class="profile-narrative-section section compact"><div class="profile-editorial-composition"><div class="profile-portrait-col"><figure class="portrait-archival-frame"><div class="portrait-window" data-motion="image">${img(p.portrait,'Portrait of '+p.name,base,'portrait-img',false)||'<div class="portrait-placeholder">Portrait<br>forthcoming</div>'}</div><figcaption class="portrait-caption" data-motion="fade-up" data-motion-index="4"><div class="portrait-meta-line"><span class="meta-code">PORTRAIT / KM-01</span><span class="meta-dot" aria-hidden="true">·</span><span class="meta-field">ARCHIVAL RECORD</span></div><p class="caption-text"><strong>${esc(p.name)}</strong> · History &amp; Social Science Educator</p></figcaption></figure></div><div class="profile-narrative-col"><header class="narrative-header" data-motion="fade-up" data-motion-index="2"><p class="eyebrow narrative-eyebrow">Educator Narrative</p><h2 class="narrative-heading">Connecting the past<br>with the classroom.</h2></header><div class="narrative-blocks" data-motion="fade-up" data-motion-index="3"><div class="narrative-block"><p class="narrative-block-label">WHY HISTORY</p><p class="narrative-text">${esc(c.about)}</p></div><div class="narrative-block"><p class="narrative-block-label">WIDER HUMANITIES CONTEXT</p><p class="narrative-text">${esc(c.preparation)}</p></div><div class="narrative-block"><p class="narrative-block-label">CURRENT DEVELOPMENT</p><p class="narrative-text">${esc(studySummary(c))}. The education record below lists institutions, progress and expected completion.</p></div></div></div></div></section>${profileRecruiterSystem(c)}${profileAcademicChronology(c)}${profileSkillsSection(c)}${profileExitPath(base)}</div>`;
   case 'teaching': return `<div class="container teaching-page">${heading('02 / Teaching Journey','Learning to teach.<br><em>Teaching to understand.</em>','School internships, community teaching, observation and the ideas I am developing through them.')}<div class="journey-flow-strip" aria-label="Educator development continuum"><div class="flow-strip-intro"><span class="flow-strip-tag">FRAMEWORK</span><span class="flow-strip-desc">Pedagogical Continuum</span></div><div class="flow-sequence" role="list"><span class="flow-step" role="listitem">OBSERVE</span><span class="flow-sep" aria-hidden="true">→</span><span class="flow-step" role="listitem">QUESTION</span><span class="flow-sep" aria-hidden="true">→</span><span class="flow-step" role="listitem">PLAN</span><span class="flow-sep" aria-hidden="true">→</span><span class="flow-step" role="listitem">TEACH</span><span class="flow-sep" aria-hidden="true">→</span><span class="flow-step" role="listitem">ASSESS</span><span class="flow-sep" aria-hidden="true">→</span><span class="flow-step" role="listitem">REFLECT</span><span class="flow-sep" aria-hidden="true">→</span><span class="flow-step" role="listitem">GROW</span></div></div>${evidenceLinks(base)}<div class="collection-tools" data-enhancement hidden><label>Find teaching experience<input id="experience-search" type="search" placeholder="Search school, activity or date" aria-controls="experience-list"></label><div class="filters" role="group" aria-label="Filter teaching experience">${['All','Teaching','Observation'].map((s,i)=>`<button class="filter" data-experience-filter="${s}" aria-pressed="${i===0}">${s}</button>`).join('')}</div></div><p id="experience-count" class="collection-count" role="status" data-enhancement hidden></p><div class="timeline-container"><div class="timeline-track" aria-hidden="true"><div class="timeline-fill"></div></div><h2 class="sr-only">Teaching and observation experience</h2><section id="experience-list" class="experience-timeline" aria-label="Teaching and observation record">${experienceRows(c,base)}</section></div><p id="experience-empty" class="empty-note" ${c.experiences.length?'hidden':''}>No experiences match this search.</p>${philosophySection(c,base)}</div>`;
   case 'pehchaan': return caseStudy(base,'Community teaching','Foundational literacy<br><em>and numeracy.</em>',pehchaan,`<h2>The teaching context</h2><p>The portfolio record describes a five-week NTCC internship with Nursery, LKG and UKG learners, alongside ULLAS adult-literacy sessions for five learners.</p><h2>Responsibilities recorded</h2>${list(pehchaan.points)}<h2>What the document supports</h2><p>The completion certificate confirms 80 hours as an on-ground intern / teacher at Pehchaan The Street School. It does not report learner outcomes or describe individual teaching activities.</p><h2>Next reflection to document</h2><p>A short account of one activity, the learner response and a subsequent adjustment would add evidence of how this experience informed teaching.</p>`,`<aside class="evidence-aside"><p class="eyebrow">Completion certificate</p><h2>80 hours</h2><p>Pehchaan The Street School · 6 July 2026</p><a class="archive-doc-frame" href="${base}assets/certificate-2.webp">${img(defaultContent.certificates[1].image,'Pehchaan certificate confirming 80 hours as an on-ground intern / teacher',base,'case-evidence-img')}</a>${link(base,'credentials','View supporting credentials')}</aside>`);
