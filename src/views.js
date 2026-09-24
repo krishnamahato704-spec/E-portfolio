@@ -126,6 +126,12 @@ function certificateCard(c,base,index){
     crosslink = `<a class="text-link cert-context-link" href="${base}teaching/">Connect with teaching journey ${arrow}</a>`;
   } else if (/bachelor/i.test(c.title)) {
     crosslink = `<a class="text-link cert-context-link" href="${base}profile/">View academic chronology ${arrow}</a>`;
+  } else if (/ai|ncert/i.test(c.title + ' ' + (c.issuer||''))) {
+    crosslink = `<a class="text-link cert-context-link" href="${base}resources/">Explore classroom technology &amp; TLM ${arrow}</a>`;
+  } else if (/writing|nptel/i.test(c.title + ' ' + (c.issuer||''))) {
+    crosslink = `<a class="text-link cert-context-link" href="${base}profile/">View disciplinary &amp; writing foundations ${arrow}</a>`;
+  } else if (/linkedin|suraasa/i.test(c.title + ' ' + (c.issuer||''))) {
+    crosslink = `<a class="text-link cert-context-link" href="${base}contact/">Connect for professional learning ${arrow}</a>`;
   }
 
   return `
