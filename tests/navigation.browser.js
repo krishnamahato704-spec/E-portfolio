@@ -99,7 +99,7 @@ try{
     assert(!document.body.classList.contains('navigation-open'),'Page restore retained stale navigation state');
   });
   await check('All generated header routes retain destinations and accurate active state',()=>{
-    const navRoutes=['profile','teaching','resources','credentials','resume','contact'];
+    const navRoutes=['profile','teaching','resources','credentials','gallery','resume','contact'];
     for(const [route,meta] of Object.entries(routes)){
       const depth=meta.path.endsWith('/')?meta.path.split('/').filter(Boolean).length:0;
       const base=route==='404'?'/E-portfolio/':depth?'../'.repeat(depth):'./';

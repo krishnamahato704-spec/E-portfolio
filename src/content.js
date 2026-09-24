@@ -58,15 +58,15 @@ export const defaultContent = {
       category:'Teaching',
       duration:'5',
       durationUnit:'Weeks',
-      summary:'Foundational literacy, numeracy and ULLAS adult-literacy teaching.',
-      title:'NTCC Internship · Pehchaan The Street School',
-      type:'Five-week teaching internship',
+      summary:'80 hours foundational kindergarten teaching & 50 hours ULLAS adult literacy field practice (Course EDCW100).',
+      title:'NTCC Internship · Pehchaan The Street School & ULLAS Adult Literacy',
+      type:'Five-week community teaching & adult literacy internship',
       period:'1 June–6 July 2026',
       points:[
-        'Taught foundational literacy and numeracy to Nursery, LKG and UKG learners.',
-        'Used competency-based and activity-based methods.',
-        'Conducted ULLAS adult-literacy sessions for five adult learners.',
-        'Developed classroom-management and community-engagement experience.'
+        'Completed 80 verified hours teaching foundational literacy and numeracy to Nursery, LKG and UKG learners (ages 4–6) at Pehchaan The Street School in Morna Village, Sector 35, Noida.',
+        'Conducted 50 hours of adult literacy and critical life-skills instruction for five community workers (security guards and sanitation cleaners) under the Government of India ULLAS / NILP initiative.',
+        'Designed and administered a 40-mark UKG diagnostic assessment test alongside multi-sensory tracing sheets, Maths Market real-world currency simulations, and Mystery Bag vocabulary games.',
+        'Authored and submitted a 27-page academic NTCC report (EDCW100) under Faculty Guide Dr. Neetu Mishra Shukla and Founder Akash Tandon, verified with a 6% Turnitin score.'
       ]
     },
     {
@@ -179,16 +179,99 @@ export const defaultContent = {
       duration:'40 minutes',
       evidenceStatus:'Classroom TLM',
       context:'Panchsheel Balak Inter-College · B.Ed. English practicum'
+    },
+    {
+      id:'tlm-comparative-diagrams',
+      title:'Comparative Systems Concept Diagrams & Visual Evidence Sources',
+      category:'Classroom TLM',
+      subject:'Social Science (Civics)',
+      grade:'Class IX-B',
+      date:'25 July 2026',
+      description:'Structured visual teaching learning material contrasting Direct vs. Indirect Democracy and Parliamentary vs. Presidential government systems using comparative architectural diagrams and primary photographic sources.',
+      url:'https://oyqevsygintkjrkfbzpx.supabase.co/storage/v1/object/public/portfolio-media/redesign/comparative-systems-concept-diagram.pdf',
+      thumbnail:'assets/democracy-thumb.webp',
+      type:'Concept diagrams & TLM',
+      duration:'Classroom TLM',
+      evidenceStatus:'Classroom TLM',
+      context:'Amity University school practicum · Panchsheel Balak Inter-College'
+    },
+    {
+      id:'tlm-phonics-word-builder',
+      title:'Multisensory Phonics & Foundational Word-Building Kit',
+      category:'Tactile TLM & FLN',
+      subject:'English (Foundational Literacy)',
+      grade:'Nursery, LKG & UKG',
+      date:'June–July 2026',
+      description:'Tactile phonics flashcards, alphabet tracing guides, visual-motor maze worksheets, and two-letter blend cards developed for early learners and ULLAS adult literacy sessions.',
+      url:'https://oyqevsygintkjrkfbzpx.supabase.co/storage/v1/object/public/portfolio-media/redesign/multisensory-phonics-word-builder.pdf',
+      thumbnail:'assets/pehchaan-classroom-mosaic.webp',
+      type:'Tactile learning kit & worksheets',
+      duration:'5 weeks on-ground',
+      evidenceStatus:'Classroom TLM',
+      context:'Pehchaan The Street School · 80-Hour Teaching Internship'
+    },
+    {
+      id:'tlm-photo-evidence-cards',
+      title:'Primary Source Historical Evidence Cards: Elections & Citizen Voice',
+      category:'Historical TLM',
+      subject:'History & Civics',
+      grade:'Class 9',
+      date:'July 2026',
+      description:'Inquiry-prompt source cards pairing historical Indian election photographs and protest marches with open-ended diagnostic questioning to provoke analytical discussion on constitutional accountability.',
+      url:'https://oyqevsygintkjrkfbzpx.supabase.co/storage/v1/object/public/portfolio-media/redesign/primary-source-historical-evidence-cards.pdf',
+      thumbnail:'assets/mock-election-evm-activity.webp',
+      type:'Inquiry prompt cards (TLM)',
+      duration:'Inquiry lesson',
+      evidenceStatus:'Classroom TLM',
+      context:'Panchsheel Balak Inter-College · Class IX-B'
+    },
+    {
+      id:'tlm-formative-response-sheets',
+      title:'Three-Tier Diagnostic Response Sheets & Formative Prompt System',
+      category:'Formative Assessment',
+      subject:'Social Science',
+      grade:'Classes 8–9',
+      date:'July–August 2026',
+      description:'Tiered formative check-for-understanding sheets featuring diagnostic recall prompts, guided differentiation questions, and independent evaluative tasks designed to immediately inform subsequent instruction.',
+      url:'https://oyqevsygintkjrkfbzpx.supabase.co/storage/v1/object/public/portfolio-media/redesign/three-tier-diagnostic-response-sheets.pdf',
+      thumbnail:'assets/notice-writing-preview.webp',
+      type:'Assessment rubrics & response sheets',
+      duration:'Formative assessment',
+      evidenceStatus:'Classroom TLM',
+      context:'Panchsheel Balak Inter-College practicum'
+    },
+    {
+      id:'ntcc-community-work-report',
+      title:'Community Work & Adult Literacy · NTCC B.Ed. Report (EDCW100)',
+      category:'Internship report',
+      subject:'Foundational Education & Adult Literacy (ULLAS)',
+      grade:'Nursery–UKG & Adult Community Learners',
+      date:'20 July 2026',
+      description:'Official 27-page Non-Teaching Credit Course (NTCC) community engagement report submitted to Amity Institute of Education under Faculty Guide Dr. Neetu Mishra Shukla and Founder Akash Tandon. Details 80 verified hours of kindergarten teaching at Pehchaan The Street School and 50 hours of ULLAS adult literacy with security guards and sanitation workers. Turnitin certified (6% similarity).',
+      url:storage+'amity-ntcc-community-work-report.pdf',
+      thumbnail:'assets/ntcc-report-cover-preview.webp',
+      type:'Academic NTCC report (PDF · 27 pages)',
+      duration:'130 total hours (5 weeks)',
+      evidenceStatus:'Verified academic report',
+      context:'Amity University Uttar Pradesh · Course EDCW100'
+    },
+    {
+      id:'ukg-diagnostic-assessment',
+      title:'UKG Diagnostic Assessment & Foundational Skills Evaluation Sheet',
+      category:'Assessment',
+      subject:'Foundational Literacy & Numeracy (FLN)',
+      grade:'Nursery, LKG & UKG (Ages 4–6)',
+      date:'June–July 2026',
+      description:'Authentic 40-mark diagnostic test instrument (Annexure 2 of NTCC report) administered to kindergarten learners at Pehchaan The Street School. Features English/Hindi alphabet missing letters, counting & shape identification, picture words, and single-digit addition and subtraction.',
+      url:storage+'ukg-assessment-test.pdf',
+      thumbnail:'assets/ukg-assessment-preview.webp',
+      type:'Diagnostic assessment test (PDF)',
+      duration:'40 marks assessment',
+      evidenceStatus:'Field assessment tool',
+      context:'Pehchaan The Street School · Morna Village, Sector 35, Noida'
     }
   ],
   gallery:[
-    {
-      title:'Democracy Lesson Plan · Class IX-B Practicum Framing',
-      image:storage+'democracy_plan_class9.jpeg',
-      category:'Lesson Planning & TLM',
-      description:'Structured pedagogical blueprint for Class IX Social Science integrating inquiry prompts, visual sources, and formative assessment checks.',
-      context:'Amity Institute of Education school practicum 2026'
-    },
     {
       title:'Mock Election Classroom Activity & EVM Simulation',
       image:storage+'mock-election-evm-activity.webp',
@@ -225,6 +308,20 @@ export const defaultContent = {
       context:'Panchsheel Balak Inter-College · Classes 6 & 8'
     },
     {
+      title:'Democracy Lesson Plan · Class IX-B Practicum Framing',
+      image:storage+'democracy_plan_class9.jpeg',
+      category:'Lesson Planning & TLM',
+      description:'Structured pedagogical blueprint for Class IX Social Science integrating inquiry prompts, visual sources, and formative assessment checks.',
+      context:'Amity Institute of Education school practicum 2026'
+    },
+    {
+      title:'Democracy Comparative Concept Diagram & Matrix',
+      image:storage+'democracy-thumb.webp',
+      category:'Classroom TLM',
+      description:'Classroom chalkboard synthesis matrix and comparative conceptual diagram contrasting parliamentary and presidential democratic governance structures.',
+      context:'Panchsheel Balak Inter-College · Class IX-B'
+    },
+    {
       title:'Gemini Certified Educator Credential',
       image:storage+'cert_gemini_educator_2026.webp',
       category:'Digital Pedagogy & AI',
@@ -232,11 +329,81 @@ export const defaultContent = {
       context:'Google for Education · 2026'
     },
     {
+      title:'Leveraging AI for Transforming School Education',
+      image:storage+'cert_ncert_ai_2026.jpeg',
+      category:'Professional Learning',
+      description:'National course on pedagogical AI integration, ethical digital tools, and educational transformation offered by CIET-NCERT under the Ministry of Education.',
+      context:'CIET-NCERT, New Delhi · 4 March 2026'
+    },
+    {
+      title:'Effective Writing · NPTEL Elite Certification',
+      image:storage+'cert_nptel_writing_2026.jpeg',
+      category:'Academic Foundations',
+      description:'8-week academic composition and critical writing course completed with a 76% consolidated score. Awarded Elite certification.',
+      context:'IIT Roorkee · NPTEL (SWAYAM / MoE)'
+    },
+    {
+      title:'LinkedIn for Teachers · Professional Development',
+      image:storage+'cert_suraasa_linkedin_2026.jpeg',
+      category:'Professional Learning',
+      description:'Professional development webinar on educator digital visibility, teacher personal branding, and career networking.',
+      context:'Suraasa · 7 January 2026'
+    },
+    {
       title:'Academic Discipline in History & Economics',
       image:storage+'1787898353874_955zgr_certWall1_0.jpeg',
       category:'Academic Foundations',
       description:'Undergraduate graduation degree with honours in History and Economics, providing the historiographical grounding for classroom pedagogy.',
-      context:'Gurukul Kangri Vishwavidyalaya · CGPA 8.80'
+      context:'Gurukula Kangri (Deemed to be University) · CGPA 8.80'
+    },
+    {
+      title:'Teaching Internship · 80 Hours On-Ground',
+      image:storage+'1787898375320_kx4r62_certWall2_0.jpeg',
+      category:'Field Practice & Community',
+      description:'Certificate of completion as an on-ground intern / teacher documenting 80 hours of foundational literacy and numeracy instruction.',
+      context:'Pehchaan The Street School · 6 July 2026'
+    },
+    {
+      title:'Youth as Catalyst in Strengthening Women Safety',
+      image:storage+'1787898492438_n15fxx_certWall3_0.jpeg',
+      category:'Professional Learning',
+      description:'Certificate of participation in national webinar on women’s safety, digital awareness, and community protection.',
+      context:'Pink Shakti Women Safety Initiative · 26 November 2025'
+    },
+    {
+      title:'NEP 2020 & IKS in Teacher Education Seminar Presentation',
+      image:storage+'1787898560665_nhlr6b_certWall4_0.jpeg',
+      category:'Research & Presentations',
+      description:'Certificate of co-authorship and oral presentation on integrating Indian Knowledge Systems into teacher education.',
+      context:'Amity Institute of Education · Sponsored by GAIL India Ltd'
+    },
+    {
+      title:'Educator Practicum Study & Reflective Practice',
+      image:storage+'1787826897958_3tk4ud_portrait.jpeg',
+      category:'Reflective Practice',
+      description:'Professional portrait and archival record representing inquiry-based educator pedagogy, secondary humanities instruction, and school practicum.',
+      context:'Krishna Mahato · History & Social Science Educator'
+    },
+    {
+      title:'ULLAS Adult Literacy Programme · 50-Hour Community Practice',
+      image:storage+'ullas-adult-literacy-preview.webp',
+      category:'Adult Literacy & ULLAS',
+      description:'Instructional adult-literacy sessions under the centrally sponsored ULLAS scheme (NEP 2020) for five community workers (security guards and cleaners), developing signature literacy, bill comprehension, household budgeting, and reading.',
+      context:'Amity University NTCC (EDCW100) · Morna Village, Sector 35, Noida'
+    },
+    {
+      title:'UKG Diagnostic Assessment & Foundational Literacy Tool',
+      image:storage+'ukg-assessment-preview.webp',
+      category:'Field Assessment & FLN',
+      description:'Classroom diagnostic test sheet (Annexure 2 of NTCC report) evaluating English and Hindi alphabet recall, number sequencing, shape counting, and arithmetic operations.',
+      context:'Pehchaan The Street School · Kindergarten Practicum'
+    },
+    {
+      title:'Amity University NTCC Community Work & Adult Literacy Report',
+      image:storage+'ntcc-report-cover-preview.webp',
+      category:'Academic Reports & NTCC',
+      description:'Official 27-page B.Ed. community work report (EDCW100) submitted to Amity Institute of Education under Faculty Guide Dr. Neetu Mishra Shukla. Verified with 6% Turnitin score.',
+      context:'Amity Institute of Education · Submission Date: 20 July 2026'
     }
   ],
 };
@@ -262,6 +429,9 @@ export function mergeContent(live = {}) {
     const original=defaultContent.experiences.find(x=>x.id===id);
     const merged={...original,...e,id};
     if(older && id==='observation' && e.period==='May 2026')Object.assign(merged,{period:original.period,type:original.type,duration:original.duration,durationUnit:original.durationUnit});
+    if(older && id==='pehchaan') {
+      Object.assign(merged,{summary:original.summary,title:original.title,type:original.type,points:structuredClone(original.points)});
+    }
     if(older && id==='panchsheel' && e.period==='Ongoing') {
       Object.assign(merged,{period:original.period,type:original.type,summary:original.summary});
       if(e.points?.length===1 && e.points[0]==='Undertaking a 16-week school internship at Panchsheel Balak Inter-College.')merged.points=structuredClone(original.points);
@@ -269,25 +439,66 @@ export function mergeContent(live = {}) {
     return merged;
   });
   if(!live.schemaVersion && Array.isArray(live.experiences) && result.experiences.length===2 && ['pehchaan','observation'].every(id=>result.experiences.some(e=>e.id===id)))result.experiences.unshift(structuredClone(defaultContent.experiences[0]));
-  if(Array.isArray(live.certificates))result.certificates=live.certificates.map(c=>{
-    const original=defaultContent.certificates.find(x=>x.image===c.image);
-    const legacy=['Graduation certificate','Pehchaan internship certificate','Webinar certificate','Seminar participation certificate'];
-    return {...original,...c,...(original&&legacy.includes(c.title)?{title:original.title}:{}),...(older&&/Rusha Chaudhauri|in History and Economics/.test(c.description||'')?{description:original?.description||c.description}:{})};
-  });
-  if(Array.isArray(live.resources))result.resources=live.resources.map(r=>{
-    const original=defaultContent.resources.find(x=>x.url===r.url);
-    if(!original)return r;
-    const merged={...original,...r};
-    if(older) {
-      if(['Democracy','Teaching Democracy: More Than a Definition'].includes(r.title))merged.title=original.title;
-      if(!r.grade||r.grade==='Classes 6–8 (Middle School)')merged.grade=original.grade;
-      if(!r.subject||r.subject==='Social Science / History')merged.subject=original.subject;
-      if(!r.description||r.description.startsWith('Structured inquiry lesson plan'))merged.description=original.description;
-      if(r.thumbnail==='assets/democracy-thumb.webp')merged.thumbnail=original.thumbnail;
+  if(Array.isArray(live.certificates)) {
+    if(live.certificates.length===0 && live.schemaVersion) {
+      result.certificates=[];
+    } else {
+      const liveImages=new Set(live.certificates.map(c=>c.image).filter(Boolean));
+      const missingFromDefault=defaultContent.certificates.filter(d=>!liveImages.has(d.image));
+      result.certificates=[
+        ...live.certificates.map(c=>{
+          const original=defaultContent.certificates.find(x=>x.image===c.image);
+          const legacy=['Graduation certificate','Pehchaan internship certificate','Webinar certificate','Seminar participation certificate'];
+          return {...original,...c,...(original&&legacy.includes(c.title)?{title:original.title}:{}),...(older&&/Rusha Chaudhauri|in History and Economics/.test(c.description||'')?{description:original?.description||c.description}:{})};
+        }),
+        ...missingFromDefault
+      ];
     }
-    return merged;
-  });
+  }
+  if(Array.isArray(live.resources)) {
+    if(live.resources.length===0 && live.schemaVersion) {
+      result.resources=[];
+    } else {
+      const hasCustomResources = live.resources.some(r => !defaultContent.resources.some(d => d.url === r.url));
+      if (hasCustomResources) {
+        result.resources = live.resources.map(r => {
+          const original = defaultContent.resources.find(x => x.url === r.url);
+          return original ? { ...original, ...r } : r;
+        });
+      } else {
+        const liveUrls = new Set(live.resources.map(r => r.url));
+        const mergedExisting = live.resources.map(r => {
+          const original = defaultContent.resources.find(x => x.url === r.url);
+          if (!original) return r;
+          const merged = { ...original, ...r };
+          if (older) {
+            if (['Democracy','Teaching Democracy: More Than a Definition'].includes(r.title)) merged.title = original.title;
+            if (!r.grade || r.grade === 'Classes 6–8 (Middle School)') merged.grade = original.grade;
+            if (!r.subject || r.subject === 'Social Science / History') merged.subject = original.subject;
+            if (!r.description || r.description.startsWith('Structured inquiry lesson plan')) merged.description = original.description;
+            if (r.thumbnail === 'assets/democracy-thumb.webp') merged.thumbnail = original.thumbnail;
+          }
+          return merged;
+        });
+        const missingDefaults = defaultContent.resources.filter(d => !liveUrls.has(d.url));
+        result.resources = [...mergedExisting, ...missingDefaults];
+      }
+    }
+  }
   else if(live.schemaVersion)result.resources=[];
+  if(Array.isArray(live.gallery)&&live.gallery.length>0) {
+    const liveImages=new Set(live.gallery.map(g=>g.image).filter(Boolean));
+    const missingGallery=defaultContent.gallery.filter(g=>!liveImages.has(g.image));
+    result.gallery=[
+      ...live.gallery.map(g=>{
+        const original=defaultContent.gallery.find(x=>x.image===g.image);
+        return {...original,...g};
+      }),
+      ...missingGallery
+    ];
+  } else {
+    result.gallery=structuredClone(defaultContent.gallery);
+  }
   if(Array.isArray(live.qualifications))result.qualifications=live.qualifications.map(q=>{
     const original=defaultContent.qualifications.find(x=>x.title===q.title);
     return {...original,...q,...(!live.schemaVersion&&q.title==='M.A. History'?{place:original.place,note:'First year cleared · Final examinations expected in June 2027'}:{})};

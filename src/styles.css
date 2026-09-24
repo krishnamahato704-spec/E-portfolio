@@ -1227,6 +1227,7 @@
   }
   .footer-bottom>div {
     display:flex;
+    flex-wrap:wrap;
     gap:28px
   }
   .footer-bottom .text-link {
@@ -1831,7 +1832,8 @@
       gap:6px
     }
     .footer-bottom>div {
-      gap:25px
+      flex-wrap:wrap;
+      gap:12px 18px
     }
     .admin-page #login-form {
       margin-left:0

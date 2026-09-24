@@ -32,14 +32,31 @@ knownImages['assets/mock-election-class8-poster.webp']='mock-election-class8-pos
 knownImages['assets/pehchaan-classroom-mosaic.webp']='pehchaan-classroom-mosaic.webp';
 knownImages['assets/roots-to-wings-preview.webp']='roots-to-wings-preview.webp';
 knownImages['assets/notice-writing-preview.webp']='notice-writing-preview.webp';
+knownImages['assets/ullas-adult-literacy-preview.webp']='ullas-adult-literacy-preview.webp';
+knownImages['assets/ukg-assessment-preview.webp']='ukg-assessment-preview.webp';
+knownImages['assets/ntcc-report-cover-preview.webp']='ntcc-report-cover-preview.webp';
 
 const assetAliases = {
+  'ullas-adult-literacy': 'ullas-adult-literacy-preview.webp',
+  'ukg-assessment': 'ukg-assessment-preview.webp',
+  'ntcc-report-cover': 'ntcc-report-cover-preview.webp',
   'mock-election-evm-activity': 'mock-election-evm-activity.webp',
   'mock-election-class8-poster': 'mock-election-class8-poster.webp',
   'pehchaan-classroom-mosaic': 'pehchaan-classroom-mosaic.webp',
   'roots-to-wings': 'roots-to-wings-preview.webp',
   'notice-writing': 'notice-writing-preview.webp',
+  'democracy_plan': 'democracy-plan-preview.webp',
+  'democracy-plan': 'democracy-plan-preview.webp',
+  'democracy-thumb': 'democracy-thumb.webp',
   'cert_gemini_educator': 'certificate-8.webp',
+  'cert_ncert_ai': 'certificate-5.webp',
+  'cert_nptel_writing': 'certificate-6.webp',
+  'cert_suraasa_linkedin': 'certificate-7.webp',
+  'certWall1': 'certificate-1.webp',
+  'certWall2': 'certificate-2.webp',
+  'certWall3': 'certificate-3.webp',
+  'certWall4': 'certificate-4.webp',
+  'portrait': 'portrait.webp',
 };
 
 if (defaultContent.gallery?.[0]?.image) {
@@ -81,11 +98,12 @@ export function header(route,base,c){
     {r:'teaching',num:'02',label:'Teaching'},
     {r:'resources',num:'03',label:'Teaching Artifacts'},
     {r:'credentials',num:'04',label:'Credentials'},
+    {r:'gallery',num:'05',label:'Gallery'},
     {r:'resume',num:'—',label:'Résumé'}
   ];
-  return `<a class="skip-link" href="#main">Skip to content</a><header class="site-header"><div class="container header-inner"><a class="brand" href="${base}" aria-label="${esc(c.profile.name)} — Home"><span class="monogram" aria-hidden="true">KM<span>.</span></span><span class="brand-caption">${esc(c.profile.name)}<small>History, Social Science & English</small></span></a><details class="fallback-navigation"><summary>Menu</summary><nav aria-label="Main navigation">${[...navItems,{r:'contact',label:'Let’s Connect'}].map(it=>`<a href="${base}${routes[it.r].path}">${it.label}</a>`).join('')}</nav></details><button class="menu-toggle" aria-expanded="false" aria-controls="navigation">Menu <span class="menu-lines" aria-hidden="true"></span></button><div id="navigation" class="navigation-panel"><div class="navigation-top"><p id="navigation-title" class="eyebrow">Explore the portfolio</p><button class="menu-close" aria-label="Close navigation">Close <span aria-hidden="true">×</span></button></div><nav class="navigation-links" aria-label="Main navigation">${navItems.map(it=>`<a ${route===it.r || (it.r==='teaching'&&['pehchaan','observation','democracy'].includes(route))?'aria-current="page"':''} href="${base}${routes[it.r].path}"><span class="nav-index" aria-hidden="true">${it.num}</span>${it.label}</a>`).join('')}<a class="nav-contact" ${route==='contact'?'aria-current="page"':''} href="${base}contact/"><span class="nav-index" aria-hidden="true">05</span>Let’s Connect ${arrow}</a></nav><p class="navigation-note">History. Inquiry. Possibility.</p></div></div></header>`;
+  return `<a class="skip-link" href="#main">Skip to content</a><header class="site-header"><div class="container header-inner"><a class="brand" href="${base}" aria-label="${esc(c.profile.name)} — Home"><span class="monogram" aria-hidden="true">KM<span>.</span></span><span class="brand-caption">${esc(c.profile.name)}<small>History, Social Science & English</small></span></a><details class="fallback-navigation"><summary>Menu</summary><nav aria-label="Main navigation">${[...navItems,{r:'contact',label:'Let’s Connect'}].map(it=>`<a href="${base}${routes[it.r].path}">${it.label}</a>`).join('')}</nav></details><button class="menu-toggle" aria-expanded="false" aria-controls="navigation">Menu <span class="menu-lines" aria-hidden="true"></span></button><div id="navigation" class="navigation-panel"><div class="navigation-top"><p id="navigation-title" class="eyebrow">Explore the portfolio</p><button class="menu-close" aria-label="Close navigation">Close <span aria-hidden="true">×</span></button></div><nav class="navigation-links" aria-label="Main navigation">${navItems.map(it=>`<a ${route===it.r || (it.r==='teaching'&&['pehchaan','observation','democracy'].includes(route))?'aria-current="page"':''} href="${base}${routes[it.r].path}"><span class="nav-index" aria-hidden="true">${it.num}</span>${it.label}</a>`).join('')}<a class="nav-contact" ${route==='contact'?'aria-current="page"':''} href="${base}contact/"><span class="nav-index" aria-hidden="true">06</span>Let’s Connect ${arrow}</a></nav><p class="navigation-note">History. Inquiry. Possibility.</p></div></div></header>`;
 }
-export function footer(base,c){return `<footer class="site-footer"><div class="container footer-top"><div><a class="footer-name" href="${base}">${esc(c.profile.name)}</a><p>History. Inquiry. Possibility.</p></div><div><p class="eyebrow">Start a conversation</p><a class="email-link" href="mailto:${esc(c.profile.email)}">${esc(c.profile.email)} ${arrow}</a></div></div><div class="container footer-bottom"><span>© ${new Date().getFullYear()} ${esc(c.profile.name)} · Teaching portfolio</span><div>${link(base,'resume','Résumé')}${link(base,'admin','Owner sign in')}</div></div></footer>`}
+export function footer(base,c){return `<footer class="site-footer"><div class="container footer-top"><div><a class="footer-name" href="${base}">${esc(c.profile.name)}</a><p>History. Inquiry. Possibility.</p></div><div><p class="eyebrow">Start a conversation</p><a class="email-link" href="mailto:${esc(c.profile.email)}">${esc(c.profile.email)} ${arrow}</a></div></div><div class="container footer-bottom"><span>© ${new Date().getFullYear()} ${esc(c.profile.name)} · Teaching portfolio</span><div>${link(base,'resources','Artifacts')}${link(base,'gallery','Gallery')}${link(base,'credentials','Credentials')}${link(base,'resume','Résumé')}${link(base,'admin','Owner sign in')}</div></div></footer>`}
 function qualificationRows(c){return c.qualifications.map(q=>`<article class="qualification"><p class="period">${esc(q.period)}</p><div><h3>${esc(q.title)}</h3><p>${esc(q.place)}</p>${q.note?`<p class="small">${esc(q.note)}</p>`:''}${q.expected?`<p class="small">Expected completion: ${esc(q.expected)}</p>`:''}</div><span class="status ${/progress/i.test(q.status)?'progress':''}">${esc(q.status)}</span></article>`).join('')}
 function practiceRows(c){return `<div class="practice-grid">${c.practice.map((p,i)=>`<article><span class="index-number">${String(i+1).padStart(2,'0')}</span><h3>${esc(p.title)}</h3><p>${esc(p.text)}</p></article>`).join('')}</div>`}
 
@@ -421,6 +439,19 @@ function homePhilosophy(c,base){return `<section class="section container home-p
 
 function homeFeaturedArtifact(c,base){return evidenceFeature(c,base,true);}
 
+function homeGalleryHighlight(c,base){
+  if(!c.gallery||c.gallery.length===0)return '';
+  const activeInstitutions=(c.experiences||[]).map(e=>(e.institution||e.title||'').toLowerCase());
+  const highlights=c.gallery.filter(x=>{
+    if(/panchsheel/i.test(x.title||'')||/panchsheel/i.test(x.context||'')){
+      return activeInstitutions.some(inst=>inst.includes('panchsheel'));
+    }
+    return true;
+  }).slice(0,6);
+  if(highlights.length===0)return '';
+  return `<section class="section container home-gallery-section" aria-labelledby="home-gallery-heading"><div class="section-heading"><div><p class="eyebrow">Visual evidence &amp; classroom artifacts</p><h2 id="home-gallery-heading">Classroom teaching,<br><em>materials &amp; milestones.</em></h2></div>${link(base,'gallery','Explore all '+c.gallery.length+' gallery records')}</div><p class="section-subhead">Archival photographic evidence of on-ground school teaching, civic simulation activities, international seminar presentations, and instructional teaching-learning materials (TLM).</p><div class="tlm-gallery-grid home-gallery-grid">${highlights.map(x=>`<article class="tlm-card interactive-3d-card"><div class="tlm-image-frame"><a class="archive-doc-frame" href="${esc(imageUrl(x.image,base)||safeUrl(x.image))}" target="_blank" rel="noopener noreferrer" data-title="${esc(x.title)}" data-category="${esc(x.category||'GALLERY')}" data-caption="${esc(x.description||'')}">${img(x.image,x.title,base,'tlm-img')}<span class="doc-view-hint" aria-hidden="true">Examine record ↗</span></a></div><div class="tlm-body"><div class="tlm-meta-line"><span class="tlm-category-badge">${esc(x.category||'Artifact')}</span>${x.context?`<span class="meta-sep" aria-hidden="true">·</span><span class="tlm-context">${esc(x.context)}</span>`:''}</div><h3 class="tlm-title">${esc(x.title)}</h3>${x.description?`<p class="tlm-description">${esc(x.description)}</p>`:''}</div></article>`).join('')}</div><div class="home-gallery-actions" style="margin-top:28px; display:flex; gap:16px; flex-wrap:wrap;">${link(base,'gallery','View the Complete Visual Gallery ('+c.gallery.length+' Records)','button primary')}${link(base,'resources','Browse All Teaching Files &amp; Lesson Plans','button secondary')}</div></section>`;
+}
+
 function homeCredentialsHighlight(c,base){return `<section class="section container home-credentials-section"><div class="section-heading"><div><p class="eyebrow">Academic preparation</p><h2>Qualifications and<br><em>supporting documents.</em></h2></div>${link(base,'credentials','View supporting credentials')}</div><div class="credentials-curated-grid">${c.qualifications.slice(0,3).map(q=>`<article class="curated-cred-card"><h3>${esc(q.title)}</h3><p class="cred-place">${esc(q.place)}</p>${q.note?`<p class="cred-note">${esc(q.note)}</p>`:''}${q.expected?`<p class="small">Expected completion: ${esc(q.expected)}</p>`:''}<span class="status ${/progress/i.test(q.status)?'progress':''}">${esc(q.status)}</span></article>`).join('')}</div></section>`;}
 
 function homeReflection(c,base){return `<section class="section compact container home-reflection-section"><div class="reflection-quote-card"><p class="eyebrow">Professional development</p><h2 id="reflection-title">Making reflection<br><em>part of the record.</em></h2><p class="reflection-body">My next evidence priority is a completed lesson reflection: the question I asked, what learners’ responses showed, and the change I would make. The published Democracy plan includes prompts for this review.</p>${link(base,'democracy','Read the reflection section')}</div></section>`;}
@@ -464,16 +495,259 @@ function resumeDownload(c,base) {
  if(!custom&&!matches)return '<p class="small">Use Print / save as PDF for the current résumé.</p>';
  return `<a class="button primary" href="${esc(custom||base+'assets/krishna-mahato-resume.pdf')}" download="krishna-mahato-resume.pdf">Download Résumé PDF <span aria-hidden="true">↓</span></a>`;
 }
+function pehchaanCaseStudy(pehchaan, base = './') {
+  const body = `
+<div class="dossier-callout" style="background:#f8fafc; border:1px solid #e2e8f0; border-left:4px solid #1e3a8a; border-radius:6px; padding:18px 22px; margin-bottom:28px;">
+  <p class="eyebrow" style="color:#1e3a8a; margin:0 0 6px; font-weight:700; letter-spacing:0.05em;">AMITY UNIVERSITY UTTAR PRADESH · AMITY INSTITUTE OF EDUCATION</p>
+  <h3 style="margin:0 0 10px; font-size:1.25rem; color:#0f172a;">Course EDCW100: Community Work &amp; Adult Literacy</h3>
+  <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:12px; font-size:0.875rem; color:#334155; margin-bottom:14px;">
+    <div><strong>Student:</strong> Krishna Mahato (A3410525022)</div>
+    <div><strong>Faculty Guide:</strong> Dr. Neetu Mishra Shukla</div>
+    <div><strong>Industry Guide:</strong> Mr. Akash Tandon (Founder)</div>
+    <div><strong>Partner NGO:</strong> Pehchaan The Street School</div>
+    <div><strong>Duration:</strong> 31 May – 06 July 2026 (5 Weeks)</div>
+    <div><strong>Verified Hours:</strong> 130 Hours (80h NGO + 50h ULLAS)</div>
+    <div><strong>Turnitin Score:</strong> 6% Plagiarism Similarity</div>
+    <div><strong>Submission Date:</strong> 20 July 2026 · Noida, UP</div>
+  </div>
+  <div style="display:flex; gap:12px; flex-wrap:wrap;">
+    <a class="button primary" href="${base}assets/amity-ntcc-community-work-report.pdf" target="_blank" rel="noopener noreferrer" style="font-size:0.875rem; padding:8px 16px;">Read Full 27-Page NTCC Report (PDF) ↗</a>
+    <a class="button secondary" href="${base}assets/ukg-assessment-test.pdf" target="_blank" rel="noopener noreferrer" style="font-size:0.875rem; padding:8px 16px;">Download UKG Assessment Tool (PDF) ↗</a>
+  </div>
+</div>
+
+<h2>The Teaching &amp; Community Context</h2>
+<p>As part of the B.Ed. curriculum (Course EDCW100) at Amity Institute of Education, Krishna Mahato completed an intensive five-week community engagement (1 June to 6 July 2026). The field practice addressed two distinct educational imperatives: providing foundational literacy and numeracy (FLN) to 4–6 year old kindergarten children at Pehchaan The Street School in the Morna Village slum area of Sector 35, Noida; and delivering 50 hours of adult literacy and life-skills instruction to five community sanitation and security workers under the Government of India’s ULLAS (Understanding Lifelong Learning for All in Society) initiative.</p>
+
+<h2>Key Responsibilities &amp; Practicum Milestones</h2>
+${list(pehchaan.points)}
+
+<hr style="border:0; border-top:1px solid #e2e8f0; margin:32px 0;">
+
+<h2>Chapter 1: Child Education at Pehchaan The Street School (80 Verified Hours)</h2>
+<p>Pehchaan The Street School operates an informal learning centre in Morna Village (Sector 35, Noida), catering primarily to children of migrant construction laborers, sanitation workers, and informal daily-wage earners. Baseline testing during Week 1 revealed critical educational vulnerabilities: several children enrolled in Class 4 at local municipal schools could not construct basic sentences or recognize Hindi and English alphabets with stability. Consequently, instruction was restructured from rote memorization into tiered, competency-based, and multi-sensory learning.</p>
+
+<div class="case-gallery-block" style="margin:24px 0;">
+  <a class="archive-doc-frame" href="${base}assets/pehchaan-classroom-mosaic.webp" target="_blank" rel="noopener noreferrer" aria-label="Open Pehchaan classroom documentary mosaic in full size">
+    <img src="${base}assets/pehchaan-classroom-mosaic.webp" alt="Photographic documentary mosaic showing 80 hours of on-ground teaching, maze activities, kindergarten literacy and ULLAS adult literacy at Pehchaan The Street School" class="case-evidence-img" style="border-radius:12px; width:100%; height:auto;" loading="lazy">
+    <span class="doc-view-hint" aria-hidden="true">Examine 80-Hour Documentary Mosaic (Figure 1 of NTCC Report) ↗</span>
+  </a>
+  <p class="small" style="margin-top:8px; color:#64748b;">Figure 1: Archival classroom evidence: kindergarten visual-motor maze worksheets, letter formation on chalkboards, small-group reading circles, and peer numeracy practice.</p>
+</div>
+
+<h3>Weekly Pedagogical Trajectory (80 Hours Total)</h3>
+<div style="overflow-x:auto; margin:16px 0 24px;">
+  <table style="width:100%; border-collapse:collapse; font-size:0.9rem; border:1px solid #cbd5e1;">
+    <thead>
+      <tr style="background:#f1f5f9; text-align:left;">
+        <th style="padding:10px 14px; border:1px solid #cbd5e1;">Week &amp; Duration</th>
+        <th style="padding:10px 14px; border:1px solid #cbd5e1;">Focus Competencies</th>
+        <th style="padding:10px 14px; border:1px solid #cbd5e1;">Pedagogical Methods &amp; Materials</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="padding:10px 14px; border:1px solid #cbd5e1;"><strong>Week 1</strong><br>(1–6 June)<br>14 Hours</td>
+        <td style="padding:10px 14px; border:1px solid #cbd5e1;">Induction &amp; Baseline Assessment; Fine-motor grip; A–Z &amp; 1–100 recognition</td>
+        <td style="padding:10px 14px; border:1px solid #cbd5e1;">Orientation by Founder Akash Tandon; baseline diagnostic evaluation of 25+ children; ability grouping; straight and curved line tracing worksheets; daily 15-minute shape drawing.</td>
+      </tr>
+      <tr>
+        <td style="padding:10px 14px; border:1px solid #cbd5e1;"><strong>Week 2</strong><br>(8–14 June)<br>18 Hours</td>
+        <td style="padding:10px 14px; border:1px solid #cbd5e1;">Visual-motor maze tracing; Numbers 1–50; Geometric shape integration</td>
+        <td style="padding:10px 14px; border:1px solid #cbd5e1;">Dotted line tracing for emergent writers; elimination alphabet recitation loop game; creative vehicle/doll drawing combining circles, squares and rectangles; robotics demonstration observation.</td>
+      </tr>
+      <tr>
+        <td style="padding:10px 14px; border:1px solid #cbd5e1;"><strong>Week 3</strong><br>(15–21 June)<br>18 Hours</td>
+        <td style="padding:10px 14px; border:1px solid #cbd5e1;">Phonetic word association; Hindi Varnamala; Differentiated addition/subtraction</td>
+        <td style="padding:10px 14px; border:1px solid #cbd5e1;">English phonics (A for Axe, Apple; B for Ball); call-and-response Hindi akshar drills; differentiated maths groupings (1-digit addition/subtraction for advanced; counting for beginners).</td>
+      </tr>
+      <tr>
+        <td style="padding:10px 14px; border:1px solid #cbd5e1;"><strong>Week 4</strong><br>(22–28 June)<br>12 Hours</td>
+        <td style="padding:10px 14px; border:1px solid #cbd5e1;">Vocabulary-to-illustration; 2-digit carry-over addition; Public speaking</td>
+        <td style="padding:10px 14px; border:1px solid #cbd5e1;">Bilingual word-to-picture matching worksheets; multi-step carry-over scaffolding on chalkboard; daily confidence-building student spoken presentations.</td>
+      </tr>
+      <tr>
+        <td style="padding:10px 14px; border:1px solid #cbd5e1;"><strong>Week 5</strong><br>(29 June – 6 July)<br>18 Hours</td>
+        <td style="padding:10px 14px; border:1px solid #cbd5e1;">Experiential "Maths Market"; 40-mark diagnostic post-assessment; Vocabulary games</td>
+        <td style="padding:10px 14px; border:1px solid #cbd5e1;">Storytelling reading circles (rabbit-tortoise fable); simulated currency marketplace calculating fruit costs; comprehensive 40-mark UKG diagnostic evaluation (&gt;60% improvement demonstrated); "Mystery Bag" vocabulary mime and drawing game; farewell celebrations.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<h3>Diagnostic Assessment Instrument (UKG Foundational Skills Test)</h3>
+<p>To measure learning gains objectively across the 80 hours, Krishna developed and administered a structured 40-mark diagnostic evaluation sheet (documented in Annexure 2 of the NTCC Report). The instrument tested seven core foundational domains:</p>
+<div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:16px; margin:16px 0 24px;">
+  <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:8px; padding:14px;">
+    <h4 style="margin:0 0 6px; font-size:0.95rem; color:#1e3a8a;">Language &amp; Phonics (15 Marks)</h4>
+    <p class="small" style="margin:0; line-height:1.5; color:#475569;">English alphabet missing letters (A–Z), Hindi Varnamala akshar completion (अ–ह, क–ण), and bilingual picture-word matching (Apple, Ball, Mango, Cat, Sun).</p>
+  </div>
+  <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:8px; padding:14px;">
+    <h4 style="margin:0 0 6px; font-size:0.95rem; color:#1e3a8a;">Numeracy &amp; Geometry (25 Marks)</h4>
+    <p class="small" style="margin:0; line-height:1.5; color:#475569;">Number sequencing 1–100, concrete shape counting (triangles, circles, squares, stars), 8 single-digit addition problems, and 7 subtraction problems.</p>
+  </div>
+</div>
+
+<div class="case-gallery-block" style="margin:20px 0;">
+  <a class="archive-doc-frame" href="${base}assets/ukg-assessment-preview.webp" target="_blank" rel="noopener noreferrer" aria-label="Open UKG Diagnostic Assessment preview in full size">
+    <img src="${base}assets/ukg-assessment-preview.webp" alt="UKG Diagnostic Assessment test sheet designed by Krishna Mahato at Pehchaan The Street School" class="case-evidence-img" style="border-radius:12px; width:100%; height:auto;" loading="lazy">
+    <span class="doc-view-hint" aria-hidden="true">Examine UKG Assessment Instrument (Figure 3 / Annexure 2) ↗</span>
+  </a>
+</div>
+
+<hr style="border:0; border-top:1px solid #e2e8f0; margin:32px 0;">
+
+<h2>Chapter 2: ULLAS Adult Literacy &amp; Life Skills Initiative (50 Verified Hours)</h2>
+<p>Parallel to kindergarten teaching, Krishna conducted 50 hours of instructional engagement under the Government of India’s centrally sponsored <strong>ULLAS (Understanding Lifelong Learning for All in Society)</strong> initiative, the flagship New India Literacy Programme (NILP) aligned with the National Education Policy (NEP 2020). Designed for non-literates and neo-literates aged 15 and above, the sessions were tailored to five adult community workers residing and working in Noida Sector 35.</p>
+
+<div class="case-gallery-block" style="margin:24px 0;">
+  <a class="archive-doc-frame" href="${base}assets/ullas-adult-literacy-preview.webp" target="_blank" rel="noopener noreferrer" aria-label="Open ULLAS Adult Literacy preview in full size">
+    <img src="${base}assets/ullas-adult-literacy-preview.webp" alt="ULLAS Adult Literacy Programme preview card showing learner profiles and curricular pillars" class="case-evidence-img" style="border-radius:12px; width:100%; height:auto;" loading="lazy">
+    <span class="doc-view-hint" aria-hidden="true">Examine ULLAS Adult Literacy Overview (Figure 2 of NTCC Report) ↗</span>
+  </a>
+  <p class="small" style="margin-top:8px; color:#64748b;">Figure 2: Adult community literacy sessions: signature practice, form-filling, reading excerpts from Paulo Coelho's The Alchemist and Bhagavad Gita, and digital bill literacy.</p>
+</div>
+
+<h3>Learner Profiles &amp; Differentiated Needs</h3>
+<div style="overflow-x:auto; margin:16px 0 24px;">
+  <table style="width:100%; border-collapse:collapse; font-size:0.9rem; border:1px solid #cbd5e1;">
+    <thead>
+      <tr style="background:#f1f5f9; text-align:left;">
+        <th style="padding:10px 14px; border:1px solid #cbd5e1;">Learner</th>
+        <th style="padding:10px 14px; border:1px solid #cbd5e1;">Age &amp; Occupation</th>
+        <th style="padding:10px 14px; border:1px solid #cbd5e1;">Educational Background</th>
+        <th style="padding:10px 14px; border:1px solid #cbd5e1;">Curricular Goals &amp; Outcomes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="padding:10px 14px; border:1px solid #cbd5e1;"><strong>Anshul</strong></td>
+        <td style="padding:10px 14px; border:1px solid #cbd5e1;">30 Yrs · Security Guard</td>
+        <td style="padding:10px 14px; border:1px solid #cbd5e1;">Completed Class 8th</td>
+        <td style="padding:10px 14px; border:1px solid #cbd5e1;">Spoken English communication, formal letter drafting, bank slip completion, smartphone digital utility apps.</td>
+      </tr>
+      <tr>
+        <td style="padding:10px 14px; border:1px solid #cbd5e1;"><strong>Ram Lakhan</strong></td>
+        <td style="padding:10px 14px; border:1px solid #cbd5e1;">20 Yrs · Security Guard</td>
+        <td style="padding:10px 14px; border:1px solid #cbd5e1;">Completed Class 8th</td>
+        <td style="padding:10px 14px; border:1px solid #cbd5e1;">Vocational communication; academic counseling provided to re-enroll and complete Class 10/12 through NIOS.</td>
+      </tr>
+      <tr>
+        <td style="padding:10px 14px; border:1px solid #cbd5e1;"><strong>Gyashi Lal</strong></td>
+        <td style="padding:10px 14px; border:1px solid #cbd5e1;">45 Yrs · Sanitation Cleaner</td>
+        <td style="padding:10px 14px; border:1px solid #cbd5e1;">No prior schooling (Non-literate)</td>
+        <td style="padding:10px 14px; border:1px solid #cbd5e1;">Transitioned from thumbprint to proud, verifiable legal signature in Hindi; basic counting, currency identification and street sign reading.</td>
+      </tr>
+      <tr>
+        <td style="padding:10px 14px; border:1px solid #cbd5e1;"><strong>Teeja</strong></td>
+        <td style="padding:10px 14px; border:1px solid #cbd5e1;">40 Yrs · Sanitation Cleaner</td>
+        <td style="padding:10px 14px; border:1px solid #cbd5e1;">No prior schooling (Non-literate)</td>
+        <td style="padding:10px 14px; border:1px solid #cbd5e1;">Official signature writing; reading electricity and water utility bills; mental math for grocery shopping and household accounting.</td>
+      </tr>
+      <tr>
+        <td style="padding:10px 14px; border:1px solid #cbd5e1;"><strong>Jyothi</strong></td>
+        <td style="padding:10px 14px; border:1px solid #cbd5e1;">28 Yrs · Sanitation Cleaner</td>
+        <td style="padding:10px 14px; border:1px solid #cbd5e1;">Completed Class 8th</td>
+        <td style="padding:10px 14px; border:1px solid #cbd5e1;">Hindi reading fluency; domestic budget recording; basic conversational English phrases; reading notices and medical prescriptions.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<h3>Curricular Progression (10 Hours per Week × 5 Weeks = 50 Hours)</h3>
+<ul class="plain-list">
+  <li><strong>Week 1 (Diagnostic Profiling &amp; Bifurcation):</strong> Evaluated prior schooling; split cohort into two dedicated pedagogical tracks (Track A: spoken communication &amp; formal forms for prior-schoolers; Track B: handwriting, alphabet tracing and sound-symbol association for non-literates).</li>
+  <li><strong>Week 2 (Legal Signature &amp; Civic Form-Filling):</strong> Intensive guided practice in writing legal signatures to replace thumbprints on bank documents, ration cards, and government forms; basic marketplace arithmetic.</li>
+  <li><strong>Week 3 (Literary &amp; Philosophical Exploration):</strong> Guided reading of selected shlokas and interpretations from the <em>Bhagavad Gita</em> in Hindi, alongside adapted passages from Paulo Coelho's <em>The Alchemist</em> in English, sparking reflective discussions on duty, self-worth, and perseverance.</li>
+  <li><strong>Week 4 (Digital &amp; Financial Functional Literacy):</strong> Decoding electricity, water, and gas utility bills; practicing household budget logs; ATM card precautions; navigating smartphones and government welfare applications.</li>
+  <li><strong>Week 5 (Summative Assessment &amp; Empowerment):</strong> Practical evaluation assessing reading comprehension passages, conversational English/Hindi confidence, and independent currency calculations. Celebrated individual growth and self-reliance.</li>
+</ul>
+
+<hr style="border:0; border-top:1px solid #e2e8f0; margin:32px 0;">
+
+<h2>Chapter 3: Course Learning Outcomes (CLOs 1–6) &amp; Pedagogical Insights</h2>
+<p>The internship synthesized theoretical B.Ed. coursework with complex on-ground reality, fulfilling all six prescribed Course Learning Outcomes across Bloom's Cognitive Taxonomy:</p>
+<div style="display:grid; grid-template-columns:1fr; gap:12px; margin:16px 0 24px;">
+  <div style="background:#f8fafc; border-left:3px solid #1e3a8a; padding:12px 16px;">
+    <strong>CLO 1 (Remember):</strong> Internalized professional codes, ethical norms of community education, punctuality, and the responsibility of the educator in informal, non-traditional learning spaces.
+  </div>
+  <div style="background:#f8fafc; border-left:3px solid #1e3a8a; padding:12px 16px;">
+    <strong>CLO 2 (Understand):</strong> Comprehended how socio-economic vulnerabilities, migrant life cycles, and systemic inequalities impede formal learning, recognizing literacy as a fundamental engine of dignity.
+  </div>
+  <div style="background:#f8fafc; border-left:3px solid #1e3a8a; padding:12px 16px;">
+    <strong>CLO 3 (Apply):</strong> Implemented differentiated instruction, multi-sensory materials, play-based numeracy, and conflict-resolution tactics within lively, multi-age classroom environments.
+  </div>
+  <div style="background:#f8fafc; border-left:3px solid #1e3a8a; padding:12px 16px;">
+    <strong>CLO 4 (Analyze):</strong> Diagnosed individual learner barriers; candidly evaluated initial teaching hesitancy and recognized that structured pre-planning is essential for classroom stability.
+  </div>
+  <div style="background:#f8fafc; border-left:3px solid #1e3a8a; padding:12px 16px;">
+    <strong>CLO 5 (Evaluate):</strong> Appraised diverse pedagogical methods, concluding that combining structured repetition with experiential games (Maths Market, Mystery Bag) significantly outperforms rote drill.
+  </div>
+  <div style="background:#f8fafc; border-left:3px solid #1e3a8a; padding:12px 16px;">
+    <strong>CLO 6 (Create):</strong> Authored comprehensive diagnostic evaluation instruments (40-mark UKG test sheet), visual-motor maze worksheets, and experiential marketplace simulations.
+  </div>
+</div>
+
+<h3>Overcoming Field Challenges</h3>
+<ul class="plain-list">
+  <li><strong>Disparity in Baseline Abilities:</strong> Solved by grouping children by diagnosed ability rather than age, enabling targeted phonics for beginners and reading circles for advanced learners.</li>
+  <li><strong>Short Attention Spans in Kindergarten:</strong> Regulated energy through kinetic games ("Hands Up / Hands Down", "Mystery Bag"), 15-minute shape-drawing intervals, and deep-breathing focus pauses.</li>
+  <li><strong>Adult Learner Self-Consciousness:</strong> Mitigated fear of error through one-on-one positive reinforcement, celebrating small victories (like signing a name), and grounding examples in real daily expenses.</li>
+  <li><strong>Scarcity of Physical Resources:</strong> Leveraged low-cost locally sourced items, reusable slate boards, and hand-drawn visual flashcards to maintain high engagement without expensive commercial kits.</li>
+</ul>
+
+<hr style="border:0; border-top:1px solid #e2e8f0; margin:32px 0;">
+
+<h2>Chapter 4: Documentary &amp; Institutional Evidence</h2>
+<p>All aspects of this internship are backed by verifiable primary documentation:</p>
+<ul class="plain-list">
+  <li><strong>Amity University NTCC Community Work Report (27 Pages):</strong> Submitted under Faculty Guide Dr. Neetu Mishra Shukla and HOD Prof. (Dr.) Alka; verified through Turnitin with a 6% similarity score.</li>
+  <li><strong>Annexure 2 — UKG Diagnostic Assessment Instrument:</strong> Original 40-mark test paper testing language, numeracy, and operations.</li>
+  <li><strong>Annexure 3 — Pehchaan The Street School Offer Letter:</strong> Issued by Founder Akash Tandon outlining internship scope.</li>
+  <li><strong>Annexure 4 — Certificate of Completion (Reg: 36088115712633):</strong> Official trust certificate confirming 80 hours on-ground teaching.</li>
+</ul>
+  `;
+
+  const aside = `
+<aside class="evidence-aside">
+  <p class="eyebrow">Academic Credentials</p>
+  <h2>130 Hours</h2>
+  <p>Pehchaan The Street School &amp; ULLAS<br><strong>Course EDCW100 · 6 July 2026</strong></p>
+  
+  <div style="background:#f1f5f9; border:1px solid #cbd5e1; border-radius:6px; padding:12px; margin:16px 0; font-size:0.8rem; line-height:1.5;">
+    <div><strong>NGO Teaching:</strong> 80 Hours Verified</div>
+    <div><strong>Adult Literacy:</strong> 50 Hours (ULLAS)</div>
+    <div><strong>Registration:</strong> #36088115712633</div>
+    <div><strong>Academic Credit:</strong> Amity B.Ed. EDCW100</div>
+    <div><strong>Turnitin Certified:</strong> 6% Similarity</div>
+  </div>
+
+  <a class="archive-doc-frame" href="${base}assets/certificate-2.webp" target="_blank" rel="noopener noreferrer">
+    ${img(defaultContent.certificates[1].image,'Pehchaan certificate confirming 80 hours as an on-ground intern / teacher',base,'case-evidence-img')}
+    <span class="doc-view-hint" aria-hidden="true">Examine completion certificate ↗</span>
+  </a>
+
+  <div style="display:flex; flex-direction:column; gap:10px; margin-top:18px;">
+    <a class="button primary" href="${base}assets/amity-ntcc-community-work-report.pdf" target="_blank" rel="noopener noreferrer" style="font-size:0.85rem; text-align:center;">Read 27-Page NTCC Report (PDF) ↗</a>
+    <a class="button secondary" href="${base}assets/ukg-assessment-test.pdf" target="_blank" rel="noopener noreferrer" style="font-size:0.85rem; text-align:center;">Download UKG Assessment (PDF) ↗</a>
+    ${link(base,'credentials','View supporting credentials')}
+  </div>
+</aside>
+  `;
+
+  return caseStudy(base, 'Community teaching', 'Foundational literacy<br><em>and numeracy.</em>', pehchaan, body, aside);
+}
+
 export function view(route,c,base='./') {
  const p=c.profile;
  const pehchaan=c.experiences.find(e=>e.id==='pehchaan');
  const observation=c.experiences.find(e=>e.id==='observation');
   if((route==='pehchaan'&&!pehchaan)||(route==='observation'&&!observation))return view('404',c,base);
   switch(route){
-  case 'home': return `${opening(c,base)}${hiringSummary(c,base)}${schoolProgression(c,base)}${homePhilosophy(c,base)}${homeFeaturedArtifact(c,base)}${homeCredentialsHighlight(c,base)}${homeReflection(c,base)}${homeClosingCTA(c,base)}`;
+  case 'home': return `${opening(c,base)}${hiringSummary(c,base)}${schoolProgression(c,base)}${homePhilosophy(c,base)}${homeFeaturedArtifact(c,base)}${homeGalleryHighlight(c,base)}${homeCredentialsHighlight(c,base)}${homeReflection(c,base)}${homeClosingCTA(c,base)}`;
   case 'profile': return `<div class="container profile-page"><header class="educator-opening" aria-labelledby="educator-title"><div class="educator-opening-grid"><div class="educator-col-left"><p class="eyebrow educator-chapter" data-motion="fade-up" data-motion-index="1"><span class="chapter-number" aria-hidden="true">01</span><span class="chapter-label">The Educator</span></p><h1 id="educator-title" class="educator-mantra" data-motion="fade-up" data-motion-index="2">HISTORY.<br>INQUIRY.<br>POSSIBILITY.</h1></div><div class="educator-col-right"><p class="educator-lead" data-motion="fade-up" data-motion-index="3">${esc(p.summary)}</p><div class="educator-meta-badge" data-motion="fade-up" data-motion-index="4"><span class="meta-code">EDUCATOR RECORD / KM-01</span><span class="meta-sep" aria-hidden="true">·</span><span class="meta-field">FIELD / HISTORY &amp; SOCIAL SCIENCE</span></div></div></div><div class="educator-divider" data-motion="fade-up" data-motion-index="5" aria-hidden="true"><span class="divider-line"></span><span class="divider-notch"></span></div></header><section class="profile-narrative-section section compact"><div class="profile-editorial-composition"><div class="profile-portrait-col"><figure class="portrait-archival-frame"><div class="portrait-window" data-motion="image">${img(p.portrait,'Portrait of '+p.name,base,'portrait-img',false)||'<div class="portrait-placeholder">Portrait<br>forthcoming</div>'}</div><figcaption class="portrait-caption" data-motion="fade-up" data-motion-index="4"><div class="portrait-meta-line"><span class="meta-code">PORTRAIT / KM-01</span><span class="meta-dot" aria-hidden="true">·</span><span class="meta-field">ARCHIVAL RECORD</span></div><p class="caption-text"><strong>${esc(p.name)}</strong> · History &amp; Social Science Educator</p></figcaption></figure></div><div class="profile-narrative-col"><header class="narrative-header" data-motion="fade-up" data-motion-index="2"><p class="eyebrow narrative-eyebrow">Educator Narrative</p><h2 class="narrative-heading">Connecting the past<br>with the classroom.</h2></header><div class="narrative-blocks" data-motion="fade-up" data-motion-index="3"><div class="narrative-block"><p class="narrative-block-label">WHY HISTORY</p><p class="narrative-text">${esc(c.about)}</p></div><div class="narrative-block"><p class="narrative-block-label">WIDER HUMANITIES CONTEXT</p><p class="narrative-text">${esc(c.preparation)}</p></div><div class="narrative-block"><p class="narrative-block-label">CURRENT DEVELOPMENT</p><p class="narrative-text">${esc(studySummary(c))}. The education record below lists institutions, progress and expected completion.</p></div></div></div></div></section>${profileRecruiterSystem(c)}${profileAcademicChronology(c)}${profileSkillsSection(c)}${profileExitPath(base)}</div>`;
   case 'teaching': return `<div class="container teaching-page">${heading('02 / Teaching Journey','Learning to teach.<br><em>Teaching to understand.</em>','School internships, community teaching, observation and the ideas I am developing through them.')}<div class="journey-flow-strip" aria-label="Educator development continuum"><div class="flow-strip-intro"><span class="flow-strip-tag">FRAMEWORK</span><span class="flow-strip-desc">Pedagogical Continuum</span></div><div class="flow-sequence" role="list"><span class="flow-step" role="listitem">OBSERVE</span><span class="flow-sep" aria-hidden="true">→</span><span class="flow-step" role="listitem">QUESTION</span><span class="flow-sep" aria-hidden="true">→</span><span class="flow-step" role="listitem">PLAN</span><span class="flow-sep" aria-hidden="true">→</span><span class="flow-step" role="listitem">TEACH</span><span class="flow-sep" aria-hidden="true">→</span><span class="flow-step" role="listitem">ASSESS</span><span class="flow-sep" aria-hidden="true">→</span><span class="flow-step" role="listitem">REFLECT</span><span class="flow-sep" aria-hidden="true">→</span><span class="flow-step" role="listitem">GROW</span></div></div>${evidenceLinks(base)}<div class="collection-tools" data-enhancement hidden><label>Find teaching experience<input id="experience-search" type="search" placeholder="Search school, activity or date" aria-controls="experience-list"></label><div class="filters" role="group" aria-label="Filter teaching experience">${['All','Teaching','Observation'].map((s,i)=>`<button class="filter" data-experience-filter="${s}" aria-pressed="${i===0}">${s}</button>`).join('')}</div></div><p id="experience-count" class="collection-count" role="status" data-enhancement hidden></p><div class="timeline-container"><div class="timeline-track" aria-hidden="true"><div class="timeline-fill"></div></div><h2 class="sr-only">Teaching and observation experience</h2><section id="experience-list" class="experience-timeline" aria-label="Teaching and observation record">${experienceRows(c,base)}</section></div><p id="experience-empty" class="empty-note" ${c.experiences.length?'hidden':''}>No experiences match this search.</p>${philosophySection(c,base)}</div>`;
-  case 'pehchaan': return caseStudy(base,'Community teaching','Foundational literacy<br><em>and numeracy.</em>',pehchaan,`<h2>The teaching context</h2><p>The portfolio record describes a five-week NTCC internship with Nursery, LKG and UKG learners, alongside ULLAS adult-literacy sessions for five learners.</p><h2>Responsibilities recorded</h2>${list(pehchaan.points)}<h2>Classroom documentary evidence</h2><div class="case-gallery-block" style="margin:24px 0;"><a class="archive-doc-frame" href="${base}assets/pehchaan-classroom-mosaic.webp" target="_blank" rel="noopener noreferrer" aria-label="Open Pehchaan classroom documentary mosaic in full size"><img src="${base}assets/pehchaan-classroom-mosaic.webp" alt="Photographic documentary mosaic showing 80 hours of on-ground teaching, maze activities, kindergarten literacy and ULLAS adult literacy at Pehchaan The Street School" class="case-evidence-img" style="border-radius:12px; width:100%; height:auto;" loading="lazy"><span class="doc-view-hint" aria-hidden="true">Examine documentary mosaic ↗</span></a><p class="small" style="margin-top:8px; color:#64748b;">Archival photo mosaic: Kindergarten maze problem-solving, letter formation, paired worksheets, and one-on-one adult learner numeracy under ULLAS.</p></div><h2>Activity-based foundational pedagogy</h2><p>Working with mixed-age foundational learners required structuring lessons around tangible activity sheets. Visual-motor maze worksheets were introduced to cultivate pencil grip, directional control, and focused attention before transitioning to letter tracing and basic numeracy.</p><h2>What the document supports</h2><p>The completion certificate confirms 80 hours as an on-ground intern / teacher at Pehchaan The Street School. It does not report learner outcomes or describe individual teaching activities.</p><h2>Next reflection to document</h2><p>A short account of one activity, the learner response and a subsequent adjustment would add evidence of how this experience informed teaching.</p>`,`<aside class="evidence-aside"><p class="eyebrow">Completion certificate</p><h2>80 hours</h2><p>Pehchaan The Street School · 6 July 2026</p><a class="archive-doc-frame" href="${base}assets/certificate-2.webp">${img(defaultContent.certificates[1].image,'Pehchaan certificate confirming 80 hours as an on-ground intern / teacher',base,'case-evidence-img')}</a>${link(base,'credentials','View supporting credentials')}</aside>`);
+  case 'pehchaan': return pehchaanCaseStudy(pehchaan, base);
   case 'observation': return caseStudy(base,'School observation','Learning through<br><em>classroom observation.</em>',observation,`<h2>Observation context</h2><p>This five-day observation placement at Amity International School, Mayur Vihar took place on 24–28 November 2025. The record concerns observation of teaching.</p><h2>What I paid attention to</h2>${list(observation.points)}<h2>From observation to planning</h2><p>The account identifies questioning, participation and classroom routines as areas of attention. A dated observation note linking a specific teaching choice to a planning decision would make this learning easier to assess.</p>`,`<aside class="note-panel"><p class="eyebrow">Evidence status</p><h2>Observation record</h2><p>The dates are confirmed by the candidate. A school observation certificate or mentor record is not currently published.</p><p>The women’s-safety webinar certificate belongs to professional learning.</p>${link(base,'credentials','View published credentials')}</aside>`);
   case 'democracy': return democracyView(c,base);
   case 'resources': return `<div class="container resources-page">${heading('04 / Teaching Resources','Teacher’s Resource Library.<br><em>Ideas into practice.</em>','Published teaching files, with context and links to the original evidence.')}${evidenceFeature(c,base)}<section class="section resource-library">${sectionHead('Teacher’s Resource Library','Curated teaching files.')}<div class="resource-collection-tools ${c.resources.length===0?'is-catalog-empty':''}" data-enhancement hidden><label class="collection-search">Search teaching files<input id="resource-search" type="search" placeholder="Search title, category or description" aria-controls="resource-list"></label><div class="filters" role="group" aria-label="Filter resources">${['All',...new Set(c.resources.map(r=>r.category||r.type||'Teaching material'))].map((s,i)=>`<button class="filter" data-filter="${esc(s)}" aria-pressed="${i===0}">${esc(s)}</button>`).join('')}</div></div><p class="collection-count" id="resource-count" role="status">${c.resources.length} ${c.resources.length===1?'file':'files'} in the library</p><div id="resource-list">${resourceRows(c,base)}</div><p class="empty-note" id="resource-empty" ${c.resources.length?'hidden':''}>No teaching files match this search.</p><p class="small">Completed student responses, marked feedback and lesson reflections have not yet been published.</p></section></div>`;
