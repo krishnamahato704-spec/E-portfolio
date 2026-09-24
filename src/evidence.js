@@ -8,6 +8,8 @@ const knownPdfs = {
   'mock-election-class8-poster.pdf': 'mock-election-class8-poster.pdf',
   'roots-to-wings-iks-presentation.pdf': 'roots-to-wings-iks-presentation.pdf',
   'notice-writing-english-pedagogy.pdf': 'notice-writing-english-pedagogy.pdf',
+  'amity-ntcc-community-work-report.pdf': 'amity-ntcc-community-work-report.pdf',
+  'ukg-assessment-test.pdf': 'ukg-assessment-test.pdf',
 };
 export function documentUrl(url,base) {
   if(!url) return '';
