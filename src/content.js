@@ -93,7 +93,7 @@ export const defaultContent = {
     {number:'02',title:'Different routes, shared depth',text:'I aim to support different starting points. The published plan combines a concept diagram, photographs, discussion and written responses; targeted adaptations are a next area to document.'},
     {number:'03',title:'Assessment that changes teaching',text:'I plan checks before, during and after explanation. The Democracy plan includes diagnostic questions, guided practice and an independent task; collecting responses will help me evaluate these choices.'},
   ],
-  competencies:['Lesson planning','Historical source analysis','Formative assessment','Differentiated instruction','Classroom management','Canva','Microsoft Office','Online classroom tools'],
+  competencies:['Lesson planning','Historical source analysis','Formative assessment','Differentiated instruction','Classroom management','Google Gemini & AI in Education','Canva & visual TLM','Microsoft Office','Online classroom tools'],
   certificates:[
     {title:'Bachelor of Arts',image:storage+'1787898353874_955zgr_certWall1_0.jpeg',issuer:'Gurukula Kangri (Deemed to be University)',date:'Awarded 2021 · Issued 26 December 2022',category:'Academic',description:'Degree certificate recording a Bachelor of Arts awarded in 2021 and a CGPA of 8.80.'},
     {title:'Teaching internship · 80 hours',image:storage+'1787898375320_kx4r62_certWall2_0.jpeg',issuer:'Pehchaan The Street School',date:'6 July 2026',category:'Teaching',description:'Certificate of completion as an on-ground intern / teacher (80 hours).'},
@@ -102,6 +102,7 @@ export const defaultContent = {
     {title:'Leveraging AI for Transforming School Education',image:storage+'cert_ncert_ai_2026.jpeg',issuer:'CIET-NCERT, New Delhi',date:'4 March 2026',category:'Professional learning',description:'National course on pedagogical AI integration, ethical digital tools, and educational transformation offered by CIET-NCERT under the Ministry of Education (5 hours).'},
     {title:'Effective Writing · NPTEL Elite Certification',image:storage+'cert_nptel_writing_2026.jpeg',issuer:'IIT Roorkee · NPTEL (SWAYAM / MoE)',date:'Jan–Mar 2026',category:'Academic',description:'8-week academic composition and critical writing course completed with a 76% consolidated score (Online Assignments: 25/25, Proctored Exam: 51/75). Awarded Elite certification.'},
     {title:'LinkedIn for Teachers · Professional Development',image:storage+'cert_suraasa_linkedin_2026.jpeg',issuer:'Suraasa',date:'7 January 2026',category:'Professional learning',description:'Professional development webinar on educator digital visibility, teacher personal branding, and career networking.'},
+    {title:'Gemini Certified Educator',image:storage+'cert_gemini_educator_2026.webp',issuer:'Google for Education / Google',date:'2026',category:'Professional learning',description:'Professional educator certification validating proficiency in using generative AI (Google Gemini) to design inquiry-based lessons, scaffold complex concepts, differentiate student learning, and create multimodal instructional materials.'},
   ],
   resources:[
     {
@@ -118,6 +119,66 @@ export const defaultContent = {
       duration:'40 minutes',
       evidenceStatus:'Planning evidence',
       context:'Amity University school practicum · Session 2026–27'
+    },
+    {
+      id:'mock-election-evm-activity-guide',
+      title:'Mock Election Classroom Activity · EVM Simulation Guide',
+      category:'Classroom activity & TLM',
+      subject:'Social Science (Civics)',
+      grade:'Class 8',
+      date:'August 2026',
+      description:'A structured 4-stage experiential learning guide for conducting classroom mock elections using an Electronic Voting Machine (EVM) simulation: nomination, campaigning, secret balloting, and democratic counting in action.',
+      url:'https://oyqevsygintkjrkfbzpx.supabase.co/storage/v1/object/public/portfolio-media/redesign/mock-election-evm-activity.pdf',
+      thumbnail:'assets/mock-election-evm-activity.webp',
+      type:'Activity guide (Infographic & EVM guide)',
+      duration:'2 periods (80 minutes)',
+      evidenceStatus:'Classroom TLM',
+      context:'Panchsheel Balak Inter-College · Class 8 Civics practicum'
+    },
+    {
+      id:'mock-election-class8-announcement',
+      title:'Class 8 Mock Election Announcement & Display Poster',
+      category:'Classroom display & TLM',
+      subject:'Social Science (Civics)',
+      grade:'Class 8',
+      date:'August 2026',
+      description:'Official classroom display board poster designed for school notice boards, introducing Class 8 students to candidate nominations, franchise rights, and democratic participation.',
+      url:'https://oyqevsygintkjrkfbzpx.supabase.co/storage/v1/object/public/portfolio-media/redesign/mock-election-class8-poster.pdf',
+      thumbnail:'assets/mock-election-class8-poster.webp',
+      type:'Display poster (Classroom TLM)',
+      duration:'Display TLM',
+      evidenceStatus:'Classroom TLM',
+      context:'Panchsheel Balak Inter-College · Display board'
+    },
+    {
+      id:'roots-to-wings-iks-presentation',
+      title:'Roots to Wings · Integrating IKS in Modern Teacher Education',
+      category:'Presentation & Research',
+      subject:'Teacher Education / NEP 2020',
+      grade:'Teacher Education (B.Ed. & Higher Ed)',
+      date:'10 March 2026',
+      description:'A 15-slide research presentation delivered at the international seminar sponsored by GAIL India, examining epistemic plurality, NCF 2023 developmental stages, Panchakosha holistic assessment, and pedagogical frameworks for Indian Knowledge Systems.',
+      url:'https://oyqevsygintkjrkfbzpx.supabase.co/storage/v1/object/public/portfolio-media/redesign/roots-to-wings-iks-presentation.pdf',
+      thumbnail:'assets/roots-to-wings-preview.webp',
+      type:'Presentation deck (PDF · 15 slides)',
+      duration:'Seminar presentation',
+      evidenceStatus:'Research presentation',
+      context:'Amity Institute of Education · GAIL India sponsored seminar'
+    },
+    {
+      id:'notice-writing-english-pedagogy',
+      title:'Notice Writing · English Pedagogy & Formative Error Analysis',
+      category:'Teaching material',
+      subject:'English (B.Ed. Pedagogy)',
+      grade:'Classes 6 & 8',
+      date:'September 2026',
+      description:'An 11-slide instructional unit for secondary English teaching, combining formal notice layout, uncorrected student draft analysis with targeted teacher annotations, and an exemplar writing model.',
+      url:'https://oyqevsygintkjrkfbzpx.supabase.co/storage/v1/object/public/portfolio-media/redesign/notice-writing-english-pedagogy.pdf',
+      thumbnail:'assets/notice-writing-preview.webp',
+      type:'Instructional slides (PDF · 11 slides)',
+      duration:'40 minutes',
+      evidenceStatus:'Classroom TLM',
+      context:'Panchsheel Balak Inter-College · B.Ed. English practicum'
     }
   ],
   gallery:[
@@ -129,18 +190,46 @@ export const defaultContent = {
       context:'Amity Institute of Education school practicum 2026'
     },
     {
+      title:'Mock Election Classroom Activity & EVM Simulation',
+      image:storage+'mock-election-evm-activity.webp',
+      category:'Lesson Planning & TLM',
+      description:'Experiential civics infographic and activity guide introducing the four stages of democratic elections—nomination, campaign, electronic voting machine (EVM) balloting, and results counting.',
+      context:'Panchsheel Balak Inter-College · Class 8 Civics'
+    },
+    {
+      title:'Class 8 Mock Election Announcement & Display Poster',
+      image:storage+'mock-election-class8-poster.webp',
+      category:'Classroom Display & TLM',
+      description:'Classroom display board poster for experiential voting simulation in Class 8, inviting student candidacy and explaining civic participation.',
+      context:'Panchsheel Balak Inter-College · Display board'
+    },
+    {
+      title:'Foundational Literacy, Numeracy & ULLAS Field Practice',
+      image:storage+'pehchaan-classroom-mosaic.webp',
+      category:'Field Practice & Community',
+      description:'Photographic documentary mosaic of 80 hours on-ground teaching at Pehchaan The Street School: maze activities, drawing, alphabet tracing with early learners, and ULLAS adult-literacy sessions.',
+      context:'Pehchaan The Street School · Summer 2026'
+    },
+    {
       title:'NEP 2020 & Indian Knowledge Systems (IKS) in Teacher Education',
-      image:storage+'1787898560665_nhlr6b_certWall4_0.jpeg',
+      image:storage+'roots-to-wings-preview.webp',
       category:'Research & Presentations',
       description:'Paper presentation on embedding Indian Knowledge Systems and experiential inquiry into teacher education at the international seminar sponsored by GAIL India.',
       context:'Amity Institute of Education · 10 March 2026'
     },
     {
-      title:'Foundational Literacy & Numeracy Field Teaching',
-      image:storage+'1787898375320_kx4r62_certWall2_0.jpeg',
-      category:'Field Practice & Community',
-      description:'Documented 80-hour on-ground teaching internship with foundational learners and adult-literacy participants at Pehchaan The Street School.',
-      context:'Pehchaan The Street School · Summer 2026'
+      title:'Notice Writing · English Pedagogy & Error Analysis TLM',
+      image:storage+'notice-writing-preview.webp',
+      category:'Lesson Planning & TLM',
+      description:'Secondary English pedagogical presentation demonstrating formal notice structure, uncorrected student draft analysis with red-pen feedback, and model exemplar.',
+      context:'Panchsheel Balak Inter-College · Classes 6 & 8'
+    },
+    {
+      title:'Gemini Certified Educator Credential',
+      image:storage+'cert_gemini_educator_2026.webp',
+      category:'Digital Pedagogy & AI',
+      description:'Official Gemini Certified Educator credential validating competency in generative AI lesson planning, scaffolded instructional materials, and digital classroom innovation.',
+      context:'Google for Education · 2026'
     },
     {
       title:'Academic Discipline in History & Economics',
