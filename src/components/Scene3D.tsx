@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { MotionContext } from './WorkspaceCanvas';
+import { StudyLights } from './StudyLights';
 import { Sparkles } from '@react-three/drei';
 import { EducatorWorkspace } from './EducatorWorkspace';
 import { CategoryFilter } from '../data/teachingData';
@@ -7,9 +9,10 @@ import { GalleryItem, CertificateItem } from '../data/galleryData';
 
 interface Scene3DProps {
   mouseRef: React.RefObject<{ x: number; y: number }>;
-  scrollProgress: number;
+  scrollProgress: React.RefObject<number>;
   activeMilestoneIndex: number;
   isMobile: boolean;
+  section: number;
   activeCategory?: CategoryFilter;
   hoveredTeachingItemId?: string | null;
   activeTlmCategory?: TlmCategory;
@@ -27,6 +30,7 @@ export function Scene3D({
   scrollProgress,
   activeMilestoneIndex,
   isMobile,
+  section,
   activeCategory = 'All',
   hoveredTeachingItemId = null,
   activeTlmCategory = 'All',
@@ -38,14 +42,16 @@ export function Scene3D({
   onHoverGalleryItem,
   onSelectGalleryItem,
 }: Scene3DProps) {
+  const reduced = useContext(MotionContext);
   return (
     <>
+      <StudyLights shadows={!isMobile && !reduced && section < 3} />
       {/* 3D Educator / Learner Workspace Scene */}
       <EducatorWorkspace
         mouseRef={mouseRef}
         scrollProgress={scrollProgress}
         activeMilestoneIndex={activeMilestoneIndex}
-        isMobile={isMobile}
+        isMobile={isMobile} section={section}
         activeCategory={activeCategory}
         hoveredTeachingItemId={hoveredTeachingItemId}
         activeTlmCategory={activeTlmCategory}
@@ -59,14 +65,14 @@ export function Scene3D({
       />
 
       {/* Subtle Dust Motes in Sunlit Study Room */}
-      <Sparkles
-        count={isMobile ? 18 : 36}
+      {!isMobile && !reduced && section < 3 && <Sparkles
+        count={12}
         scale={[12, 6, 8]}
         size={2.2}
         speed={0.3}
         opacity={0.35}
         color="#c8b17d"
-      />
+      />}
     </>
   );
 }

@@ -1,3 +1,5 @@
+import { EvidenceImage } from './EvidenceImage';
+import { Modal } from './Modal';
 import { useState, useMemo } from 'react';
 import {
   TEACHING_ITEMS,
@@ -57,7 +59,7 @@ export function TeachingPortfolio({
               {/* Visual Preview Frame */}
               <div className="featured-media-col">
                 <div className="featured-image-frame">
-                  <img
+                  <EvidenceImage
                     src={featuredItem.thumbnail}
                     alt={featuredItem.title}
                     className="featured-image"
@@ -125,7 +127,7 @@ export function TeachingPortfolio({
 
         {/* 2. CATEGORY NAVIGATION TABS */}
         <div className="portfolio-filter-bar">
-          <div className="portfolio-filter-buttons" role="tablist" aria-label="Filter teaching categories">
+          <div className="portfolio-filter-buttons" role="group" aria-label="Filter teaching categories">
             {TEACHING_CATEGORIES.map((cat) => {
               const isSelected = activeCategory === cat;
               const count =
@@ -136,8 +138,8 @@ export function TeachingPortfolio({
                 <button
                   key={cat}
                   type="button"
-                  role="tab"
-                  aria-selected={isSelected}
+
+                  aria-pressed={isSelected}
                   onClick={() => onSelectCategory(cat)}
                   className={`filter-btn ${isSelected ? 'is-active' : ''}`}
                 >
@@ -171,7 +173,7 @@ export function TeachingPortfolio({
                 {/* Thumbnail Preview */}
                 {item.thumbnail && (
                   <div className="card-thumbnail-wrap">
-                    <img
+                    <EvidenceImage
                       src={item.thumbnail}
                       alt={item.title}
                       className="card-thumb-img"
@@ -184,7 +186,7 @@ export function TeachingPortfolio({
                 )}
 
                 <h3 className="card-item-title">{item.title}</h3>
-                
+
                 <div className="card-meta-line">
                   <span>{item.institution}</span>
                   {item.date && (
@@ -239,13 +241,7 @@ export function TeachingPortfolio({
 
         {/* 4. INTERACTIVE CASE STUDY MODAL */}
         {selectedItem && (
-          <div
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="case-study-title"
-            className="case-study-modal-backdrop"
-            onClick={() => setSelectedItem(null)}
-          >
+          <Modal className="case-study-modal-backdrop" aria-labelledby="case-study-title" onClose={() => setSelectedItem(null)}>
             <div
               className="case-study-modal-window"
               onClick={(e) => e.stopPropagation()}
@@ -316,7 +312,7 @@ export function TeachingPortfolio({
               {selectedItem.caseStudy?.stages && selectedItem.caseStudy.stages.length > 0 && (
                 <div className="modal-stages-section">
                   <h4 className="modal-subheading">Six-Stage Instructional Architecture</h4>
-                  
+
                   <div className="stage-pills-nav">
                     {selectedItem.caseStudy.stages.map((stg, sIdx) => (
                       <button
@@ -407,7 +403,7 @@ export function TeachingPortfolio({
                 </button>
               </div>
             </div>
-          </div>
+          </Modal>
         )}
       </div>
     </section>

@@ -152,6 +152,19 @@ export const defaultContent = {
 // Merge missing fields only. Known pre-v6 records receive narrowly scoped corrections;
 // explicit owner edits and empty collections remain authoritative.
 export function mergeContent(live = {}) {
+  if (!live || typeof live !== 'object' || Array.isArray(live)) live = {};
+  live = {...live};
+  for (const [key, value] of Object.entries(defaultContent)) {
+    if (Array.isArray(value) && !Array.isArray(live[key])) delete live[key];
+    if (typeof value === 'string' && typeof live[key] !== 'string') delete live[key];
+  }
+  if (!live.profile || typeof live.profile !== 'object' || Array.isArray(live.profile)) delete live.profile;
+  if (live.profile) {
+    live.profile = {...live.profile};
+    for (const [key, value] of Object.entries(defaultContent.profile)) {
+      if ((Array.isArray(value) && !Array.isArray(live.profile[key])) || (typeof value === 'string' && typeof live.profile[key] !== 'string')) delete live.profile[key];
+    }
+  }
   const result={...structuredClone(defaultContent),...live,profile:{...defaultContent.profile,...live.profile}};
   const older=(live.schemaVersion||0)<6;
   if(older) {
@@ -195,6 +208,7 @@ export function mergeContent(live = {}) {
     }
     return merged;
   });
+
   else if(live.schemaVersion)result.resources=[];
   if(Array.isArray(live.qualifications))result.qualifications=live.qualifications.map(q=>{
     const original=defaultContent.qualifications.find(x=>x.title===q.title);

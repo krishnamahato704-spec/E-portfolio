@@ -1,3 +1,5 @@
+import { useContext } from 'react';
+import { MotionContext } from './WorkspaceCanvas';
 import { useRef } from 'react';
 import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
@@ -7,7 +9,7 @@ interface TlmExhibition3DProps {
   activeCategory: TlmCategory;
   hoveredProjectId: string | null;
   isMobile: boolean;
-  scrollProgress: number;
+  scrollProgress: React.RefObject<number>;
 }
 
 export function TlmExhibition3D({
@@ -16,6 +18,7 @@ export function TlmExhibition3D({
   isMobile,
   scrollProgress,
 }: TlmExhibition3DProps) {
+  const reduced = useContext(MotionContext);
   const rootGroupRef = useRef<THREE.Group>(null);
 
   // Individual station refs for hover & category micro-motion
@@ -28,10 +31,12 @@ export function TlmExhibition3D({
   const spotlightRef = useRef<THREE.SpotLight>(null);
 
   useFrame((_, delta) => {
+    if (reduced) return;
+    delta = Math.min(delta, .05);
     if (!rootGroupRef.current) return;
 
     // Reveal and settle into the Learning Lab when scroll enters TLM zone (p >= 0.70)
-    const tlmVisibility = THREE.MathUtils.clamp((scrollProgress - 0.68) / 0.14, 0, 1);
+    const tlmVisibility = THREE.MathUtils.clamp((scrollProgress.current - 0.56) / 0.04, 0, 1);
     rootGroupRef.current.position.y = THREE.MathUtils.lerp(-0.4, 0, tlmVisibility);
 
     // Active state determinations
@@ -163,16 +168,7 @@ export function TlmExhibition3D({
       {/* ------------------------------------------------------------------ */}
       {/* 1. GALLERY SPOTLIGHT FOR LEARNING LAB STATIONS                     */}
       {/* ------------------------------------------------------------------ */}
-      <spotLight
-        ref={spotlightRef}
-        position={[5.5, 3.2, 0.5]}
-        angle={0.65}
-        penumbra={0.5}
-        intensity={isMobile ? 1.0 : 1.8}
-        color="#fff1d6"
-        distance={9}
-        castShadow={!isMobile}
-      />
+
 
       {/* ------------------------------------------------------------------ */}
       {/* 2. THE MAIN LEARNING LAB WORKSHOP TABLE & EXHIBITION BENCH        */}

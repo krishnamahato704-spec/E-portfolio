@@ -1,3 +1,4 @@
+import { assetUrl } from '../runtime';
 // Verified Teaching Portfolio Data for Krishna Mahato
 // Grounded strictly in authentic records from content.js, evidence.js, and views.js
 
@@ -65,8 +66,8 @@ export const TEACHING_ITEMS: TeachingItem[] = [
     context: 'Amity University School Practicum · Session 2026–27',
     institution: 'Panchsheel Balak Inter-College / Amity Institute of Education',
     type: 'Structured Inquiry Lesson Plan (PDF · 6 Pages)',
-    thumbnail: 'assets/democracy-plan-preview.webp',
-    documentUrl: 'assets/democracy-lesson-plan.pdf',
+    thumbnail: assetUrl('assets/democracy-plan-preview.webp'),
+    documentUrl: assetUrl('assets/democracy-lesson-plan.pdf'),
     documentLabel: 'Read Complete 6-Page Lesson Plan (PDF)',
     isFeatured: true,
     planningEvidenceNote: 'This is verified planning evidence, not a report of a delivered lesson. Completed student work and supervisor remarks are not included.',
@@ -151,7 +152,7 @@ export const TEACHING_ITEMS: TeachingItem[] = [
     context: 'Supervised B.Ed. Practicum · Session 2026–27',
     institution: 'Panchsheel Balak Inter-College',
     type: 'School Teaching Practicum',
-    thumbnail: 'assets/democracy-plan-preview.webp',
+    thumbnail: assetUrl('assets/democracy-plan-preview.webp'),
     isFeatured: true,
     evidencePoints: [
       'Undertaking a comprehensive 16-week school internship with regular classroom teaching across Tuesday through Saturday.',
@@ -191,8 +192,8 @@ export const TEACHING_ITEMS: TeachingItem[] = [
     context: 'NTCC Non-Formal Education Internship',
     institution: 'Pehchaan The Street School',
     type: 'Community Teaching Internship',
-    thumbnail: 'assets/certificate-2.webp',
-    documentUrl: 'assets/certificate-2.webp',
+    thumbnail: assetUrl('assets/certificate-2.webp'),
+    documentUrl: assetUrl('assets/certificate-2.webp'),
     documentLabel: 'View Official 80-Hour Teaching Certificate',
     isFeatured: true,
     evidencePoints: [
@@ -229,8 +230,8 @@ export const TEACHING_ITEMS: TeachingItem[] = [
     context: 'National Seminar · GAIL Sponsored',
     institution: 'Amity Institute of Education · Sponsored by GAIL India Limited',
     type: 'Academic Seminar Presentation & Research Paper',
-    thumbnail: 'assets/certificate-4.webp',
-    documentUrl: 'assets/certificate-4.webp',
+    thumbnail: assetUrl('assets/certificate-4.webp'),
+    documentUrl: assetUrl('assets/certificate-4.webp'),
     documentLabel: 'View National Seminar Certificate',
     isFeatured: true,
     evidencePoints: [
@@ -267,7 +268,7 @@ export const TEACHING_ITEMS: TeachingItem[] = [
     context: 'Secondary & Senior Secondary School Observation',
     institution: 'Amity International School, Mayur Vihar',
     type: 'School Observation Practicum',
-    thumbnail: 'assets/certificate-3.webp',
+    thumbnail: assetUrl('assets/certificate-3.webp'),
     evidencePoints: [
       'Observed live Social Science and History teaching across middle, secondary, and senior secondary classes.',
       'Analyzed master educators’ questioning hierarchies, wait-time strategies, and board management.',
@@ -298,8 +299,8 @@ export const TEACHING_ITEMS: TeachingItem[] = [
     context: 'Classroom Visual Teaching Aids · Session 2026–27',
     institution: 'Panchsheel Balak Inter-College',
     type: 'Visual Teaching-Learning Material (TLM)',
-    thumbnail: 'assets/democracy-thumb.webp',
-    documentUrl: 'assets/democracy-lesson-plan.pdf',
+    thumbnail: assetUrl('assets/democracy-thumb.webp'),
+    documentUrl: assetUrl('assets/democracy-lesson-plan.pdf'),
     documentLabel: 'View Integrated Visual TLM in Lesson Plan',
     evidencePoints: [
       'Comparative concept diagrams mapping direct democracy, representative democracy, parliamentary and presidential systems.',
@@ -335,7 +336,7 @@ export const TEACHING_ITEMS: TeachingItem[] = [
     context: 'Continuous Classroom Assessment Blueprint',
     institution: 'Panchsheel Balak Inter-College',
     type: 'Assessment Instrument & Questioning Blueprint',
-    thumbnail: 'assets/democracy-plan-preview.webp',
+    thumbnail: assetUrl('assets/democracy-plan-preview.webp'),
     evidencePoints: [
       'Diagnostic pre-assessment questions targeting baseline misconceptions before instructional delivery.',
       'In-flight guided practice checks: oral definitions, categorization exercises, and peer verification.',
@@ -365,7 +366,7 @@ export const TEACHING_ITEMS: TeachingItem[] = [
     context: 'B.Ed. Practicum Reflection Architecture',
     institution: 'Amity Institute of Education',
     type: 'Reflective Teaching Framework',
-    thumbnail: 'assets/portrait.webp',
+    thumbnail: assetUrl('assets/portrait.webp'),
     evidencePoints: [
       'Four-point reflective matrix: student engagement, concept re-teaching, observed errors, and future adjustments.',
       'Connects observed classroom dialogue directly to targeted adaptations in lesson planning.',

@@ -1,10 +1,12 @@
-import React, { useRef, useMemo } from 'react';
+import { useContext } from 'react';
+import { MotionContext } from './WorkspaceCanvas';
+import React, { useRef, useMemo, useEffect } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { RESEARCH_STAGES } from '../data/actionResearchData';
 
 interface ActionResearch3DProps {
-  scrollProgress: number;
+  scrollProgress: React.RefObject<number>;
   activeStageId: string | null;
   hoveredEvidenceId: string | null;
   isMobile: boolean;
@@ -16,6 +18,7 @@ export function ActionResearch3D({
   hoveredEvidenceId,
   isMobile,
 }: ActionResearch3DProps) {
+  const reduced = useContext(MotionContext);
   const rootGroupRef = useRef<THREE.Group>(null);
   const lampLightRef = useRef<THREE.SpotLight>(null);
   const binderRef = useRef<THREE.Group>(null);
@@ -40,15 +43,19 @@ export function ActionResearch3D({
     return new THREE.BufferGeometry().setFromPoints(points);
   }, [threadPoints]);
 
+  const threadLine = useMemo(() => new THREE.Line(threadGeometry, new THREE.LineBasicMaterial({ color: 0xd4a853, transparent: true, opacity: 0.65 })), [threadGeometry]);
+  useEffect(() => () => { threadLine.geometry.dispose(); threadLine.material.dispose(); }, [threadLine]);
   useFrame((_, delta) => {
+    if (reduced) return;
+    delta = Math.min(delta, .05);
     if (!rootGroupRef.current) return;
 
     // Visibility range for Action Research: scroll progress ~0.72 to 1.00
     // Subtle entry fade from 0.72 to 0.78, full presence through 0.94, elegant hold to 1.0
-    const inRange = scrollProgress >= 0.70;
-    const targetOpacity = inRange ? Math.min(1, Math.max(0, (scrollProgress - 0.70) / 0.06)) : 0;
+    const inRange = scrollProgress.current >= 0.70;
+    const targetOpacity = inRange ? Math.min(1, Math.max(0, (scrollProgress.current - 0.70) / 0.06)) : 0;
 
-    rootGroupRef.current.visible = targetOpacity > 0.01;
+    rootGroupRef.current.visible = true;
 
     // Micro breathing / subtle scholarly presence
     if (inRange) {
@@ -103,20 +110,8 @@ export function ActionResearch3D({
       {/* ------------------------------------------------------------------ */}
       {/* 1. Academic Task Lighting: Desk Task Lamp & Ambient Focus          */}
       {/* ------------------------------------------------------------------ */}
-      <spotLight
-        ref={lampLightRef}
-        position={[10.6, 2.2, -1.8]}
-        target-position={[9.2, 0.5, -2.6]}
-        color="#ffe3ba"
-        intensity={2.2}
-        distance={7}
-        angle={0.65}
-        penumbra={0.7}
-        castShadow
-        shadow-mapSize={[1024, 1024]}
-        shadow-bias={-0.001}
-      />
-      <pointLight position={[9.2, 1.8, -2.4]} color="#ffeedd" intensity={0.6} distance={4} />
+
+
 
       {/* ------------------------------------------------------------------ */}
       {/* 2. The Research Study Desk / Academic Investigation Plinth          */}
@@ -349,7 +344,7 @@ export function ActionResearch3D({
         </mesh>
 
         {/* Subtle Connecting Inquiry Thread (Gold Catenary) */}
-        <primitive object={new THREE.Line(threadGeometry, new THREE.LineBasicMaterial({ color: 0xd4a853, transparent: true, opacity: 0.65, linewidth: 2 }))} />
+        <primitive object={threadLine} />
 
         {/* Pinned Artifact Placards (Mapped directly to RESEARCH_STAGES) */}
         {RESEARCH_STAGES.map((stage, idx) => {
@@ -443,7 +438,7 @@ export function ActionResearch3D({
           </mesh>
         ))}
         {/* Subtle Ambient Horizon Wash */}
-        <pointLight position={[0, 0.6, 0.4]} color="#ffd285" intensity={0.35} distance={3} />
+
       </group>
     </group>
   );

@@ -1,3 +1,5 @@
+import { Modal } from './Modal';
+import { assetUrl } from '../runtime';
 import React, { useState } from 'react';
 import {
   RESEARCH_METADATA,
@@ -68,14 +70,14 @@ export function ActionResearch({
           {/* Research Stage Progress Indicator Bar */}
           <div className="research-stage-indicator-wrap" aria-label="Research inquiry progression">
             <span className="indicator-label">INQUIRY STAGES:</span>
-            <div className="research-stage-tracker" role="tablist">
+            <div className="research-stage-tracker" role="group">
               {RESEARCH_STAGES.map((stage) => {
                 const isActive = stage.id === (activeStageId || 'stage-problem');
                 return (
                   <button
                     key={stage.id}
-                    role="tab"
-                    aria-selected={isActive}
+
+                    aria-pressed={isActive}
                     className={`stage-tracker-btn ${isActive ? 'is-active' : ''}`}
                     onClick={() => onSelectStage(stage.id)}
                     onMouseEnter={() => onHoverEvidence(stage.id)}
@@ -91,34 +93,34 @@ export function ActionResearch({
         </header>
 
         {/* Navigation Tabs for Analytical Views */}
-        <div className="research-tabs-bar" role="tablist" aria-label="Action research exploration views">
+        <div className="research-tabs-bar" role="group" aria-label="Action research exploration views">
           <button
-            role="tab"
-            aria-selected={activeTab === 'stages'}
+
+            aria-pressed={activeTab === 'stages'}
             className={`research-tab-btn ${activeTab === 'stages' ? 'active' : ''}`}
             onClick={() => setActiveTab('stages')}
           >
             01. Inquiry Stages &amp; Evidence Wall
           </button>
           <button
-            role="tab"
-            aria-selected={activeTab === 'matrix'}
+
+            aria-pressed={activeTab === 'matrix'}
             className={`research-tab-btn ${activeTab === 'matrix' ? 'active' : ''}`}
             onClick={() => setActiveTab('matrix')}
           >
             02. Observation &amp; Intervention Matrix
           </button>
           <button
-            role="tab"
-            aria-selected={activeTab === 'timeline'}
+
+            aria-pressed={activeTab === 'timeline'}
             className={`research-tab-btn ${activeTab === 'timeline' ? 'active' : ''}`}
             onClick={() => setActiveTab('timeline')}
           >
             03. Practicum Timeline &amp; Phases
           </button>
           <button
-            role="tab"
-            aria-selected={activeTab === 'reading-mode'}
+
+            aria-pressed={activeTab === 'reading-mode'}
             className={`research-tab-btn ${activeTab === 'reading-mode' ? 'active' : ''}`}
             onClick={() => setActiveTab('reading-mode')}
           >
@@ -137,6 +139,7 @@ export function ActionResearch({
                 return (
                   <article
                     key={stage.id}
+                    role="button"
                     className={`stage-evidence-card ${isSelected ? 'is-selected' : ''}`}
                     onClick={() => {
                       onSelectStage(stage.id);
@@ -503,14 +506,14 @@ export function ActionResearch({
 
               <div className="dossier-download-actions">
                 <a
-                  href="assets/democracy-lesson-plan.pdf"
+                  href={assetUrl('assets/democracy-lesson-plan.pdf')}
                   download="democracy-lesson-plan.pdf"
                   className="btn-primary"
                 >
                   Download Complete Lesson Plan PDF (6 Pages) ↓
                 </a>
                 <a
-                  href="assets/krishna-mahato-resume.pdf"
+                  href={assetUrl('assets/krishna-mahato-resume.pdf')}
                   download="krishna-mahato-resume.pdf"
                   className="btn-secondary"
                 >
@@ -523,13 +526,7 @@ export function ActionResearch({
 
         {/* Modal for Deep Stage Inspection */}
         {selectedCaseStage && (
-          <div
-            className="research-modal-backdrop"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="modal-stage-title"
-            onClick={() => setSelectedCaseStage(null)}
-          >
+          <Modal className="research-modal-backdrop" aria-labelledby="modal-stage-title" onClose={() => setSelectedCaseStage(null)}>
             <div
               className="research-modal-card"
               onClick={(e) => e.stopPropagation()}
@@ -577,7 +574,7 @@ export function ActionResearch({
                 </button>
               </div>
             </div>
-          </div>
+          </Modal>
         )}
 
         {/* Transition Bridge to Certificates / Achievements Section */}
@@ -591,7 +588,7 @@ export function ActionResearch({
             </p>
           </div>
           <div className="bridge-actions">
-            <a href="assets/krishna-mahato-resume.pdf" download="krishna-mahato-resume.pdf" className="btn-secondary">
+            <a href={assetUrl('assets/krishna-mahato-resume.pdf')} download="krishna-mahato-resume.pdf" className="btn-secondary">
               Academic Résumé PDF ↓
             </a>
           </div>

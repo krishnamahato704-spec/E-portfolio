@@ -1,3 +1,5 @@
+import { EvidenceImage } from './EvidenceImage';
+import { Modal } from './Modal';
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import {
   GALLERY_ITEMS,
@@ -82,8 +84,6 @@ export function VisualGallery({
     };
 
     window.addEventListener('keydown', handleKeyDown);
-    // Auto focus close button for accessibility
-    closeBtnRef.current?.focus();
 
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
@@ -150,7 +150,7 @@ export function VisualGallery({
               }}
             >
               <div className="gallery-img-wrap">
-                <img
+                <EvidenceImage
                   src={item.fallbackImage}
                   alt={item.caption || item.title}
                   className="gallery-thumb-img"
@@ -192,13 +192,7 @@ export function VisualGallery({
       {/* FULLSCREEN LIGHTBOX VIEWER                                         */}
       {/* ================================================================== */}
       {lightboxItem && (
-        <div
-          className="gallery-lightbox-backdrop"
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="lightbox-title"
-          onClick={handleCloseLightbox}
-        >
+        <Modal className="gallery-lightbox-backdrop" aria-labelledby="lightbox-title" onClose={handleCloseLightbox}>
           <div
             ref={lightboxRef}
             className="gallery-lightbox-container"
@@ -220,14 +214,14 @@ export function VisualGallery({
               type="button"
               className="lightbox-nav-btn prev"
               onClick={handlePrev}
-              aria-label="Previous image"
+              aria-label="Previous image" hidden={!GALLERY_ITEMS.some(item => item.id === lightboxItem.id)}
             >
               ‹
             </button>
 
             {/* Main Visual Display */}
             <div className="lightbox-image-stage">
-              <img
+              <EvidenceImage
                 src={lightboxItem.fallbackImage || lightboxItem.image}
                 alt={'caption' in lightboxItem ? lightboxItem.caption : lightboxItem.description}
                 className="lightbox-main-img"
@@ -239,7 +233,7 @@ export function VisualGallery({
               type="button"
               className="lightbox-nav-btn next"
               onClick={handleNext}
-              aria-label="Next image"
+              aria-label="Next image" hidden={!GALLERY_ITEMS.some(item => item.id === lightboxItem.id)}
             >
               ›
             </button>
@@ -285,7 +279,7 @@ export function VisualGallery({
               </div>
             </div>
           </div>
-        </div>
+        </Modal>
       )}
     </section>
   );

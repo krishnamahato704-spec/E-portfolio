@@ -1,3 +1,4 @@
+import { EvidenceImage } from './EvidenceImage';
 import React from 'react';
 import { CERTIFICATES_DATA, CertificateItem } from '../data/galleryData';
 
@@ -43,7 +44,7 @@ export function CertificatesGallery({
                 <span className="cert-archive-tag">ARCHIVE / CRED-0{idx + 1}</span>
                 <span className="cert-badge">{cert.category}</span>
                 <div className="cert-img-container">
-                  <img
+                  <EvidenceImage
                     src={cert.fallbackImage}
                     alt={cert.title}
                     className="cert-img-thumbnail"

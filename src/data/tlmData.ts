@@ -1,3 +1,4 @@
+import { assetUrl } from '../runtime';
 // Verified Teaching-Learning Materials (TLM) and Classroom Projects Data for Krishna Mahato
 // Strictly grounded in authentic records from content.js, evidence.js, and teaching practicum archives
 
@@ -50,7 +51,7 @@ export const TLM_PROJECTS: TlmProject[] = [
     topic: 'Comparative Democratic Systems & Constitutional Accountability',
     date: 'July 2026',
     institution: 'Panchsheel Balak Inter-College / Amity Institute of Education',
-    image: 'assets/democracy-thumb.webp',
+    image: assetUrl('assets/democracy-thumb.webp'),
     isFeatured: true,
     purpose:
       'Transition secondary Social Science away from abstract textual definitions into clear visual schematics and comparative structures that support multiple learning starting points.',
@@ -68,7 +69,7 @@ export const TLM_PROJECTS: TlmProject[] = [
       'Identify 3 structural differences between direct citizen voting (participatory models) and representative parliamentary systems using the diagram clues.',
     reflection:
       'Visual diagrams prevent cognitive overload for secondary learners encountering constitutional vocabulary for the first time. The diagram served as a persistent reference point throughout the lesson.',
-    documentUrl: 'assets/democracy-lesson-plan.pdf',
+    documentUrl: assetUrl('assets/democracy-lesson-plan.pdf'),
     documentLabel: 'View Integrated TLM in 6-Page Lesson Plan (PDF)',
     tags: ['Comparative Politics', 'Visual Scaffolding', 'Class IX-B', 'Civics TLM', 'Multi-Modal'],
   },
@@ -81,7 +82,7 @@ export const TLM_PROJECTS: TlmProject[] = [
     topic: 'Sound-Symbol Association, Letter Cards & Word Formation',
     date: 'Summer 2026',
     institution: 'Pehchaan The Street School',
-    image: 'assets/certificate-2.webp',
+    image: assetUrl('assets/certificate-2.webp'),
     isFeatured: false,
     purpose:
       'Provide concrete, tactile learning aids for first-generation learners and out-of-school children, transforming abstract English alphabet sounds into physical, manipulative learning games.',
@@ -99,7 +100,7 @@ export const TLM_PROJECTS: TlmProject[] = [
       'Form 3 rhyming words using the tactile tile set (e.g., -at word family: cat, bat, mat) and transcribe them onto personal chalk slates.',
     reflection:
       'In non-traditional outdoor learning settings, tactile manipulatives sustain attention and remove the anxiety of formal textbooks. Physical manipulation builds confidence before pencil-and-paper writing.',
-    documentUrl: 'assets/certificate-2.webp',
+    documentUrl: assetUrl('assets/certificate-2.webp'),
     documentLabel: 'View Verified 80-Hour Teaching Record',
     tags: ['FLN', 'Tactile Learning', 'Phonics', 'Pehchaan Internship', 'Foundational English'],
   },
@@ -112,7 +113,7 @@ export const TLM_PROJECTS: TlmProject[] = [
     topic: 'Source-Based Historical Inquiry & Citizen Participation',
     date: 'July 2026',
     institution: 'Panchsheel Balak Inter-College',
-    image: 'assets/democracy-plan-preview.webp',
+    image: assetUrl('assets/democracy-plan-preview.webp'),
     isFeatured: false,
     purpose:
       'Train secondary learners to interrogate visual source documents (authentic photographs) as primary historical and civic evidence rather than passive decorative illustrations.',
@@ -129,7 +130,7 @@ export const TLM_PROJECTS: TlmProject[] = [
       'Compare a photograph of an election line with a peaceful protest photograph. Write two sentences explaining how both actions hold elected leaders accountable.',
     reflection:
       'Visual sources democratize classroom participation: students who hesitate to quote textbook definitions readily share acute observations when looking at real photographs of fellow citizens.',
-    documentUrl: 'assets/democracy-lesson-plan.pdf',
+    documentUrl: assetUrl('assets/democracy-lesson-plan.pdf'),
     documentLabel: 'Examine Source Photo Integration in Lesson Plan',
     tags: ['Primary Sources', 'Visual Evidence', 'Civic Voice', 'Inquiry Cards'],
   },
@@ -142,7 +143,7 @@ export const TLM_PROJECTS: TlmProject[] = [
     topic: 'Continuous Diagnostic, Guided Practice & Evaluative Formative Checks',
     date: 'July 2026',
     institution: 'Panchsheel Balak Inter-College',
-    image: 'assets/democracy-plan-preview.webp',
+    image: assetUrl('assets/democracy-plan-preview.webp'),
     isFeatured: false,
     purpose:
       'Embed continuous diagnostic evaluation into the 40-minute class flow, ensuring the teacher identifies and addresses misconceptions prior to, during, and after instructional explanation.',
@@ -160,7 +161,7 @@ export const TLM_PROJECTS: TlmProject[] = [
       'Complete the Tier 1 definition check, verify the 3 forms of government during guided practice, and supply one reasoned argument evaluating representative democracy.',
     reflection:
       'Formative response sheets transform assessment from a stressful terminal exam into a diagnostic tool that actively guides pedagogical adjustments in real time.',
-    documentUrl: 'assets/democracy-lesson-plan.pdf',
+    documentUrl: assetUrl('assets/democracy-lesson-plan.pdf'),
     documentLabel: 'Inspect Assessment Prompts in Lesson Record',
     tags: ['Formative Assessment', 'Diagnostic Prompts', 'Exit Slips', 'Pedagogical Evaluation'],
   },
@@ -173,7 +174,7 @@ export const TLM_PROJECTS: TlmProject[] = [
     topic: 'Comparative Matrix: Monarchy, Oligarchy, Dictatorship vs Constitutional Democracy',
     date: 'July 2026',
     institution: 'Panchsheel Balak Inter-College',
-    image: 'assets/democracy-thumb.webp',
+    image: assetUrl('assets/democracy-thumb.webp'),
     isFeatured: false,
     purpose:
       'Provide a clear, disciplined visual anchor on the blackboard that synthesizes whole-class dialogue into a durable categorical matrix during live instruction.',
@@ -190,7 +191,7 @@ export const TLM_PROJECTS: TlmProject[] = [
       'Transcribe the completed blackboard comparative matrix and add one contemporary or historical example under each government category.',
     reflection:
       'Deliberate board zoning gives visual structure to fast-moving classroom discussions and ensures that all learners, including visual and deliberate thinkers, leave with clean, coherent notes.',
-    documentUrl: 'assets/democracy-lesson-plan.pdf',
+    documentUrl: assetUrl('assets/democracy-lesson-plan.pdf'),
     documentLabel: 'Review Board Work Plan in Practicum Blueprint',
     tags: ['Board Work', 'Visual Layout', 'Classroom Synthesis', 'Concept Matrix'],
   },
@@ -203,7 +204,7 @@ export const TLM_PROJECTS: TlmProject[] = [
     topic: 'Teacher Questioning Sequences, Wait-Time Dynamics & Student Discourse',
     date: 'November 2025',
     institution: 'Amity International School, Mayur Vihar',
-    image: 'assets/certificate-3.webp',
+    image: assetUrl('assets/certificate-3.webp'),
     isFeatured: false,
     purpose:
       'Document and operationalize how experienced secondary educators structure inquiry through strategic questioning tiers (recall → analysis → hypothesis → synthesis) and intentional wait-time.',
@@ -220,7 +221,7 @@ export const TLM_PROJECTS: TlmProject[] = [
       'Participate in a structured "Wait & Revoice" routine where students pause for 5 seconds after a teacher prompt and revoice peer arguments before sharing their own perspective.',
     reflection:
       'Observing master teachers proved that extending wait-time from 1 second to 3–5 seconds dramatically increases the depth, nuance, and voluntary participation of middle and secondary learners.',
-    documentUrl: 'assets/certificate-3.webp',
+    documentUrl: assetUrl('assets/certificate-3.webp'),
     documentLabel: 'View School Observation Context Record',
     tags: ['Questioning Routines', 'Pedagogical Observation', 'Wait Time', 'Discourse Analysis'],
   },

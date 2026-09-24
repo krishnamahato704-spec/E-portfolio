@@ -1,3 +1,5 @@
+import { useContext } from 'react';
+import { MotionContext } from './WorkspaceCanvas';
 import React, { useRef, useMemo } from 'react';
 import { useFrame, useLoader } from '@react-three/fiber';
 import * as THREE from 'three';
@@ -9,7 +11,7 @@ interface VisualGallery3DProps {
   onHoverItem?: (id: string | null) => void;
   onSelectItem?: (item: GalleryItem | CertificateItem) => void;
   isMobile: boolean;
-  scrollProgress: number;
+  scrollProgress: React.RefObject<number>;
 }
 
 // Subcomponent: Individual 3D Picture Frame in the Visual Gallery
@@ -28,6 +30,7 @@ function GalleryPictureFrame({
   onSelect: (item: GalleryItem) => void;
   isMobile: boolean;
 }) {
+  const reduced = useContext(MotionContext);
   const meshGroupRef = useRef<THREE.Group>(null);
   const [width, height] = item.size3D;
 
@@ -39,6 +42,8 @@ function GalleryPictureFrame({
 
   // Smooth floating animation and responsive hover offset
   useFrame((state, delta) => {
+    if (reduced) return;
+    delta = Math.min(delta, .05);
     if (!meshGroupRef.current) return;
 
     // Gentle vertical bobbing based on item id hash
@@ -52,7 +57,7 @@ function GalleryPictureFrame({
 
     meshGroupRef.current.position.y = THREE.MathUtils.damp(meshGroupRef.current.position.y, targetY, 4, delta);
     meshGroupRef.current.position.z = THREE.MathUtils.damp(meshGroupRef.current.position.z, targetZ, 4, delta);
-    meshGroupRef.current.scale.lerp(new THREE.Vector3(targetScale, targetScale, targetScale), delta * 5);
+    meshGroupRef.current.scale.setScalar(THREE.MathUtils.damp(meshGroupRef.current.scale.x, targetScale, 5, delta));
   });
 
   return (
@@ -60,11 +65,6 @@ function GalleryPictureFrame({
       ref={meshGroupRef}
       position={[item.position3D[0], item.position3D[1], item.position3D[2]]}
       rotation={[item.rotation3D[0], item.rotation3D[1], item.rotation3D[2]]}
-      onPointerOver={(e) => {
-        e.stopPropagation();
-        onHover(item.id);
-        document.body.style.cursor = 'pointer';
-      }}
       onPointerOut={() => {
         onHover(null);
         document.body.style.cursor = 'auto';
@@ -122,14 +122,6 @@ function GalleryPictureFrame({
       )}
 
       {/* Subtle Focus Rim Light when hovered */}
-      {isHovered && (
-        <pointLight
-          position={[0, 0, 0.35]}
-          intensity={0.6}
-          distance={1.6}
-          color="#ffeed1"
-        />
-      )}
     </group>
   );
 }
@@ -157,11 +149,6 @@ function CertificateFrame({
   return (
     <group
       position={cert.position3D}
-      onPointerOver={(e) => {
-        e.stopPropagation();
-        onHover(cert.id);
-        document.body.style.cursor = 'pointer';
-      }}
       onPointerOut={() => {
         onHover(null);
         document.body.style.cursor = 'auto';
@@ -207,7 +194,7 @@ export function VisualGallery3D({
   scrollProgress,
 }: VisualGallery3DProps) {
   // Only render with full opacity when user is approaching or in this section (progress >= 0.72)
-  const isVisible = scrollProgress > 0.70;
+  const isVisible = true;
 
   return (
     <group position={[0, 0, 0]} visible={isVisible}>
@@ -234,8 +221,8 @@ export function VisualGallery3D({
         </mesh>
 
         {/* Wall Spotlights for Formal Certificate Wall */}
-        <pointLight position={[-0.8, 1.3, 1.1]} intensity={0.85} color="#fedc97" distance={4.5} />
-        <pointLight position={[0.8, 1.3, 1.1]} intensity={0.85} color="#fedc97" distance={4.5} />
+
+
       </group>
 
       {/* The 4 Formal Certificates on the Wall */}
@@ -259,10 +246,10 @@ export function VisualGallery3D({
       </mesh>
 
       {/* Soft Gallery Ambient & Accent Spotlights */}
-      <ambientLight intensity={0.45} color="#fff6e8" />
-      <pointLight position={[15.6, 2.3, 0.8]} intensity={1.1} color="#ffeed1" distance={5} />
-      <pointLight position={[18.2, 2.3, 0.8]} intensity={1.2} color="#ffe8c2" distance={5} />
-      <pointLight position={[20.5, 2.2, 0.7]} intensity={0.9} color="#ffe2b5" distance={4.8} />
+
+
+
+
 
       {/* Gallery Plinth / Birch Display Shelf Runner along the bottom */}
       <mesh position={[18.0, 0.2, -2.1]} receiveShadow>
@@ -292,7 +279,7 @@ export function VisualGallery3D({
           <planeGeometry args={[3.2, 3.0]} />
           <meshStandardMaterial color="#12181b" roughness={0.95} />
         </mesh>
-        <pointLight position={[0.2, 0.8, 1.2]} intensity={0.5} color="#e5c388" distance={4.0} />
+
       </group>
     </group>
   );

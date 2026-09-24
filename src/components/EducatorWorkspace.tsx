@@ -1,3 +1,5 @@
+import { useContext } from 'react';
+import { MotionContext } from './WorkspaceCanvas';
 import React, { useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
@@ -11,9 +13,10 @@ import { GalleryItem, CertificateItem } from '../data/galleryData';
 
 interface WorkspaceProps {
   mouseRef: React.RefObject<{ x: number; y: number }>;
-  scrollProgress: number;
+  scrollProgress: React.RefObject<number>;
   activeMilestoneIndex: number;
   isMobile: boolean;
+  section: number;
   activeCategory?: CategoryFilter;
   hoveredTeachingItemId?: string | null;
   activeTlmCategory?: TlmCategory;
@@ -31,6 +34,7 @@ export function EducatorWorkspace({
   scrollProgress,
   activeMilestoneIndex,
   isMobile,
+  section,
   activeCategory = 'All',
   hoveredTeachingItemId = null,
   activeTlmCategory = 'All',
@@ -42,6 +46,7 @@ export function EducatorWorkspace({
   onHoverGalleryItem,
   onSelectGalleryItem,
 }: WorkspaceProps) {
+  const reduced = useContext(MotionContext);
   const globeGroupRef = useRef<THREE.Group>(null);
   const globeSphereRef = useRef<THREE.Mesh>(null);
   const penRef = useRef<THREE.Group>(null);
@@ -57,6 +62,8 @@ export function EducatorWorkspace({
 
   // Subtle restrained mouse interaction + milestone responsive highlights
   useFrame((_, delta) => {
+    if (reduced || section > 3) return;
+    delta = Math.min(delta, .05);
     const mx = mouseRef.current?.x || 0;
     const my = mouseRef.current?.y || 0;
 
@@ -147,6 +154,7 @@ export function EducatorWorkspace({
 
   return (
     <group position={[0, 0, 0]}>
+      <group visible={section <= 3}>
       {/* ------------------------------------------------------------------ */}
       {/* 1. EXPANDED STUDY DESK SURFACE & EXTENDED ARCHIVAL PLINTH           */}
       {/* ------------------------------------------------------------------ */}
@@ -288,7 +296,7 @@ export function EducatorWorkspace({
 
         <group rotation={[0, 0, 0.41]}>
           <mesh ref={globeSphereRef} castShadow receiveShadow>
-            <sphereGeometry args={[0.68, 36, 36]} />
+            <sphereGeometry args={[0.68, isMobile ? 18 : 28, isMobile ? 12 : 20]} />
             <meshStandardMaterial color="#2a3d46" roughness={0.35} metalness={0.15} />
           </mesh>
 
@@ -480,91 +488,45 @@ export function EducatorWorkspace({
       </group>
 
       {/* ------------------------------------------------------------------ */}
-      {/* 8. DESK STUDY LAMP & ATMOSPHERE LIGHTING                          */}
-      {/* ------------------------------------------------------------------ */}
-      <ambientLight intensity={0.7} color="#faf6eb" />
-
-      {/* Key Sunlight / Window Beam */}
-      <directionalLight
-        position={[6, 8, 5]}
-        intensity={1.9}
-        color="#fffcf0"
-        castShadow
-        shadow-mapSize-width={isMobile ? 1024 : 2048}
-        shadow-mapSize-height={isMobile ? 1024 : 2048}
-        shadow-camera-near={0.5}
-        shadow-camera-far={22}
-        shadow-camera-left={-7}
-        shadow-camera-right={7}
-        shadow-camera-top={7}
-        shadow-camera-bottom={-7}
-        shadow-bias={-0.00015}
-      />
-
-      {/* Dynamic Desk Lamp that pans with the active study section */}
-      <pointLight
-        position={[
-          scrollProgress < 0.35
-            ? -0.7
-            : THREE.MathUtils.lerp(-0.7, 2.4, (scrollProgress - 0.35) / 0.65),
-          1.5,
-          scrollProgress < 0.35 ? 0.9 : 1.6,
-        ]}
-        intensity={1.3 + scrollProgress * 0.8}
-        color="#fedc97"
-        distance={9}
-        decay={2}
-      />
-
-      {/* Secondary Cool Rim Light */}
-      <pointLight
-        position={[-5, 2, -2]}
-        intensity={0.5}
-        color="#8faab5"
-        distance={12}
-      />
-
-      {/* ------------------------------------------------------------------ */}
-      {/* 9. TEACHING STUDIO & RESOURCE EXHIBITION GALLERY                  */}
-      {/* ------------------------------------------------------------------ */}
-      <TeachingStudio3D
+      </group>
+      {section >= 2 && section <= 4 && <TeachingStudio3D
         activeCategory={activeCategory}
         hoveredItemId={hoveredTeachingItemId}
         isMobile={isMobile}
         scrollProgress={scrollProgress}
-      />
+      />}
 
       {/* ------------------------------------------------------------------ */}
       {/* 10. LEARNING LAB / TLM & CLASSROOM PROJECTS EXHIBITION            */}
       {/* ------------------------------------------------------------------ */}
-      <TlmExhibition3D
+      {section >= 3 && section <= 5 && <TlmExhibition3D
         activeCategory={activeTlmCategory}
         hoveredProjectId={hoveredTlmProjectId}
         isMobile={isMobile}
         scrollProgress={scrollProgress}
-      />
+      />}
 
       {/* ------------------------------------------------------------------ */}
       {/* 11. ACTION RESEARCH & CLASSROOM INQUIRY WORKSPACE                 */}
       {/* ------------------------------------------------------------------ */}
-      <ActionResearch3D
+      {section >= 4 && section <= 6 && <ActionResearch3D
         activeStageId={activeStageId}
         hoveredEvidenceId={hoveredEvidenceId}
         isMobile={isMobile}
         scrollProgress={scrollProgress}
-      />
+      />}
 
       {/* ------------------------------------------------------------------ */}
       {/* 12. CERTIFICATES & VISUAL MEMORY GALLERY ("MOMENTS FROM JOURNEY") */}
       {/* ------------------------------------------------------------------ */}
-      <VisualGallery3D
+      {section >= 5 && <VisualGallery3D
         activeItemId={activeGalleryItemId}
         hoveredItemId={hoveredGalleryItemId}
         onHoverItem={onHoverGalleryItem}
         onSelectItem={onSelectGalleryItem}
         isMobile={isMobile}
         scrollProgress={scrollProgress}
-      />
+      />}
     </group>
   );
 }

@@ -1,3 +1,5 @@
+import { EvidenceImage } from './EvidenceImage';
+import { Modal } from './Modal';
 import React, { useState, useEffect } from 'react';
 import {
   TLM_PROJECTS,
@@ -34,24 +36,7 @@ export function TlmExhibition({
 
   const featuredProject = TLM_PROJECTS.find((p) => p.isFeatured) || TLM_PROJECTS[0];
 
-  // Keyboard escape listener for modal
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        setSelectedProject(null);
-      }
-    };
-    if (selectedProject) {
-      document.body.style.overflow = 'hidden';
-      window.addEventListener('keydown', handleKeyDown);
-    } else {
-      document.body.style.overflow = '';
-    }
-    return () => {
-      document.body.style.overflow = '';
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [selectedProject]);
+
 
   return (
     <section id="tlm-exhibition" className="tlm-section">
@@ -72,7 +57,7 @@ export function TlmExhibition({
           </p>
 
           {/* Interactive Category / Subject Filters */}
-          <div className="tlm-filter-bar" role="tablist" aria-label="Filter TLM and classroom projects">
+          <div className="tlm-filter-bar" role="group" aria-label="Filter TLM and classroom projects">
             {TLM_CATEGORIES.map((category) => {
               const count =
                 category === 'All'
@@ -90,8 +75,8 @@ export function TlmExhibition({
                 <button
                   key={category}
                   type="button"
-                  role="tab"
-                  aria-selected={isSelected}
+
+                  aria-pressed={isSelected}
                   onClick={() => onSelectCategory(category)}
                   className={`filter-pill ${isSelected ? 'active' : ''}`}
                 >
@@ -108,7 +93,7 @@ export function TlmExhibition({
           <div className="featured-tlm-card">
             <div className="featured-tlm-media">
               <div className="media-frame">
-                <img
+                <EvidenceImage
                   src={featuredProject.image}
                   alt={featuredProject.title}
                   className="featured-tlm-img"
@@ -182,7 +167,7 @@ export function TlmExhibition({
             return (
               <article
                 key={project.id}
-                className="tlm-project-card"
+                className="tlm-project-card" role="button"
                 tabIndex={0}
                 onMouseEnter={() => onHoverProject(project.id)}
                 onMouseLeave={() => onHoverProject(null)}
@@ -202,7 +187,7 @@ export function TlmExhibition({
               >
                 {/* Visual Thumbnail Frame */}
                 <div className="card-thumb-container">
-                  <img
+                  <EvidenceImage
                     src={project.image}
                     alt={project.title}
                     className="card-thumb-img"
@@ -251,13 +236,7 @@ export function TlmExhibition({
       {/* Full Project Detail Modal / Lightbox                                 */}
       {/* -------------------------------------------------------------------- */}
       {selectedProject && (
-        <div
-          className="modal-backdrop"
-          onClick={() => setSelectedProject(null)}
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="tlm-modal-title"
-        >
+        <Modal className="modal-backdrop" aria-labelledby="tlm-modal-title" onClose={() => setSelectedProject(null)}>
           <div
             className="modal-container tlm-modal-container"
             onClick={(e) => e.stopPropagation()}
@@ -294,7 +273,7 @@ export function TlmExhibition({
 
               {/* Large High-Res Image Display */}
               <div className="modal-image-showcase">
-                <img
+                <EvidenceImage
                   src={selectedProject.image}
                   alt={selectedProject.title}
                   className="modal-showcase-img"
@@ -305,11 +284,11 @@ export function TlmExhibition({
               </div>
 
               {/* Tab Navigation for Deep Pedagogical Inspection */}
-              <div className="modal-tabs-nav" role="tablist">
+              <div className="modal-tabs-nav" role="group">
                 <button
                   type="button"
-                  role="tab"
-                  aria-selected={activeTab === 'overview'}
+
+                  aria-pressed={activeTab === 'overview'}
                   onClick={() => setActiveTab('overview')}
                   className={`modal-tab-btn ${activeTab === 'overview' ? 'active' : ''}`}
                 >
@@ -317,8 +296,8 @@ export function TlmExhibition({
                 </button>
                 <button
                   type="button"
-                  role="tab"
-                  aria-selected={activeTab === 'materials'}
+
+                  aria-pressed={activeTab === 'materials'}
                   onClick={() => setActiveTab('materials')}
                   className={`modal-tab-btn ${activeTab === 'materials' ? 'active' : ''}`}
                 >
@@ -326,8 +305,8 @@ export function TlmExhibition({
                 </button>
                 <button
                   type="button"
-                  role="tab"
-                  aria-selected={activeTab === 'application'}
+
+                  aria-pressed={activeTab === 'application'}
                   onClick={() => setActiveTab('application')}
                   className={`modal-tab-btn ${activeTab === 'application' ? 'active' : ''}`}
                 >
@@ -335,8 +314,8 @@ export function TlmExhibition({
                 </button>
                 <button
                   type="button"
-                  role="tab"
-                  aria-selected={activeTab === 'reflection'}
+
+                  aria-pressed={activeTab === 'reflection'}
                   onClick={() => setActiveTab('reflection')}
                   className={`modal-tab-btn ${activeTab === 'reflection' ? 'active' : ''}`}
                 >
@@ -433,7 +412,7 @@ export function TlmExhibition({
               </div>
             </div>
           </div>
-        </div>
+        </Modal>
       )}
     </section>
   );

@@ -1,3 +1,5 @@
+import { useContext } from 'react';
+import { MotionContext } from './WorkspaceCanvas';
 import { useRef } from 'react';
 import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
@@ -7,7 +9,7 @@ interface TeachingStudio3DProps {
   activeCategory: CategoryFilter;
   hoveredItemId: string | null;
   isMobile: boolean;
-  scrollProgress: number;
+  scrollProgress: React.RefObject<number>;
 }
 
 export function TeachingStudio3D({
@@ -16,6 +18,7 @@ export function TeachingStudio3D({
   isMobile,
   scrollProgress,
 }: TeachingStudio3DProps) {
+  const reduced = useContext(MotionContext);
   const groupRef = useRef<THREE.Group>(null);
   const lessonPlanBoardRef = useRef<THREE.Group>(null);
   const internshipFolioRef = useRef<THREE.Group>(null);
@@ -25,10 +28,12 @@ export function TeachingStudio3D({
 
   // Smooth micro-motion and responsive elevation based on active category & hover
   useFrame((state, delta) => {
+    if (reduced) return;
+    delta = Math.min(delta, .05);
     if (!groupRef.current) return;
 
     // Subtly reveal & float the studio as scroll enters the Teaching Portfolio zone (p > 0.55)
-    const studioVisibility = THREE.MathUtils.clamp((scrollProgress - 0.52) / 0.15, 0, 1);
+    const studioVisibility = THREE.MathUtils.clamp((scrollProgress.current - 0.40) / 0.04, 0, 1);
     groupRef.current.position.y = THREE.MathUtils.lerp(-0.3, 0, studioVisibility);
 
     // Target positions for each exhibition artifact based on active category and hovered cards
@@ -122,13 +127,7 @@ export function TeachingStudio3D({
             <boxGeometry args={[2.4, 0.08, 0.16]} />
             <meshStandardMaterial color="#c59b27" metalness={0.9} roughness={0.2} />
           </mesh>
-          <pointLight
-            position={[0, -0.25, 0.05]}
-            color="#ffe6b0"
-            intensity={isMobile ? 0.7 : 1.2}
-            distance={4.5}
-            decay={2}
-          />
+
         </group>
       </group>
 
@@ -191,12 +190,7 @@ export function TeachingStudio3D({
         </group>
 
         {/* Mini Accent Spot for Lesson Plan */}
-        <pointLight
-          position={[0, 1.1, 0.65]}
-          color="#fff2d6"
-          intensity={activeCategory === 'Lesson Plans' ? 1.6 : 0.8}
-          distance={2.4}
-        />
+
       </group>
 
       {/* 3. PRACTICUM & INTERNSHIP ARCHIVAL REGISTER (Left Shelf) */}

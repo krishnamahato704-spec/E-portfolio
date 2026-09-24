@@ -64,10 +64,16 @@ test('Teaching resource uploads normalize document MIME before storage',async()=
   assert.match(url,/\/storage\/v1\/object\/public\/portfolio-media\/redesign\/.+\.docx$/);
  } finally {global.fetch=original}
 });
-test('Every route renders a complete static document with one heading and working local links',async()=>{
+test('Legacy routes retain complete documents and working local links; home has the React entry',async()=>{
  for(const [route,meta] of Object.entries(routes)){
   const file=path.join(root,meta.path.endsWith('/')||!meta.path?meta.path+'index.html':meta.path);
   const html=await fs.readFile(file,'utf8');
+  if(route==='home') {
+   assert.match(html,/id="root"/);
+   assert.match(html,/src="\.\/src\/main.tsx"/);
+   assert.match(html,/<noscript>/);
+   continue; // The rendered home page is checked against dist by test:browser.
+  }
   assert.equal((html.match(/<h1[ >]/g)||[]).length,1,route);
   assert.match(html,/<html lang="en">/);assert.match(html,/id="main"/);assert.match(html,/Content-Security-Policy/);
   const ids=[...html.matchAll(/\bid="([^"]+)"/g)].map(x=>x[1]);assert.equal(ids.length,new Set(ids).size,route+' duplicate IDs');
