@@ -23,7 +23,7 @@ try {
  input(main.querySelector('#credential-search'),'Pehchaan');
  assert(main.querySelectorAll('.certificate-card:not([hidden])').length===1,'Credential search matches issuer');
  assert(getComputedStyle(main.querySelector('.certificate-card[hidden]')).display==='none','Filtered credentials remain hidden');
- assert(main.querySelector('#credential-count').textContent==='1 of 4 credentials shown','Credential count announces the result');
+ assert(main.querySelector('#credential-count').textContent===`1 of ${c.certificates.length} credentials shown`,'Credential count announces the result');
  main.innerHTML=view('admin',c,'../');
  window.fetch=async(url,options={})=>{
    calls.push({url:String(url),method:options.method||'GET',body:options.body});
