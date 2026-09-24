@@ -32,6 +32,7 @@ try {
   page.on('response', r=>{ if(r.status()>=400 && r.url().startsWith(base)) errors.push(`${r.status()} ${r.url()}`); });
   await page.goto(base);
   await page.locator('canvas').waitFor();
+  await page.evaluate(() => document.fonts.ready);
   await page.waitForTimeout(2500);
   check('Nine semantic portfolio sections',await page.locator('main > section').count()===9);
   check('One visible main heading',await page.locator('h1:visible').count()===1);
@@ -52,8 +53,9 @@ try {
   await page.getByRole('button',{name:'Play background video'}).click();
   for (let i=1;i<ids.length;i++) {
     await page.locator(`#${ids[i]}`).evaluate(el=>window.scrollTo({top:el.getBoundingClientRect().top+scrollY+280,behavior:'instant'}));
-    await page.waitForTimeout(350);
-    check(`Section ${ids[i]} tracks the actual scroll position`,await page.locator('#scroll-root').getAttribute('data-section')===String(i));
+    await page.waitForFunction(index => document.querySelector('#scroll-root')?.getAttribute('data-section') === String(index), i, {timeout:5000}).catch(() => {});
+    const currentSection=await page.locator('#scroll-root').getAttribute('data-section');
+    check(`Section ${ids[i]} tracks the actual scroll position`,currentSection===String(i),{expected:i,actual:currentSection});
     await page.screenshot({path:`${output}/desktop-${ids[i]}.png`});
   }
   check('Offscreen hero video pauses',await video.evaluate(v=>v.paused));
@@ -74,7 +76,7 @@ try {
     for(let n=0;n<14;n++) await page.keyboard.press('Tab');
     check(`Viewer ${i+1} contains keyboard focus`,await page.evaluate(()=>Boolean(document.activeElement?.closest('dialog[open]'))));
     if(i===4) { const title=await modal.locator('h2').textContent(); await page.keyboard.press('ArrowRight'); check('Gallery arrow navigation changes image',await modal.locator('h2').textContent()!==title); }
-    await modal.screenshot({path:`${output}/viewer-${i+1}.png`});
+    await page.screenshot({path:`${output}/viewer-${i+1}.png`});
     await page.keyboard.press('Escape');
     check(`Viewer ${i+1} closes with Escape`,await page.locator('dialog[open]').count()===0);
     check(`Viewer ${i+1} restores opener focus`,await opener.evaluate(el=>el===document.activeElement));
