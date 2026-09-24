@@ -1,0 +1,10 @@
+node_modules/
+work/
+outputs/
+portfolio-source.zip
+npm-*.tgz
+democracy-original.pdf
+E-portfolio-*/
+.env
+.env.*
+!.env.example

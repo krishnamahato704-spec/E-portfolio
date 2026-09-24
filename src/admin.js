@@ -1,0 +1,90 @@
+import {wireCollections} from './collections.js?v=evidence-20260917';
+import {recruitmentGaps} from './recruiter.js?v=evidence-20260917';
+import {loadContent,signIn,signOut,saveContent,uploadFile,validateFile} from './cloud.js?v=upload-20260912';
+import {mergeContent,validateContent} from './content.js?v=evidence-20260917';
+import {esc,view} from './views.js?v=evidence-20260917';
+let session=null, draft=null, version=null, dirty=false, base='./',busy=false;
+const schemas={
+ qualifications:{label:'Education',fields:{title:'Qualification',place:'Institution / result',period:'Study period',status:'Status',expected:'Expected completion (optional)',note:'Progress note (optional)'}},
+ experiences:{label:'Teaching experiences',fields:{institution:'School / institution',category:'Category',status:'Experience status',duration:'Duration number (optional)',durationUnit:'Duration unit (optional)',summary:'Short summary',title:'Experience title',type:'Type / duration',period:'Dates',points:'Activities (one per line)'}},
+ practice:{label:'Teaching approach',fields:{title:'Principle',text:'Description'}},
+ certificates:{label:'Credentials',fields:{title:'Certificate title',issuer:'Issuing organisation',date:'Date',category:'Category',description:'Description',image:'Certificate image URL'}},
+ resources:{label:'Teaching resources',fields:{title:'File title',category:'Category',subject:'Subject',grade:'Class / year group',date:'Date',duration:'Duration',evidenceStatus:'Evidence status',context:'Context',description:'Description',url:'File URL',image:'Thumbnail / preview image URL (optional)'}},
+ gallery:{label:'Gallery',fields:{title:'Caption / alternative text',image:'Image URL'}},
+};
+const profileFields={location:'Current city',workPreferences:'Work / relocation preferences',targetClasses:'Target classes (interest, not prior experience)',targetBoards:'Boards of interest (not a claim of experience)',availability:'Earliest joining availability',eligibility:'Eligibility exam status',name:'Full name',email:'Contact email',eyebrow:'Profile label',headline:'Main statement',summary:'Professional summary',roles:'Roles of interest (one per line)',subjects:'Subjects (one per line)',languages:'Languages (one per line)',portrait:'Portrait URL',cv:'CV PDF URL (optional)'};
+const multiline=new Set(['headline','summary','roles','subjects','languages','about','preparation','competencies','points','description','text']);
+const categories={experiences:['Teaching','Observation'],certificates:['Academic','Teaching','Professional learning','Presentation'],resources:['Lesson plan','Worksheet','Teaching material','Assessment','Presentation']};
+function field(key,label,value,scope,index){
+ const attrs=`data-field="${key}" data-scope="${scope}" ${index!==undefined?`data-index="${index}"`:''}`;
+ const text=Array.isArray(value)?value.join('\n'):value||'';
+ let input;
+ if(key==='category'&&categories[scope]) input=`<select ${attrs}>${categories[scope].map(v=>`<option ${v===value?'selected':''}>${v}</option>`).join('')}</select>`;
+ else if(key==='status'&&scope==='experiences')input=`<select ${attrs}>${['Ongoing','Completed'].map(s=>`<option ${value===s?'selected':''}>${s}</option>`).join('')}</select>`;
+ else if(key==='status')input=`<select ${attrs}><option ${value==='Completed'?'selected':''}>Completed</option><option ${value==='In progress'?'selected':''}>In progress</option></select>`;
+ else if(multiline.has(key))input=`<textarea ${attrs} rows="3" maxlength="5000">${esc(text)}</textarea>`;
+ else input=`<input ${attrs} value="${esc(text)}" type="${key==='email'?'email':['image','url','portrait','cv'].includes(key)?'url':'text'}" maxlength="1000">`;
+ return `<label>${label}${input}</label>`;
+}
+function uploadControl(scope,index,key){
+ const label=key==='cv'?'Upload CV (PDF)':key==='url'?'Upload resource file (PDF, DOCX, PPTX, image)':key==='image'&&scope==='resources'?'Upload thumbnail / preview image':'Upload an image';
+ return `<label class="upload-control">${label}<input type="file" data-upload="${key}" data-scope="${scope}" ${index!==undefined?`data-index="${index}"`:''} accept="${key==='cv'?'.pdf':key==='url'?'.pdf,.docx,.pptx,.jpg,.jpeg,.png,.webp':'.jpg,.jpeg,.png,.webp'}"><small>Maximum 10 MB. Uploaded files are publicly accessible.</small></label>`;
+}
+function editor(){
+ document.querySelector('#studio').innerHTML=`<div class="studio-toolbar"><button class="button light" id="preview">Preview changes</button><button class="button light" id="publish">Publish changes</button><button class="button light" id="export">Export draft</button><button class="button light" id="logout">Sign out</button></div><p class="studio-message" id="studio-status" role="status">Loaded the current online content. No changes published.</p><p class="admin-note">Edit text and attach files below. Removing a file here removes its reference; the stored file is retained. Export a draft before leaving if you want to keep unpublished changes.</p><aside class="recruiter-checklist"><h2>Recruiter readiness</h2><p id="readiness-status" role="status"></p><ul id="readiness-list"></ul><p>Keep dates, qualification status and boards of interest accurate. Add only evidence you are ready to share publicly.</p></aside><details class="editor-section" open><summary>Profile & contact</summary><div class="editor-fields">${Object.entries(profileFields).map(([k,l])=>field(k,l,draft.profile[k],'profile')).join('')}${uploadControl('profile',undefined,'portrait')}${uploadControl('profile',undefined,'cv')}</div></details><details class="editor-section"><summary>About & skills</summary><div class="editor-fields">${[['about','About me'],['preparation','Additional preparation'],['competencies','Skills (one per line)']].map(([k,l])=>field(k,l,draft[k],'root')).join('')}</div></details>${Object.entries(schemas).map(([scope,s])=>`<details class="editor-section"><summary>${s.label} (${draft[scope].length})</summary>${draft[scope].map((item,i)=>{
+  const previewImg = item.thumbnail || item.image || (item.url && /\.(jpg|jpeg|png|webp)($|\?)/i.test(item.url) ? item.url : '');
+  return `<div class="editor-item"><div class="admin-item-header">${previewImg?`<img class="admin-item-thumb" src="${esc(previewImg)}" alt="Preview">`:''}<div class="admin-item-header-meta"><h3>${esc(item.title||'New entry')}</h3><span class="admin-item-type">${esc(item.category||s.label)}</span></div></div><div class="editor-fields">${Object.entries(s.fields).map(([k,l])=>field(k,l,item[k],scope,i)).join('')}${['certificates','gallery'].includes(scope)?uploadControl(scope,i,'image'):''}${scope==='resources'?`${uploadControl(scope,i,'url')}${uploadControl(scope,i,'image')}`:''}</div><button class="button danger" data-remove="${scope}" data-index="${i}">Remove entry</button></div>`;
+ }).join('')}<button class="button secondary" data-add="${scope}">Add ${s.label.toLowerCase()} entry</button></details>`).join('')}<details class="editor-section"><summary>Restore an exported draft</summary><p class="admin-note">Restoring replaces this workspace draft. It does not publish automatically.</p><label>Draft JSON file<input type="file" id="import-draft" accept=".json,application/json"></label></details><dialog class="preview-dialog" aria-label="Preview unpublished portfolio"><div class="dialog-toolbar"><label>Page<select id="preview-route"><option value="home">Home</option><option value="profile">Profile</option><option value="teaching">Teaching</option><option value="resources">Resources</option><option value="credentials">Credentials</option><option value="resume">Résumé</option><option value="contact">Contact</option></select></label><span>Unpublished preview</span><button class="button light" id="close-preview">Close preview</button></div><div id="preview-content"></div></dialog>`;
+ updateReadiness();
+ document.querySelectorAll('[data-field]').forEach(el=>el.addEventListener('input',()=>{
+  const {scope,field:key,index}=el.dataset;const target=scope==='root'?draft:scope==='profile'?draft.profile:draft[scope][Number(index)];
+  target[key]=['roles','subjects','languages','competencies','points'].includes(key)?el.value.split('\n').map(x=>x.trim()).filter(Boolean):el.value;
+  if(scope==='resources'&&key==='image')target.thumbnail=el.value;
+  setDirty();
+ }));
+ document.querySelectorAll('[data-add]').forEach(el=>el.addEventListener('click',()=>{
+  const scope=el.dataset.add;draft[scope].push(Object.assign({id:crypto.randomUUID()},Object.fromEntries(Object.keys(schemas[scope].fields).map(k=>[k,k==='points'?[]:k==='category'?categories[scope][0]:k==='status'?(scope==='experiences'?'Ongoing':'In progress'):'']))));setDirty();editor();
+  const group=[...document.querySelectorAll('.editor-section')].find(x=>x.querySelector(`[data-add="${scope}"]`));group.open=true;group.querySelectorAll('.editor-item').item(draft[scope].length-1).querySelector('input,textarea,select').focus();status('Entry added to the draft.');
+ }));
+ document.querySelectorAll('[data-remove]').forEach(el=>el.addEventListener('click',()=>{if(confirm('Remove this entry from the draft? Stored files will be retained.')){draft[el.dataset.remove].splice(Number(el.dataset.index),1);setDirty();editor();status('Entry removed from the draft. Publish to apply.')}}));
+ document.querySelectorAll('[data-upload]').forEach(el=>el.addEventListener('change',async()=>{
+  const file=el.files[0];if(!file)return;
+  try{
+   const ext=validateFile(file);
+   if(el.dataset.upload==='cv' && ext!=='pdf')throw new Error('The CV must be a PDF.');
+   if(['image','portrait'].includes(el.dataset.upload) && !['jpg','jpeg','png','webp'].includes(ext))throw new Error('Choose an image for this field.');
+   setBusy(true);status('Uploading file…');
+   const url=await uploadFile(file,session.access_token);
+   const target=el.dataset.scope==='profile'?draft.profile:draft[el.dataset.scope][Number(el.dataset.index)];
+   target[el.dataset.upload]=url;
+   if(el.dataset.upload==='image'&&el.dataset.scope==='resources'){ target.thumbnail=url; }
+   if(el.dataset.upload==='url'&&el.dataset.scope==='resources'&&['jpg','jpeg','png','webp'].includes(ext)&&!target.thumbnail&&!target.image){ target.thumbnail=url; target.image=url; }
+   setDirty();editor();status('File uploaded. Preview, then publish to display it on the portfolio.');
+  }catch(err){status(err.message)}finally{setBusy(false);el.value=''}
+ }));
+ document.querySelector('#export').onclick=()=>{const url=URL.createObjectURL(new Blob([JSON.stringify(draft,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download='krishna-portfolio-draft.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),500);status('Draft exported. This does not publish your changes.');};
+ document.querySelector('#import-draft').onchange=async e=>{const file=e.target.files[0];if(!file)return;try{if(file.size>500000)throw new Error('Draft is too large.');const next=validateContent(mergeContent(JSON.parse(await file.text())));if(confirm('Replace the current workspace draft with this file?')){draft=next;setDirty();editor();status('Draft restored. Preview before publishing.')}}catch(err){status(err.message)}};
+ document.querySelector('#preview').onclick=()=>{const dlg=document.querySelector('dialog');renderPreview('home');document.querySelector('#preview-route').value='home';dlg.showModal();};
+ document.querySelector('#preview-route').onchange=e=>renderPreview(e.target.value);
+ document.querySelector('#close-preview').onclick=()=>document.querySelector('dialog').close();
+ document.querySelector('#preview-content').onclick=e=>{if(e.target.closest('a,button,form'))e.preventDefault()};
+ document.querySelector('#publish').onclick=async()=>{
+  try{validateContent(draft);if(!confirm('Publish this draft to your public portfolio?'))return;setBusy(true);status('Publishing…');draft.schemaVersion=6;const row=await saveContent(draft,session.access_token,version);version=row.updated_at;dirty=false;status('Published successfully. Your portfolio now shows this content.');}
+  catch(err){status(err.message)}finally{setBusy(false)}
+ };
+ document.querySelector('#logout').onclick=async()=>{if(dirty&&!confirm('Discard unpublished changes and sign out? Export first if you want to keep them.'))return;try{await signOut(session.access_token)}catch{}session=null;draft=null;dirty=false;location.reload()};
+}
+function renderPreview(route){const root=document.querySelector('#preview-content');root.innerHTML=view(route,draft,base);wireCollections(root);}
+function status(text){const el=document.querySelector('#studio-status')||document.querySelector('#login-status');if(el)el.textContent=text;}
+function updateReadiness(){const gaps=recruitmentGaps(draft);document.querySelector('#readiness-status').textContent=gaps.length?'Items to review before sharing:':'Core recruiter details are filled in. Review their accuracy before publishing.';document.querySelector('#readiness-list').innerHTML=gaps.map(x=>'<li>'+esc(x)+'</li>').join('');}
+function setDirty(){dirty=true;status('Unpublished changes. Preview before publishing.');if(document.querySelector('#readiness-list'))updateReadiness();}
+function setBusy(value){busy=value;document.querySelectorAll('#studio button,#studio input,#studio textarea,#studio select').forEach(el=>el.disabled=value)}
+export function initStudio(rootBase){
+ base=rootBase;
+ document.querySelector('#login-form').addEventListener('submit',async e=>{
+  e.preventDefault();const form=e.currentTarget;const fields=new FormData(form);const button=form.querySelector('button');button.disabled=true;status('Signing in…');
+  try{session=await signIn(String(fields.get('email')),String(fields.get('password')));form.reset();const row=await loadContent();draft=mergeContent(row.content);version=row.updated_at;editor();}
+  catch(err){status(err.message);button.disabled=false;form.elements.password.value='';session=null;}
+ });
+ window.addEventListener('beforeunload',e=>{if(dirty||busy){e.preventDefault();e.returnValue=''}});
+}
