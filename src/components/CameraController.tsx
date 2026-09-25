@@ -40,7 +40,9 @@ export function CameraController({ mouseRef, scrollProgress, isMobile, reducedMo
     const update = () => {
       const y = window.scrollY;
       let index = 0;
-      for (let i = 1; i < starts.length; i++) if (y >= starts[i]) index = i;
+      // scrollHeight is rounded but scrollY can be fractional on scaled displays.
+      // Treat the last CSS pixel as reached so the closing scene can activate.
+      for (let i = 1; i < starts.length; i++) if (y + 1 >= starts[i]) index = i;
       const span = (starts[index + 1] ?? document.documentElement.scrollHeight) - starts[index];
       const t = MathUtils.clamp((y - starts[index]) / Math.max(span, 1), 0, 1);
       scrollProgress.current = MathUtils.lerp(PHASES[index], PHASES[index + 1], t);

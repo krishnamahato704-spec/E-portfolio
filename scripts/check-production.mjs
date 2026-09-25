@@ -55,7 +55,8 @@ try {
     await page.locator(`#${ids[i]}`).evaluate(el=>window.scrollTo({top:el.getBoundingClientRect().top+scrollY+280,behavior:'instant'}));
     await page.waitForFunction(index => document.querySelector('#scroll-root')?.getAttribute('data-section') === String(index), i, {timeout:5000}).catch(() => {});
     const currentSection=await page.locator('#scroll-root').getAttribute('data-section');
-    check(`Section ${ids[i]} tracks the actual scroll position`,currentSection===String(i),{expected:i,actual:currentSection});
+    const scrollPosition=await page.evaluate(()=>({y:scrollY,max:document.documentElement.scrollHeight-innerHeight,contact:document.querySelector('#contact').getBoundingClientRect().top+scrollY}));
+    check(`Section ${ids[i]} tracks the actual scroll position`,currentSection===String(i),{expected:i,actual:currentSection,...scrollPosition});
     await page.screenshot({path:`${output}/desktop-${ids[i]}.png`});
   }
   check('Offscreen hero video pauses',await video.evaluate(v=>v.paused));
@@ -78,6 +79,7 @@ try {
   for(let i=0;i<openers.length;i++) {
     const opener=openers[i]; await opener.focus(); await opener.press('Enter');
     const modal=page.locator('dialog[open]'); await modal.waitFor();
+    await modal.evaluate(async el=>{await Promise.all(el.getAnimations({subtree:true}).filter(a=>a.effect?.getComputedTiming().iterations!==Infinity).map(a=>a.finished.catch(()=>{})));});
     check(`Viewer ${i+1} has a labelled native dialog`,Boolean(await modal.getAttribute('aria-labelledby')));
     for(let n=0;n<14;n++) await page.keyboard.press('Tab');
     check(`Viewer ${i+1} contains keyboard focus`,await page.evaluate(()=>Boolean(document.activeElement?.closest('dialog[open]'))));
