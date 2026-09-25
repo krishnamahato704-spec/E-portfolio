@@ -172,11 +172,13 @@ try{
   await keys.close();
 
   const motion=await context({reducedMotion:'no-preference'});const moving=await motion.newPage();
+  const {defaultContent}=await import('../src/content.js');
+  await motion.route('**/rest/v1/portfolio_public?*',route=>route.fulfill({status:200,contentType:'application/json',body:JSON.stringify([{content:defaultContent,updated_at:'2026-09-25T00:00:00Z'}])}));
   await moving.goto(base,{waitUntil:'load'});
   record('2D opening: no canvas renderer',await moving.locator('canvas').count()===0);
   record('2D opening: avatar video fills the viewport width',await moving.locator('.hero-bg-video').evaluate(v=>Math.abs(v.getBoundingClientRect().width-innerWidth)<2));
-  await moving.locator('.hero-bg-video').evaluate(v=>v.play()).catch(error=>record('motion: hero media can play',false,error.message));
   await moving.waitForFunction(()=>document.querySelector('.hero-bg-video').currentTime>.2);
+  record('2D opening: saved-content refresh preserves video autoplay',await moving.locator('.hero-bg-video').evaluate(v=>!v.paused));
   await moving.screenshot({path:path.join(output,'video-opening-desktop.png')});
   await moving.locator('.video-toggle').click();
   record('2D opening: pause control stops avatar video',await moving.locator('.hero-bg-video').evaluate(v=>v.paused));
