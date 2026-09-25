@@ -5701,7 +5701,3 @@
   padding: 8px 4px 2px;
   font-style: italic;
 }
-
-/* Full evidence remains readable on the saved detail pages and in Studio previews. */
-.certificate-image, .tlm-image-frame, .archive-doc-frame, .resource-thumb-wrap { height:auto; min-height:0; aspect-ratio:auto; }
-.certificate-image img, .tlm-img, .resource-thumb, .seminar-cert-img { display:block; width:100%; height:auto; max-height:none; object-fit:contain; transform:none !important; }

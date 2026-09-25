@@ -16,16 +16,9 @@ jobs:
           node-version: '22'
           cache: 'npm'
       - run: npm ci
-      - run: npm run lint
       - run: npm run build
       - run: npm test
-      - run: npx playwright install-deps chromium
+      - run: npx playwright install --with-deps chromium
       - run: npm run test:browser
-        env:
-          CHROME_PATH: /usr/bin/google-chrome
-      - name: Save production browser results
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: production-browser-results
-          path: outputs/production-checks
+      - name: Verify committed pages match their source
+        run: git diff --exit-code -- '*.html' sitemap.xml robots.txt assets/krishna-mahato-resume.pdf

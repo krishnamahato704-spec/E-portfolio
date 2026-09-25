@@ -8,9 +8,9 @@ const schemas={
  qualifications:{label:'Education',fields:{title:'Qualification',place:'Institution / result',period:'Study period',status:'Status',expected:'Expected completion (optional)',note:'Progress note (optional)'}},
  experiences:{label:'Teaching experiences',fields:{institution:'School / institution',category:'Category',status:'Experience status',duration:'Duration number (optional)',durationUnit:'Duration unit (optional)',summary:'Short summary',title:'Experience title',type:'Type / duration',period:'Dates',points:'Activities (one per line)'}},
  practice:{label:'Teaching approach',fields:{title:'Principle',text:'Description'}},
- certificates:{label:'Credentials',fields:{title:'Certificate title',issuer:'Issuing organisation',date:'Date',category:'Category',description:'Description',image:'Certificate image URL',url:'Original document URL (optional)'}},
+ certificates:{label:'Credentials',fields:{title:'Certificate title',issuer:'Issuing organisation',date:'Date',category:'Category',description:'Description',image:'Certificate image URL'}},
  resources:{label:'Teaching resources',fields:{title:'File title',category:'Category',subject:'Subject',grade:'Class / year group',date:'Date',duration:'Duration',evidenceStatus:'Evidence status',context:'Context',description:'Description',url:'File URL',image:'Thumbnail / preview image URL (optional)'}},
- gallery:{label:'Gallery',fields:{title:'Title / alternative text',image:'Image URL',category:'Category',description:'Caption',context:'Context'}},
+ gallery:{label:'Gallery',fields:{title:'Caption / alternative text',image:'Image URL'}},
 };
 const profileFields={location:'Current city',workPreferences:'Work / relocation preferences',targetClasses:'Target classes (interest, not prior experience)',targetBoards:'Boards of interest (not a claim of experience)',availability:'Earliest joining availability',eligibility:'Eligibility exam status',name:'Full name',email:'Contact email',eyebrow:'Profile label',headline:'Main statement',summary:'Professional summary',roles:'Roles of interest (one per line)',subjects:'Subjects (one per line)',languages:'Languages (one per line)',portrait:'Portrait URL',cv:'CV PDF URL (optional)'};
 const multiline=new Set(['headline','summary','roles','subjects','languages','about','preparation','competencies','points','description','text']);

@@ -6,14 +6,13 @@ const knownPdfs = {
   '24c7a756-be36-4fd8-9462-6ee980c54736.pdf': 'democracy-lesson-plan.pdf',
   'mock-election-evm-activity.pdf': 'mock-election-evm-activity.pdf',
   'mock-election-class8-poster.pdf': 'mock-election-class8-poster.pdf',
-  'roots-to-wings-iks-presentation.pdf': 'evidence/rootedness-iks.pdf',
+  'roots-to-wings-iks-presentation.pdf': 'roots-to-wings-iks-presentation.pdf',
   'notice-writing-english-pedagogy.pdf': 'notice-writing-english-pedagogy.pdf',
-  'amity-ntcc-community-work-report.pdf': 'evidence/ntcc-community-report.pdf',
+  'amity-ntcc-community-work-report.pdf': 'amity-ntcc-community-work-report.pdf',
   'ukg-assessment-test.pdf': 'ukg-assessment-test.pdf',
 };
 export function documentUrl(url,base) {
   if(!url) return '';
-  if(url.startsWith('https://krishnamahato704-spec.github.io/E-portfolio/')) return base+url.split('/E-portfolio/')[1];
   if(url===democracySource)return base+'assets/democracy-lesson-plan.pdf';
   if(url.startsWith('./assets/')||url.startsWith('assets/')) return base + url.replace(/^\.?\//, '');
   for(const [key, file] of Object.entries(knownPdfs)) {

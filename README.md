@@ -1,32 +1,82 @@
 # Krishna Mahato — Teaching portfolio
 
-React, TypeScript, Vite and React Three Fiber portfolio published to GitHub Pages at `/E-portfolio/`. The existing profile, teaching detail pages, resource library and Supabase owner editor remain available.
+A redesigned, accessible portfolio for school recruitment, built on the existing GitHub Pages repository and Supabase project. Work lives on `redesign/editorial-teaching-portfolio`; production `main` is unchanged pending review.
 
-## Development and checks
+## Run and build
 
-Use Node.js 22 or newer. Install with `npm ci`, then use `npm run dev`. Run `npm run lint`, `npm run build`, `npm test` and `npm run test:browser` before publishing. Browser checks require Chrome; set `CHROME_PATH` to its executable. Use `npm run preview` to inspect the built site.
+Requires Node.js 22 or later. There are no runtime or build package dependencies to install.
 
-The build regenerates saved detail pages without overwriting the React entry, stages assets, builds Vite into `dist/`, and copies the editor and detail routes into that output. Only `dist/` is deployed. The review workflow validates pull requests; the Pages workflow validates and deploys main.
+```sh
+node scripts/build.mjs
+node --test tests/*.test.mjs
+node scripts/serve.mjs
+```
 
-## Content and media
+Open http://127.0.0.1:4173/. The same server supports `/E-portfolio/` for deployment-path checks.
 
-- `src/App.tsx` and `src/components/`: accessible page, native dialogs, personal video and 3D environments.
-- `src/content.js`: local snapshot, versioned compatibility merge and validation.
-- `src/media.js`: metadata for the supplied photographs, certificates, reports and presentations.
-- `src/PortfolioContent.tsx`: shared published content for the gallery, credentials, document library and 3D gallery.
-- `assets/`: single tracked asset source. Supplied PDF and PowerPoint files are preserved in `assets/evidence/`; WebP previews keep their proportions.
-- `src/image-dimensions.json`: intrinsic sizes and responsive preview paths.
-- `public/assets/`: generated Vite input, ignored by Git. Old direct media URLs are recreated during staging where needed.
-- `src/views.js`, `src/app.js`, `src/admin.js` and legacy styles: saved detail pages and owner editing. These remain active code.
+## Architecture
 
-Images use intrinsic sizes, contain sizing and lazy loading. Large originals download only when opened. The 3D bundle loads separately, caps resolution and reduces work on mobile, reduced-motion and low-power devices. Content remains readable if WebGL or Supabase fails.
+- Twelve generated HTML pages, including eight primary pages, three teaching detail pages and a 404 page.
+- `src/views.js`: shared accessible page templates, navigation, footer, URL and text escaping.
+- `src/styles.css`: responsive editorial design, keyboard focus, reduced motion and A4 print styles.
+- `src/content.js`: reviewed public content snapshot, compatibility adapter and validation.
+- `src/cloud.js`: small Supabase REST/Auth/Storage adapter; timeout handling and optimistic content updates.
+- `src/app.js`: progressive live content, mobile navigation, resource filters, printable résumé and email draft preparation.
+- `src/admin.js`: separately loaded owner workspace; structured editing, preview, draft export/import and file uploads.
+- `assets/`: optimized WebP copies of the existing portrait and four certificates, with provenance in `manifest.json`.
 
-## Supabase
+The static pages contain the complete reviewed content. Supabase refreshes public content progressively. An unavailable service leaves the readable snapshot in place; form input is never replaced by a late response. No client framework, CDN JavaScript or remote font is required.
 
-Project `oyqevsygintkjrkfbzpx`, public content in `public.portfolio_public`, row `id = 1`. `src/config.js` contains public connection settings. The editor uses Supabase Auth and optimistic locking. Never add service-role credentials to frontend code.
+## Content & database
 
-Both public tables have RLS. Anonymous visitors receive SELECT only. Authenticated users receive SELECT, INSERT and UPDATE, with existing owner-only write policies using USING and WITH CHECK. The grant repair is recorded under `supabase/migrations/`. The legacy state table and media bucket are preserved.
+The existing project is `oyqevsygintkjrkfbzpx`. The redesigned public site reads only `public.portfolio_public`, row `id = 1`. The legacy `portfolio_state` and `portfolio-media` storage bucket are preserved. **No database migration or data deletion was performed.**
 
-Editor changes update the database, not the repository snapshot. Refresh `src/content.js` and rebuild when updating saved detail-page content. Compatibility merging preserves explicitly emptied collections.
+The `portfolio_public.content` document supports `profile`, `qualifications`, `experiences`, `practice`, `competencies`, `certificates`, `resources`, `gallery`, `about` and `preparation`. The first Studio publish saves `schemaVersion: 3`. A compatibility adapter enriches legacy records with verified certificate metadata and the owner's clarified education/availability without modifying the live database during review.
 
-The Gemini image is a supplied badge, not a named certificate. Uploaded originals are kept as supplied; their contents have not been rewritten. See `docs/media-cleanup-report.md` for this repair's checks, limitations and file inventory.
+Owner edits are live for JavaScript-enabled visitors. To refresh the no-JavaScript / search-engine snapshot after substantial edits, copy the reviewed content into `src/content.js`, rebuild and commit the generated pages. Changes made in Studio do not automatically modify the GitHub repository.
+
+The supplied candidate information states: M.A. History at IGNOU, first year cleared; CTET applied; available from May 2027. The B.Ed. and M.A. are labelled in progress. The teaching design is explicitly illustrative. No passed CTET claim, invented assessment results or fabricated classroom evidence is present.
+
+## Configuration
+
+No environment variables or private keys are required for GitHub Pages. Public settings are in `src/config.js`:
+
+| Setting | Purpose |
+| --- | --- |
+| `url` | Existing Supabase URL |
+| `key` | Existing public publishable key |
+| `ownerId` | Existing owner Auth UUID (not a secret; RLS is the authority) |
+| `canonical` | Existing GitHub Pages project URL |
+
+Never add secret / service credentials to this repository. `.env` files are ignored. The frontend needs only a publishable key.
+
+## Owner workspace
+
+Open `/admin/` and sign in using the existing Supabase owner email and password. There is no public signup or client-side authentication bypass. Access tokens remain in memory and are cleared on reload/sign out; the password field is cleared after a sign-in attempt.
+
+Edit the named fields, add or remove collection entries, upload files and preview the draft. Publishing updates only row 1 and checks `updated_at` to avoid overwriting a newer online version. Export your draft before leaving to retain unpublished work. Importing a draft does not publish it.
+
+Files are uploaded under unique `redesign/` paths in the existing public bucket. Uploads are limited to 10 MB and approved MIME/extension pairs. SVG/HTML/executable uploads are rejected. Removing a reference never deletes its stored file. Credentials and images retain original-file links; visitors receive optimized previews.
+
+The public contact form prepares a `mailto:` draft for the visitor to review and send. The website neither stores submissions nor claims to have sent email. The résumé has an A4 print / Save as PDF view; a separate CV PDF can be uploaded through Studio.
+
+## Deployment & review
+
+The repository previously served the root of `main` through GitHub Pages. Generated pages are committed at that same root; the `/E-portfolio/` subpath and deep links are supported. `.nojekyll`, `robots.txt`, `sitemap.xml`, canonical tags, Open Graph metadata and a project-aware 404 page are included.
+
+1. Review the redesign branch / pull request and local preview.
+2. Confirm the content and owner login using the existing account.
+3. After approval, merge into `main`. Keep GitHub Pages set to deploy from `main` / root.
+4. Verify the published home, nested case studies, Studio and résumé.
+
+The review workflow builds, tests and checks generated pages for drift. It does **not** deploy the redesign branch or change production. No additional hosting account is needed.
+
+## Security
+
+Existing RLS was inspected: both portfolio tables have RLS enabled, public reads are allowed, and content inserts/updates require the existing owner UUID. Storage writes are restricted to the owner's authenticated account. Client identity checks supplement, and never replace, those database policies.
+
+All content is escaped as text, executable URL schemes are rejected, uploads are type/size checked, external links use `noopener noreferrer`, and a restrictive Content Security Policy blocks remote scripts and object embeds. Draft import is validated. Auth tokens are not persisted in localStorage.
+
+Supabase's security advisor reports one existing warning: [leaked-password protection is disabled](https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection). Enable it in Auth settings when supported by the project plan. No service key was requested or exposed.
+
+See `docs/AUDIT.md` and `docs/QA.md` for the audit, recruiter review and verification limits.
