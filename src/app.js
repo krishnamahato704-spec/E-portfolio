@@ -1,13 +1,11 @@
-import {wireCollections} from './collections.js?v=evidence-20260917';
-import {loadContent} from './cloud.js?v=evidence-20260917';
-import {mergeContent,validateContent} from './content.js?v=evidence-20260917';
-import {view} from './views.js?v=evidence-20260917';
-import {initNavigation} from './navigation.js?v=evidence-20260917';
-import {initMotion,cleanupMotion} from './motion.js?v=evidence-20260917';
-import {initHero3D,cleanupHero3D} from './hero-3d.js?v=evidence-20260917';
-import {initCustomCursor,cleanupCustomCursor} from './cursor.js?v=evidence-20260917';
-import {init3DTilt} from './tilt.js?v=evidence-20260917';
-import {initLightbox} from './lightbox.js?v=evidence-20260917';
+import {wireCollections} from './collections.js?v=2d-20260925';
+import {loadContent} from './cloud.js?v=2d-20260925';
+import {mergeContent,validateContent} from './content.js?v=2d-20260925';
+import {view} from './views.js?v=2d-20260925';
+import {initNavigation} from './navigation.js?v=2d-20260925';
+import {initMotion,cleanupMotion} from './motion.js?v=2d-20260925';
+import {initCustomCursor,cleanupCustomCursor} from './cursor.js?v=2d-20260925';
+import {initLightbox} from './lightbox.js?v=2d-20260925';
 const route=document.body.dataset.route;
 const base=document.body.dataset.base;
 let content=mergeContent();
@@ -28,18 +26,15 @@ function wire(){
   document.querySelector('#contact-status').textContent='Your email draft is ready to open. If no email app opens, use the email address alongside this form. Nothing has been sent by this website.';
  });
  wireCollections();
- init3DTilt();
  initLightbox();
- const heroCanvas=document.querySelector('#hero-3d-canvas');
- if(heroCanvas)initHero3D(heroCanvas);
  initCustomCursor();
  document.querySelectorAll('img').forEach(im=>im.addEventListener('error',()=>{const note=document.createElement('p');note.className='image-error';note.textContent=im.alt+' — image temporarily unavailable.';im.replaceWith(note)},{once:true}));
 }
-if(route==='admin') import('./admin.js?v=evidence-20260917').then(x=>x.initStudio(base));
+if(route==='admin') import('./admin.js?v=2d-20260925').then(x=>x.initStudio(base));
 else {
  wire();
  initMotion({initial:true});
- window.addEventListener('pagehide',()=>{cleanupMotion();cleanupHero3D();cleanupCustomCursor();});
+ window.addEventListener('pagehide',()=>{cleanupMotion();cleanupCustomCursor();});
  window.addEventListener('pageshow',e=>{if(e.persisted){initMotion();wire();}});
  // Keep the complete static document available during requests, failures, and without JS.
  loadContent().then(row=>{

@@ -5,7 +5,6 @@ export function initNavigation() {
  const header=document.querySelector('.site-header');
  if(!toggle || !panel || toggle.dataset.ready) return;
  toggle.dataset.ready='true';
- const mobile=matchMedia('(max-width: 1000px)');
  const closeButton=panel.querySelector('.menu-close');
  let open=false, position=0, savedBody={}, inertNodes=[];
  const close=(restore=true)=>{
@@ -21,7 +20,7 @@ export function initNavigation() {
   if(restore)toggle.focus({preventScroll:true});
  };
  toggle.addEventListener('click',()=>{
-  if(open){close();return}if(!mobile.matches)return;
+  if(open){close();return}
   open=true;position=scrollY;
   savedBody=Object.fromEntries(['position','top','width','overflow'].map(key=>[key,document.body.style[key]]));
   Object.assign(document.body.style,{position:'fixed',top:`-${position}px`,width:'100%',overflow:'hidden'});
@@ -44,16 +43,11 @@ export function initNavigation() {
   if(e.shiftKey && document.activeElement===first){e.preventDefault();last.focus()}
   else if(!e.shiftKey && document.activeElement===last){e.preventDefault();first.focus()}
  });
- mobile.addEventListener('change',()=>{
-  const hadFocus=panel.contains(document.activeElement);
-  close(false);
-  if(hadFocus && !mobile.matches)panel.querySelector('a[aria-current],a').focus({preventScroll:true});
- });
  window.addEventListener('pagehide',()=>close(false));
  window.addEventListener('pageshow',()=>close(false));
  // Only the header surface changes; content and menu position remain stable.
  const updateSurface=()=>header.classList.toggle('is-scrolled',scrollY>24);
  window.addEventListener('scroll',updateSurface,{passive:true});updateSurface();
  // Preserve a menu already opened through the native fallback during loading.
- if(document.querySelector('.fallback-navigation')?.open&&mobile.matches)toggle.click();
+ if(document.querySelector('.fallback-navigation')?.open)toggle.click();
 }

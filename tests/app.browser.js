@@ -42,8 +42,7 @@ try {
   if(mode.startsWith('home')) {
     assert(main.querySelector('.hero')===originalHero,'Cloud refresh preserves the existing hero node');
     if(mode==='home')assert(main.querySelector('.portrait')===originalPortrait,'Cloud refresh preserves the existing portrait node');
-    if(mode==='home-remove')assert(!main.querySelector('.portrait')&&!!main.querySelector('.portrait-placeholder'),'Cloud refresh respects removal of the portrait');
-    if(mode==='home-add')assert(!!main.querySelector('.portrait')&&!main.querySelector('.portrait-placeholder'),'Cloud refresh adds a newly published portrait');
+    if(mode==='home-remove'||mode==='home-add')assert(!main.querySelector('.portrait'),'Profile portrait updates do not add a portrait over the video opening');
     assert(main.querySelector('.hero-bg-video')===originalVideo,'Cloud refresh preserves the existing video node');
     assert(main.querySelector('.hero-statement').textContent.includes('Updated fixture teaching headline'),'Cloud refresh updates editable hero text');
     assert(main.querySelectorAll('.hero').length===1,'Cloud refresh leaves exactly one hero');
