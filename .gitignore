@@ -2,6 +2,9 @@ node_modules/
 dist/
 work/
 outputs/
+public/assets/
+supabase/.temp/
+work-*.py
 portfolio-source.zip
 npm-*.tgz
 democracy-original.pdf

@@ -6,6 +6,7 @@ import {config} from '../src/config.js';
 import {generateResume} from './generate-resume-pdf.mjs';
 const root=path.resolve(import.meta.dirname,'..');
 for(const [route,meta] of Object.entries(routes)) {
+ if(route==='home') continue; // The home page is the React entry, never generated HTML.
  const depth=meta.path.endsWith('/')?meta.path.split('/').filter(Boolean).length:0;
  const base=route==='404'?'/E-portfolio/':depth?'../'.repeat(depth):'./';
  const target=meta.path.endsWith('/')||!meta.path?meta.path+'index.html':meta.path;
