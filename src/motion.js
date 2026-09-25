@@ -16,7 +16,10 @@ export function cleanupMotion() {
 
 export function initMotion({ initial = false } = {}) {
   const previousVideo = document.querySelector('#main .hero-bg-video');
-  const resumeVideo = !!previousVideo && !previousVideo.paused;
+  // A fast content response can arrive before the first video frame. Preserve
+  // its pending autoplay as well as playback already in progress.
+  const resumeVideo = !!previousVideo && (!previousVideo.paused ||
+    (!previousVideo.dataset.hasPlayed && previousVideo.dataset.userPaused!=='true'));
   cleanupMotion();
   const root = document.querySelector('#main');
   if (!root || ['admin', 'resume', '404'].includes(document.body.dataset.route)) return;
@@ -61,9 +64,9 @@ export function initMotion({ initial = false } = {}) {
   if(video && videoToggle && video.src) {
     videoToggle.hidden=false;
     const label=()=>{videoToggle.textContent=video.paused?'Play background video':'Pause background video';videoToggle.setAttribute('aria-pressed',String(video.paused));};
-    video.addEventListener('play',label,{signal:events.signal});
+    video.addEventListener('play',()=>{video.dataset.hasPlayed='true';label();},{signal:events.signal});
     video.addEventListener('pause',label,{signal:events.signal});
-    videoToggle.addEventListener('click',()=>{if(video.paused)video.play().catch(()=>{});else video.pause();},{signal:events.signal});
+    videoToggle.addEventListener('click',()=>{video.dataset.userPaused=String(!video.paused);if(video.paused)video.play().catch(()=>{});else video.pause();},{signal:events.signal});
     if(resumeVideo && video===previousVideo)video.play().catch(()=>{});
     label();
   }
