@@ -16,9 +16,15 @@ jobs:
           node-version: '22'
           cache: 'npm'
       - run: npm ci
+      - run: npm run lint
       - run: npm run build
       - run: npm test
       - run: npx playwright install --with-deps chromium
       - run: npm run test:browser
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: browser-results
+          path: outputs/browser-checks
       - name: Verify committed pages match their source
         run: git diff --exit-code -- '*.html' sitemap.xml robots.txt assets/krishna-mahato-resume.pdf

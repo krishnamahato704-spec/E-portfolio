@@ -33,8 +33,8 @@ try {
   main.innerHTML = view('home',defaultContent,'../');
   await check('Initial hero sequence is finite and completes visibly',async () => {
     initMotion({initial:true});
-    assert(main.querySelectorAll('.motion-hero').length === 6,'Six text and action steps expected (portrait stays visible)');
-    assert(!main.querySelector('.portrait-frame').classList.contains('motion-hero'),'Portrait must never enter the fade sequence');
+    assert(main.querySelectorAll('.motion-hero').length === 0,'Video opening must not animate hidden headline overlays');
+    assert(!main.querySelector('canvas,.portrait-frame'),'No 3D canvas or portrait overlay in the video opening');
     for(let i=0;i<40&&main.querySelector('.motion-hero');i++)await wait(50);
     assert(!main.querySelector('.motion-hero'),'Hero classes must clear');
     assert(getComputedStyle(main.querySelector('h1')).opacity === '1','Headline must remain visible');

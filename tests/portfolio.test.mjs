@@ -82,7 +82,7 @@ test('Every route renders a complete static document with one heading and workin
  }
 });
 test('Public views are usable with empty resource collections and show degree status honestly',()=>{
- assert.match(view('resources',defaultContent),/have not yet been published/);
+ assert.match(view('resources',{...defaultContent,resources:[]}),/have not yet been published/);
  assert.match(view('profile',defaultContent),/In progress/);
  assert.match(view('democracy',defaultContent),/not a report of a delivered lesson/);
  assert.match(view('resume',defaultContent),/Print \/ save as PDF/);

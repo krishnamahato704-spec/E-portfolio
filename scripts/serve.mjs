@@ -1,7 +1,8 @@
 import http from 'node:http';
 import fs from 'node:fs/promises';
 import path from 'node:path';
-const root=path.resolve(import.meta.dirname,'..');
+const root=path.resolve(import.meta.dirname,'..',process.argv.includes('--dist')?'dist':'.');
+const fixtureRoot=path.resolve(import.meta.dirname,'..','tests');
 const port=Number(process.env.PORT||3000);
 const types={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.mjs':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.json':'application/json','.webp':'image/webp','.jpg':'image/jpeg','.pdf':'application/pdf','.mp4':'video/mp4','.svg':'image/svg+xml','.xml':'application/xml','.txt':'text/plain','.woff2':'font/woff2'};
 http.createServer(async(req,res)=>{
@@ -12,6 +13,11 @@ http.createServer(async(req,res)=>{
   let target=path.resolve(root,'.'+pathname);
   if(!target.startsWith(root+path.sep)&&target!==root) {res.writeHead(403);res.end();return;}
   if(pathname.includes('/.')) {res.writeHead(403);res.end();return;}
+  if(process.argv.includes('--tests')&&pathname.startsWith('/tests/')) {
+   const fixture=path.resolve(fixtureRoot,pathname.slice('/tests/'.length));
+   if(!fixture.startsWith(fixtureRoot+path.sep)){res.writeHead(403);res.end();return;}
+   target=fixture;
+  }
   const stat=await fs.stat(target).catch(()=>null);
   if(stat?.isDirectory()){
    if(!url.pathname.endsWith('/')){

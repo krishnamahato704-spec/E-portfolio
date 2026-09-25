@@ -1,37 +1,40 @@
 # Krishna Mahato — Teaching portfolio
 
-A redesigned, accessible portfolio for school recruitment, built on the existing GitHub Pages repository and Supabase project. Work lives on `redesign/editorial-teaching-portfolio`; production `main` is unchanged pending review.
+The owner's 2D teaching portfolio, with a full-width avatar video, a numbered menu, and separate content pages. There is no React or Three.js renderer. The existing GitHub Pages repository and Supabase project are retained.
 
 ## Run and build
 
-Requires Node.js 22 or later. There are no runtime or build package dependencies to install.
+Requires Node.js 22 or later. Install the locked dependencies with `npm ci`.
 
 ```sh
-node scripts/build.mjs
-node --test tests/*.test.mjs
-node scripts/serve.mjs
+npm run build
+npm run lint
+npm test
+npm run test:browser
+npm run preview
 ```
 
-Open http://127.0.0.1:4173/. The same server supports `/E-portfolio/` for deployment-path checks.
+Preview runs at http://127.0.0.1:3000/E-portfolio/. Browser checks use Playwright Chromium, or an installed Chrome selected through `CHROME_PATH`. The build generates the static pages and résumé, then packages deployment files into `dist/`. Only that folder is published.
 
 ## Architecture
 
-- Twelve generated HTML pages, including eight primary pages, three teaching detail pages and a 404 page.
+- Thirteen generated HTML pages, including the owner editor and a 404 page.
 - `src/views.js`: shared accessible page templates, navigation, footer, URL and text escaping.
 - `src/styles.css`: responsive editorial design, keyboard focus, reduced motion and A4 print styles.
 - `src/content.js`: reviewed public content snapshot, compatibility adapter and validation.
 - `src/cloud.js`: small Supabase REST/Auth/Storage adapter; timeout handling and optimistic content updates.
 - `src/app.js`: progressive live content, mobile navigation, resource filters, printable résumé and email draft preparation.
 - `src/admin.js`: separately loaded owner workspace; structured editing, preview, draft export/import and file uploads.
-- `assets/`: optimized WebP copies of the existing portrait and four certificates, with provenance in `manifest.json`.
+- `assets/evidence/`: supplied photographs, certificates, original PDFs and PowerPoint files, with smaller WebP previews.
+- `src/media.js` and `src/image-dimensions.json`: supplied-file metadata and intrinsic image proportions.
 
 The static pages contain the complete reviewed content. Supabase refreshes public content progressively. An unavailable service leaves the readable snapshot in place; form input is never replaced by a late response. No client framework, CDN JavaScript or remote font is required.
 
 ## Content & database
 
-The existing project is `oyqevsygintkjrkfbzpx`. The redesigned public site reads only `public.portfolio_public`, row `id = 1`. The legacy `portfolio_state` and `portfolio-media` storage bucket are preserved. **No database migration or data deletion was performed.**
+The existing project is `oyqevsygintkjrkfbzpx`. The public site reads `public.portfolio_public`, row `id = 1`. The legacy `portfolio_state` and `portfolio-media` storage bucket are preserved. The previously applied explicit grants are recorded in `supabase/migrations/20260924163206_explicit_portfolio_api_grants.sql`. Both public tables retain RLS and owner-only writes. This 2D restoration makes no database changes.
 
-The `portfolio_public.content` document supports `profile`, `qualifications`, `experiences`, `practice`, `competencies`, `certificates`, `resources`, `gallery`, `about` and `preparation`. The first Studio publish saves `schemaVersion: 3`. A compatibility adapter enriches legacy records with verified certificate metadata and the owner's clarified education/availability without modifying the live database during review.
+The content document supports profile details, education, experiences, teaching practice, credentials, resources and gallery records. Versioned compatibility handling preserves owner edits and explicitly empty collections.
 
 Owner edits are live for JavaScript-enabled visitors. To refresh the no-JavaScript / search-engine snapshot after substantial edits, copy the reviewed content into `src/content.js`, rebuild and commit the generated pages. Changes made in Studio do not automatically modify the GitHub repository.
 

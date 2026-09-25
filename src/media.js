@@ -1,0 +1,25 @@
+// Metadata transcribed from the owner's supplied documents and visible photographs.
+const base = 'https://krishnamahato704-spec.github.io/E-portfolio/assets/evidence/';
+const image = id => base + id + '.webp';
+export const suppliedCertificates = [
+  {id:'diksha-ai',title:'Leveraging AI for Transforming School Education',issuer:'CIET-NCERT, New Delhi · DIKSHA',date:'4 March 2026',category:'Professional learning',description:'Certificate of completion for a five-hour course.',image:image('diksha-ai'),url:base+'diksha-ai.pdf'},
+  {id:'nptel-writing',title:'Effective Writing · NPTEL Elite',issuer:'IIT Roorkee · NPTEL',date:'January–March 2026',category:'Academic',description:'Eight-week course. Consolidated score: 76%; assignments: 25/25; proctored examination: 51/75.',image:image('nptel-writing'),url:base+'nptel-writing.pdf'},
+  {id:'suraasa-linkedin',title:'LinkedIn for Teachers',issuer:'Suraasa',date:'7 January 2026',category:'Professional learning',description:'Certificate of participation in the LinkedIn for Teachers webinar.',image:image('suraasa-linkedin'),url:base+'suraasa-linkedin.pdf'},
+  {id:'gemini-badge',title:'Gemini Certified Educator badge',issuer:'Google for Education',date:'Issue date not shown',category:'Professional learning',description:'Badge image supplied by Krishna. The image does not include a recipient name, issue date or verification link.',image:image('gemini-badge'),url:image('gemini-badge')},
+];
+export const suppliedGallery = [
+  {id:'tlm-exhibition',title:'Teaching-learning materials exhibition',category:'Lesson Planning & TLM',description:'Ballot box, Earth model and other handmade teaching materials displayed with colleagues.',context:'Teacher-education exhibition'},
+  {id:'mock-election-activity',title:'Mock election activity guide',category:'Lesson Planning & TLM',description:'Illustrated classroom poster covering nomination, campaigning, voting and results.',context:'Civics classroom activity'},
+  {id:'mock-election-class8',title:'Class 8 mock election invitation',category:'Lesson Planning & TLM',description:'A classroom display inviting students to choose candidates and cast votes.',context:'Class 8 · Civics'},
+  {id:'pehchaan-collage',title:'Learning at Pehchaan',category:'Field Practice & Community',description:'A collage of drawing, worksheets and classroom learning at Pehchaan The Street School.',context:'Community teaching internship'},
+  {id:'independence-day',title:'Independence Day display',category:'Teaching Practice',description:'Krishna beside a handmade Independence Day display.',context:'School activity'},
+  {id:'school-house-placards',title:'School house placards',category:'Teaching Practice',description:'Krishna with Neelgiri, Malaygiri, Udaygiri and Ratnagiri house placards.',context:'Panchsheel Balak Inter-College'},
+  {id:'sports-day-artwork',title:'Student artwork for Major Dhyan Chand',category:'Teaching Practice',description:'Students display their artwork beside a commemorative portrait.',context:'School activity'},
+  {id:'tlm-documentation',title:'Ballot box and Earth model documentation',category:'Lesson Planning & TLM',description:'A handwritten record explains the materials, intended classes and classroom uses of the models.',context:'Civics · Classes 6–8; Geography · Classes 6–10'},
+].map(item=>({...item,image:image(item.id)}));
+export const suppliedResources = [
+  {id:'ntcc-community-report',title:'Community Work and Adult Literacy',category:'Internship report',subject:'Foundational literacy and numeracy · ULLAS',grade:'Early learners and adults',date:'20 July 2026',description:'Original 27-page NTCC report. It records 80 hours at Pehchaan and 50 hours of adult literacy work, with weekly reflections and annexures.',type:'PDF · 27 pages',extension:'pdf',context:'Amity Institute of Education · EDCW100'},
+  {id:'rootedness-iks',title:'Roots to Wings: Indian Knowledge Systems in Teacher Education',category:'Presentation',subject:'NEP 2020 and teacher education',grade:'Teacher education',date:'',description:'The supplied 15-slide presentation on Indian Knowledge Systems and teacher education.',type:'PDF · 15 slides',extension:'pdf',context:'Academic presentation'},
+  {id:'krishna-da',title:'Architecting the Digital Pedagogy Ecosystem',category:'Presentation',subject:'Digital pedagogy',grade:'Teacher education',date:'',description:'Ten-slide presentation on technology integration, instruction and NEP 2020. Original PowerPoint download.',type:'PowerPoint · 10 slides · 12.8 MB',extension:'pptx',context:'Presented by Krishna Mahato'},
+  {id:'finland-education',title:"Finland’s Education System",category:'Presentation',subject:'Knowledge and Curriculum',grade:'B.Ed.',date:'Academic year 2025–2027',description:'Comparative curriculum studies presentation by Krishna Mahato and Sahil Kumar. Original PowerPoint download.',type:'PowerPoint · 16 slides · 1.3 MB',extension:'pptx',context:'Amity University, Noida'},
+].map(({extension,...item})=>({...item,url:base+item.id+'.'+extension,thumbnail:image(item.id),evidenceStatus:'Original supplied document'}));

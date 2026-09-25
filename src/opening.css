@@ -74,7 +74,7 @@ body[data-route=home] .site-header:not(.is-scrolled) :focus-visible { outline-co
  }
 }
 @media(max-width:1100px) and (min-width:1001px) { .brand-caption { display:none; } .opening-inner { gap:40px; } }
-@media(max-width:1000px) {
+@media screen {
  :root { --header-height:72px; }
  .brand-caption { display:block; }
  .header-inner { justify-content:space-between; }
@@ -142,4 +142,24 @@ body[data-route=home] .site-header:not(.is-scrolled) :focus-visible { outline-co
  .opening-inner { display:block; min-height:0; padding:0; }
  .opening-traces,.opening-bottom,.opening-transition { display:none; }
  .opening-hero h1,.opening-hero h1 em,.opening-hero .hero-statement,.opening-hero .hero-detail { color:var(--print-ink); }
+}
+
+/* The owner's reference: full-width avatar video, then the 2D portfolio. */
+@media screen {
+ .opening-hero .opening-inner { display:flex; flex-direction:column; justify-content:flex-end; min-height:calc(100svh - var(--header-height)); padding-top:0; }
+ .hero-bg-video { opacity:.5; filter:grayscale(.15); }
+ .opening-bottom { width:100%; margin-top:0; display:flex; align-items:center; gap:24px; }
+ .opening-status { margin-right:auto; }
+ .opening-continue { width:auto; }
+ .opening-hero .video-toggle { position:static; flex-shrink:0; min-height:44px; padding:12px 18px; background:var(--paper); color:var(--ink); border:1px solid var(--line-strong); font-size:.8125rem; }
+ .opening-hero .sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap; border:0; }
+ .brand-caption { display:block; }
+ .site-header .navigation-links a { font-size:clamp(2rem,5vw,3.6rem); }
+}
+@media(max-width:650px) {
+ .opening-bottom { gap:12px; padding-block:16px; }
+ .hero-bg-video { object-position:70% center; }
+ .opening-status { width:100%; }
+ .opening-continue { flex:1; }
+ .opening-hero .video-toggle { padding:10px; font-size:.75rem; }
 }

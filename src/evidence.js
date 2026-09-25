@@ -13,6 +13,7 @@ const knownPdfs = {
 };
 export function documentUrl(url,base) {
   if(!url) return '';
+  if(url.startsWith('https://krishnamahato704-spec.github.io/E-portfolio/')) return base+url.split('/E-portfolio/')[1];
   if(url===democracySource)return base+'assets/democracy-lesson-plan.pdf';
   if(url.startsWith('./assets/')||url.startsWith('assets/')) return base + url.replace(/^\.?\//, '');
   for(const [key, file] of Object.entries(knownPdfs)) {

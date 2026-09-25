@@ -1,5 +1,5 @@
 import {config} from './config.js';
-import {validateContent} from './content.js?v=evidence-20260917';
+import {validateContent} from './content.js?v=2d-20260925';
 const fileTypes=Object.freeze({pdf:'application/pdf',jpg:'image/jpeg',jpeg:'image/jpeg',png:'image/png',webp:'image/webp',docx:'application/vnd.openxmlformats-officedocument.wordprocessingml.document',pptx:'application/vnd.openxmlformats-officedocument.presentationml.presentation'});
 export async function request(path,options={}) {
   const {token,headers,timeoutMs=12000,...rest}=options;

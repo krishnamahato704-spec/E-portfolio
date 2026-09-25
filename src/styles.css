@@ -1,8 +1,8 @@
-/* Visual foundation: a modern classroom and curated history archive. */
+/* Visual foundation: the owner's 2D portfolio. */
 @layer reset,tokens,base,components,layout,responsive,identity,recruiter,foundation,opening,evidence,motion,print;
-@import url('./evidence.css?v=evidence-20260917');
-@import url('./opening.css?v=opening-20260912') layer(opening);
-@import url('./redesign.css?v=evidence-20260917');
+@import url('./evidence.css?v=2d-20260925');
+@import url('./opening.css?v=2d-20260925') layer(opening);
+@import url('./redesign.css?v=2d-20260925');
 @font-face {
   font-family:'Source Serif 4';
   font-style:normal;
@@ -5663,7 +5663,6 @@
   display: block;
   width: 100%;
   height: auto;
-  aspect-ratio: 4/3;
   object-fit: cover;
 }
 .seminar-credential-preview {
@@ -5674,7 +5673,6 @@
   display: block;
   width: 100%;
   height: auto;
-  aspect-ratio: 16/11;
   object-fit: cover;
 }
 .lesson-design-preview-figure {
@@ -5701,3 +5699,11 @@
   padding: 8px 4px 2px;
   font-style: italic;
 }
+
+/* Evidence keeps its source proportions in the existing 2D layouts. */
+.case-layout > *, .case-layout .prose { min-width:0; }
+.table-scroll { max-width:100%; overflow-x:auto; margin:16px 0 24px; }
+.table-scroll table { width:100%; border-collapse:collapse; font-size:.9rem; }
+.course-title { font-size:1.25rem; margin-bottom:10px; }
+.certificate-image, .tlm-image-frame, .archive-doc-frame, .resource-thumb-wrap { height:auto; min-height:0; aspect-ratio:auto; }
+.certificate-image img, .tlm-img, .resource-thumb, .seminar-cert-img, .case-evidence-img { display:block; width:100%; height:auto; max-height:none; object-fit:contain; transform:none !important; }

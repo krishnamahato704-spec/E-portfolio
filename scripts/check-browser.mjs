@@ -32,7 +32,7 @@ async function loadPlaywright(){
 
 async function startServer(){
   if(process.env.BROWSER_TEST_ORIGIN)return;
-  server=spawn(process.execPath,['scripts/serve.mjs'],{
+  server=spawn(process.execPath,['scripts/serve.mjs','--dist','--tests'],{
     cwd:root,env:{...process.env,PORT:String(port)},windowsHide:true,stdio:['ignore','pipe','pipe']
   });
   let serverError='';
@@ -58,7 +58,10 @@ async function imageFailures(page){
   const imgs=page.locator('main img');
   for(let i=0;i<await imgs.count();i++){
     const img=imgs.nth(i);
-    if(await img.isVisible())await img.scrollIntoViewIfNeeded();
+    if(await img.evaluate(i=>i.checkVisibility())){
+      await img.scrollIntoViewIfNeeded();
+      await img.evaluate(i=>i.decode()).catch(()=>{});
+    }
   }
   await page.waitForFunction(()=>[...document.querySelectorAll('main img')].filter(i=>i.checkVisibility()).every(i=>i.complete),null,{timeout:10000}).catch(()=>{});
   return page.evaluate(()=>[...document.querySelectorAll('main img')].filter(i=>i.checkVisibility()&&(!i.complete||!i.naturalWidth)).map(i=>({src:i.getAttribute('src'),alt:i.alt})));
@@ -133,7 +136,7 @@ try{
       record(`${name}: ${mode} fits 320px`,state.documentWidth<=321,state.documentWidth);
       if(name==='home'){
         const hero=await p.evaluate(()=>{const image=document.querySelector('.portrait'),video=document.querySelector('.hero-bg-video');return {portraitVisible:!!image&&image.checkVisibility({checkOpacity:true,checkVisibilityCSS:true})&&image.naturalWidth>0,portraitSrc:image?.getAttribute('src'),poster:video?.getAttribute('poster'),videoSource:video?.getAttribute('src')||''}});
-        record(`home: ${mode} shows separate portrait and static poster`,hero.portraitVisible&&!!hero.poster&&hero.portraitSrc!==hero.poster&&!hero.videoSource,hero);
+        record(`home: ${mode} preserves the full-width video poster`,!!hero.poster&&!hero.videoSource&&!hero.portraitVisible,hero);
         await p.screenshot({path:path.join(output,`home-${mode}-320.png`),fullPage:false});
       }
       await fallback.close();
@@ -170,7 +173,19 @@ try{
 
   const motion=await context({reducedMotion:'no-preference'});const moving=await motion.newPage();
   await moving.goto(base,{waitUntil:'load'});
+  record('2D opening: no canvas renderer',await moving.locator('canvas').count()===0);
+  record('2D opening: avatar video fills the viewport width',await moving.locator('.hero-bg-video').evaluate(v=>Math.abs(v.getBoundingClientRect().width-innerWidth)<2));
   await moving.locator('.hero-bg-video').evaluate(v=>v.play()).catch(error=>record('motion: hero media can play',false,error.message));
+  await moving.waitForFunction(()=>document.querySelector('.hero-bg-video').currentTime>.2);
+  await moving.screenshot({path:path.join(output,'video-opening-desktop.png')});
+  await moving.locator('.video-toggle').click();
+  record('2D opening: pause control stops avatar video',await moving.locator('.hero-bg-video').evaluate(v=>v.paused));
+  await moving.locator('.video-toggle').click();
+  await moving.locator('.menu-toggle').click();
+  record('2D desktop menu: numbered navigation opens',await moving.locator('#navigation').evaluate(n=>n.getAttribute('aria-modal')==='true'&&n.querySelectorAll('.nav-index').length===7));
+  await moving.locator('#navigation').evaluate(n=>Promise.all(n.getAnimations({subtree:true}).filter(a=>Number.isFinite(a.effect?.getComputedTiming().endTime)).map(a=>a.finished.catch(()=>{}))));
+  await moving.screenshot({path:path.join(output,'menu-desktop.png')});
+  await moving.keyboard.press('Escape');
   await moving.emulateMedia({reducedMotion:'reduce'});
   await moving.waitForTimeout(100);
   record('reduced motion: changing preference pauses active hero video',await moving.locator('.hero-bg-video').evaluate(v=>v.paused));

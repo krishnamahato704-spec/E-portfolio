@@ -116,12 +116,11 @@ try{
       if(expected)assert(current[0].getAttribute('href')===base+routes[expected].path,`${route}: wrong active destination`);
     }
   });
-  await check('Hero CTAs retain teaching and existing printable resume functionality',()=>{
+  await check('Video opening continues to the portfolio and retains printable resume functionality',()=>{
     const home=fragment(view('home',defaultContent,'../'));
-    const actions=[...home.querySelectorAll('.hero .actions a')];
-    assert(actions.length===2,'Hero must have two primary actions');
-    assert(actions[0].textContent.includes('Explore My Teaching') && actions[0].getAttribute('href')==='../teaching/','Teaching CTA changed destination');
-    assert(actions[1].textContent.includes('View Résumé') && actions[1].getAttribute('href')==='../resume/','Resume CTA changed destination');
+    assert(home.querySelector('.opening-continue')?.getAttribute('href')==='#portfolio-start','Video opening must lead to the existing portfolio');
+    assert(!home.querySelector('canvas,.hero .portrait-frame'),'Opening must remain 2D without a portrait over the video');
+    assert(home.querySelector('a[href="../teaching/"]')&&home.querySelector('a[href="../resume/"]'),'Teaching and resume routes remain reachable');
     assert(fragment(view('resume',defaultContent,'../')).querySelector('button#print-resume')?.textContent.includes('Print / save as PDF'),'Printable resume control was removed');
   });
   await check('Live status follows existing internship and teacher-education evidence',()=>{

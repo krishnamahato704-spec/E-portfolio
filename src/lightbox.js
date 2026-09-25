@@ -3,6 +3,7 @@
 
 let activeLightbox = null;
 let previousFocus = null;
+const escapeHTML=value=>String(value??'').replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
 
 export function initLightbox(root = document) {
   if (typeof window === 'undefined') return;
@@ -10,6 +11,8 @@ export function initLightbox(root = document) {
   const triggers = root.querySelectorAll('.archive-doc-frame, .lightbox-trigger, .gallery-item a');
 
   triggers.forEach(trigger => {
+    if(trigger.dataset.lightboxReady)return;
+    trigger.dataset.lightboxReady='true';
     trigger.addEventListener('click', (e) => {
       // Allow Ctrl/Cmd + click to open direct link in new tab
       if (e.metaKey || e.ctrlKey) return;
@@ -17,6 +20,8 @@ export function initLightbox(root = document) {
       const img = trigger.querySelector('img');
       const href = trigger.getAttribute('href') || (img ? img.getAttribute('src') : null);
       if (!href) return;
+      const target=new URL(href,location.href);
+      if(!['http:','https:'].includes(target.protocol)||!/\.(webp|jpe?g|png)$/i.test(target.pathname))return;
 
       e.preventDefault();
       openLightbox({
@@ -34,6 +39,7 @@ export function initLightbox(root = document) {
 function openLightbox(data, triggerElement) {
   closeLightbox();
   previousFocus = triggerElement || document.activeElement;
+  data=Object.fromEntries(Object.entries(data).map(([key,value])=>[key,escapeHTML(value)]));
 
   const overlay = document.createElement('div');
   overlay.className = 'lightbox-overlay';

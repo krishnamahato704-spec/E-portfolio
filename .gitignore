@@ -1,5 +1,8 @@
 node_modules/
 dist/
+public/
+supabase/.temp/
+/work-*.py
 work/
 outputs/
 portfolio-source.zip
