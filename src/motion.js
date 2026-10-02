@@ -1,6 +1,6 @@
-import {initTimeline, cleanupTimeline} from './timeline.js?v=perf-20261002';
-import {initPhilosophy, cleanupPhilosophy} from './philosophy.js?v=perf-20261002';
-import {initDemocracy, cleanupDemocracy} from './democracy.js?v=perf-20261002';
+import {initTimeline, cleanupTimeline} from './timeline.js?v=build';
+import {initPhilosophy, cleanupPhilosophy} from './philosophy.js?v=build';
+import {initDemocracy, cleanupDemocracy} from './democracy.js?v=build';
 
 // Progressive enhancement: nothing is hidden while waiting for JavaScript or an observer.
 let dispose = () => {};

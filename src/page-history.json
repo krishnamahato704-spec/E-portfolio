@@ -1,0 +1,54 @@
+{
+  "404": {
+    "hash": "087d2e75fa642041f98e14d0153923ae64cb839dcfeb114ed636e8eee04d8728",
+    "lastmod": "2026-10-02"
+  },
+  "home": {
+    "hash": "fd12fb52370b7ceab017369bc6e2dc3fcce3951488e8db9329b4587846e291c7",
+    "lastmod": "2026-10-02"
+  },
+  "profile": {
+    "hash": "6ce7deb7e96bda9657af0b054655075a0674311ae6a20ad8973d36c1d82128bb",
+    "lastmod": "2026-10-02"
+  },
+  "teaching": {
+    "hash": "cf5fa6a4f17e882934d00bcfbdcd17b96f01557f89b45406b36ea6b8cd4e239a",
+    "lastmod": "2026-10-02"
+  },
+  "resources": {
+    "hash": "28a35ad4811e1d756eeba1ed3571bb1a8e677dcdee0e80e7ff611ec99300cd1a",
+    "lastmod": "2026-10-02"
+  },
+  "credentials": {
+    "hash": "c9e678fec1236339a2e312fbeb640b64eb08b694bbaf6508b4635febb041006a",
+    "lastmod": "2026-10-02"
+  },
+  "contact": {
+    "hash": "bee278826ab0720629e72474efd057b2be7d20c18ea3eb85e928529101ee5441",
+    "lastmod": "2026-10-02"
+  },
+  "resume": {
+    "hash": "535fd5adb0cebd69fa8e0f305fe0ec9d83441c51221df1d52577d546c9fbb26a",
+    "lastmod": "2026-10-02"
+  },
+  "pehchaan": {
+    "hash": "0a34a75f3821cd677563bfc0cf1d496973444d2fba03194efda2d779a75eb047",
+    "lastmod": "2026-10-02"
+  },
+  "observation": {
+    "hash": "8b76587b7cbf5df08cf423f7448d91f44059f4e03dea8532f0bd62c5647a849b",
+    "lastmod": "2026-10-02"
+  },
+  "democracy": {
+    "hash": "39c0663e8d09070e3d5f768d1952ab2decef958444bebbc929b8751a3a31051b",
+    "lastmod": "2026-10-02"
+  },
+  "gallery": {
+    "hash": "212ee62e88c89c1dd9ee5620b10501623d3890f95a2258549e6a51a569b7fc5f",
+    "lastmod": "2026-10-02"
+  },
+  "admin": {
+    "hash": "43a57874e71a5febafa765073b241002d29ac4072f26b633a69e576dab3514c4",
+    "lastmod": "2026-10-02"
+  }
+}

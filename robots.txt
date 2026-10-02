@@ -1,4 +1,3 @@
 User-agent: *
 Allow: /
-Disallow: /E-portfolio/admin/
 Sitemap: https://krishnamahato704-spec.github.io/E-portfolio/sitemap.xml

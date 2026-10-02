@@ -6,8 +6,11 @@ export function studySummary(content) {
 
 export function recruiterFacts(content) {
   const p=content.profile;
+  const schoolPractice=content.experiences.some(e=>e.id==='panchsheel');
   return [
     ['Roles of interest',p.roles.join(' · ')],
+    ['Direct teaching',schoolPractice?p.directTeaching:''],
+    ['Additional teaching',schoolPractice?p.additionalTeaching:''],
     ['Earliest joining',p.availability],
     ['Based in',p.location],
     ['Work preferences',p.workPreferences],

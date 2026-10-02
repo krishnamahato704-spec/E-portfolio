@@ -58,10 +58,10 @@ test('Teaching resource uploads normalize document MIME before storage',async()=
  global.fetch=async(url,options)=>{seen={url:String(url),options};return new Response(JSON.stringify({Key:'redesign/test.docx'}),{status:200,headers:{'Content-Type':'application/json'}})};
  try {
   const url=await uploadFile({name:'lesson-plan.docx',type:'',size:1024},'test-token');
-  assert.match(seen.url,/\/storage\/v1\/object\/portfolio-media\/redesign\/.+\.docx$/);
+  assert.match(seen.url,/\/storage\/v1\/object\/portfolio-media\/reviewed\/.+\.docx$/);
   assert.equal(seen.options.headers['Content-Type'],'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
   assert.equal(seen.options.headers.Authorization,'Bearer test-token');
-  assert.match(url,/\/storage\/v1\/object\/public\/portfolio-media\/redesign\/.+\.docx$/);
+  assert.match(url,/\/storage\/v1\/object\/public\/portfolio-media\/reviewed\/.+\.docx$/);
  } finally {global.fetch=original}
 });
 test('Every route renders a complete static document with one heading and working local links',async()=>{
@@ -114,7 +114,7 @@ test('Stable experience IDs survive reordering and removed cases do not resurfac
 });
 test('Clarified recruiter facts survive loading the legacy public record',()=>{
  const c=mergeContent({qualifications:[{title:'M.A. History',place:'Postgraduate study in History',period:'2025–Present',status:'In progress'}]});
- const html=view('profile',c);assert.match(html,/IGNOU/);assert.match(html,/First year cleared/);assert.match(html,/CTET Paper II applied/);assert.match(html,/May 2027/);
+ const html=view('profile',c);assert.match(html,/IGNOU/);assert.match(html,/First year cleared/);assert.match(html,/CTET Paper II — Applied/);assert.match(html,/May 2027/);
 });
 test('Editorial records retain owner order and escape document metadata',()=>{
  const c=structuredClone(defaultContent);
