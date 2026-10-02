@@ -1,111 +1,80 @@
-// Lightswind-inspired Interactive Custom Cursor
-// Elegant magnetic cursor with context badges ('EXPLORE', 'VIEW', 'OPEN', 'PDF')
-// Active ONLY on desktop devices with fine pointer, auto-disabled on touch and reduced motion.
+// Keep the existing cursor effect, but animate only while it is catching up.
+let dispose = () => {};
+let active = false;
 
-let cursorEl = null;
-let ringEl = null;
-let labelEl = null;
-let rafId = null;
-let mouseX = -100;
-let mouseY = -100;
-let ringX = -100;
-let ringY = -100;
+export function cleanupCustomCursor() {
+  dispose();
+  dispose = () => {};
+  active = false;
+}
 
 export function initCustomCursor() {
-  if (typeof window === 'undefined') return;
-  const isFinePointer = window.matchMedia('(pointer: fine)').matches;
-  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (!isFinePointer || prefersReduced) return;
+  if (typeof window === 'undefined' || active) return;
+  const pointer = matchMedia('(hover: hover) and (pointer: fine)');
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+  if (!pointer.matches || reduced.matches) return;
 
-  if (document.querySelector('.custom-cursor-container')) return;
-
+  const events = new AbortController();
+  const signal = events.signal;
   const container = document.createElement('div');
   container.className = 'custom-cursor-container';
   container.setAttribute('aria-hidden', 'true');
+  container.hidden = true;
+  const dot = document.createElement('div');
+  dot.className = 'cursor-dot';
+  const ring = document.createElement('div');
+  ring.className = 'cursor-ring';
+  const label = document.createElement('span');
+  label.className = 'cursor-label';
+  ring.append(label);
+  container.append(dot, ring);
+  document.body.append(container);
+  active = true;
 
-  cursorEl = document.createElement('div');
-  cursorEl.className = 'cursor-dot';
-
-  ringEl = document.createElement('div');
-  ringEl.className = 'cursor-ring';
-
-  labelEl = document.createElement('span');
-  labelEl.className = 'cursor-label';
-  ringEl.appendChild(labelEl);
-
-  container.appendChild(cursorEl);
-  container.appendChild(ringEl);
-  document.body.appendChild(container);
-
-  const onMouseMove = (e) => {
-    mouseX = e.clientX;
-    mouseY = e.clientY;
-    if (cursorEl) {
-      cursorEl.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`;
-    }
+  let frame = 0, lastTime = 0;
+  let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+  const update = time => {
+    frame = 0;
+    if (document.hidden || container.hidden) return;
+    // Use elapsed time so the same movement works on 60 Hz and 120 Hz screens.
+    const delta = lastTime ? Math.min(50, time - lastTime) : 1000 / 60;
+    lastTime = time;
+    const amount = 1 - Math.pow(0.84, delta / (1000 / 60));
+    ringX += (mouseX - ringX) * amount;
+    ringY += (mouseY - ringY) * amount;
+    const moving = Math.hypot(mouseX - ringX, mouseY - ringY) > 0.2;
+    if (!moving) { ringX = mouseX; ringY = mouseY; lastTime = 0; }
+    dot.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`;
+    ring.style.transform = `translate3d(${ringX}px, ${ringY}px, 0)`;
+    if (moving) frame = requestAnimationFrame(update);
   };
-
-  const updateRing = () => {
-    // Lerp ring towards mouse with smooth inertia
-    ringX += (mouseX - ringX) * 0.16;
-    ringY += (mouseY - ringY) * 0.16;
-
-    if (ringEl) {
-      ringEl.style.transform = `translate3d(${ringX}px, ${ringY}px, 0)`;
-    }
-    rafId = requestAnimationFrame(updateRing);
+  const hide = () => {
+    cancelAnimationFrame(frame);
+    frame = 0;
+    lastTime = 0;
+    container.hidden = true;
+    ring.classList.remove('is-active', 'is-text');
+    label.textContent = '';
   };
-
-  const onMouseOver = (e) => {
-    const target = e.target.closest('[data-cursor], a, button, summary, .interactive-3d-card, .archive-doc-frame, .milestone-card');
-    if (!target || !ringEl) {
-      ringEl.classList.remove('is-active', 'is-text');
-      labelEl.textContent = '';
-      return;
-    }
-
-    const customText = target.getAttribute('data-cursor');
-    if (customText) {
-      ringEl.classList.add('is-active', 'is-text');
-      labelEl.textContent = customText;
-    } else if (target.classList.contains('archive-doc-frame') || target.querySelector('.archive-cert-img')) {
-      ringEl.classList.add('is-active', 'is-text');
-      labelEl.textContent = 'VIEW';
-    } else if (target.classList.contains('milestone-card') || target.closest('.milestone-record')) {
-      ringEl.classList.add('is-active');
-      labelEl.textContent = '';
-    } else if (target.tagName === 'A' || target.tagName === 'BUTTON' || target.tagName === 'SUMMARY') {
-      ringEl.classList.add('is-active');
-      labelEl.textContent = '';
-    }
-  };
-
-  const onMouseOut = (e) => {
-    if (!e.relatedTarget && ringEl) {
-      ringEl.classList.remove('is-active', 'is-text');
-      labelEl.textContent = '';
-    }
-  };
-
-  window.addEventListener('mousemove', onMouseMove, { passive: true });
-  document.addEventListener('mouseover', onMouseOver, { passive: true });
-  document.addEventListener('mouseout', onMouseOut, { passive: true });
-  rafId = requestAnimationFrame(updateRing);
-
-  return () => {
-    if (rafId) cancelAnimationFrame(rafId);
-    window.removeEventListener('mousemove', onMouseMove);
-    document.removeEventListener('mouseover', onMouseOver);
-    document.removeEventListener('mouseout', onMouseOut);
-    container.remove();
-  };
-}
-
-export function cleanupCustomCursor() {
-  const container = document.querySelector('.custom-cursor-container');
-  if (container) container.remove();
-  if (rafId) {
-    cancelAnimationFrame(rafId);
-    rafId = null;
-  }
+  window.addEventListener('mousemove', event => {
+    if (document.hidden) return;
+    mouseX = event.clientX; mouseY = event.clientY;
+    if (container.hidden) { ringX = mouseX; ringY = mouseY; container.hidden = false; }
+    if (!frame) frame = requestAnimationFrame(update);
+  }, {passive:true, signal});
+  document.addEventListener('mouseover', event => {
+    const target = event.target.closest('[data-cursor], a, button, summary, .archive-doc-frame, .milestone-card');
+    const text = target?.getAttribute('data-cursor') ||
+      (target && (target.classList.contains('archive-doc-frame') || target.querySelector('.archive-cert-img')) ? 'VIEW' : '');
+    ring.classList.toggle('is-active', !!target);
+    ring.classList.toggle('is-text', !!text);
+    label.textContent = text;
+  }, {passive:true, signal});
+  document.addEventListener('mouseout', event => { if (!event.relatedTarget) hide(); }, {passive:true, signal});
+  document.addEventListener('visibilitychange', hide, {signal});
+  const changed = () => { if (reduced.matches || !pointer.matches) cleanupCustomCursor(); };
+  reduced.addEventListener('change', changed, {signal});
+  pointer.addEventListener('change', changed, {signal});
+  dispose = () => { hide(); events.abort(); container.remove(); };
+  return cleanupCustomCursor;
 }

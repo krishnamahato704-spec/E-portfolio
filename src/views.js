@@ -1,7 +1,7 @@
 import dimensions from './image-dimensions.json' with {type:'json'};
-import {democracyView,evidenceFeature,democracyResource,documentUrl} from './evidence.js?v=2d-20260925';
-import {studySummary,recruiterFacts} from './recruiter.js?v=2d-20260925';
-import {defaultContent} from './content.js?v=2d-20260925';
+import {democracyView,evidenceFeature,democracyResource,documentUrl} from './evidence.js?v=perf-20261002';
+import {studySummary,recruiterFacts} from './recruiter.js?v=perf-20261002';
+import {defaultContent} from './content.js?v=perf-20261002';
 export const routes={
   home:{path:'',title:'History, Social Science & English Educator',nav:'Home'},
   profile:{path:'profile/',title:'Profile & Education',nav:'Profile'},

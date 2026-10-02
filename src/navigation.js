@@ -17,6 +17,7 @@ export function initNavigation() {
   Object.assign(document.body.style,savedBody);
   inertNodes.forEach(([el,previous])=>{el.inert=previous});inertNodes=[];
   window.scrollTo({top:position,behavior:'instant'});
+  document.dispatchEvent(new Event('navigationchange'));
   if(restore)toggle.focus({preventScroll:true});
  };
  toggle.addEventListener('click',()=>{
@@ -30,6 +31,7 @@ export function initNavigation() {
   inertNodes=background.map(el=>[el,el.inert]);inertNodes.forEach(([el])=>{el.inert=true});
   panel.setAttribute('role','dialog');panel.setAttribute('aria-modal','true');panel.setAttribute('aria-labelledby','navigation-title');
   panel.classList.add('is-open');toggle.setAttribute('aria-expanded','true');
+  document.dispatchEvent(new Event('navigationchange'));
   panel.querySelector('nav a').focus({preventScroll:true});
  });
  closeButton.addEventListener('click',()=>close());

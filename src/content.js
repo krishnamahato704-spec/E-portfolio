@@ -98,15 +98,15 @@ export const defaultContent = {
       "category": "Teaching",
       "duration": "5",
       "durationUnit": "Weeks",
-      "summary": "80 hours foundational kindergarten teaching & 50 hours ULLAS adult literacy field practice (Course EDCW100).",
-      "title": "NTCC Internship · Pehchaan The Street School & ULLAS Adult Literacy",
-      "type": "Five-week community teaching & adult literacy internship",
+      "summary": "Foundational literacy, numeracy and ULLAS adult-literacy teaching.",
+      "title": "NTCC Internship · Pehchaan The Street School",
+      "type": "Five-week teaching internship",
       "period": "1 June–6 July 2026",
       "points": [
-        "Completed 80 verified hours teaching foundational literacy and numeracy to Nursery, LKG and UKG learners (ages 4–6) at Pehchaan The Street School in Morna Village, Sector 35, Noida.",
-        "Conducted 50 hours of adult literacy and critical life-skills instruction for five community workers (security guards and sanitation cleaners) under the Government of India ULLAS / NILP initiative.",
-        "Designed and administered a 40-mark UKG diagnostic assessment test alongside multi-sensory tracing sheets, Maths Market real-world currency simulations, and Mystery Bag vocabulary games.",
-        "Authored and submitted a 27-page academic NTCC report (EDCW100) under Faculty Guide Dr. Neetu Mishra Shukla and Founder Akash Tandon, verified with a 6% Turnitin score."
+        "Taught foundational literacy and numeracy to Nursery, LKG and UKG learners.",
+        "Used competency-based and activity-based methods.",
+        "Conducted ULLAS adult-literacy sessions for five adult learners.",
+        "Developed classroom-management and community-engagement experience."
       ]
     },
     {
@@ -151,8 +151,7 @@ export const defaultContent = {
     "Formative assessment",
     "Differentiated instruction",
     "Classroom management",
-    "Google Gemini & AI in Education",
-    "Canva & visual TLM",
+    "Canva",
     "Microsoft Office",
     "Online classroom tools"
   ],
@@ -422,6 +421,12 @@ export function mergeContent(live = {}) {
     return original && /^(I begin with a question, source|Scaffolded prompts, visual sources|Short checks, source-based tasks)/.test(p.text)?{...p,text:original.text}:p;
   });
   return result;
+}
+
+// Object key order from Postgres must not trigger an identical page replacement.
+export function contentSignature(content) {
+  return JSON.stringify(content, (_, value) => value && !Array.isArray(value) && typeof value==='object'
+    ? Object.fromEntries(Object.keys(value).sort().map(key=>[key,value[key]])) : value);
 }
 
 export function validateContent(c) {

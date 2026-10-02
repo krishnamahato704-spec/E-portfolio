@@ -28,7 +28,9 @@ Preview runs at http://127.0.0.1:3000/E-portfolio/. Browser checks use Playwrigh
 - `assets/evidence/`: supplied photographs, certificates, original PDFs and PowerPoint files, with smaller WebP previews.
 - `src/media.js` and `src/image-dimensions.json`: supplied-file metadata and intrinsic image proportions.
 
-The static pages contain the complete reviewed content. Supabase refreshes public content progressively. An unavailable service leaves the readable snapshot in place; form input is never replaced by a late response. No client framework, CDN JavaScript or remote font is required.
+The static pages contain the complete reviewed content. Supabase refreshes public content progressively. Identical content keeps the existing page; rendering templates are downloaded only when the published document changes. An unavailable service leaves the readable snapshot in place; form input is never replaced by a late response, including while templates load. No client framework, CDN JavaScript or remote font is required.
+
+Production packaging combines the local CSS imports into one stylesheet while preserving their order and cascade layers. The cursor uses animation frames only while moving. The avatar video pauses when the opening leaves the viewport, when the menu covers it, or when the tab is hidden, and resumes without overriding a visitor's pause or reduced-motion preference. History restoration retains search/filter state and releases old animation listeners.
 
 ## Content & database
 
