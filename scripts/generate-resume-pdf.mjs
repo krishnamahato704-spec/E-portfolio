@@ -44,7 +44,7 @@ export async function generateResume(c=defaultContent,{updatedAt=sourceDate()}={
  const lesson=c.resources.find(r=>/Democracy/.test(r.title));
  if(lesson)text(`${lesson.title} | ${lesson.grade} | ${lesson.date}. Diagnostic questioning, visual resources, discussion and written practice. Planning evidence; assessed learner outcomes are not published.`,9);
  section('Selected professional learning');
- for(const id of ['nptel-writing','diksha-ai']){
+ for(const id of ['gemini-badge','nptel-writing','diksha-ai']){
   const cert=publicContent(c).certificates.find(x=>x.id===id);
   if(cert)text(`${cert.title} | ${cert.issuer} | ${cert.date}`,8.5);
  }

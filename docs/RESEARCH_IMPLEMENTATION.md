@@ -9,7 +9,7 @@ The attached research was read in full and checked against the existing project.
 - Pehchaan uses the published 1 June–6 July 2026 period. The observation remains 24–28 November 2025.
 - Removed the unsupported “60% improvement demonstrated” assertion from the dossier. Original supplied reports are retained as source documents.
 - English remains a documented B.Ed. pedagogy subject and teaching exposure. Primary identity is History and Social Science.
-- Gemini badge retained in source/Studio, hidden from public credential and résumé listings pending recipient/date/verification evidence.
+- Gemini Certified Educator restored after the owner supplied the named certificate on 2 October 2026. The original PDF is retained unchanged, with a faithful preview, issue date of 21 August 2026 and validity through 21 August 2029. The certificate does not include a separate verification URL; no independent issuer verification is claimed.
 - Added a Plan → Teach → Assess → Reflect evidence guide that identifies missing learner scores, methodology, completed school reflections and mentor feedback honestly.
 - Both supplied PowerPoint decks exported with PowerPoint's native PDF engine: Digital Pedagogy 10 pages, Finland 16 pages. PDF is the primary viewing link; original PPTX downloads remain.
 - The downloadable résumé selects three qualifications, two teaching experiences and relevant learning. Its generator fails deployment if it exceeds one page. The web résumé keeps the fuller record.
@@ -35,7 +35,6 @@ The owner confirmed documented publication permission for the Pehchaan collage a
 ## Remaining owner-supplied work
 
 - Completed lesson reflections, anonymised assessed student work, marking rubrics, matched scores/methodology and mentor feedback. These cannot be created as factual evidence by the site implementation.
-- Verifiable Gemini credential details before approving that record.
 - Owner MFA enrollment and leaked-password protection where the Supabase plan supports it. The connected security advisor still reports leaked-password protection disabled.
 - A purchased/owned custom domain and DNS details before domain setup.
 
