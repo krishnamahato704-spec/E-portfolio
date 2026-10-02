@@ -1,5 +1,5 @@
 // Progressive search/filter controls. All evidence is readable before JS runs.
-export function wireCollections(root=document) {
+export function wireCollections(root=document, options={}) {
   const groups=[
     {list:'resource-list',row:'.resource-row',input:'resource-search',attribute:'data-filter',count:'resource-count',empty:'resource-empty',noun:'files'},
     {list:'experience-list',row:'.experience-row',input:'experience-search',attribute:'data-experience-filter',count:'experience-count',empty:'experience-empty',noun:'experiences'},
@@ -28,12 +28,12 @@ export function wireCollections(root=document) {
         if(rows.length)empty.textContent=`No ${group.noun} match. Try another category or clear the search.`;
       }
     };
-    input?.addEventListener('input',update);
+    input?.addEventListener('input',update,options);
     for(const button of buttons)button.addEventListener('click',()=>{
       category=button.getAttribute(group.attribute);
       buttons.forEach(b=>b.setAttribute('aria-pressed',String(b===button)));
       update();
-    });
+    },options);
     update();
   }
   root.querySelectorAll('[data-enhancement]').forEach(el=>el.hidden=false);

@@ -1,41 +1,4 @@
-/* ==========================================================================
-   PORTFOLIO REDESIGN SYSTEM: LIGHTSWIND & 3D INTERACTION
-   Elevated typography, generous whitespace, interactive 3D canvas,
-   tactile card depth, category segmentation, and accessible lightbox.
-   ========================================================================== */
-
-/* --------------------------------------------------------------------------
-   1. Interactive 3D Hero Canvas & Visual Ecosystem
-   -------------------------------------------------------------------------- */
-.hero-3d-canvas-wrap {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-  overflow: hidden;
-}
-
-.hero-3d-canvas {
-  position: absolute;
-  top: 50%;
-  right: -5%;
-  transform: translateY(-50%);
-  width: min(650px, 90vw);
-  height: min(650px, 90vw);
-  pointer-events: auto;
-  opacity: 0.85;
-  transition: opacity 0.4s ease;
-}
-
-@media (max-width: 900px) {
-  .hero-3d-canvas {
-    right: 50%;
-    transform: translate(50%, -50%);
-    opacity: 0.35;
-    width: 380px;
-    height: 380px;
-  }
-}
+/* Cursor, media viewer, and 2D portfolio refinements. */
 
 /* --------------------------------------------------------------------------
    2. Lightswind-inspired Custom Magnetic Cursor
@@ -499,7 +462,6 @@
 
 /* Print Overrides */
 @media print {
-  .hero-3d-canvas-wrap,
   .custom-cursor-container,
   .lightbox-overlay {
     display: none !important;

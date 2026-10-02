@@ -30,6 +30,7 @@ try {
     {title:'Test lesson',category:'Lesson plan',description:'Local fixture only',url:'https://example.com/lesson.pdf'},
     {title:'Test assessment',category:'Assessment',description:'Local fixture only',url:'https://example.com/assessment.pdf'}
   ];
+  if(mode==='unchanged')Object.assign(content,JSON.parse(JSON.stringify(defaultContent),(_,value)=>value&&!Array.isArray(value)&&typeof value==='object'?Object.fromEntries(Object.entries(value).reverse()):value));
   if(mode==='contact') {
     const name=main.querySelector('[name=name]');
     name.value='Local regression fixture';
@@ -47,6 +48,8 @@ try {
     assert(main.querySelector('.hero-statement').textContent.includes('Updated fixture teaching headline'),'Cloud refresh updates editable hero text');
     assert(main.querySelectorAll('.hero').length===1,'Cloud refresh leaves exactly one hero');
     assert(!main.querySelector('.evidence-feature'),'Explicitly replacing evidence removes the old featured artifact');
+  } else if(mode==='unchanged') {
+    assert(main.firstElementChild===original,'Identical cloud content keeps the static DOM even when JSON key order differs');
   } else if(mode==='resources') {
     assert(main.firstElementChild!==original,'Successful content read replaces markup');
     assert(main.querySelectorAll('.resource-row').length===2,'New resources rendered');
@@ -61,6 +64,9 @@ try {
     assert(main.querySelectorAll('.resource-row:not([hidden])').length===1,'Search works after content replacement');
     main.querySelector('[data-filter="Lesson plan"]').click();
     assert(!main.querySelector('#resource-empty').hidden,'Combined search and category show an empty state');
+    window.dispatchEvent(new PageTransitionEvent('pagehide',{persisted:true}));
+    window.dispatchEvent(new PageTransitionEvent('pageshow',{persisted:true}));
+    assert(search.value==='assessment' && main.querySelector('[data-filter="Lesson plan"]').getAttribute('aria-pressed')==='true' && !main.querySelector('#resource-empty').hidden,'History restoration keeps the active search and category');
   } else {
     assert(main.firstElementChild===original,'Slow or failed read preserves the existing document');
     if(mode==='contact')assert(main.querySelector('[name=name]').value==='Local regression fixture','Typed form value survives the late read');

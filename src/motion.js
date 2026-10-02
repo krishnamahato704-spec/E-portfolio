@@ -1,6 +1,6 @@
-import {initTimeline, cleanupTimeline} from './timeline.js?v=2d-20260925';
-import {initPhilosophy, cleanupPhilosophy} from './philosophy.js?v=2d-20260925';
-import {initDemocracy, cleanupDemocracy} from './democracy.js?v=2d-20260925';
+import {initTimeline, cleanupTimeline} from './timeline.js?v=perf-20261002';
+import {initPhilosophy, cleanupPhilosophy} from './philosophy.js?v=perf-20261002';
+import {initDemocracy, cleanupDemocracy} from './democracy.js?v=perf-20261002';
 
 // Progressive enhancement: nothing is hidden while waiting for JavaScript or an observer.
 let dispose = () => {};
@@ -19,6 +19,7 @@ export function initMotion({ initial = false } = {}) {
   // A fast content response can arrive before the first video frame. Preserve
   // its pending autoplay as well as playback already in progress.
   const resumeVideo = !!previousVideo && (!previousVideo.paused ||
+    previousVideo.dataset.resumeWhenVisible==='true' ||
     (!previousVideo.dataset.hasPlayed && previousVideo.dataset.userPaused!=='true'));
   cleanupMotion();
   const root = document.querySelector('#main');
@@ -35,8 +36,20 @@ export function initMotion({ initial = false } = {}) {
   const marked = new Set();
   const video = root.querySelector('.hero-bg-video');
   const videoToggle = root.querySelector('.video-toggle');
+  const hero = root.querySelector('.hero');
+  const heroRect = hero?.getBoundingClientRect();
+  let heroVisible = !heroRect || (heroRect.bottom > 0 && heroRect.top < innerHeight);
+  let wantsVideo = resumeVideo;
+  const syncVideo = () => {
+    if (!video?.src) return;
+    const visible = heroVisible && !document.hidden && !document.body.classList.contains('navigation-open');
+    video.dataset.resumeWhenVisible = String(wantsVideo && !visible);
+    if (wantsVideo && visible) video.play().catch(()=>{});
+    else video.pause();
+  };
   const finish = element => element.classList.remove('motion-enter', 'motion-hero');
   const stop = () => {
+    if(video && !video.paused)video.dataset.resumeWhenVisible='true';
     video?.pause();
     if(videoToggle)videoToggle.hidden=true;
     events.abort();
@@ -66,8 +79,10 @@ export function initMotion({ initial = false } = {}) {
     const label=()=>{videoToggle.textContent=video.paused?'Play background video':'Pause background video';videoToggle.setAttribute('aria-pressed',String(video.paused));};
     video.addEventListener('play',()=>{video.dataset.hasPlayed='true';label();},{signal:events.signal});
     video.addEventListener('pause',label,{signal:events.signal});
-    videoToggle.addEventListener('click',()=>{video.dataset.userPaused=String(!video.paused);if(video.paused)video.play().catch(()=>{});else video.pause();},{signal:events.signal});
-    if(resumeVideo && video===previousVideo)video.play().catch(()=>{});
+    videoToggle.addEventListener('click',()=>{wantsVideo=video.paused;video.dataset.userPaused=String(!wantsVideo);syncVideo();},{signal:events.signal});
+    document.addEventListener('visibilitychange',syncVideo,{signal:events.signal});
+    document.addEventListener('navigationchange',syncVideo,{signal:events.signal});
+    syncVideo();
     label();
   }
 
@@ -84,7 +99,6 @@ export function initMotion({ initial = false } = {}) {
     for (let el = e.target; el && el !== root; el = el.parentElement) finish(el);
   }, { signal: events.signal });
 
-  const hero = root.querySelector('.hero');
   if (hero && initial && !heroPlayed && scrollY < 24) {
     heroPlayed = true;
     const navigation = document.querySelector('.site-header .header-inner');
@@ -112,11 +126,17 @@ export function initMotion({ initial = false } = {}) {
   if ('IntersectionObserver' in window) {
     observer = new IntersectionObserver(entries => {
       for (const entry of entries) {
+        if (entry.target===hero && video) {
+          heroVisible=entry.isIntersecting;
+          syncVideo();
+          continue;
+        }
         if (!entry.isIntersecting) continue;
         observer.unobserve(entry.target);
         if (!entry.target.contains(document.activeElement)) enter(entry.target);
       }
     }, { threshold: 0, rootMargin: '0px 0px -24px 0px' });
+    if(hero && video)observer.observe(hero);
     // Read all geometry before changing classes. Refreshed content already in
     // view stays still; only unread content further down the page is observed.
     const positions = targets.map(el => ({ el, top: el.getBoundingClientRect().top }));

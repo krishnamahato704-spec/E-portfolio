@@ -146,7 +146,7 @@ try{
   // Existing isolated fixtures exercise actual application modules, including
   // successful Supabase replacement, late-read preservation, and owner editing
   // with mocked auth/uploads only. No real submissions or owner writes occur.
-  const fixtures=['app.browser.html?case=home','app.browser.html?case=home-add','app.browser.html?case=home-remove','app.browser.html?case=resources','app.browser.html?case=contact','app.browser.html?case=teaching','app.browser.html?case=failure','motion.browser.html','recruiter.browser.html','navigation.browser.html'];
+  const fixtures=['app.browser.html?case=home','app.browser.html?case=home-add','app.browser.html?case=home-remove','app.browser.html?case=resources','app.browser.html?case=unchanged','app.browser.html?case=contact','app.browser.html?case=teaching','app.browser.html?case=failure','motion.browser.html','recruiter.browser.html','navigation.browser.html'];
   for(const fixture of fixtures){
     const ctx=await context({reducedMotion:'no-preference',...(fixture.startsWith('navigation')?{viewport:{width:390,height:844}}:{})});const page=await ctx.newPage();
     await page.goto(`${origin}/tests/${fixture}`,{waitUntil:'load'});
@@ -172,6 +172,11 @@ try{
   await keys.close();
 
   const motion=await context({reducedMotion:'no-preference'});const moving=await motion.newPage();
+  await moving.addInitScript(()=>{
+    window.animationCallbacks=0;
+    const raf=requestAnimationFrame.bind(window);
+    window.requestAnimationFrame=callback=>raf(time=>{window.animationCallbacks++;callback(time);});
+  });
   const {defaultContent}=await import('../src/content.js');
   await motion.route('**/rest/v1/portfolio_public?*',route=>route.fulfill({status:200,contentType:'application/json',body:JSON.stringify([{content:defaultContent,updated_at:'2026-09-25T00:00:00Z'}])}));
   await moving.goto(base,{waitUntil:'load'});
@@ -179,19 +184,47 @@ try{
   record('2D opening: avatar video fills the viewport width',await moving.locator('.hero-bg-video').evaluate(v=>Math.abs(v.getBoundingClientRect().width-innerWidth)<2));
   await moving.waitForFunction(()=>document.querySelector('.hero-bg-video').currentTime>.2);
   record('2D opening: saved-content refresh preserves video autoplay',await moving.locator('.hero-bg-video').evaluate(v=>!v.paused));
+  record('loading: identical published content does not download page templates',await moving.evaluate(()=>!performance.getEntriesByType('resource').some(e=>e.name.includes('/src/views.js'))));
+  record('loading: production CSS has no chained stylesheet requests',await moving.evaluate(()=>!performance.getEntriesByType('resource').some(e=>/\/(opening|redesign|evidence)\.css/.test(e.name))));
+  await moving.mouse.move(100,200);await moving.mouse.move(350,250);
+  await moving.waitForTimeout(900);
+  const idleFrames=await moving.evaluate(()=>window.animationCallbacks);
+  await moving.waitForTimeout(250);
+  record('cursor: animation stops after the mouse settles',await moving.evaluate(n=>window.animationCallbacks===n,idleFrames));
   await moving.screenshot({path:path.join(output,'video-opening-desktop.png')});
   await moving.locator('.video-toggle').click();
   record('2D opening: pause control stops avatar video',await moving.locator('.hero-bg-video').evaluate(v=>v.paused));
+  await moving.evaluate(()=>window.scrollTo({top:innerHeight+100,behavior:'instant'}));
+  await moving.waitForTimeout(100);
+  await moving.evaluate(()=>window.scrollTo({top:0,behavior:'instant'}));
+  await moving.waitForTimeout(100);
+  record('video: returning to the opening preserves a manual pause',await moving.locator('.hero-bg-video').evaluate(v=>v.paused));
   await moving.locator('.video-toggle').click();
+  await moving.evaluate(()=>window.scrollTo({top:innerHeight+100,behavior:'instant'}));
+  await moving.waitForFunction(()=>document.querySelector('.hero-bg-video').paused);
+  record('video: offscreen opening stops decoding',await moving.locator('.hero-bg-video').evaluate(v=>v.paused));
+  await moving.evaluate(()=>window.scrollTo({top:0,behavior:'instant'}));
+  await moving.waitForFunction(()=>!document.querySelector('.hero-bg-video').paused);
+  record('video: returning to the opening resumes automatic playback',await moving.locator('.hero-bg-video').evaluate(v=>!v.paused));
   await moving.locator('.menu-toggle').click();
   record('2D desktop menu: numbered navigation opens',await moving.locator('#navigation').evaluate(n=>n.getAttribute('aria-modal')==='true'&&n.querySelectorAll('.nav-index').length===7));
+  record('video: open menu pauses covered video',await moving.locator('.hero-bg-video').evaluate(v=>v.paused));
   await moving.locator('#navigation').evaluate(n=>Promise.all(n.getAnimations({subtree:true}).filter(a=>Number.isFinite(a.effect?.getComputedTiming().endTime)).map(a=>a.finished.catch(()=>{}))));
   await moving.screenshot({path:path.join(output,'menu-desktop.png')});
   await moving.keyboard.press('Escape');
+  await moving.waitForFunction(()=>!document.querySelector('.hero-bg-video').paused);
+  record('video: closing the menu resumes automatic playback',await moving.locator('.hero-bg-video').evaluate(v=>!v.paused));
+  await moving.evaluate(()=>{
+    window.dispatchEvent(new PageTransitionEvent('pagehide',{persisted:true}));
+    window.dispatchEvent(new PageTransitionEvent('pageshow',{persisted:true}));
+  });
+  await moving.waitForFunction(()=>!document.querySelector('.hero-bg-video').paused);
+  record('history: restoring a page resumes video without duplicate cursor elements',await moving.locator('.custom-cursor-container').count()===1);
   await moving.emulateMedia({reducedMotion:'reduce'});
   await moving.waitForTimeout(100);
   record('reduced motion: changing preference pauses active hero video',await moving.locator('.hero-bg-video').evaluate(v=>v.paused));
   record('reduced motion: changing preference clears decorative animations',await moving.evaluate(()=>document.getAnimations().filter(a=>a.playState==='running').length===0));
+  record('cursor: preference change removes cursor and listeners',await moving.locator('.custom-cursor-container').count()===0);
   await motion.close();
 
   const failed=results.filter(result=>!result.pass);

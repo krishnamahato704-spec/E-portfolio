@@ -1,8 +1,8 @@
-import {wireCollections} from './collections.js?v=2d-20260925';
-import {recruitmentGaps} from './recruiter.js?v=2d-20260925';
+import {wireCollections} from './collections.js?v=perf-20261002';
+import {recruitmentGaps} from './recruiter.js?v=perf-20261002';
 import {loadContent,signIn,signOut,saveContent,uploadFile,validateFile} from './cloud.js?v=upload-20260912';
-import {mergeContent,validateContent} from './content.js?v=2d-20260925';
-import {esc,view} from './views.js?v=2d-20260925';
+import {mergeContent,validateContent} from './content.js?v=perf-20261002';
+import {esc,view} from './views.js?v=perf-20261002';
 let session=null, draft=null, version=null, dirty=false, base='./',busy=false;
 const schemas={
  qualifications:{label:'Education',fields:{title:'Qualification',place:'Institution / result',period:'Study period',status:'Status',expected:'Expected completion (optional)',note:'Progress note (optional)'}},
