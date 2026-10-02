@@ -17,9 +17,19 @@ test('A validated remote release retains its exact content and timestamp',async(
  assert.equal(release.updatedAt,'2026-10-02T00:00:00Z');
 });
 test('Pending credentials stay in Studio data and are hidden from all recruiter views',()=>{
- assert.ok(defaultContent.certificates.some(c=>c.id==='gemini-badge'));
- assert.ok(!publicContent(defaultContent).certificates.some(c=>c.id==='gemini-badge'));
- for(const route of ['home','credentials','resume'])assert.doesNotMatch(view(route,defaultContent),/Gemini Certified Educator/);
+ const pending=structuredClone(defaultContent);
+ pending.certificates.find(c=>c.id==='gemini-badge').publicationStatus='Pending verification';
+ assert.ok(pending.certificates.some(c=>c.id==='gemini-badge'));
+ assert.ok(!publicContent(pending).certificates.some(c=>c.id==='gemini-badge'));
+ for(const route of ['home','credentials','resume'])assert.doesNotMatch(view(route,pending),/Gemini Certified Educator/);
+});
+test('The supplied Gemini certificate is published with its recorded dates and PDF',()=>{
+ const certificate=publicContent(defaultContent).certificates.find(c=>c.id==='gemini-badge');
+ assert.equal(certificate.title,'Gemini Certified Educator');
+ assert.equal(certificate.date,'21 August 2026');
+ assert.match(certificate.description,/Valid through 21 August 2029/);
+ assert.match(certificate.url,/gemini-certified-educator\.pdf$/);
+ for(const route of ['credentials','resume'])assert.match(view(route,defaultContent),/Gemini Certified Educator/);
 });
 test('Corrected dates and HTTPS-only external links are rendered consistently',()=>{
  assert.equal(safeUrl('http://example.com/file.pdf'),'');

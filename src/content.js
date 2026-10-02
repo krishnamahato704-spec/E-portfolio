@@ -223,14 +223,14 @@ export const defaultContent = {
     },
     {
       "id": "gemini-badge",
-      "publicationStatus": "Pending verification",
-      "title": "Gemini Certified Educator badge",
+      "publicationStatus": "Approved",
+      "title": "Gemini Certified Educator",
       "issuer": "Google for Education",
-      "date": "Issue date not shown",
+      "date": "21 August 2026",
       "category": "Professional learning",
-      "description": "Badge image supplied by Krishna. The image does not include a recipient name, issue date or verification link.",
-      "image": "https://krishnamahato704-spec.github.io/E-portfolio/assets/evidence/gemini-badge.webp",
-      "url": "https://krishnamahato704-spec.github.io/E-portfolio/assets/evidence/gemini-badge.webp"
+      "description": "Certificate awarded to Krishna Mahato for the knowledge, skills and basic competencies needed to use Google AI in education. Valid through 21 August 2029.",
+      "image": "https://krishnamahato704-spec.github.io/E-portfolio/assets/evidence/gemini-certified-educator.webp",
+      "url": "https://krishnamahato704-spec.github.io/E-portfolio/assets/evidence/gemini-certified-educator.pdf"
     }
   ],
   "resources": [
