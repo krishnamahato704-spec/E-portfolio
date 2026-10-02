@@ -6,19 +6,12 @@ const external = (href, label) => `<a href="${esc(safeUrl(href))}" target="_blan
 const sectionTitle = (number, title, intro = '') => `<header class="section-heading"><div><p class="eyebrow">${number}</p><h2>${title}</h2>${intro ? `<p>${intro}</p>` : ''}</div></header>`;
 const items = entries => `<ul class="plain-list">${entries.map(text => `<li>${esc(text)}</li>`).join('')}</ul>`;
 
-// These two roles and the preparation focus come from the owner's specification.
-// They supplement presentation only; the saved content document is unchanged.
-const specifiedRoles = [
-  {title:'Volunteer Teacher', institution:'eVidyaloka', type:'Volunteer teaching', points:[]},
-  {title:'Freelance Tutor', institution:'UrbanPro', type:'Independent tutoring', points:[]}
-];
-
 export function education(c) {
   return `<div class="education-grid">${c.qualifications.map(q => `<article class="academic-card"><p class="small">${esc(q.period)}</p><h3>${esc(q.title)}</h3><p>${esc(q.place)}</p><span class="status">${esc(q.status)}</span>${q.note ? `<p class="small">${esc(q.note)}</p>` : ''}${q.expected ? `<p class="small">Expected completion: ${esc(q.expected)}</p>` : ''}</article>`).join('')}</div><aside class="study-focus"><h3>Current focus</h3><p>CTET and UGC NET preparation.</p><p class="small">${esc(c.profile.eligibility)}</p></aside>`;
 }
 
 export function teachingCards(c, base) {
-  const records = [...c.experiences, ...specifiedRoles.filter(e => !c.experiences.some(saved => (saved.institution || saved.title || '').toLowerCase().includes(e.institution.toLowerCase())))];
+  const records = c.experiences;
   return `<div class="experience-grid">${records.map(e => `<article class="academic-card"><p class="eyebrow">${esc(e.type || e.category || 'Teaching')}</p><h3>${esc(e.title)}</h3><p class="institution">${esc(e.institution || '')}</p>${e.period ? `<p class="small">${esc(e.period)}${e.status ? ' · ' + esc(e.status) : ''}</p>` : ''}${e.summary ? `<p>${esc(e.summary)}</p>` : ''}${e.points?.length ? items(e.points) : ''}${['pehchaan','observation'].includes(e.id) ? `<a class="text-link" href="${base}teaching/${e.id}/" aria-label="Read the ${esc(e.institution)} teaching record">Read experience <span aria-hidden="true">↗</span></a>` : ''}</article>`).join('')}</div>`;
 }
 

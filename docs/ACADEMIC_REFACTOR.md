@@ -10,7 +10,7 @@ Supabase preservation was checked against SHA-256 hashes taken before editing. `
 
 The home template retains the existing live-rendering selectors. Its CV control is inside the refreshed hero-detail region: edited content uses the current printable CV unless a valid custom CV is provided. The bundled PDF is offered only when the source content still matches it.
 
-The owner specification supplies the eVidyaloka and UrbanPro roles, the SETU-TE 2026 seminar name, and the CTET / UGC NET preparation focus. These are presentation-only additions. Dates, duties, scores, and certificate names have not been invented for those roles. The paper title and lead author come from the existing presentation record. The owner supplied the LinkedIn URL during this task. CENTA and Advanced Statistics details remain unavailable and are labelled accordingly.
+The owner specification supplies the SETU-TE 2026 seminar name and the CTET / UGC NET preparation focus. These are presentation-only additions. Teaching experience uses the saved portfolio records. The paper title and lead author come from the existing presentation record. The owner supplied the LinkedIn URL during this task. CENTA and Advanced Statistics details remain unavailable and are labelled accordingly.
 
 Validation:
 
