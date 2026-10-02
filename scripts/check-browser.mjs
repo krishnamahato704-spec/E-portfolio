@@ -72,7 +72,27 @@ async function inspectPage(page){
     const headings=[...document.querySelectorAll('main h1,main h2,main h3,main h4,main h5,main h6')];
     const visible=el=>el.checkVisibility({checkOpacity:true,checkVisibilityCSS:true});
     const formControls=[...document.querySelectorAll('main input,main textarea,main select')].filter(el=>el.type!=='hidden'&&el.getAttribute('aria-hidden')!=='true'&&visible(el));
+    const rgb=value=>value.match(/[\d.]+/g)?.map(Number);
+    const luminance=color=>color.slice(0,3).map(value=>{
+      value/=255;return value<=.04045?value/12.92:((value+.055)/1.055)**2.4;
+    }).reduce((sum,value,index)=>sum+value*[.2126,.7152,.0722][index],0);
+    const contrastFailures=[];
+    for(const el of document.querySelectorAll('main *,header *,footer *')){
+      if(!visible(el)||![...el.childNodes].some(node=>node.nodeType===3&&node.textContent.trim()))continue;
+      const foreground=rgb(getComputedStyle(el).color);if(!foreground)continue;
+      let parent=el,background;
+      while(parent){
+        const color=rgb(getComputedStyle(parent).backgroundColor);
+        if(color&&(color.length===3||color[3]===1)){background=color;break;}
+        parent=parent.parentElement;
+      }
+      background??=[255,255,255];
+      const a=luminance(foreground),b=luminance(background);
+      const ratio=(Math.max(a,b)+.05)/(Math.min(a,b)+.05);
+      if(ratio<7)contrastFailures.push({text:el.textContent.trim().slice(0,80),ratio:ratio.toFixed(2)});
+    }
     return {
+      contrastFailures,
       width:innerWidth,documentWidth:document.documentElement.scrollWidth,
       mainTextLength:document.querySelector('main')?.innerText.trim().length||0,
       mainCount:document.querySelectorAll('main').length,h1Count:document.querySelectorAll('h1').length,
@@ -110,6 +130,7 @@ try{
     record(`${name}: one visible page heading and main landmark`,semantics.h1Count===1&&semantics.mainCount===1&&semantics.headingVisible,semantics);
     record(`${name}: labelled controls and image alternatives`,!semantics.unlabelledControls.length&&!semantics.imagesWithoutAlt.length,semantics.unlabelledControls.concat(semantics.imagesWithoutAlt));
     record(`${name}: heading levels do not skip`,!semantics.headingSkips.length,semantics.headingSkips);
+    record(`${name}: rendered text meets 7:1 contrast`,!semantics.contrastFailures.length,semantics.contrastFailures);
     const imageErrors=await imageFailures(page);record(`${name}: visible images load`,!imageErrors.length,imageErrors);
     for(const width of widths){
       await page.setViewportSize({width,height:1000});await page.evaluate(()=>window.scrollTo(0,0));
@@ -136,7 +157,7 @@ try{
       record(`${name}: ${mode} fits 320px`,state.documentWidth<=321,state.documentWidth);
       if(name==='home'){
         const hero=await p.evaluate(()=>{const image=document.querySelector('.portrait'),video=document.querySelector('.hero-bg-video');return {portraitVisible:!!image&&image.checkVisibility({checkOpacity:true,checkVisibilityCSS:true})&&image.naturalWidth>0,portraitSrc:image?.getAttribute('src'),poster:video?.getAttribute('poster'),videoSource:video?.getAttribute('src')||''}});
-        record(`home: ${mode} preserves the full-width video poster`,!!hero.poster&&!hero.videoSource&&!hero.portraitVisible,hero);
+        record(`home: ${mode} preserves a readable introduction and portrait`,hero.portraitVisible&&!hero.poster&&!hero.videoSource,hero);
         await p.screenshot({path:path.join(output,`home-${mode}-320.png`),fullPage:false});
       }
       await fallback.close();
@@ -168,30 +189,20 @@ try{
   await page.keyboard.press('Escape');
   record('keyboard: Escape restores trigger and page access',await page.evaluate(()=>document.activeElement.matches('.menu-toggle')&&!document.querySelector('main').inert&&document.querySelector('.menu-toggle').getAttribute('aria-expanded')==='false'));
   record('keyboard: trigger has visible focus indicator',await toggle.evaluate(el=>{const s=getComputedStyle(el);return s.outlineStyle!=='none'&&parseFloat(s.outlineWidth)>=2}));
-  record('reduced motion: hero starts static',await page.locator('.hero-bg-video').evaluate(v=>v.paused&&!v.getAttribute('src')));
+  record('reduced motion: hero starts static',await page.locator('video,canvas,.reading-progress').count()===0);
   await keys.close();
 
   const motion=await context({reducedMotion:'no-preference'});const moving=await motion.newPage();
   const {defaultContent}=await import('../src/content.js');
   await motion.route('**/rest/v1/portfolio_public?*',route=>route.fulfill({status:200,contentType:'application/json',body:JSON.stringify([{content:defaultContent,updated_at:'2026-09-25T00:00:00Z'}])}));
   await moving.goto(base,{waitUntil:'load'});
-  record('2D opening: no canvas renderer',await moving.locator('canvas').count()===0);
-  record('2D opening: avatar video fills the viewport width',await moving.locator('.hero-bg-video').evaluate(v=>Math.abs(v.getBoundingClientRect().width-innerWidth)<2));
-  await moving.waitForFunction(()=>document.querySelector('.hero-bg-video').currentTime>.2);
-  record('2D opening: saved-content refresh preserves video autoplay',await moving.locator('.hero-bg-video').evaluate(v=>!v.paused));
-  await moving.screenshot({path:path.join(output,'video-opening-desktop.png')});
-  await moving.locator('.video-toggle').click();
-  record('2D opening: pause control stops avatar video',await moving.locator('.hero-bg-video').evaluate(v=>v.paused));
-  await moving.locator('.video-toggle').click();
-  await moving.locator('.menu-toggle').click();
-  record('2D desktop menu: numbered navigation opens',await moving.locator('#navigation').evaluate(n=>n.getAttribute('aria-modal')==='true'&&n.querySelectorAll('.nav-index').length===7));
-  await moving.locator('#navigation').evaluate(n=>Promise.all(n.getAnimations({subtree:true}).filter(a=>Number.isFinite(a.effect?.getComputedTiming().endTime)).map(a=>a.finished.catch(()=>{}))));
-  await moving.screenshot({path:path.join(output,'menu-desktop.png')});
-  await moving.keyboard.press('Escape');
+  record('academic opening: no video, canvas, or custom cursor',await moving.locator('video,canvas,.custom-cursor,.reading-progress').count()===0);
+  record('academic opening: name is visible',await moving.locator('h1').isVisible());
+  await moving.locator('a[href="#publications"]').click();
+  record('academic opening: publications link reaches research',await moving.evaluate(()=>location.hash==='#publications'));
+  await moving.screenshot({path:path.join(output,'academic-desktop.png'),fullPage:true});
   await moving.emulateMedia({reducedMotion:'reduce'});
-  await moving.waitForTimeout(100);
-  record('reduced motion: changing preference pauses active hero video',await moving.locator('.hero-bg-video').evaluate(v=>v.paused));
-  record('reduced motion: changing preference clears decorative animations',await moving.evaluate(()=>document.getAnimations().filter(a=>a.playState==='running').length===0));
+  record('reduced motion: no decorative animations',await moving.evaluate(()=>document.getAnimations().filter(a=>a.playState==='running').length===0));
   await motion.close();
 
   const failed=results.filter(result=>!result.pass);

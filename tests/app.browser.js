@@ -42,11 +42,14 @@ try {
   if(mode.startsWith('home')) {
     assert(main.querySelector('.hero')===originalHero,'Cloud refresh preserves the existing hero node');
     if(mode==='home')assert(main.querySelector('.portrait')===originalPortrait,'Cloud refresh preserves the existing portrait node');
-    if(mode==='home-remove'||mode==='home-add')assert(!main.querySelector('.portrait'),'Profile portrait updates do not add a portrait over the video opening');
+    if(mode==='home-remove')assert(!main.querySelector('.portrait'),'Removing the saved portrait removes its image');
+    if(mode==='home-add')assert(!!main.querySelector('.portrait'),'Adding a saved portrait fills the existing portrait window');
     assert(main.querySelector('.hero-bg-video')===originalVideo,'Cloud refresh preserves the existing video node');
     assert(main.querySelector('.hero-statement').textContent.includes('Updated fixture teaching headline'),'Cloud refresh updates editable hero text');
     assert(main.querySelectorAll('.hero').length===1,'Cloud refresh leaves exactly one hero');
     assert(!main.querySelector('.evidence-feature'),'Explicitly replacing evidence removes the old featured artifact');
+    assert(!main.querySelector('.hero-cv [download]'),'Live edits do not keep an outdated CV download');
+    assert(main.querySelector('.hero-cv a').textContent.includes('View current CV'),'Live edits link to the current printable CV');
   } else if(mode==='resources') {
     assert(main.firstElementChild!==original,'Successful content read replaces markup');
     assert(main.querySelectorAll('.resource-row').length===2,'New resources rendered');
@@ -66,7 +69,7 @@ try {
     if(mode==='contact')assert(main.querySelector('[name=name]').value==='Local regression fixture','Typed form value survives the late read');
     if(mode==='teaching')assert(main.querySelector('details').open,'Opened activity record survives the late read');
   }
-  assert(document.querySelectorAll('.reading-progress').length===1,'Exactly one reading-progress element');
+  assert(document.querySelectorAll('.reading-progress').length===0,'No decorative reading-progress element');
   assert(!main.querySelector('form.motion-enter, input.motion-enter, textarea.motion-enter'),'Form controls are excluded from reveals');
 } catch(error) { results.push({name:String(error),pass:false}); }
 finally {

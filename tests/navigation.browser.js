@@ -116,25 +116,21 @@ try{
       if(expected)assert(current[0].getAttribute('href')===base+routes[expected].path,`${route}: wrong active destination`);
     }
   });
-  await check('Video opening continues to the portfolio and retains printable resume functionality',()=>{
+  await check('Academic opening links to publications and a downloadable CV',()=>{
     const home=fragment(view('home',defaultContent,'../'));
-    assert(home.querySelector('.opening-continue')?.getAttribute('href')==='#portfolio-start','Video opening must lead to the existing portfolio');
-    assert(!home.querySelector('canvas,.hero .portrait-frame'),'Opening must remain 2D without a portrait over the video');
-    assert(home.querySelector('a[href="../teaching/"]')&&home.querySelector('a[href="../resume/"]'),'Teaching and resume routes remain reachable');
-    assert(fragment(view('resume',defaultContent,'../')).querySelector('button#print-resume')?.textContent.includes('Print / save as PDF'),'Printable resume control was removed');
+    assert(home.querySelector('a[href="#publications"]'),'Publication CTA is missing');
+    assert(home.querySelector('#publications'),'Publication section is missing');
+    assert(home.querySelector('a[download]'),'CV download is missing');
+    assert(home.querySelector('.hero .portrait-frame'),'Portrait is missing');
+    assert(!home.querySelector('canvas,video'),'Decorative background is present');
+    assert(fragment(view('resume',defaultContent,'../')).querySelector('button#print-resume'),'Printable CV control was removed');
   });
-  await check('Live status follows existing internship and teacher-education evidence',()=>{
-    const status=content=>fragment(view('home',content,'../')).querySelector('.opening-status');
-    assert(status(defaultContent).textContent.includes('Currently developing through school internship'),'Existing ongoing internship is not represented');
-    const noInternship=structuredClone(defaultContent);
-    noInternship.experiences=[];
-    assert(!status(noInternship).textContent.includes('school internship'),'Removed internship still appears current');
-    assert(status(noInternship).textContent.includes('Currently developing through teacher education'),'Current B.Ed. evidence did not provide an accurate fallback');
-    noInternship.qualifications.forEach(qualification=>{qualification.status='Completed'});
-    assert(!status(noInternship).textContent.includes('Currently developing') && !status(noInternship).querySelector('.status-dot'),'No ongoing evidence must produce a static status without a live dot');
-    const completedInternship=structuredClone(defaultContent);
-    completedInternship.experiences.forEach(experience=>{experience.status='Completed'});
-    assert(!status(completedInternship).textContent.includes('school internship'),'Completed internship is presented as current');
+  await check('Live study status remains accurate when qualification status changes',()=>{
+    const status=content=>fragment(view('home',content,'../')).querySelector('.opening-status').textContent;
+    assert(status(defaultContent).includes('in progress'),'Degree progress is absent');
+    const completed=structuredClone(defaultContent);
+    completed.qualifications.forEach(q=>q.status='Completed');
+    assert(!status(completed).includes('in progress'),'Completed degrees still appear in progress');
   });
 }finally{
   key('Escape');

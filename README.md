@@ -1,6 +1,6 @@
 # Krishna Mahato — Teaching portfolio
 
-The owner's 2D teaching portfolio, with a full-width avatar video, a numbered menu, and separate content pages. There is no React or Three.js renderer. The existing GitHub Pages repository and Supabase project are retained.
+A readable academic portfolio built on the existing GitHub Pages repository and Supabase project. The UI refactor lives on `ui-refactor-academic`; production `main` is unchanged. See [the refactor notes](docs/ACADEMIC_REFACTOR.md) for the design, content sources, backend preservation checks, and validation.
 
 ## Run and build
 
@@ -20,7 +20,8 @@ Preview runs at http://127.0.0.1:3000/E-portfolio/. Browser checks use Playwrigh
 
 - Thirteen generated HTML pages, including the owner editor and a 404 page.
 - `src/views.js`: shared accessible page templates, navigation, footer, URL and text escaping.
-- `src/styles.css`: responsive editorial design, keyboard focus, reduced motion and A4 print styles.
+- `src/academic.js`: academic home, education, research, certification, and footer templates.
+- `src/academic.css`: responsive academic design, keyboard focus, reduced motion and A4 print styles, loaded through `src/styles.css`.
 - `src/content.js`: reviewed public content snapshot, compatibility adapter and validation.
 - `src/cloud.js`: small Supabase REST/Auth/Storage adapter; timeout handling and optimistic content updates.
 - `src/app.js`: progressive live content, mobile navigation, resource filters, printable résumé and email draft preparation.
@@ -32,7 +33,7 @@ The static pages contain the complete reviewed content. Supabase refreshes publi
 
 ## Content & database
 
-The existing project is `oyqevsygintkjrkfbzpx`. The public site reads `public.portfolio_public`, row `id = 1`. The legacy `portfolio_state` and `portfolio-media` storage bucket are preserved. The previously applied explicit grants are recorded in `supabase/migrations/20260924163206_explicit_portfolio_api_grants.sql`. Both public tables retain RLS and owner-only writes. This 2D restoration makes no database changes.
+The existing project is `oyqevsygintkjrkfbzpx`. The public site reads `public.portfolio_public`, row `id = 1`. The legacy `portfolio_state` and `portfolio-media` storage bucket are preserved. The previously applied explicit grants are recorded in `supabase/migrations/20260924163206_explicit_portfolio_api_grants.sql`. Both public tables retain RLS and owner-only writes. This UI refactor makes no database changes.
 
 The content document supports profile details, education, experiences, teaching practice, credentials, resources and gallery records. Versioned compatibility handling preserves owner edits and explicitly empty collections.
 
@@ -67,12 +68,12 @@ The public contact form prepares a `mailto:` draft for the visitor to review and
 
 The repository previously served the root of `main` through GitHub Pages. Generated pages are committed at that same root; the `/E-portfolio/` subpath and deep links are supported. `.nojekyll`, `robots.txt`, `sitemap.xml`, canonical tags, Open Graph metadata and a project-aware 404 page are included.
 
-1. Review the redesign branch / pull request and local preview.
+1. Review `ui-refactor-academic` and the local preview.
 2. Confirm the content and owner login using the existing account.
 3. After approval, merge into `main`. Keep GitHub Pages set to deploy from `main` / root.
 4. Verify the published home, nested case studies, Studio and résumé.
 
-The review workflow builds, tests and checks generated pages for drift. It does **not** deploy the redesign branch or change production. No additional hosting account is needed.
+The review workflow builds, tests and checks generated pages for drift. It does **not** deploy `ui-refactor-academic` or change production. No additional hosting account is needed.
 
 ## Security
 

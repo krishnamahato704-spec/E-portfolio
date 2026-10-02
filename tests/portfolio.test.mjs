@@ -86,7 +86,10 @@ test('Public views are usable with empty resource collections and show degree st
  assert.match(view('profile',defaultContent),/In progress/);
  assert.match(view('democracy',defaultContent),/not a report of a delivered lesson/);
  assert.match(view('resume',defaultContent),/Print \/ save as PDF/);
- assert.ok(!view('home',defaultContent).includes('Download CV'));
+ assert.match(view('home',defaultContent),/Download CV/);
+ const edited=structuredClone(defaultContent);edited.profile.availability='September 2027';
+ assert.ok(!view('home',edited).includes('download="krishna-mahato-resume.pdf"'));
+ assert.match(view('home',edited),/View current CV/);
 });
 test('No public page depends on legacy editor or external JavaScript',async()=>{
  const html=await fs.readFile(path.join(root,'index.html'),'utf8');
