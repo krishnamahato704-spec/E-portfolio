@@ -1,10 +1,11 @@
 const storage = 'https://oyqevsygintkjrkfbzpx.supabase.co/storage/v1/object/public/portfolio-media/evidence/images/';
+export const CURRENT_SCHEMA_VERSION = 7;
 export const defaultContent = {
-  "schemaVersion": 7,
+  "schemaVersion": CURRENT_SCHEMA_VERSION,
   "profile": {
     "name": "Krishna Mahato",
     "email": "krishnamahato704@gmail.com",
-    "eyebrow": "History, Social Science & English · Emerging educator",
+    "eyebrow": "History & Social Science Educator · B.Ed. Candidate",
     "headline": "I help students read the past with curiosity, evidence and confidence.",
     "summary": "Developing History, Social Science and English educator with academic foundations in History and Economics, formal teacher education and supervised classroom experience.",
     "portrait": "https://oyqevsygintkjrkfbzpx.supabase.co/storage/v1/object/public/portfolio-media/evidence/images/1787826897958_3tk4ud_portrait.jpeg",
@@ -27,11 +28,13 @@ export const defaultContent = {
     ],
     "cv": "",
     "availability": "May 2027",
-    "eligibility": "CTET Paper II applied · Examination expected 12–13 December 2026",
+    "eligibility": "CTET Paper II — Applied · Examination window: 12–13 December 2026 · Exact date/shift subject to admit card",
     "location": "Noida, India",
     "workPreferences": "Open to relocation anywhere in India",
     "targetClasses": "Classes 6–10 (TGT) · Classes 11–12 (PGT History post-M.A. 2027)",
-    "targetBoards": "Boards of interest: CBSE, ICSE, Cambridge and IB"
+    "targetBoards": "CBSE · ICSE · Cambridge · IB",
+    "directTeaching": "Social Science · Classes 6–9; select Class 11 History lessons",
+    "additionalTeaching": "English · Classes 6 and 8 (B.Ed. pedagogy)"
   },
   "about": "My interest in History grew from memorising events to asking why they happened, how we know, and what they mean to different people. Studying historical sources and accounts of Partition shaped my commitment to teach through evidence, inquiry and multiple perspectives.",
   "preparation": "Five years of UPSC preparation strengthened my engagement with Indian polity, governance and public affairs. I now bring that wider humanities perspective to teacher education and classroom practice.",
@@ -220,6 +223,7 @@ export const defaultContent = {
     },
     {
       "id": "gemini-badge",
+      "publicationStatus": "Pending verification",
       "title": "Gemini Certified Educator badge",
       "issuer": "Google for Education",
       "date": "Issue date not shown",
@@ -280,10 +284,11 @@ export const defaultContent = {
       "subject": "Digital pedagogy",
       "grade": "Teacher education",
       "date": "",
-      "description": "Ten-slide presentation on technology integration, instruction and NEP 2020. Original PowerPoint download.",
-      "type": "PowerPoint · 10 slides · 12.8 MB",
+      "description": "Ten-slide presentation on technology integration, instruction and NEP 2020. Browser-readable PDF with the original slides available separately.",
+      "type": "PDF · 10 slides",
       "context": "Presented by Krishna Mahato",
-      "url": "https://krishnamahato704-spec.github.io/E-portfolio/assets/evidence/krishna-da.pptx",
+      "url": "https://krishnamahato704-spec.github.io/E-portfolio/assets/evidence/krishna-da.pdf",
+      "originalUrl": "https://krishnamahato704-spec.github.io/E-portfolio/assets/evidence/krishna-da.pptx",
       "thumbnail": "https://krishnamahato704-spec.github.io/E-portfolio/assets/evidence/krishna-da.webp",
       "evidenceStatus": "Original supplied document"
     },
@@ -294,10 +299,11 @@ export const defaultContent = {
       "subject": "Knowledge and Curriculum",
       "grade": "B.Ed.",
       "date": "Academic year 2025–2027",
-      "description": "Comparative curriculum studies presentation by Krishna Mahato and Sahil Kumar. Original PowerPoint download.",
-      "type": "PowerPoint · 16 slides · 1.3 MB",
+      "description": "Comparative curriculum studies presentation by Krishna Mahato and Sahil Kumar. Browser-readable PDF with the original slides available separately.",
+      "type": "PDF · 16 slides",
       "context": "Amity University, Noida",
-      "url": "https://krishnamahato704-spec.github.io/E-portfolio/assets/evidence/finland-education.pptx",
+      "url": "https://krishnamahato704-spec.github.io/E-portfolio/assets/evidence/finland-education.pdf",
+      "originalUrl": "https://krishnamahato704-spec.github.io/E-portfolio/assets/evidence/finland-education.pptx",
       "thumbnail": "https://krishnamahato704-spec.github.io/E-portfolio/assets/evidence/finland-education.webp",
       "evidenceStatus": "Original supplied document"
     }
@@ -329,6 +335,8 @@ export const defaultContent = {
     },
     {
       "id": "pehchaan-collage",
+      "publicationStatus": "Approved",
+      "privacyNote": "Publication permission confirmed by the portfolio owner on 2 October 2026. Permission records are kept separately.",
       "title": "Learning at Pehchaan",
       "category": "Field Practice & Community",
       "description": "A collage of drawing, worksheets and classroom learning at Pehchaan The Street School.",
@@ -353,6 +361,8 @@ export const defaultContent = {
     },
     {
       "id": "sports-day-artwork",
+      "publicationStatus": "Approved",
+      "privacyNote": "Publication permission confirmed by the portfolio owner on 2 October 2026. Permission records are kept separately.",
       "title": "Student artwork for Major Dhyan Chand",
       "category": "Teaching Practice",
       "description": "Students display their artwork beside a commemorative portrait.",
@@ -429,12 +439,18 @@ export function contentSignature(content) {
     ? Object.fromEntries(Object.keys(value).sort().map(key=>[key,value[key]])) : value);
 }
 
+// Pending records remain editable in Studio, but are never advertised as evidence.
+export function publicContent(content) {
+  const approved=item=>!item.publicationStatus||item.publicationStatus==='Approved';
+  return {...content,...Object.fromEntries(['certificates','resources','gallery'].map(key=>[key,content[key].filter(approved)]))};
+}
+
 export function validateContent(c) {
   if(!c || typeof c!=='object' || !c.profile || !String(c.profile.name||'').trim()) throw new Error('A profile name is required.');
   if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(c.profile.email||'')) throw new Error('Enter a valid contact email.');
   for(const key of ['qualifications','experiences','practice','certificates','resources','gallery','competencies']) if(!Array.isArray(c[key])) throw new Error(`${key} must be a list.`);
   for(const key of ['roles','subjects','languages']) if(!Array.isArray(c.profile[key]) || !c.profile[key].every(x=>typeof x==='string')) throw new Error(`${key} must be a list of text.`);
-  for(const key of ['location','workPreferences','targetClasses','targetBoards','eligibility','availability']) if(c.profile[key]!==undefined && (typeof c.profile[key]!=='string'||c.profile[key].length>1000)) throw new Error(`${key} must be text of at most 1000 characters.`);
+  for(const key of ['location','workPreferences','targetClasses','targetBoards','eligibility','availability','directTeaching','additionalTeaching']) if(c.profile[key]!==undefined && (typeof c.profile[key]!=='string'||c.profile[key].length>1000)) throw new Error(`${key} must be text of at most 1000 characters.`);
   for(const key of ['portrait','cv']) if(c.profile[key] && !/^https:\/\//i.test(c.profile[key])) throw new Error(`${key} must use HTTPS.`);
   for(const e of c.experiences) if(!e?.title?.trim() || !Array.isArray(e.points) || !e.points.every(x=>typeof x==='string')) throw new Error('Each experience needs a title and activity list.');
   for(const e of c.experiences) for(const key of ['institution','status','category','duration','durationUnit','summary']) if(e[key]!==undefined && (typeof e[key]!=='string'||e[key].length>1000)) throw new Error(`Experience ${key} must be text of at most 1000 characters.`);
@@ -446,6 +462,8 @@ export function validateContent(c) {
     if(!x.title?.trim()) throw new Error('Each file or image needs a title.');
     const url=x.url||x.image;
     if(!url || !/^https:\/\//i.test(url)) throw new Error('Each file or image needs an HTTPS link.');
+    if(url.includes('/storage/v1/object/authenticated/')) throw new Error('Private source files cannot be published. Upload a reviewed public copy instead.');
+    if(x.publicationStatus && !['Approved','Pending review','Pending verification'].includes(x.publicationStatus)) throw new Error('Choose an approved or pending publication status.');
   }
   return c;
 }

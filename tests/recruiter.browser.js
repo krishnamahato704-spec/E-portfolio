@@ -1,4 +1,4 @@
-import {defaultContent,mergeContent} from '../src/content.js';
+import {defaultContent,mergeContent,publicContent} from '../src/content.js';
 import {view} from '../src/views.js';
 import {wireCollections} from '../src/collections.js';
 import {config} from '../src/config.js';
@@ -23,7 +23,7 @@ try {
  input(main.querySelector('#credential-search'),'Pehchaan');
  assert(main.querySelectorAll('.certificate-card:not([hidden])').length===1,'Credential search matches issuer');
  assert(getComputedStyle(main.querySelector('.certificate-card[hidden]')).display==='none','Filtered credentials remain hidden');
- assert(main.querySelector('#credential-count').textContent===`1 of ${c.certificates.length} credentials shown`,'Credential count announces the result');
+ assert(main.querySelector('#credential-count').textContent===`1 of ${publicContent(c).certificates.length} credentials shown`,'Credential count announces the result');
  main.innerHTML=view('admin',c,'../');
  window.fetch=async(url,options={})=>{
    calls.push({url:String(url),method:options.method||'GET',body:options.body});
@@ -61,7 +61,7 @@ try {
  const patch=calls.find(x=>x.method==='PATCH');
  assert(!!patch&&patch.url.includes('updated_at=eq.'),'Publish retains optimistic version check');
  const saved=JSON.parse(patch.body).content;
- assert(saved.schemaVersion===6&&saved.profile.location==='Local fixture city','Mocked publish preserves the new schema and edited field');
+ assert(saved.schemaVersion===7&&saved.profile.location==='Local fixture city','Mocked publish preserves the current schema and edited field');
  assert(saved.resources[resourceIndex].url.endsWith('.docx')&&saved.resources[resourceIndex].grade==='Class 8','Published payload preserves the uploaded lesson plan URL and class');
  assert(saved.resources[0].url===c.resources[0].url,'Adding a resource preserves the existing lesson');
  assert(saved.experiences.some(x=>x.id==='panchsheel'),'Ongoing internship survives mocked save');
