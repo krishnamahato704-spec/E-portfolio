@@ -1,86 +1,71 @@
-# Krishna Mahato — Teaching portfolio
+# Krishna Mahato — Academic portfolio
 
-A readable academic portfolio built on the existing GitHub Pages repository and Supabase project. The UI refactor lives on `ui-refactor-academic`; production `main` is unchanged. See [the refactor notes](docs/ACADEMIC_REFACTOR.md) for the design, content sources, backend preservation checks, and validation.
+A React and Next.js portfolio built from the approved editorial blueprint. The public UI uses Tailwind CSS, GSAP, and Framer Motion, with light/dark themes, selected teaching evidence, research, searchable resources, and accessible mobile layouts.
 
-## Run and build
+Work lives on `ui-refactor-academic`. Supabase services, content validation, authentication, schemas, and the original owner studio are preserved.
 
-Requires Node.js 22 or later. Install the locked dependencies with `npm ci`.
+## Run locally
+
+Use Node.js 22 or later and the committed lockfile.
 
 ```sh
-npm run build
+npm ci
+npm run dev
+```
+
+Open `http://localhost:3000/E-portfolio/`.
+
+```sh
 npm run lint
+npm run build
+npm run typecheck
 npm test
 npm run test:browser
 npm run preview
 ```
 
-Preview runs at http://127.0.0.1:3000/E-portfolio/. Browser checks use Playwright Chromium, or an installed Chrome selected through `CHROME_PATH`. The build generates the static pages and résumé, then packages deployment files into `dist/`. Only that folder is published.
+Browser tests use Playwright Chromium. Install it with `npx playwright install chromium`, or select an existing Chrome through `CHROME_PATH`. Reports and screenshots are written to ignored `outputs/browser-checks/`.
 
-## Architecture
+## Structure
 
-- Thirteen generated HTML pages, including the owner editor and a 404 page.
-- `src/views.js`: shared accessible page templates, navigation, footer, URL and text escaping.
-- `src/academic.js`: academic home, education, research, certification, and footer templates.
-- `src/academic.css`: responsive academic design, keyboard focus, reduced motion and A4 print styles, loaded through `src/styles.css`.
-- `src/content.js`: reviewed public content snapshot, compatibility adapter and validation.
-- `src/cloud.js`: small Supabase REST/Auth/Storage adapter; timeout handling and optimistic content updates.
-- `src/app.js`: progressive live content, mobile navigation, resource filters, printable résumé and email draft preparation.
-- `src/admin.js`: separately loaded owner workspace; structured editing, preview, draft export/import and file uploads.
-- `assets/evidence/`: supplied photographs, certificates, original PDFs and PowerPoint files, with smaller WebP previews.
-- `src/media.js` and `src/image-dimensions.json`: supplied-file metadata and intrinsic image proportions.
+```text
+app/                       Next.js routes, metadata, fonts, theme tokens, styles
+frontend/components/       Shared navigation, records, media, motion, and filters
+frontend/pages/            Public page compositions
+frontend/lib/              UI types, URL adapters, case studies, and SEO
+src/                       Preserved content, Supabase services, and owner studio
+assets/                    Existing documents, photos, previews, and fonts
+scripts/                   Static builds, packaging, and browser checks
+```
 
-The static pages contain the complete reviewed content. Supabase refreshes public content progressively. An unavailable service leaves the readable snapshot in place; form input is never replaced by a late response. No client framework, CDN JavaScript or remote font is required.
+Public routes include `/`, `/teaching/`, `/research/`, `/about/`, `/resources/`, `/credentials/`, `/contact/`, `/resume/`, `/gallery/`, and four teaching cases. `/profile/` remains supported with a canonical pointing to `/about/`.
 
-## Content & database
+## Content and rendering
 
-The existing project is `oyqevsygintkjrkfbzpx`. The public site reads `public.portfolio_public`, row `id = 1`. The legacy `portfolio_state` and `portfolio-media` storage bucket are preserved. The previously applied explicit grants are recorded in `supabase/migrations/20260924163206_explicit_portfolio_api_grants.sql`. Both public tables retain RLS and owner-only writes. This UI refactor makes no database changes.
+Next.js pre-renders public pages from the reviewed snapshot. The React provider calls the unchanged `src/cloud.js` loader and existing merge/validation functions. Explicitly removed collections stay removed. During a service outage or without JavaScript, static content remains readable.
 
-The content document supports profile details, education, experiences, teaching practice, credentials, resources and gallery records. Versioned compatibility handling preserves owner edits and explicitly empty collections.
+Late content does not replace an active form or interrupt reading. A pending valid update is applied on the next route change. The bundled CV is offered only when corresponding content matches; edited profiles use the current printable résumé unless the owner supplies a CV URL.
 
-Owner edits are live for JavaScript-enabled visitors. To refresh the no-JavaScript / search-engine snapshot after substantial edits, copy the reviewed content into `src/content.js`, rebuild and commit the generated pages. Changes made in Studio do not automatically modify the GitHub repository.
+Studio edits do not update the repository or search-engine snapshot automatically. Updating that snapshot remains a separate reviewed content change and build.
 
-The supplied candidate information states: M.A. History at IGNOU, first year cleared; CTET applied; available from May 2027. The B.Ed. and M.A. are labelled in progress. The teaching design is explicitly illustrative. No passed CTET claim, invented assessment results or fabricated classroom evidence is present.
+## Motion and themes
 
-## Configuration
+GSAP loads separately for subtle section entrances. Framer Motion handles page entrances, mobile navigation, image previews, and document notes. Native smooth scrolling preserves browser behavior. Reduced-motion preferences disable movement and smooth scrolling.
 
-No environment variables or private keys are required for GitHub Pages. Public settings are in `src/config.js`:
+The initial theme follows the system. Explicit choices are stored locally and applied before first paint. Fonts and known evidence previews are self-hosted. Responsive display images are generated during the build; original evidence files stay intact. Media reserves space and has readable error fallbacks. A thin loading indicator follows actual pending navigation without hiding the current page.
 
-| Setting | Purpose |
-| --- | --- |
-| `url` | Existing Supabase URL |
-| `key` | Existing public publishable key |
-| `ownerId` | Existing owner Auth UUID (not a secret; RLS is the authority) |
-| `canonical` | Existing GitHub Pages project URL |
+## Owner studio
 
-Never add secret / service credentials to this repository. `.env` files are ignored. The frontend needs only a publishable key.
+`/admin/` embeds the original studio at `/admin/studio.html`. Its scripts and styles are copied verbatim. Sign-in, owner checks, optimistic publishing, draft import/export, and uploads remain in the original modules. No auth replacement or database migration is introduced.
 
-## Owner workspace
+The contact form opens an email draft. It does not store submissions or send email. The résumé supports printing and saving as PDF.
 
-Open `/admin/` and sign in using the existing Supabase owner email and password. There is no public signup or client-side authentication bypass. Access tokens remain in memory and are cleared on reload/sign out; the password field is cleared after a sign-in attempt.
+## Build and deployment
 
-Edit the named fields, add or remove collection entries, upload files and preview the draft. Publishing updates only row 1 and checks `updated_at` to avoid overwriting a newer online version. Export your draft before leaving to retain unpublished work. Importing a draft does not publish it.
+`npm run build` refreshes the existing generated documents and CV, prepares assets, exports Next.js, and packages `dist/`. Generated `public/`, `.next/`, `out/`, and `dist/` folders are ignored. Only `dist/` is the deployment artifact.
 
-Files are uploaded under unique `redesign/` paths in the existing public bucket. Uploads are limited to 10 MB and approved MIME/extension pairs. SVG/HTML/executable uploads are rejected. Removing a reference never deletes its stored file. Credentials and images retain original-file links; visitors receive optimized previews.
+GitHub Pages must use the **GitHub Actions** deployment source. Serving the repository root would serve retained legacy HTML. The Pages workflow publishes the artifact when work reaches `main`; pushing the UI branch runs review checks without merging or deploying it.
 
-The public contact form prepares a `mailto:` draft for the visitor to review and send. The website neither stores submissions nor claims to have sent email. The résumé has an A4 print / Save as PDF view; a separate CV PDF can be uploaded through Studio.
+Canonical URLs, social metadata, Person structured data, sitemap, robots rules, and a static 404 are included. Owner routes are noindex.
 
-## Deployment & review
-
-The repository previously served the root of `main` through GitHub Pages. Generated pages are committed at that same root; the `/E-portfolio/` subpath and deep links are supported. `.nojekyll`, `robots.txt`, `sitemap.xml`, canonical tags, Open Graph metadata and a project-aware 404 page are included.
-
-1. Review `ui-refactor-academic` and the local preview.
-2. Confirm the content and owner login using the existing account.
-3. After approval, merge into `main`. Keep GitHub Pages set to deploy from `main` / root.
-4. Verify the published home, nested case studies, Studio and résumé.
-
-The review workflow builds, tests and checks generated pages for drift. It does **not** deploy `ui-refactor-academic` or change production. No additional hosting account is needed.
-
-## Security
-
-Existing RLS was inspected: both portfolio tables have RLS enabled, public reads are allowed, and content inserts/updates require the existing owner UUID. Storage writes are restricted to the owner's authenticated account. Client identity checks supplement, and never replace, those database policies.
-
-All content is escaped as text, executable URL schemes are rejected, uploads are type/size checked, external links use `noopener noreferrer`, and a restrictive Content Security Policy blocks remote scripts and object embeds. Draft import is validated. Auth tokens are not persisted in localStorage.
-
-Supabase's security advisor reports one existing warning: [leaked-password protection is disabled](https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection). Enable it in Auth settings when supported by the project plan. No service key was requested or exposed.
-
-See `docs/AUDIT.md` and `docs/QA.md` for the audit, recruiter review and verification limits.
+`npm run build:legacy` retains the previous compatibility build. It overwrites `dist/` with the old site, so run `npm run build` again before reviewing or publishing Next.js.

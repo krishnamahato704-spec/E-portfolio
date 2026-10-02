@@ -1,24 +1,46 @@
 {
   "name": "krishna-teaching-portfolio",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "node scripts/serve.mjs",
-    "build": "node scripts/build.mjs && node scripts/package-site.mjs",
-    "preview": "node scripts/serve.mjs --dist",
-    "lint": "node scripts/check-syntax.mjs",
+    "dev": "node scripts/prepare-next-assets.mjs && next dev --webpack",
+    "build": "node scripts/build.mjs && node scripts/prepare-next-assets.mjs && next build --webpack && node scripts/package-next-site.mjs",
+    "preview": "node scripts/serve-next.mjs",
+    "lint": "eslint app frontend && node scripts/check-syntax.mjs",
+    "typecheck": "tsc --noEmit",
     "test": "node --test tests/*.test.mjs",
-    "test:browser": "node scripts/check-browser.mjs"
+    "test:browser": "node scripts/check-next-browser.mjs && node scripts/check-loading-browser.mjs",
+    "test:legacy-browser": "node scripts/check-browser.mjs",
+    "build:legacy": "node scripts/build.mjs && node scripts/package-site.mjs"
   },
   "engines": {
     "node": ">=22"
   },
   "dependencies": {
-    "@supabase/supabase-js": "2.116.0"
+    "@fontsource/inter": "5.3.0",
+    "@supabase/supabase-js": "2.116.0",
+    "framer-motion": "13.5.0",
+    "gsap": "3.15.0",
+    "next": "16.3.8",
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
   },
   "devDependencies": {
+    "@axe-core/playwright": "4.13.0",
+    "@tailwindcss/postcss": "4.3.3",
+    "@types/node": "26.6.4",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "eslint": "9.39.5",
+    "eslint-config-next": "16.3.8",
+    "lighthouse": "13.5.0",
     "pdfkit": "0.20.2",
-    "playwright": "1.62.1"
+    "playwright": "1.62.1",
+    "postcss": "8.5.28",
+    "prettier": "3.9.9",
+    "sharp": "0.35.5",
+    "tailwindcss": "4.3.3",
+    "typescript": "6.0.3"
   }
 }

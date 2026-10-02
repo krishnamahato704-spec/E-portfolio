@@ -33,7 +33,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build static site & resume
+      - name: Build Next.js static portfolio and resume
         run: npm run build
 
       - run: npm run lint
