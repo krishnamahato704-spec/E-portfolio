@@ -1,6 +1,6 @@
 # Krishna Mahato — Teaching portfolio
 
-The existing 2D teaching portfolio retains its full-width avatar video, numbered menu, editorial layout, GitHub Pages hosting and Supabase project. It uses a small static generator with progressive browser interactions.
+The existing 2D teaching portfolio retains its full-width avatar video, editorial layout, GitHub Pages hosting and Supabase project. Navigation uses a compact dropdown beneath the Menu button. It uses a small static generator with progressive browser interactions.
 
 ## Development and checks
 
