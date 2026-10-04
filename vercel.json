@@ -5,6 +5,8 @@
   "installCommand": "npm ci",
   "outputDirectory": "dist",
   "redirects": [
+    {"source": "/E-portfolio/", "destination": "/", "permanent": true},
+    {"source": "/E-portfolio/:path*/", "destination": "/:path*/", "permanent": true},
     {"source": "/E-portfolio/:path*", "destination": "/:path*", "permanent": true}
   ]
 }
