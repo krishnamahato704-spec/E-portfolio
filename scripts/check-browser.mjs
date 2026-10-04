@@ -163,8 +163,10 @@ try{
   await page.keyboard.press('Enter');
   record('keyboard: skip link reaches main',await page.evaluate(()=>document.activeElement.id==='main'));
   const toggle=page.locator('.menu-toggle');await toggle.focus();await page.keyboard.press('Enter');
-  record('keyboard: menu opens and isolates background',await page.evaluate(()=>document.querySelector('#navigation').getAttribute('aria-modal')==='true'&&document.querySelector('main').inert&&document.querySelector('#navigation').contains(document.activeElement)));
-  for(let i=0;i<12;i++){await page.keyboard.press('Tab');record(`keyboard: open menu contains focus ${i+1}`,await page.evaluate(()=>document.querySelector('#navigation').contains(document.activeElement)));}
+  record('keyboard: dropdown opens without isolating the page',await page.evaluate(()=>document.querySelector('.menu-toggle').getAttribute('aria-expanded')==='true'&&!document.querySelector('#navigation').hasAttribute('aria-modal')&&!document.querySelector('main').inert&&document.querySelector('#navigation').contains(document.activeElement)));
+  await page.locator('#navigation nav a').last().focus();await page.keyboard.press('Tab');
+  record('keyboard: Tab leaves and closes the dropdown',await page.evaluate(()=>!document.querySelector('#navigation').classList.contains('is-open')&&!document.querySelector('#navigation').contains(document.activeElement)));
+  await toggle.click();
   await page.keyboard.press('Escape');
   record('keyboard: Escape restores trigger and page access',await page.evaluate(()=>document.activeElement.matches('.menu-toggle')&&!document.querySelector('main').inert&&document.querySelector('.menu-toggle').getAttribute('aria-expanded')==='false'));
   record('keyboard: trigger has visible focus indicator',await toggle.evaluate(el=>{const s=getComputedStyle(el);return s.outlineStyle!=='none'&&parseFloat(s.outlineWidth)>=2}));
@@ -207,8 +209,8 @@ try{
   await moving.waitForFunction(()=>!document.querySelector('.hero-bg-video').paused);
   record('video: returning to the opening resumes automatic playback',await moving.locator('.hero-bg-video').evaluate(v=>!v.paused));
   await moving.locator('.menu-toggle').click();
-  record('2D desktop menu: numbered navigation opens',await moving.locator('#navigation').evaluate(n=>n.getAttribute('aria-modal')==='true'&&n.querySelectorAll('.nav-index').length===7));
-  record('video: open menu pauses covered video',await moving.locator('.hero-bg-video').evaluate(v=>v.paused));
+  record('2D desktop menu: compact dropdown opens',await moving.locator('#navigation').evaluate(n=>n.classList.contains('is-open')&&!n.hasAttribute('aria-modal')&&n.getBoundingClientRect().width<=321&&n.querySelectorAll('nav a').length===7));
+  record('video: compact menu preserves playback',await moving.locator('.hero-bg-video').evaluate(v=>!v.paused));
   await moving.locator('#navigation').evaluate(n=>Promise.all(n.getAnimations({subtree:true}).filter(a=>Number.isFinite(a.effect?.getComputedTiming().endTime)).map(a=>a.finished.catch(()=>{}))));
   await moving.screenshot({path:path.join(output,'menu-desktop.png')});
   await moving.keyboard.press('Escape');

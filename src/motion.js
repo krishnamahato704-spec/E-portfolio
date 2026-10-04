@@ -42,7 +42,7 @@ export function initMotion({ initial = false } = {}) {
   let wantsVideo = resumeVideo;
   const syncVideo = () => {
     if (!video?.src) return;
-    const visible = heroVisible && !document.hidden && !document.body.classList.contains('navigation-open');
+    const visible = heroVisible && !document.hidden;
     video.dataset.resumeWhenVisible = String(wantsVideo && !visible);
     if (wantsVideo && visible) video.play().catch(()=>{});
     else video.pause();
@@ -81,7 +81,6 @@ export function initMotion({ initial = false } = {}) {
     video.addEventListener('pause',label,{signal:events.signal});
     videoToggle.addEventListener('click',()=>{wantsVideo=video.paused;video.dataset.userPaused=String(!wantsVideo);syncVideo();},{signal:events.signal});
     document.addEventListener('visibilitychange',syncVideo,{signal:events.signal});
-    document.addEventListener('navigationchange',syncVideo,{signal:events.signal});
     syncVideo();
     label();
   }
