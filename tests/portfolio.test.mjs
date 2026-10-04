@@ -76,13 +76,13 @@ test('Every route renders a complete static document with one heading and workin
    const [pathname,hash]=href.split('#');const raw=pathname.split('?')[0];let target=raw.startsWith('/E-portfolio/')?path.resolve(root,raw.slice('/E-portfolio/'.length)):raw?path.resolve(path.dirname(file),raw):file;
    if(raw.endsWith('/'))target=path.join(target,'index.html');
    await fs.access(target).catch(()=>assert.fail(`${route}: missing ${href}`));
-   if(hash && path.extname(target)==='.pdf'){assert.match(hash,/^page=[1-6]$/);const pdf=await fs.readFile(target);assert.equal(pdf.subarray(0,5).toString(),'%PDF-');}
+   if(hash && path.extname(target)==='.pdf'){assert.match(hash,/^page=[1-9]\d*$/);const pdf=await fs.readFile(target);assert.equal(pdf.subarray(0,5).toString(),'%PDF-');const pages=(pdf.toString('latin1').match(/\/Type\s*\/Page\b/g)||[]).length;assert.ok(Number(hash.slice(5))<=pages,`${route}: PDF page outside document ${href}`);}
    else if(hash){const linked=await fs.readFile(target,'utf8');assert.ok(linked.includes(`id="${hash}"`),`${route}: missing fragment ${href}`);}
   }
  }
 });
 test('Public views are usable with empty resource collections and show degree status honestly',()=>{
- assert.match(view('resources',{...defaultContent,resources:[]}),/have not yet been published/);
+ assert.match(view('resources',defaultContent),/have not yet been published/);
  assert.match(view('profile',defaultContent),/In progress/);
  assert.match(view('democracy',defaultContent),/not a report of a delivered lesson/);
  assert.match(view('resume',defaultContent),/Print \/ save as PDF/);
@@ -114,7 +114,7 @@ test('Stable experience IDs survive reordering and removed cases do not resurfac
 });
 test('Clarified recruiter facts survive loading the legacy public record',()=>{
  const c=mergeContent({qualifications:[{title:'M.A. History',place:'Postgraduate study in History',period:'2025–Present',status:'In progress'}]});
- const html=view('profile',c);assert.match(html,/IGNOU/);assert.match(html,/First year cleared/);assert.match(html,/CTET Paper II applied/);assert.match(html,/May 2027/);
+ const html=view('profile',c);assert.match(html,/IGNOU/);assert.match(html,/First year cleared/);assert.match(html,/CTET Paper II.*Applied/i);assert.match(html,/May 2027/);
 });
 test('Editorial records retain owner order and escape document metadata',()=>{
  const c=structuredClone(defaultContent);

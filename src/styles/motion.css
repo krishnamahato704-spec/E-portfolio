@@ -1,0 +1,13 @@
+@keyframes arrive {from {transform:translateY(7px)}to {transform:none}}
+@media(prefers-reduced-motion:no-preference) {
+ .motion-enter,.motion-hero {animation:arrive 300ms var(--ease) both}
+ .reading-progress {position:fixed;top:0;left:0;height:2px;width:100%;background:var(--accent);transform-origin:left;z-index:60;pointer-events:none}
+ .gallery-image {transition:filter var(--quick)}
+ a:hover>.gallery-image {filter:brightness(.97)}
+}
+@media(prefers-reduced-motion: reduce) {
+ *,*::before,*::after {animation:none!important;transition:none!important;scroll-behavior:auto!important}
+ .motion-enter,.motion-hero {opacity:1!important;transform:none!important}
+ .reading-progress {display:none}
+ .text-link:hover span[aria-hidden] {translate:none}
+}

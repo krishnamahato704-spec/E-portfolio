@@ -16,7 +16,7 @@ try {
  assert(!main.querySelector('#experience-empty').hidden,'Combined search and category have an honest empty state');
  main.querySelector('[data-experience-filter=All]').click();
  assert(main.querySelectorAll('.experience-row:not([hidden])').length===1,'Search persists when category changes');
- const detail=main.querySelector('.experience-row:not([hidden]) details');detail.querySelector('summary').click();
+ const detail=main.querySelector('.experience-row:not([hidden]) details');detail.open=false;detail.querySelector('summary').click();
  assert(detail.open,'Native experience disclosure opens');
  detail.querySelector('summary').click();assert(!detail.open,'Native experience disclosure closes');
  main.innerHTML=view('credentials',c,'../');wireCollections(main);
@@ -61,7 +61,7 @@ try {
  const patch=calls.find(x=>x.method==='PATCH');
  assert(!!patch&&patch.url.includes('updated_at=eq.'),'Publish retains optimistic version check');
  const saved=JSON.parse(patch.body).content;
- assert(saved.schemaVersion===6&&saved.profile.location==='Local fixture city','Mocked publish preserves the new schema and edited field');
+ assert(saved.schemaVersion===8&&saved.profile.location==='Local fixture city','Mocked publish preserves the current schema and edited field');
  assert(saved.resources[resourceIndex].url.endsWith('.docx')&&saved.resources[resourceIndex].grade==='Class 8','Published payload preserves the uploaded lesson plan URL and class');
  assert(saved.resources[0].url===c.resources[0].url,'Adding a resource preserves the existing lesson');
  assert(saved.experiences.some(x=>x.id==='panchsheel'),'Ongoing internship survives mocked save');

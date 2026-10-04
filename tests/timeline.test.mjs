@@ -127,10 +127,10 @@ test('initTimeline sets up track positioning and active states with mocked DOM e
   }
 });
 
-test('Teaching journey preserves owner reflections without inventing default observations', async()=>{
+test('Teaching journey uses the supplied observation reflection and preserves owner edits', async()=>{
  const {view}=await import('../src/views.js');const {defaultContent}=await import('../src/content.js');
  const html=view('teaching',defaultContent,'../');
- assert.ok(!html.includes('WHAT I LEARNT'));assert.ok(!html.includes('WHAT I NOTICED'));
+ assert.ok(html.includes(defaultContent.experiences.find(e=>e.id==='observation').reflection));
  assert.ok(html.includes('Read the published lesson plan'));assert.ok(html.includes('View internship certificate'));
  const edited=structuredClone(defaultContent);edited.experiences[1].reflection='Owner reflection about an observed response.';
  assert.ok(view('teaching',edited).includes('Owner reflection about an observed response.'));

@@ -1,0 +1,47 @@
+/* Decorative study illustrations echo the supplied archival-paper previews.
+   Ivory washes protect copy; photographs and evidence cards remain opaque. */
+body {background-image:url('../../assets/theme/paper-texture.svg')}
+body:not([data-route="admin"]) #main {
+ background-image:linear-gradient(#f7f5efed,#f7f5efed),url('../../assets/theme/history-study.webp'),url('../../assets/theme/english-study.webp');
+ background-position:center,left 470px,right 1450px;
+ background-size:auto,540px auto,540px auto;
+ background-repeat:repeat,no-repeat,no-repeat;
+}
+.opening-hero {
+ background:linear-gradient(110deg,#f7f5efe6 20%,#f7f5efcc),url('../../assets/theme/history-study.webp') left bottom / 930px auto no-repeat,url('../../assets/theme/english-study.webp') right bottom / 680px auto no-repeat,var(--paper);
+}
+.opening-hero::before {background-image:url('../../assets/theme/paper-texture.svg');background-size:240px;opacity:1}
+.selected-evidence,.home-records {
+ background:linear-gradient(#f7f5efe8,#f7f5efd4),url('../../assets/theme/history-study.webp') center bottom / 100% auto no-repeat;
+}
+.home-journey {
+ background:linear-gradient(#f7f5efeb,#f7f5efbd),url('../../assets/theme/history-study.webp') left bottom / 520px auto no-repeat,url('../../assets/theme/english-study.webp') right bottom / 520px auto no-repeat;
+}
+.home-philosophy {
+ background:linear-gradient(#f7f5efe8,#f7f5efd9),url('../../assets/theme/english-study.webp') right bottom / 720px auto no-repeat;
+}
+.connect-strip {
+ background:linear-gradient(90deg,#f7f5eff5 25%,#f7f5efdb),url('../../assets/theme/english-study.webp') right bottom / 540px auto no-repeat;
+}
+.site-footer {
+ background:linear-gradient(#f7f5eff7 15%,#f7f5efc7),url('../../assets/theme/english-study.webp') left bottom / 650px auto no-repeat,url('../../assets/theme/history-study.webp') right bottom / 650px auto no-repeat;
+}
+.profile-hero,.profile-page .section:nth-of-type(even),.teaching-page .section,.timeline-container {
+ background:linear-gradient(#f7f5eff0,#f7f5efde),url('../../assets/theme/history-study.webp') right bottom / 760px auto no-repeat;
+}
+.profile-story,.profile-page .section:nth-of-type(odd),.contact-dossier {
+ background:linear-gradient(#f7f5eff0,#f7f5efd9),url('../../assets/theme/english-study.webp') right bottom / 680px auto no-repeat;
+}
+.page-heading {
+ background:linear-gradient(90deg,#f7f5eff7 30%,#f7f5efcf),url('../../assets/theme/english-study.webp') right bottom / 460px auto no-repeat;
+}
+.profile-hero .page-heading {background:none}
+@media(max-width:650px) {
+ body:not([data-route="admin"]) #main {background-size:auto,320px auto,320px auto}
+ .opening-hero {background-size:auto,700px auto,420px auto}
+ .home-journey,.home-philosophy,.connect-strip,.site-footer,.profile-hero,.profile-story,.profile-page .section,.timeline-container,.contact-dossier,.page-heading {background-size:auto,440px auto,440px auto}
+ .site-footer {background-position:center,left bottom,right bottom}
+}
+@media print {
+ body,#main,.opening-hero,.section,.site-footer,.profile-hero,.profile-story,.timeline-container,.contact-dossier,.page-heading,.connect-strip {background-image:none!important}
+}

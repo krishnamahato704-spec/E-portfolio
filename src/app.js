@@ -1,17 +1,16 @@
-import {wireCollections} from './collections.js?v=2d-20260925';
-import {loadContent} from './cloud.js?v=2d-20260925';
-import {mergeContent,validateContent} from './content.js?v=2d-20260925';
-import {view} from './views.js?v=2d-20260925';
-import {initNavigation} from './navigation.js?v=2d-20260925';
-import {initMotion,cleanupMotion} from './motion.js?v=2d-20260925';
-import {initCustomCursor,cleanupCustomCursor} from './cursor.js?v=2d-20260925';
-import {initLightbox} from './lightbox.js?v=2d-20260925';
+import {wireCollections} from './collections.js?v=editorial-20261004';
+import {loadContent} from './cloud.js?v=editorial-20261004';
+import {mergeContent,validateContent} from './content.js?v=editorial-20261004';
+import {view} from './views.js?v=editorial-20261004';
+import {initNavigation} from './navigation.js?v=editorial-20261004';
+import {initMotion,cleanupMotion} from './motion.js?v=editorial-20261004';
+import {wireViewer,wireVideo} from './viewer.js?v=editorial-20261004';
 const route=document.body.dataset.route;
 const base=document.body.dataset.base;
 let content=mergeContent();
 let interacted=false;
 document.addEventListener('input',()=>{interacted=true},{once:true});
-document.addEventListener('click',e=>{if(e.target.closest('#main button,#main input,#main textarea,#main summary'))interacted=true;});
+document.addEventListener('click',e=>{if(e.target.closest('#main a,#main button,#main input,#main textarea,#main summary'))interacted=true;});
 initNavigation();
 function wire(){
  document.querySelector('#print-resume')?.addEventListener('click',()=>window.print());
@@ -26,16 +25,15 @@ function wire(){
   document.querySelector('#contact-status').textContent='Your email draft is ready to open. If no email app opens, use the email address alongside this form. Nothing has been sent by this website.';
  });
  wireCollections();
- initLightbox();
- initCustomCursor();
+ wireViewer();wireVideo();
  document.querySelectorAll('img').forEach(im=>im.addEventListener('error',()=>{const note=document.createElement('p');note.className='image-error';note.textContent=im.alt+' — image temporarily unavailable.';im.replaceWith(note)},{once:true}));
 }
-if(route==='admin') import('./admin.js?v=2d-20260925').then(x=>x.initStudio(base));
+if(route==='admin') import('./admin.js?v=editorial-20261004').then(x=>x.initStudio(base));
 else {
  wire();
  initMotion({initial:true});
- window.addEventListener('pagehide',()=>{cleanupMotion();cleanupCustomCursor();});
- window.addEventListener('pageshow',e=>{if(e.persisted){initMotion();wire();}});
+ window.addEventListener('pagehide',cleanupMotion);
+ window.addEventListener('pageshow',e=>{if(e.persisted)initMotion();});
  // Keep the complete static document available during requests, failures, and without JS.
  loadContent().then(row=>{
   const candidate=mergeContent(row.content);validateContent(candidate);content=candidate;
@@ -45,13 +43,13 @@ else {
   if(!interacted && !main.contains(document.activeElement) && scrollY<24) {
    const template=document.createElement('template');template.innerHTML=view(route,content,base);
    if(route==='home') {
-    // The first-render portrait and video remain the same DOM nodes.
+    // Keep the first-render portrait stable while updating the public profile.
     const hero=main.querySelector('.hero');
     const incoming=template.content.querySelector('.hero');
     if(hero&&incoming) {
-     for(const selector of ['.opening-label','#opening-name span','#opening-name em','.hero-statement','.hero-detail','.opening-status']) {
+     for(const selector of ['.opening-label','#opening-name','.hero-role','.hero-statement','.hero-detail','.hero-copy .actions','.hero-contact','.current-card']) {
       const current=hero.querySelector(selector),next=incoming.querySelector(selector);
-      if(current&&next)current.replaceChildren(...next.childNodes);
+      if(current&&next){current.replaceChildren(...next.childNodes);if(current.tagName==='A')current.href=next.href;}
      }
      const portrait=hero.querySelector('.portrait'),nextPortrait=incoming.querySelector('.portrait');
      if(portrait&&nextPortrait){for(const attr of ['src','alt'])if(portrait.getAttribute(attr)!==nextPortrait.getAttribute(attr))portrait.setAttribute(attr,nextPortrait.getAttribute(attr));}

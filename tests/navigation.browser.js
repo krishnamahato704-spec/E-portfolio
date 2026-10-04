@@ -99,7 +99,7 @@ try{
     assert(!document.body.classList.contains('navigation-open'),'Page restore retained stale navigation state');
   });
   await check('All generated header routes retain destinations and accurate active state',()=>{
-    const navRoutes=['profile','teaching','resources','credentials','gallery','resume','contact'];
+    const navRoutes=['home','profile','teaching','resources','credentials','resume','contact'];
     for(const [route,meta] of Object.entries(routes)){
       const depth=meta.path.endsWith('/')?meta.path.split('/').filter(Boolean).length:0;
       const base=route==='404'?'/E-portfolio/':depth?'../'.repeat(depth):'./';
@@ -110,17 +110,18 @@ try{
       const fallbackLinks=[...rendered.querySelectorAll('.fallback-navigation nav a')];
       assert(fallbackLinks.length===navRoutes.length,`${route}: missing native fallback link`);
       fallbackLinks.forEach((link,index)=>assert(link.getAttribute('href')===base+routes[navRoutes[index]].path,`${route}: incorrect native fallback target`));
-      const expected=['pehchaan','observation','democracy'].includes(route)?'teaching':navRoutes.includes(route)?route:null;
+      const expected=['pehchaan','observation'].includes(route)?'teaching':route==='democracy'?'resources':navRoutes.includes(route)?route:null;
       const current=[...rendered.querySelectorAll('a[aria-current="page"]')];
       assert(current.length===(expected?1:0),`${route}: incorrect number of active links`);
       if(expected)assert(current[0].getAttribute('href')===base+routes[expected].path,`${route}: wrong active destination`);
     }
   });
-  await check('Video opening continues to the portfolio and retains printable resume functionality',()=>{
+  await check('Hero CTAs retain teaching and existing printable resume functionality',()=>{
     const home=fragment(view('home',defaultContent,'../'));
-    assert(home.querySelector('.opening-continue')?.getAttribute('href')==='#portfolio-start','Video opening must lead to the existing portfolio');
-    assert(!home.querySelector('canvas,.hero .portrait-frame'),'Opening must remain 2D without a portrait over the video');
-    assert(home.querySelector('a[href="../teaching/"]')&&home.querySelector('a[href="../resume/"]'),'Teaching and resume routes remain reachable');
+    const actions=[...home.querySelectorAll('.hero .actions a')];
+    assert(actions.length===2,'Hero must have two primary actions');
+    assert(actions[0].textContent.includes('View Teaching Evidence') && actions[0].getAttribute('href')==='../resources/','Evidence CTA reaches the original resource route');
+    assert(actions[1].textContent.includes('Download Résumé') && actions[1].getAttribute('href')==='../assets/krishna-mahato-resume.pdf','Resume CTA downloads the generated PDF');
     assert(fragment(view('resume',defaultContent,'../')).querySelector('button#print-resume')?.textContent.includes('Print / save as PDF'),'Printable resume control was removed');
   });
   await check('Live status follows existing internship and teacher-education evidence',()=>{

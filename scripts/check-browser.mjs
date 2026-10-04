@@ -17,6 +17,12 @@ const record=(name,pass,details)=>{
   if(!pass)console.error(`FAIL ${name}`,details||'');
 };
 const delay=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+const axeSource=await fs.readFile(path.join(root,'node_modules/axe-core/axe.min.js'),'utf8');
+async function auditAccessibility(page,label){
+ await page.evaluate(axeSource);
+ const results=await page.evaluate(async()=>{const result=await axe.run(document,{runOnly:{type:'tag',values:['wcag2a','wcag2aa','wcag21aa']}});return {violations:result.violations.map(x=>({id:x.id,impact:x.impact,nodes:x.nodes.map(n=>({target:n.target,summary:n.failureSummary}))})),incomplete:result.incomplete.map(x=>({id:x.id,impact:x.impact}))};});
+ record(label+': no critical or serious axe violations',!results.violations.some(x=>['critical','serious'].includes(x.impact)),results);
+}
 
 async function loadPlaywright(){
   if(process.env.PLAYWRIGHT_MODULE){
@@ -32,7 +38,7 @@ async function loadPlaywright(){
 
 async function startServer(){
   if(process.env.BROWSER_TEST_ORIGIN)return;
-  server=spawn(process.execPath,['scripts/serve.mjs','--dist','--tests'],{
+  server=spawn(process.execPath,['scripts/serve.mjs'],{
     cwd:root,env:{...process.env,PORT:String(port)},windowsHide:true,stdio:['ignore','pipe','pipe']
   });
   let serverError='';
@@ -58,10 +64,7 @@ async function imageFailures(page){
   const imgs=page.locator('main img');
   for(let i=0;i<await imgs.count();i++){
     const img=imgs.nth(i);
-    if(await img.evaluate(i=>i.checkVisibility())){
-      await img.scrollIntoViewIfNeeded();
-      await img.evaluate(i=>i.decode()).catch(()=>{});
-    }
+    if(await img.isVisible())await img.scrollIntoViewIfNeeded();
   }
   await page.waitForFunction(()=>[...document.querySelectorAll('main img')].filter(i=>i.checkVisibility()).every(i=>i.complete),null,{timeout:10000}).catch(()=>{});
   return page.evaluate(()=>[...document.querySelectorAll('main img')].filter(i=>i.checkVisibility()&&(!i.complete||!i.naturalWidth)).map(i=>({src:i.getAttribute('src'),alt:i.alt})));
@@ -111,11 +114,13 @@ try{
     record(`${name}: labelled controls and image alternatives`,!semantics.unlabelledControls.length&&!semantics.imagesWithoutAlt.length,semantics.unlabelledControls.concat(semantics.imagesWithoutAlt));
     record(`${name}: heading levels do not skip`,!semantics.headingSkips.length,semantics.headingSkips);
     const imageErrors=await imageFailures(page);record(`${name}: visible images load`,!imageErrors.length,imageErrors);
+    await auditAccessibility(page,name+' desktop');
     for(const width of widths){
       await page.setViewportSize({width,height:1000});await page.evaluate(()=>window.scrollTo(0,0));
       await page.waitForTimeout(50);
       const state=await inspectPage(page);
       record(`${name}: no horizontal overflow at ${width}px`,state.documentWidth<=width+1,{documentWidth:state.documentWidth,overflow:state.horizontalOverflow});
+      if(width===320)await auditAccessibility(page,name+' mobile');
       if(width===390||width===1440)await page.screenshot({path:path.join(output,`${name}-${width}.png`),fullPage:true});
     }
     record(`${name}: no uncaught browser errors`,!exceptions.length,exceptions);
@@ -135,8 +140,8 @@ try{
       record(`${name}: ${mode} has usable navigation`,state.navLinks>=6,state.navLinks);
       record(`${name}: ${mode} fits 320px`,state.documentWidth<=321,state.documentWidth);
       if(name==='home'){
-        const hero=await p.evaluate(()=>{const image=document.querySelector('.portrait'),video=document.querySelector('.hero-bg-video');return {portraitVisible:!!image&&image.checkVisibility({checkOpacity:true,checkVisibilityCSS:true})&&image.naturalWidth>0,portraitSrc:image?.getAttribute('src'),poster:video?.getAttribute('poster'),videoSource:video?.getAttribute('src')||''}});
-        record(`home: ${mode} preserves the full-width video poster`,!!hero.poster&&!hero.videoSource&&!hero.portraitVisible,hero);
+        const hero=await p.evaluate(()=>{const image=document.querySelector('.portrait'),video=document.querySelector('.teaching-video');return {portraitVisible:!!image&&image.checkVisibility({checkOpacity:true,checkVisibilityCSS:true})&&image.naturalWidth>0,portraitSrc:image?.getAttribute('src'),poster:video?.getAttribute('poster'),videoSource:video?.getAttribute('src')||'',heroVideo:!!document.querySelector('.hero video')}});
+        record(`home: ${mode} shows portrait and hero video fallback`,hero.portraitVisible&&!!hero.poster&&hero.portraitSrc!==hero.poster&&!hero.videoSource&&hero.heroVideo,hero);
         await p.screenshot({path:path.join(output,`home-${mode}-320.png`),fullPage:false});
       }
       await fallback.close();
@@ -168,29 +173,57 @@ try{
   await page.keyboard.press('Escape');
   record('keyboard: Escape restores trigger and page access',await page.evaluate(()=>document.activeElement.matches('.menu-toggle')&&!document.querySelector('main').inert&&document.querySelector('.menu-toggle').getAttribute('aria-expanded')==='false'));
   record('keyboard: trigger has visible focus indicator',await toggle.evaluate(el=>{const s=getComputedStyle(el);return s.outlineStyle!=='none'&&parseFloat(s.outlineWidth)>=2}));
-  record('reduced motion: hero starts static',await page.locator('.hero-bg-video').evaluate(v=>v.paused&&!v.getAttribute('src')));
+  record('reduced motion: hero video starts static',await page.locator('.teaching-video').evaluate(v=>v.paused&&!v.getAttribute('src')));
+  await page.locator('.video-play').click();
+  await page.waitForFunction(()=>!document.querySelector('.teaching-video').paused);
+  record('reduced motion: visitor can explicitly play the hero film with music',await page.locator('.teaching-video').evaluate(v=>!v.paused&&!v.muted));
+  await page.locator('.teaching-video').evaluate(v=>v.pause());
+  const imageTrigger=page.locator('.moments-grid a[data-viewer]').first();await imageTrigger.click();
+  record('viewer: image preview opens with labelled native dialog',await page.evaluate(()=>{const dialog=document.querySelector('.evidence-viewer');return dialog?.open&&!!dialog.querySelector('img[alt]')&&!!document.getElementById(dialog.getAttribute('aria-labelledby'));}));
+  record('viewer: opening focuses the close control',await page.evaluate(()=>document.activeElement.getAttribute('aria-label')==='Close evidence preview'));
+  await page.keyboard.press('Escape');
+  await page.locator('.evidence-viewer').waitFor({state:'hidden'});
+  record('viewer: Escape closes and restores the image link',await imageTrigger.evaluate(el=>document.activeElement===el&&!document.querySelector('.evidence-viewer')));
+  await page.goto(base+'resources/',{waitUntil:'load'});
+  const pdfTrigger=page.locator('#resource-list a[data-viewer]').first();await pdfTrigger.click();
+  record('viewer: PDF preview retains an accessible title and original link',await page.evaluate(()=>{const dialog=document.querySelector('.evidence-viewer');return dialog?.open&&!!dialog.querySelector('iframe[title]')&&dialog.querySelector('.viewer-footer a').href.startsWith('https://');}));
+  await page.keyboard.press('Escape');
+  await page.locator('.evidence-viewer').waitFor({state:'hidden'});
+  record('viewer: PDF closes and restores trigger focus',await pdfTrigger.evaluate(el=>document.activeElement===el&&!document.querySelector('.evidence-viewer')));
+  await page.goto(base+'resume/',{waitUntil:'load'});await page.emulateMedia({media:'print'});
+  record('print: web résumé remains readable without preview or controls',await page.evaluate(()=>document.querySelector('.resume-web-summary').checkVisibility()&&!document.querySelector('.resume-overview').checkVisibility()&&document.querySelector('.resume-web-summary').innerText.includes('Education')));
   await keys.close();
 
   const motion=await context({reducedMotion:'no-preference'});const moving=await motion.newPage();
-  const {defaultContent}=await import('../src/content.js');
-  await motion.route('**/rest/v1/portfolio_public?*',route=>route.fulfill({status:200,contentType:'application/json',body:JSON.stringify([{content:defaultContent,updated_at:'2026-09-25T00:00:00Z'}])}));
+  await moving.addInitScript(()=>{
+   const nativePlay=HTMLMediaElement.prototype.play;
+   window.__blockedSoundAttempts=0;
+   HTMLMediaElement.prototype.play=function(){
+    if(!this.muted&&!navigator.userActivation.isActive){window.__blockedSoundAttempts++;return Promise.reject(new DOMException('Browser test: audible autoplay blocked','NotAllowedError'));}
+    return nativePlay.call(this);
+   };
+  });
   await moving.goto(base,{waitUntil:'load'});
-  record('2D opening: no canvas renderer',await moving.locator('canvas').count()===0);
-  record('2D opening: avatar video fills the viewport width',await moving.locator('.hero-bg-video').evaluate(v=>Math.abs(v.getBoundingClientRect().width-innerWidth)<2));
-  await moving.waitForFunction(()=>document.querySelector('.hero-bg-video').currentTime>.2);
-  record('2D opening: saved-content refresh preserves video autoplay',await moving.locator('.hero-bg-video').evaluate(v=>!v.paused));
-  await moving.screenshot({path:path.join(output,'video-opening-desktop.png')});
-  await moving.locator('.video-toggle').click();
-  record('2D opening: pause control stops avatar video',await moving.locator('.hero-bg-video').evaluate(v=>v.paused));
-  await moving.locator('.video-toggle').click();
-  await moving.locator('.menu-toggle').click();
-  record('2D desktop menu: numbered navigation opens',await moving.locator('#navigation').evaluate(n=>n.getAttribute('aria-modal')==='true'&&n.querySelectorAll('.nav-index').length===7));
-  await moving.locator('#navigation').evaluate(n=>Promise.all(n.getAnimations({subtree:true}).filter(a=>Number.isFinite(a.effect?.getComputedTiming().endTime)).map(a=>a.finished.catch(()=>{}))));
-  await moving.screenshot({path:path.join(output,'menu-desktop.png')});
-  await moving.keyboard.press('Escape');
+  await moving.waitForFunction(()=>!document.querySelector('.teaching-video').paused);
+  const heroFilm=await moving.evaluate(()=>{const v=document.querySelector('.teaching-video'),copy=document.querySelector('.hero-copy'),metrics=document.querySelector('.metrics-strip');const box=v.getBoundingClientRect(),text=copy.getBoundingClientRect();return {muted:v.muted,loop:v.loop,controls:v.controls,once:document.querySelectorAll('video').length===1,beside:box.left>text.right,beforeMetrics:box.bottom<metrics.getBoundingClientRect().top,time:v.currentTime};});
+  record('hero video: blocked sound still permits continuous video beside profile details',heroFilm.muted&&heroFilm.loop&&heroFilm.controls&&heroFilm.once&&heroFilm.beside&&heroFilm.beforeMetrics,heroFilm);
+  record('hero video: attempts automatic music and exposes sound control when blocked',await moving.evaluate(()=>window.__blockedSoundAttempts>0&&document.querySelector('.video-sound').textContent==='Sound on'&&!document.querySelector('.hero-video-panel figcaption')));
+  await moving.waitForTimeout(250);
+  record('hero video: playback advances',await moving.locator('.teaching-video').evaluate((v,time)=>v.currentTime>time,heroFilm.time));
+  await moving.locator('.video-sound').click();
+  await moving.waitForFunction(()=>!document.querySelector('.teaching-video').muted&&!document.querySelector('.teaching-video').paused);
+  record('hero video: Sound on enables music and updates the accessible control',await moving.evaluate(()=>document.querySelector('.video-sound').getAttribute('aria-pressed')==='true'&&document.querySelector('.video-sound').textContent==='Mute music'));
+  await moving.locator('.teaching-video').evaluate(v=>{v.currentTime=v.duration-.2;});
+  await moving.waitForTimeout(600);
+  record('hero video: film and embedded music continue across the loop boundary',await moving.locator('.teaching-video').evaluate(v=>!v.paused&&!v.muted&&v.currentTime<3));
+  await moving.locator('.video-sound').click();
+  record('hero video: music can be muted without stopping the film',await moving.locator('.teaching-video').evaluate(v=>v.muted&&!v.paused));
+  await moving.reload({waitUntil:'load'});
+  await moving.waitForFunction(()=>!document.querySelector('.teaching-video').paused);
+  record('hero video: a visitor mute is retained after refresh',await moving.locator('.teaching-video').evaluate(v=>v.muted));
   await moving.emulateMedia({reducedMotion:'reduce'});
   await moving.waitForTimeout(100);
-  record('reduced motion: changing preference pauses active hero video',await moving.locator('.hero-bg-video').evaluate(v=>v.paused));
+  record('reduced motion: changing preference pauses active hero video',await moving.locator('.teaching-video').evaluate(v=>v.paused));
   record('reduced motion: changing preference clears decorative animations',await moving.evaluate(()=>document.getAnimations().filter(a=>a.playState==='running').length===0));
   await motion.close();
 

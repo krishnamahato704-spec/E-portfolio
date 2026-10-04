@@ -1,10 +1,10 @@
-const storage = 'https://oyqevsygintkjrkfbzpx.supabase.co/storage/v1/object/public/portfolio-media/evidence/images/';
+import {amityJournalResource} from './amity-journal.js?v=editorial-20261004';
 export const defaultContent = {
-  "schemaVersion": 7,
+  "schemaVersion": 8,
   "profile": {
     "name": "Krishna Mahato",
     "email": "krishnamahato704@gmail.com",
-    "eyebrow": "History, Social Science & English · Emerging educator",
+    "eyebrow": "History & Social Science Educator · B.Ed. Candidate",
     "headline": "I help students read the past with curiosity, evidence and confidence.",
     "summary": "Developing History, Social Science and English educator with academic foundations in History and Economics, formal teacher education and supervised classroom experience.",
     "portrait": "https://oyqevsygintkjrkfbzpx.supabase.co/storage/v1/object/public/portfolio-media/evidence/images/1787826897958_3tk4ud_portrait.jpeg",
@@ -27,11 +27,13 @@ export const defaultContent = {
     ],
     "cv": "",
     "availability": "May 2027",
-    "eligibility": "CTET Paper II applied · Examination expected 12–13 December 2026",
+    "eligibility": "CTET Paper II — Applied · Examination window: 12–13 December 2026 · Exact date/shift subject to admit card",
     "location": "Noida, India",
     "workPreferences": "Open to relocation anywhere in India",
     "targetClasses": "Classes 6–10 (TGT) · Classes 11–12 (PGT History post-M.A. 2027)",
-    "targetBoards": "Boards of interest: CBSE, ICSE, Cambridge and IB"
+    "targetBoards": "CBSE · ICSE · Cambridge · IB",
+    "directTeaching": "Social Science · Classes 6–9; select Class 11 History lessons",
+    "additionalTeaching": "English · Classes 6 and 8 (B.Ed. pedagogy)"
   },
   "about": "My interest in History grew from memorising events to asking why they happened, how we know, and what they mean to different people. Studying historical sources and accounts of Partition shaped my commitment to teach through evidence, inquiry and multiple perspectives.",
   "preparation": "Five years of UPSC preparation strengthened my engagement with Indian polity, governance and public affairs. I now bring that wider humanities perspective to teacher education and classroom practice.",
@@ -98,15 +100,15 @@ export const defaultContent = {
       "category": "Teaching",
       "duration": "5",
       "durationUnit": "Weeks",
-      "summary": "80 hours foundational kindergarten teaching & 50 hours ULLAS adult literacy field practice (Course EDCW100).",
-      "title": "NTCC Internship · Pehchaan The Street School & ULLAS Adult Literacy",
-      "type": "Five-week community teaching & adult literacy internship",
+      "summary": "Foundational literacy, numeracy and ULLAS adult-literacy teaching.",
+      "title": "NTCC Internship · Pehchaan The Street School",
+      "type": "Five-week teaching internship",
       "period": "1 June–6 July 2026",
       "points": [
-        "Completed 80 verified hours teaching foundational literacy and numeracy to Nursery, LKG and UKG learners (ages 4–6) at Pehchaan The Street School in Morna Village, Sector 35, Noida.",
-        "Conducted 50 hours of adult literacy and critical life-skills instruction for five community workers (security guards and sanitation cleaners) under the Government of India ULLAS / NILP initiative.",
-        "Designed and administered a 40-mark UKG diagnostic assessment test alongside multi-sensory tracing sheets, Maths Market real-world currency simulations, and Mystery Bag vocabulary games.",
-        "Authored and submitted a 27-page academic NTCC report (EDCW100) under Faculty Guide Dr. Neetu Mishra Shukla and Founder Akash Tandon, verified with a 6% Turnitin score."
+        "Taught foundational literacy and numeracy to Nursery, LKG and UKG learners.",
+        "Used competency-based and activity-based methods.",
+        "Conducted ULLAS adult-literacy sessions for five adult learners.",
+        "Developed classroom-management and community-engagement experience."
       ]
     },
     {
@@ -114,35 +116,36 @@ export const defaultContent = {
       "institution": "Amity International School, Mayur Vihar",
       "status": "Completed",
       "category": "Observation",
-      "duration": "5",
+      "duration": "4",
       "durationUnit": "Days",
-      "summary": "Observation of Social Science and History classrooms across Classes 6–12.",
+      "summary": "Four days observing classroom lessons, student activities, learning spaces and school routines, documented in a reflective journal.",
       "title": "Observation Internship · Amity International School, Mayur Vihar",
-      "type": "Five-day school observation",
-      "period": "24–28 November 2025",
+      "type": "Four-day school observation",
+      "period": "1–4 December",
+      "reflection": "I noticed how examples, discussion and practical work affected participation. The visit helped me connect B.Ed. theory with classroom management, lesson planning and the care teachers provide beyond lessons.",
       "points": [
-        "Observed Social Science and History lessons in Classes 6–12.",
-        "Observed school assemblies, morning events and a student-organised PCOS/PCOD awareness programme.",
-        "Studied classroom questioning, student engagement and management practices.",
-        "Connected teacher-education theory with daily classroom practice."
+        "Observed lessons in Classes VIII, IX, X and XII, including Social Studies, exam-answer guidance and Kinship, Caste and Class.",
+        "Observed a student-led assembly, PCOS/PCOD awareness work and Class XII counselling.",
+        "Visited libraries, science and computer labs, sports spaces, art rooms and the Atal Tinkering Lab.",
+        "Helped with carnival materials and noticeboards; reflected on questioning, participation and school routines."
       ]
     }
   ],
   "practice": [
     {
-      "number": "01",
+      "text": "I want learners to explain ideas and give reasons. My Democracy plan begins with prior-knowledge questions and includes discussion of elections and protest.",
       "title": "Inquiry before recall",
-      "text": "I want learners to explain ideas and give reasons. My Democracy plan begins with prior-knowledge questions and includes discussion of elections and protest."
+      "number": "01"
     },
     {
-      "number": "02",
+      "text": "I aim to support different starting points. The published plan combines a concept diagram, photographs, discussion and written responses; targeted adaptations are a next area to document.",
       "title": "Different routes, shared depth",
-      "text": "I aim to support different starting points. The published plan combines a concept diagram, photographs, discussion and written responses; targeted adaptations are a next area to document."
+      "number": "02"
     },
     {
-      "number": "03",
+      "text": "I plan checks before, during and after explanation. The Democracy plan includes diagnostic questions, guided practice and an independent task; collecting responses will help me evaluate these choices.",
       "title": "Assessment that changes teaching",
-      "text": "I plan checks before, during and after explanation. The Democracy plan includes diagnostic questions, guided practice and an independent task; collecting responses will help me evaluate these choices."
+      "number": "03"
     }
   ],
   "competencies": [
@@ -151,8 +154,7 @@ export const defaultContent = {
     "Formative assessment",
     "Differentiated instruction",
     "Classroom management",
-    "Google Gemini & AI in Education",
-    "Canva & visual TLM",
+    "Canva",
     "Microsoft Office",
     "Online classroom tools"
   ],
@@ -191,43 +193,44 @@ export const defaultContent = {
     },
     {
       "id": "diksha-ai",
+      "url": "https://krishnamahato704-spec.github.io/E-portfolio/assets/evidence/diksha-ai.pdf",
+      "date": "4 March 2026",
+      "image": "https://krishnamahato704-spec.github.io/E-portfolio/assets/evidence/diksha-ai.webp",
       "title": "Leveraging AI for Transforming School Education",
       "issuer": "CIET-NCERT, New Delhi · DIKSHA",
-      "date": "4 March 2026",
       "category": "Professional learning",
-      "description": "Certificate of completion for a five-hour course.",
-      "image": "https://krishnamahato704-spec.github.io/E-portfolio/assets/evidence/diksha-ai.webp",
-      "url": "https://krishnamahato704-spec.github.io/E-portfolio/assets/evidence/diksha-ai.pdf"
+      "description": "Certificate of completion for a five-hour course."
     },
     {
       "id": "nptel-writing",
+      "url": "https://krishnamahato704-spec.github.io/E-portfolio/assets/evidence/nptel-writing.pdf",
+      "date": "January–March 2026",
+      "image": "https://krishnamahato704-spec.github.io/E-portfolio/assets/evidence/nptel-writing.webp",
       "title": "Effective Writing · NPTEL Elite",
       "issuer": "IIT Roorkee · NPTEL",
-      "date": "January–March 2026",
       "category": "Academic",
-      "description": "Eight-week course. Consolidated score: 76%; assignments: 25/25; proctored examination: 51/75.",
-      "image": "https://krishnamahato704-spec.github.io/E-portfolio/assets/evidence/nptel-writing.webp",
-      "url": "https://krishnamahato704-spec.github.io/E-portfolio/assets/evidence/nptel-writing.pdf"
+      "description": "Eight-week course. Consolidated score: 76%; assignments: 25/25; proctored examination: 51/75."
     },
     {
       "id": "suraasa-linkedin",
+      "url": "https://krishnamahato704-spec.github.io/E-portfolio/assets/evidence/suraasa-linkedin.pdf",
+      "date": "7 January 2026",
+      "image": "https://krishnamahato704-spec.github.io/E-portfolio/assets/evidence/suraasa-linkedin.webp",
       "title": "LinkedIn for Teachers",
       "issuer": "Suraasa",
-      "date": "7 January 2026",
       "category": "Professional learning",
-      "description": "Certificate of participation in the LinkedIn for Teachers webinar.",
-      "image": "https://krishnamahato704-spec.github.io/E-portfolio/assets/evidence/suraasa-linkedin.webp",
-      "url": "https://krishnamahato704-spec.github.io/E-portfolio/assets/evidence/suraasa-linkedin.pdf"
+      "description": "Certificate of participation in the LinkedIn for Teachers webinar."
     },
     {
       "id": "gemini-badge",
-      "title": "Gemini Certified Educator badge",
+      "url": "https://krishnamahato704-spec.github.io/E-portfolio/assets/evidence/gemini-certified-educator.pdf",
+      "date": "21 August 2026",
+      "image": "https://krishnamahato704-spec.github.io/E-portfolio/assets/evidence/gemini-certified-educator.webp",
+      "title": "Gemini Certified Educator",
       "issuer": "Google for Education",
-      "date": "Issue date not shown",
       "category": "Professional learning",
-      "description": "Badge image supplied by Krishna. The image does not include a recipient name, issue date or verification link.",
-      "image": "https://krishnamahato704-spec.github.io/E-portfolio/assets/evidence/gemini-badge.webp",
-      "url": "https://krishnamahato704-spec.github.io/E-portfolio/assets/evidence/gemini-badge.webp"
+      "description": "Certificate awarded to Krishna Mahato for the knowledge, skills and basic competencies needed to use Google AI in education. Valid through 21 August 2029.",
+      "publicationStatus": "Approved"
     }
   ],
   "resources": [
@@ -248,134 +251,142 @@ export const defaultContent = {
     },
     {
       "id": "ntcc-community-report",
-      "title": "Community Work and Adult Literacy",
-      "category": "Internship report",
-      "subject": "Foundational literacy and numeracy · ULLAS",
-      "grade": "Early learners and adults",
-      "date": "20 July 2026",
-      "description": "Original 27-page NTCC report. It records 80 hours at Pehchaan and 50 hours of adult literacy work, with weekly reflections and annexures.",
-      "type": "PDF · 27 pages",
-      "context": "Amity Institute of Education · EDCW100",
       "url": "https://krishnamahato704-spec.github.io/E-portfolio/assets/evidence/ntcc-community-report.pdf",
+      "date": "20 July 2026",
+      "type": "PDF · 27 pages",
+      "grade": "Early learners and adults",
+      "title": "Community Work and Adult Literacy",
+      "context": "Amity Institute of Education · EDCW100",
+      "subject": "Foundational literacy and numeracy · ULLAS",
+      "category": "Internship report",
       "thumbnail": "https://krishnamahato704-spec.github.io/E-portfolio/assets/evidence/ntcc-community-report.webp",
+      "description": "Original 27-page NTCC report. It records 80 hours at Pehchaan and 50 hours of adult literacy work, with weekly reflections and annexures.",
       "evidenceStatus": "Original supplied document"
     },
     {
       "id": "rootedness-iks",
-      "title": "Roots to Wings: Indian Knowledge Systems in Teacher Education",
-      "category": "Presentation",
-      "subject": "NEP 2020 and teacher education",
-      "grade": "Teacher education",
-      "date": "",
-      "description": "The supplied 15-slide presentation on Indian Knowledge Systems and teacher education.",
-      "type": "PDF · 15 slides",
-      "context": "Academic presentation",
       "url": "https://krishnamahato704-spec.github.io/E-portfolio/assets/evidence/rootedness-iks.pdf",
+      "date": "",
+      "type": "PDF · 15 slides",
+      "grade": "Teacher education",
+      "title": "Roots to Wings: Indian Knowledge Systems in Teacher Education",
+      "context": "Academic presentation",
+      "subject": "NEP 2020 and teacher education",
+      "category": "Presentation",
       "thumbnail": "https://krishnamahato704-spec.github.io/E-portfolio/assets/evidence/rootedness-iks.webp",
+      "description": "The supplied 15-slide presentation on Indian Knowledge Systems and teacher education.",
       "evidenceStatus": "Original supplied document"
     },
     {
       "id": "krishna-da",
-      "title": "Architecting the Digital Pedagogy Ecosystem",
-      "category": "Presentation",
-      "subject": "Digital pedagogy",
-      "grade": "Teacher education",
+      "url": "https://krishnamahato704-spec.github.io/E-portfolio/assets/evidence/krishna-da.pdf",
       "date": "",
-      "description": "Ten-slide presentation on technology integration, instruction and NEP 2020. Original PowerPoint download.",
-      "type": "PowerPoint · 10 slides · 12.8 MB",
+      "type": "PDF · 10 slides",
+      "grade": "Teacher education",
+      "title": "Architecting the Digital Pedagogy Ecosystem",
       "context": "Presented by Krishna Mahato",
-      "url": "https://krishnamahato704-spec.github.io/E-portfolio/assets/evidence/krishna-da.pptx",
+      "subject": "Digital pedagogy",
+      "category": "Presentation",
       "thumbnail": "https://krishnamahato704-spec.github.io/E-portfolio/assets/evidence/krishna-da.webp",
+      "description": "Ten-slide presentation on technology integration, instruction and NEP 2020. Browser-readable PDF with the original slides available separately.",
+      "originalUrl": "https://krishnamahato704-spec.github.io/E-portfolio/assets/evidence/krishna-da.pptx",
       "evidenceStatus": "Original supplied document"
     },
     {
       "id": "finland-education",
-      "title": "Finland’s Education System",
-      "category": "Presentation",
-      "subject": "Knowledge and Curriculum",
-      "grade": "B.Ed.",
+      "url": "https://krishnamahato704-spec.github.io/E-portfolio/assets/evidence/finland-education.pdf",
       "date": "Academic year 2025–2027",
-      "description": "Comparative curriculum studies presentation by Krishna Mahato and Sahil Kumar. Original PowerPoint download.",
-      "type": "PowerPoint · 16 slides · 1.3 MB",
+      "type": "PDF · 16 slides",
+      "grade": "B.Ed.",
+      "title": "Finland’s Education System",
       "context": "Amity University, Noida",
-      "url": "https://krishnamahato704-spec.github.io/E-portfolio/assets/evidence/finland-education.pptx",
+      "subject": "Knowledge and Curriculum",
+      "category": "Presentation",
       "thumbnail": "https://krishnamahato704-spec.github.io/E-portfolio/assets/evidence/finland-education.webp",
+      "description": "Comparative curriculum studies presentation by Krishna Mahato and Sahil Kumar. Browser-readable PDF with the original slides available separately.",
+      "originalUrl": "https://krishnamahato704-spec.github.io/E-portfolio/assets/evidence/finland-education.pptx",
       "evidenceStatus": "Original supplied document"
-    }
+    },
+    amityJournalResource
   ],
   "gallery": [
     {
       "id": "tlm-exhibition",
+      "image": "https://krishnamahato704-spec.github.io/E-portfolio/assets/evidence/tlm-exhibition.webp",
       "title": "Teaching-learning materials exhibition",
-      "category": "Lesson Planning & TLM",
-      "description": "Ballot box, Earth model and other handmade teaching materials displayed with colleagues.",
       "context": "Teacher-education exhibition",
-      "image": "https://krishnamahato704-spec.github.io/E-portfolio/assets/evidence/tlm-exhibition.webp"
+      "category": "Lesson Planning & TLM",
+      "description": "Ballot box, Earth model and other handmade teaching materials displayed with colleagues."
     },
     {
       "id": "mock-election-activity",
+      "image": "https://krishnamahato704-spec.github.io/E-portfolio/assets/evidence/mock-election-activity.webp",
       "title": "Mock election activity guide",
-      "category": "Lesson Planning & TLM",
-      "description": "Illustrated classroom poster covering nomination, campaigning, voting and results.",
       "context": "Civics classroom activity",
-      "image": "https://krishnamahato704-spec.github.io/E-portfolio/assets/evidence/mock-election-activity.webp"
+      "category": "Lesson Planning & TLM",
+      "description": "Illustrated classroom poster covering nomination, campaigning, voting and results."
     },
     {
       "id": "mock-election-class8",
+      "image": "https://krishnamahato704-spec.github.io/E-portfolio/assets/evidence/mock-election-class8.webp",
       "title": "Class 8 mock election invitation",
-      "category": "Lesson Planning & TLM",
-      "description": "A classroom display inviting students to choose candidates and cast votes.",
       "context": "Class 8 · Civics",
-      "image": "https://krishnamahato704-spec.github.io/E-portfolio/assets/evidence/mock-election-class8.webp"
+      "category": "Lesson Planning & TLM",
+      "description": "A classroom display inviting students to choose candidates and cast votes."
     },
     {
       "id": "pehchaan-collage",
+      "image": "https://krishnamahato704-spec.github.io/E-portfolio/assets/evidence/pehchaan-collage.webp",
       "title": "Learning at Pehchaan",
+      "context": "Community teaching internship",
       "category": "Field Practice & Community",
       "description": "A collage of drawing, worksheets and classroom learning at Pehchaan The Street School.",
-      "context": "Community teaching internship",
-      "image": "https://krishnamahato704-spec.github.io/E-portfolio/assets/evidence/pehchaan-collage.webp"
+      "privacyNote": "Publication permission confirmed by the portfolio owner on 2 October 2026. Permission records are kept separately.",
+      "publicationStatus": "Approved"
     },
     {
       "id": "independence-day",
+      "image": "https://krishnamahato704-spec.github.io/E-portfolio/assets/evidence/independence-day.webp",
       "title": "Independence Day display",
-      "category": "Teaching Practice",
-      "description": "Krishna beside a handmade Independence Day display.",
       "context": "School activity",
-      "image": "https://krishnamahato704-spec.github.io/E-portfolio/assets/evidence/independence-day.webp"
+      "category": "Teaching Practice",
+      "description": "Krishna beside a handmade Independence Day display."
     },
     {
       "id": "school-house-placards",
+      "image": "https://krishnamahato704-spec.github.io/E-portfolio/assets/evidence/school-house-placards.webp",
       "title": "School house placards",
-      "category": "Teaching Practice",
-      "description": "Krishna with Neelgiri, Malaygiri, Udaygiri and Ratnagiri house placards.",
       "context": "Panchsheel Balak Inter-College",
-      "image": "https://krishnamahato704-spec.github.io/E-portfolio/assets/evidence/school-house-placards.webp"
+      "category": "Teaching Practice",
+      "description": "Krishna with Neelgiri, Malaygiri, Udaygiri and Ratnagiri house placards."
     },
     {
       "id": "sports-day-artwork",
+      "image": "https://krishnamahato704-spec.github.io/E-portfolio/assets/evidence/sports-day-artwork.webp",
       "title": "Student artwork for Major Dhyan Chand",
+      "context": "School activity",
       "category": "Teaching Practice",
       "description": "Students display their artwork beside a commemorative portrait.",
-      "context": "School activity",
-      "image": "https://krishnamahato704-spec.github.io/E-portfolio/assets/evidence/sports-day-artwork.webp"
+      "privacyNote": "Publication permission confirmed by the portfolio owner on 2 October 2026. Permission records are kept separately.",
+      "publicationStatus": "Approved"
     },
     {
       "id": "tlm-documentation",
+      "image": "https://krishnamahato704-spec.github.io/E-portfolio/assets/evidence/tlm-documentation.webp",
       "title": "Ballot box and Earth model documentation",
-      "category": "Lesson Planning & TLM",
-      "description": "A handwritten record explains the materials, intended classes and classroom uses of the models.",
       "context": "Civics · Classes 6–8; Geography · Classes 6–10",
-      "image": "https://krishnamahato704-spec.github.io/E-portfolio/assets/evidence/tlm-documentation.webp"
+      "category": "Lesson Planning & TLM",
+      "description": "A handwritten record explains the materials, intended classes and classroom uses of the models."
     }
   ]
 };
 
-// Merge missing fields only. Known pre-v6 records receive narrowly scoped corrections;
+// Merge missing fields only. Known obsolete records receive narrowly scoped corrections;
 // explicit owner edits and empty collections remain authoritative.
 export function mergeContent(live = {}) {
   const result={...structuredClone(defaultContent),...live,profile:{...defaultContent.profile,...live.profile}};
   const older=(live.schemaVersion||0)<6;
+  let correctedAmity=false;
   if(older) {
     const legacy={
       eyebrow:['History & Social Science · Emerging educator','History educator · Social Science · Emerging educator'],
@@ -392,8 +403,12 @@ export function mergeContent(live = {}) {
     const original=defaultContent.experiences.find(x=>x.id===id);
     const merged={...original,...e,id};
     if(older && id==='observation' && e.period==='May 2026')Object.assign(merged,{period:original.period,type:original.type,duration:original.duration,durationUnit:original.durationUnit});
-    if(older && id==='pehchaan') {
-      Object.assign(merged,{summary:original.summary,title:original.title,type:original.type,points:structuredClone(original.points)});
+    if((live.schemaVersion||0)<8 && id==='observation' && ['24–28 November 2025','May 2026'].includes(e.period)) {
+      Object.assign(merged,{period:original.period,type:original.type,duration:original.duration,durationUnit:original.durationUnit});
+      if(e.summary==='Observation of Social Science and History classrooms across Classes 6–12.')merged.summary=original.summary;
+      const legacyPoints=['Observed Social Science and History lessons in Classes 6–12.','Observed school assemblies, morning events and a student-organised PCOS/PCOD awareness programme.','Studied classroom questioning, student engagement and management practices.','Connected teacher-education theory with daily classroom practice.'];
+      if(JSON.stringify(e.points)===JSON.stringify(legacyPoints))merged.points=structuredClone(original.points);
+      correctedAmity=true;
     }
     if(older && id==='panchsheel' && e.period==='Ongoing') {
       Object.assign(merged,{period:original.period,type:original.type,summary:original.summary});
@@ -402,16 +417,29 @@ export function mergeContent(live = {}) {
     return merged;
   });
   if(!live.schemaVersion && Array.isArray(live.experiences) && result.experiences.length===2 && ['pehchaan','observation'].every(id=>result.experiences.some(e=>e.id===id)))result.experiences.unshift(structuredClone(defaultContent.experiences[0]));
-  // Explicit published collections, including empty lists, belong to the owner.
-  for(const key of ['certificates','resources','gallery']) {
-    if(Array.isArray(live[key]))result[key]=live[key].map(item=>{
-      const original=defaultContent[key].find(x=>(item.id&&x.id===item.id)||(item.image&&x.image===item.image)||(item.url&&x.url===item.url));
-      const merged={...original,...item};
-      if(older&&original&&key==='resources'&&item.thumbnail==='assets/democracy-thumb.webp')merged.thumbnail=original.thumbnail;
-      return merged;
-    });
-  }
-  if(live.schemaVersion&&!Array.isArray(live.resources))result.resources=[];
+  if(Array.isArray(live.certificates))result.certificates=live.certificates.map(c=>{
+    const original=defaultContent.certificates.find(x=>x.image===c.image);
+    const legacy=['Graduation certificate','Pehchaan internship certificate','Webinar certificate','Seminar participation certificate'];
+    return {...original,...c,...(original&&legacy.includes(c.title)?{title:original.title}:{}),...(older&&/Rusha Chaudhauri|in History and Economics/.test(c.description||'')?{description:original?.description||c.description}:{})};
+  });
+  if(Array.isArray(live.resources))result.resources=live.resources.map(r=>{
+    const original=defaultContent.resources.find(x=>x.url===r.url);
+    if(!original)return r;
+    const merged={...original,...r};
+    if(older) {
+      if(['Democracy','Teaching Democracy: More Than a Definition'].includes(r.title))merged.title=original.title;
+      if(!r.grade||r.grade==='Classes 6–8 (Middle School)')merged.grade=original.grade;
+      if(!r.subject||r.subject==='Social Science / History')merged.subject=original.subject;
+      if(!r.description||r.description.startsWith('Structured inquiry lesson plan'))merged.description=original.description;
+      if(r.thumbnail==='assets/democracy-thumb.webp')merged.thumbnail=original.thumbnail;
+    }
+    return merged;
+  });
+  else if(live.schemaVersion)result.resources=[];
+  // Add the newly supplied journal to the known published library once. An empty
+  // library or a later owner removal remains authoritative.
+  if(correctedAmity && result.resources.some(r=>r.id==='ntcc-community-report') && !result.resources.some(r=>r.id===amityJournalResource.id))result.resources.push(structuredClone(amityJournalResource));
+  if(correctedAmity)result.schemaVersion=8;
   if(Array.isArray(live.qualifications))result.qualifications=live.qualifications.map(q=>{
     const original=defaultContent.qualifications.find(x=>x.title===q.title);
     return {...original,...q,...(!live.schemaVersion&&q.title==='M.A. History'?{place:original.place,note:'First year cleared · Final examinations expected in June 2027'}:{})};
@@ -429,7 +457,7 @@ export function validateContent(c) {
   if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(c.profile.email||'')) throw new Error('Enter a valid contact email.');
   for(const key of ['qualifications','experiences','practice','certificates','resources','gallery','competencies']) if(!Array.isArray(c[key])) throw new Error(`${key} must be a list.`);
   for(const key of ['roles','subjects','languages']) if(!Array.isArray(c.profile[key]) || !c.profile[key].every(x=>typeof x==='string')) throw new Error(`${key} must be a list of text.`);
-  for(const key of ['location','workPreferences','targetClasses','targetBoards','eligibility','availability']) if(c.profile[key]!==undefined && (typeof c.profile[key]!=='string'||c.profile[key].length>1000)) throw new Error(`${key} must be text of at most 1000 characters.`);
+  for(const key of ['location','workPreferences','targetClasses','targetBoards','eligibility','availability','directTeaching','additionalTeaching']) if(c.profile[key]!==undefined && (typeof c.profile[key]!=='string'||c.profile[key].length>1000)) throw new Error(`${key} must be text of at most 1000 characters.`);
   for(const key of ['portrait','cv']) if(c.profile[key] && !/^https:\/\//i.test(c.profile[key])) throw new Error(`${key} must use HTTPS.`);
   for(const e of c.experiences) if(!e?.title?.trim() || !Array.isArray(e.points) || !e.points.every(x=>typeof x==='string')) throw new Error('Each experience needs a title and activity list.');
   for(const e of c.experiences) for(const key of ['institution','status','category','duration','durationUnit','summary']) if(e[key]!==undefined && (typeof e[key]!=='string'||e[key].length>1000)) throw new Error(`Experience ${key} must be text of at most 1000 characters.`);

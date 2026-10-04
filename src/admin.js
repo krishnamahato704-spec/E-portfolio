@@ -1,25 +1,25 @@
-import {wireCollections} from './collections.js?v=2d-20260925';
-import {recruitmentGaps} from './recruiter.js?v=2d-20260925';
-import {loadContent,signIn,signOut,saveContent,uploadFile,validateFile} from './cloud.js?v=upload-20260912';
-import {mergeContent,validateContent} from './content.js?v=2d-20260925';
-import {esc,view} from './views.js?v=2d-20260925';
+import {wireCollections} from './collections.js?v=editorial-20261004';
+import {recruitmentGaps} from './recruiter.js?v=editorial-20261004';
+import {loadContent,signIn,signOut,saveContent,uploadFile,validateFile} from './cloud.js?v=editorial-20261004';
+import {mergeContent,validateContent} from './content.js?v=editorial-20261004';
+import {esc,view} from './views.js?v=editorial-20261004';
 let session=null, draft=null, version=null, dirty=false, base='./',busy=false;
 const schemas={
  qualifications:{label:'Education',fields:{title:'Qualification',place:'Institution / result',period:'Study period',status:'Status',expected:'Expected completion (optional)',note:'Progress note (optional)'}},
  experiences:{label:'Teaching experiences',fields:{institution:'School / institution',category:'Category',status:'Experience status',duration:'Duration number (optional)',durationUnit:'Duration unit (optional)',summary:'Short summary',title:'Experience title',type:'Type / duration',period:'Dates',points:'Activities (one per line)'}},
  practice:{label:'Teaching approach',fields:{title:'Principle',text:'Description'}},
- certificates:{label:'Credentials',fields:{title:'Certificate title',issuer:'Issuing organisation',date:'Date',category:'Category',description:'Description',image:'Certificate image URL',url:'Original document URL (optional)'}},
+ certificates:{label:'Credentials',fields:{title:'Certificate title',issuer:'Issuing organisation',date:'Date',category:'Category',description:'Description',image:'Certificate image URL'}},
  resources:{label:'Teaching resources',fields:{title:'File title',category:'Category',subject:'Subject',grade:'Class / year group',date:'Date',duration:'Duration',evidenceStatus:'Evidence status',context:'Context',description:'Description',url:'File URL',image:'Thumbnail / preview image URL (optional)'}},
- gallery:{label:'Gallery',fields:{title:'Title / alternative text',image:'Image URL',category:'Category',description:'Caption',context:'Context'}},
+ gallery:{label:'Gallery',fields:{title:'Caption / alternative text',image:'Image URL'}},
 };
-const profileFields={location:'Current city',workPreferences:'Work / relocation preferences',targetClasses:'Target classes (interest, not prior experience)',targetBoards:'Boards of interest (not a claim of experience)',availability:'Earliest joining availability',eligibility:'Eligibility exam status',name:'Full name',email:'Contact email',eyebrow:'Profile label',headline:'Main statement',summary:'Professional summary',roles:'Roles of interest (one per line)',subjects:'Subjects (one per line)',languages:'Languages (one per line)',portrait:'Portrait URL',cv:'CV PDF URL (optional)'};
+const profileFields={directTeaching:'Recorded direct teaching subjects and classes',additionalTeaching:'Recorded additional subject teaching',location:'Current city',workPreferences:'Work / relocation preferences',targetClasses:'Target classes (interest, not prior experience)',targetBoards:'Boards of interest (not a claim of experience)',availability:'Earliest joining availability',eligibility:'Eligibility exam status',name:'Full name',email:'Contact email',eyebrow:'Profile label',headline:'Main statement',summary:'Professional summary',roles:'Roles of interest (one per line)',subjects:'Subjects (one per line)',languages:'Languages (one per line)',portrait:'Portrait URL',cv:'CV PDF URL (optional)'};
 const multiline=new Set(['headline','summary','roles','subjects','languages','about','preparation','competencies','points','description','text']);
-const categories={experiences:['Teaching','Observation'],certificates:['Academic','Teaching','Professional learning','Presentation'],resources:['Lesson plan','Worksheet','Teaching material','Assessment','Presentation']};
+const categories={experiences:['Teaching','Observation'],certificates:['Academic','Teaching','Professional learning','Presentation'],resources:['Lesson plan','Worksheet','Teaching material','Assessment','Presentation','Internship report','Reflective journal']};
 function field(key,label,value,scope,index){
  const attrs=`data-field="${key}" data-scope="${scope}" ${index!==undefined?`data-index="${index}"`:''}`;
  const text=Array.isArray(value)?value.join('\n'):value||'';
  let input;
- if(key==='category'&&categories[scope]) input=`<select ${attrs}>${categories[scope].map(v=>`<option ${v===value?'selected':''}>${v}</option>`).join('')}</select>`;
+ if(key==='category'&&categories[scope]) input=`<select ${attrs}>${[...new Set([...(value?[value]:[]),...categories[scope]])].map(v=>`<option ${v===value?'selected':''}>${esc(v)}</option>`).join('')}</select>`;
  else if(key==='status'&&scope==='experiences')input=`<select ${attrs}>${['Ongoing','Completed'].map(s=>`<option ${value===s?'selected':''}>${s}</option>`).join('')}</select>`;
  else if(key==='status')input=`<select ${attrs}><option ${value==='Completed'?'selected':''}>Completed</option><option ${value==='In progress'?'selected':''}>In progress</option></select>`;
  else if(multiline.has(key))input=`<textarea ${attrs} rows="3" maxlength="5000">${esc(text)}</textarea>`;
@@ -69,7 +69,7 @@ function editor(){
  document.querySelector('#close-preview').onclick=()=>document.querySelector('dialog').close();
  document.querySelector('#preview-content').onclick=e=>{if(e.target.closest('a,button,form'))e.preventDefault()};
  document.querySelector('#publish').onclick=async()=>{
-  try{validateContent(draft);if(!confirm('Publish this draft to your public portfolio?'))return;setBusy(true);status('Publishing…');draft.schemaVersion=6;const row=await saveContent(draft,session.access_token,version);version=row.updated_at;dirty=false;status('Published successfully. Your portfolio now shows this content.');}
+  try{validateContent(draft);if(!confirm('Publish this draft to your public portfolio?'))return;setBusy(true);status('Publishing…');draft.schemaVersion=Math.max(8,draft.schemaVersion||0);const row=await saveContent(draft,session.access_token,version);version=row.updated_at;dirty=false;status('Published successfully. Your portfolio now shows this content.');}
   catch(err){status(err.message)}finally{setBusy(false)}
  };
  document.querySelector('#logout').onclick=async()=>{if(dirty&&!confirm('Discard unpublished changes and sign out? Export first if you want to keep them.'))return;try{await signOut(session.access_token)}catch{}session=null;draft=null;dirty=false;location.reload()};

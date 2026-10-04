@@ -1,85 +1,54 @@
-# Krishna Mahato — Teaching portfolio
+# Krishna Mahato · Teaching portfolio
 
-The owner's 2D teaching portfolio, with a full-width avatar video, a numbered menu, and separate content pages. There is no React or Three.js renderer. The existing GitHub Pages repository and Supabase project are retained.
+An academic editorial portfolio for a developing History, Social Science and English educator. The design uses the supplied previews for layout and visual direction; the public repository and Supabase content supply the facts and authentic evidence.
 
-## Run and build
+## Run and verify
 
-Requires Node.js 22 or later. Install the locked dependencies with `npm ci`.
+Use Node.js 22 or later.
 
 ```sh
+npm ci
 npm run build
+npm run dev
 npm run lint
 npm test
+npx playwright install chromium
 npm run test:browser
-npm run preview
 ```
 
-Preview runs at http://127.0.0.1:3000/E-portfolio/. Browser checks use Playwright Chromium, or an installed Chrome selected through `CHROME_PATH`. The build generates the static pages and résumé, then packages deployment files into `dist/`. Only that folder is published.
+The local preview runs at http://127.0.0.1:3000/ and also supports `/E-portfolio/`. Browser checks use a separate server on port 4173. On Windows they use installed Microsoft Edge; CI uses Playwright Chromium.
 
 ## Architecture
 
-- Thirteen generated HTML pages, including the owner editor and a 404 page.
-- `src/views.js`: shared accessible page templates, navigation, footer, URL and text escaping.
-- `src/styles.css`: responsive editorial design, keyboard focus, reduced motion and A4 print styles.
-- `src/content.js`: reviewed public content snapshot, compatibility adapter and validation.
-- `src/cloud.js`: small Supabase REST/Auth/Storage adapter; timeout handling and optimistic content updates.
-- `src/app.js`: progressive live content, mobile navigation, resource filters, printable résumé and email draft preparation.
-- `src/admin.js`: separately loaded owner workspace; structured editing, preview, draft export/import and file uploads.
-- `assets/evidence/`: supplied photographs, certificates, original PDFs and PowerPoint files, with smaller WebP previews.
-- `src/media.js` and `src/image-dimensions.json`: supplied-file metadata and intrinsic image proportions.
+- Thirteen generated static pages preserve Home, Profile/About, Teaching/Experience, Resources/Teaching Evidence, Credentials, Gallery, Résumé, Contact, Owner Studio, three teaching details and 404 URLs.
+- `src/content.js` contains the public snapshot, legacy compatibility and validation. It combines the public `portfolio_public` row last updated on 2 October 2026 with the newly supplied Amity observation journal: six resources, eight credentials and eight gallery images.
+- `src/views.js`, `src/editorial.js` and `src/view-helpers.js` provide shared page layouts, escaping, navigation and media mapping. Existing detailed lesson and philosophy content remain available.
+- `src/styles/*.css` contains design tokens and separate component, layout, page, navigation, motion and print styles. The build generates a single `src/styles.css` bundle.
+- `src/app.js` progressively refreshes public content, retains visitor interactions during late responses, and wires filtering, printing and email draft preparation.
+- `src/viewer.js` uses native dialogs for keyboard-accessible image/PDF previews and muted hero video playback. Original evidence links remain available without JavaScript.
+- `scripts/render-resume.mjs` generates the concise one-page PDF from shared portfolio data. The web/print résumé retains the full record. A changed live record uses the current print view unless a current PDF is supplied.
+- `scripts/package-site.mjs` prepares the public `dist` artifact used by the existing GitHub Pages workflow.
 
-The static pages contain the complete reviewed content. Supabase refreshes public content progressively. An unavailable service leaves the readable snapshot in place; form input is never replaced by a late response. No client framework, CDN JavaScript or remote font is required.
+Fonts, photographs, evidence previews and media are local. The real portrait is retained. The existing 11-second illustrative film appears beside the introduction with an original soft instrumental score. It loops continuously, trying playback with music and falling back to muted playback if the browser requires a visitor action. A sound button and native pause controls remain available. Reduced-motion visitors see a still preview and can choose to play it. The visible caption beneath the video is removed.
 
-## Content & database
+The supplied previews also guide the illustrated paper theme: pale archival maps, a globe, stone fragments, open books, manuscripts and a quill decorate the page edges and section borders. Artwork and audio provenance are recorded in `docs/THEME_ASSETS.md`.
 
-The existing project is `oyqevsygintkjrkfbzpx`. The public site reads `public.portfolio_public`, row `id = 1`. The legacy `portfolio_state` and `portfolio-media` storage bucket are preserved. The previously applied explicit grants are recorded in `supabase/migrations/20260924163206_explicit_portfolio_api_grants.sql`. Both public tables retain RLS and owner-only writes. This 2D restoration makes no database changes.
+The Amity observation record uses a rebuilt 17-page reflective journal with daily notes, original photographs and edited first-person reflections. Its dates are 1–4 December and its duration is four days; no year is supplied by the source. See [the journal source record](docs/AMITY_JOURNAL_2026-10.md) for generation and migration details. The Pehchaan certificate belongs only to the Pehchaan experience.
 
-The content document supports profile details, education, experiences, teaching practice, credentials, resources and gallery records. Versioned compatibility handling preserves owner edits and explicitly empty collections.
+## Supabase and Owner Studio
 
-Owner edits are live for JavaScript-enabled visitors. To refresh the no-JavaScript / search-engine snapshot after substantial edits, copy the reviewed content into `src/content.js`, rebuild and commit the generated pages. Changes made in Studio do not automatically modify the GitHub repository.
+Public reads continue to use `public.portfolio_public`, row `id = 1`. Public settings are in `src/config.js`. The publishable key is browser-safe; database and storage authorization depend on the existing Supabase policies. No service credential belongs in this repository.
 
-The supplied candidate information states: M.A. History at IGNOU, first year cleared; CTET applied; available from May 2027. The B.Ed. and M.A. are labelled in progress. The teaching design is explicitly illustrative. No passed CTET claim, invented assessment results or fabricated classroom evidence is present.
+Owner Studio remains at `/admin/`. Sign in with the existing owner account, edit or upload, preview, then publish. Authentication tokens remain in memory. Publishing retains its optimistic `updated_at` conflict check; removing a reference does not delete its stored file. Existing storage and public/private separation are unchanged.
 
-## Configuration
+Live Studio edits update JavaScript-enabled pages. The committed snapshot still needs a reviewed refresh and rebuild to update no-JavaScript and search-engine content. `scripts/audit-public-content.mjs` performs a read-only public-content audit and updates that local snapshot; it never publishes database changes.
 
-No environment variables or private keys are required for GitHub Pages. Public settings are in `src/config.js`:
+Contact prepares a `mailto:` draft for the visitor to review and send. It does not store messages or claim delivery.
 
-| Setting | Purpose |
-| --- | --- |
-| `url` | Existing Supabase URL |
-| `key` | Existing public publishable key |
-| `ownerId` | Existing owner Auth UUID (not a secret; RLS is the authority) |
-| `canonical` | Existing GitHub Pages project URL |
+## Deployment and checks
 
-Never add secret / service credentials to this repository. `.env` files are ignored. The frontend needs only a publishable key.
+The existing main-branch GitHub Pages workflow runs the build, lint, unit tests and browser checks before uploading `dist`. The review workflow also checks generated HTML, CSS, sitemap and résumé for drift. This redesign was prepared locally; it has not been pushed or deployed.
 
-## Owner workspace
+The automated checks cover content safety, owner edits, upload validation, late/offline Supabase reads, keyboard navigation, accessible previews, reduced motion, print behavior, eight viewport widths and desktop/mobile axe audits. Browser reports and screenshots are written to `outputs/browser-checks/`.
 
-Open `/admin/` and sign in using the existing Supabase owner email and password. There is no public signup or client-side authentication bypass. Access tokens remain in memory and are cleared on reload/sign out; the password field is cleared after a sign-in attempt.
-
-Edit the named fields, add or remove collection entries, upload files and preview the draft. Publishing updates only row 1 and checks `updated_at` to avoid overwriting a newer online version. Export your draft before leaving to retain unpublished work. Importing a draft does not publish it.
-
-Files are uploaded under unique `redesign/` paths in the existing public bucket. Uploads are limited to 10 MB and approved MIME/extension pairs. SVG/HTML/executable uploads are rejected. Removing a reference never deletes its stored file. Credentials and images retain original-file links; visitors receive optimized previews.
-
-The public contact form prepares a `mailto:` draft for the visitor to review and send. The website neither stores submissions nor claims to have sent email. The résumé has an A4 print / Save as PDF view; a separate CV PDF can be uploaded through Studio.
-
-## Deployment & review
-
-The repository previously served the root of `main` through GitHub Pages. Generated pages are committed at that same root; the `/E-portfolio/` subpath and deep links are supported. `.nojekyll`, `robots.txt`, `sitemap.xml`, canonical tags, Open Graph metadata and a project-aware 404 page are included.
-
-1. Review the redesign branch / pull request and local preview.
-2. Confirm the content and owner login using the existing account.
-3. After approval, merge into `main`. Keep GitHub Pages set to deploy from `main` / root.
-4. Verify the published home, nested case studies, Studio and résumé.
-
-The review workflow builds, tests and checks generated pages for drift. It does **not** deploy the redesign branch or change production. No additional hosting account is needed.
-
-## Security
-
-Existing RLS was inspected: both portfolio tables have RLS enabled, public reads are allowed, and content inserts/updates require the existing owner UUID. Storage writes are restricted to the owner's authenticated account. Client identity checks supplement, and never replace, those database policies.
-
-All content is escaped as text, executable URL schemes are rejected, uploads are type/size checked, external links use `noopener noreferrer`, and a restrictive Content Security Policy blocks remote scripts and object embeds. Draft import is validated. Auth tokens are not persisted in localStorage.
-
-Supabase's security advisor reports one existing warning: [leaked-password protection is disabled](https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection). Enable it in Auth settings when supported by the project plan. No service key was requested or exposed.
-
-See `docs/AUDIT.md` and `docs/QA.md` for the audit, recruiter review and verification limits.
+See [the redesign audit](docs/EDITORIAL_REDESIGN_2026-10.md) for content provenance, implementation details and verification limits. Real owner authentication and production publishing were not exercised; their test paths use isolated mocks.

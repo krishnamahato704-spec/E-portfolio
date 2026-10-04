@@ -1,6 +1,6 @@
-import {initTimeline, cleanupTimeline} from './timeline.js?v=2d-20260925';
-import {initPhilosophy, cleanupPhilosophy} from './philosophy.js?v=2d-20260925';
-import {initDemocracy, cleanupDemocracy} from './democracy.js?v=2d-20260925';
+import {initTimeline, cleanupTimeline} from './timeline.js?v=editorial-20261004';
+import {initPhilosophy, cleanupPhilosophy} from './philosophy.js?v=editorial-20261004';
+import {initDemocracy, cleanupDemocracy} from './democracy.js?v=editorial-20261004';
 
 // Progressive enhancement: nothing is hidden while waiting for JavaScript or an observer.
 let dispose = () => {};
@@ -15,11 +15,8 @@ export function cleanupMotion() {
 }
 
 export function initMotion({ initial = false } = {}) {
-  const previousVideo = document.querySelector('#main .hero-bg-video');
-  // A fast content response can arrive before the first video frame. Preserve
-  // its pending autoplay as well as playback already in progress.
-  const resumeVideo = !!previousVideo && (!previousVideo.paused ||
-    (!previousVideo.dataset.hasPlayed && previousVideo.dataset.userPaused!=='true'));
+  const previousVideo = document.querySelector('#main .teaching-video');
+  const resumeVideo = !!previousVideo && !previousVideo.paused;
   cleanupMotion();
   const root = document.querySelector('#main');
   if (!root || ['admin', 'resume', '404'].includes(document.body.dataset.route)) return;
@@ -33,12 +30,10 @@ export function initMotion({ initial = false } = {}) {
   let frame = 0;
   let progress;
   const marked = new Set();
-  const video = root.querySelector('.hero-bg-video');
-  const videoToggle = root.querySelector('.video-toggle');
+  const video = root.querySelector('.teaching-video');
   const finish = element => element.classList.remove('motion-enter', 'motion-hero');
   const stop = () => {
     video?.pause();
-    if(videoToggle)videoToggle.hidden=true;
     events.abort();
     cleanupTimeline();
     cleanupPhilosophy();
@@ -58,18 +53,8 @@ export function initMotion({ initial = false } = {}) {
     if (video) video.pause();
     return;
   }
-  if (video && video.dataset.src && !video.src && !navigator.connection?.saveData) {
-    video.src = video.dataset.src;
-  }
-  if(video && videoToggle && video.src) {
-    videoToggle.hidden=false;
-    const label=()=>{videoToggle.textContent=video.paused?'Play background video':'Pause background video';videoToggle.setAttribute('aria-pressed',String(video.paused));};
-    video.addEventListener('play',()=>{video.dataset.hasPlayed='true';label();},{signal:events.signal});
-    video.addEventListener('pause',label,{signal:events.signal});
-    videoToggle.addEventListener('click',()=>{video.dataset.userPaused=String(!video.paused);if(video.paused)video.play().catch(()=>{});else video.pause();},{signal:events.signal});
-    if(resumeVideo && video===previousVideo)video.play().catch(()=>{});
-    label();
-  }
+  // Preserve playback during a content refresh; viewer.js handles the hero start.
+  if(resumeVideo && video===previousVideo)video.play().catch(()=>{});
 
   const enter = (element, hero = false) => {
     marked.add(element);

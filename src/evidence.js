@@ -2,23 +2,10 @@
 const escape=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 export const democracySource='https://oyqevsygintkjrkfbzpx.supabase.co/storage/v1/object/public/portfolio-media/redesign/24c7a756-be36-4fd8-9462-6ee980c54736.pdf';
 export const democracyResource=c=>c.resources.find(r=>r.url===democracySource);
-const knownPdfs = {
-  '24c7a756-be36-4fd8-9462-6ee980c54736.pdf': 'democracy-lesson-plan.pdf',
-  'mock-election-evm-activity.pdf': 'mock-election-evm-activity.pdf',
-  'mock-election-class8-poster.pdf': 'mock-election-class8-poster.pdf',
-  'roots-to-wings-iks-presentation.pdf': 'roots-to-wings-iks-presentation.pdf',
-  'notice-writing-english-pedagogy.pdf': 'notice-writing-english-pedagogy.pdf',
-  'amity-ntcc-community-work-report.pdf': 'amity-ntcc-community-work-report.pdf',
-  'ukg-assessment-test.pdf': 'ukg-assessment-test.pdf',
-};
 export function documentUrl(url,base) {
-  if(!url) return '';
-  if(url.startsWith('https://krishnamahato704-spec.github.io/E-portfolio/')) return base+url.split('/E-portfolio/')[1];
   if(url===democracySource)return base+'assets/democracy-lesson-plan.pdf';
-  if(url.startsWith('./assets/')||url.startsWith('assets/')) return base + url.replace(/^\.?\//, '');
-  for(const [key, file] of Object.entries(knownPdfs)) {
-    if(url.includes(key)) return base + 'assets/' + file;
-  }
+  const prefix='https://krishnamahato704-spec.github.io/E-portfolio/';
+  if(typeof url==='string'&&url.startsWith(prefix+'assets/'))return base+url.slice(prefix.length);
   try {const parsed=new URL(url);return parsed.protocol==='https:'?parsed.href:'';}catch{return '';}
 }
 export function evidenceFeature(c,base,home=false) {

@@ -33,8 +33,8 @@ try {
   main.innerHTML = view('home',defaultContent,'../');
   await check('Initial hero sequence is finite and completes visibly',async () => {
     initMotion({initial:true});
-    assert(main.querySelectorAll('.motion-hero').length === 0,'Video opening must not animate hidden headline overlays');
-    assert(!main.querySelector('canvas,.portrait-frame'),'No 3D canvas or portrait overlay in the video opening');
+    assert(main.querySelectorAll('.motion-hero').length === 6,'Six text and action steps expected (portrait stays visible)');
+    assert(!main.querySelector('.portrait-frame').classList.contains('motion-hero'),'Portrait must never enter the fade sequence');
     for(let i=0;i<40&&main.querySelector('.motion-hero');i++)await wait(50);
     assert(!main.querySelector('.motion-hero'),'Hero classes must clear');
     assert(getComputedStyle(main.querySelector('h1')).opacity === '1','Headline must remain visible');
@@ -45,7 +45,9 @@ try {
     assert(document.querySelectorAll('.reading-progress').length===1,'Duplicate progress');
   });
   await check('Refresh preserves playing video and a visitor pause',async () => {
-    const video=main.querySelector('.hero-bg-video');
+    const video=main.querySelector('.teaching-video');
+    assert(!video.getAttribute('src'),'Video loaded before an intentional play action');
+    video.src=video.dataset.src;
     await video.play();
     initMotion();
     await wait(50);

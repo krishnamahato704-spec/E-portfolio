@@ -1,0 +1,23 @@
+@page {size:A4;margin:14mm}
+@media print {
+ :root {--gutter:0;--section-space:20px}
+ body {font:10pt/1.45 Arial,sans-serif;background:white;color:#111}
+ body::before,.site-header,.site-footer,.skip-link,.reading-progress,.print-actions,.resume-overview,.page-heading,.recruiter-details,.hero-video-panel,.connect-strip,.collection-tools,.hero-contact,.video-play,.evidence-viewer {display:none!important}
+ h1,h2,h3,h4,.lead,.small {color:#111}
+ .container {width:100%;max-width:none}
+ .resume-web-summary {border:0;padding:0;max-width:none}
+ .resume-web-summary>h2 {font-size:22pt}
+ .resume-section {padding-top:12px;margin-top:12px}
+ .resume-section>h3 {font-size:14pt;margin-bottom:10px}
+ .resume-section .qualification {grid-template-columns:85px minmax(0,1fr) auto;padding-block:10px}
+ .resume-exp-entry {margin-top:12px}.resume-exp-entry h4 {font-size:11pt}.plain-list li+li {margin-top:3px}
+ .resume-section,.resume-exp-entry,.qualification,.certificate-card,.resource-row,.school-stage {break-inside:avoid}
+ .hero,.section,.milestone-card,.certificate-card,.resource-row {background:white;box-shadow:none}
+ .hero {margin:0}.opening-inner {padding:0}.opening-visual {max-width:250px}.current-card {position:static}.portrait-frame {border-radius:5px}
+ .tags,.status {border:1px solid #bbb;background:white;color:#111}
+ a {color:#111;text-decoration:none}.text-link {border:0}
+ .democracy-layout,.case-layout {display:block}.democracy-sticky-col {display:none}
+ .philosophy-layout {display:block}.philosophy-intro-col {margin-bottom:25px}
+ .timeline-track {display:none}.experience-row {display:block}.milestone-rail {display:none}.milestone-card {margin-block:20px;border-color:#bbb}
+ .experience-details>.plain-list {display:block!important}
+}
