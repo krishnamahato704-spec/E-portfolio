@@ -16,7 +16,7 @@ const history=JSON.parse(await fs.readFile(historyPath,'utf8').catch(()=>'{}'));
 const modifiedDate=new Date(Math.max(Date.parse(release.updatedAt),Date.parse(sourceDate()))).toISOString().slice(0,10);
 await fs.mkdir(path.join(root,'outputs/release'),{recursive:true});
 await fs.writeFile(path.join(root,'outputs/release/content.json'),JSON.stringify(release));
-const structured=JSON.stringify({'@context':'https://schema.org','@type':'ProfilePage',mainEntity:{'@type':'Person',name:content.profile.name,jobTitle:'History, Social Science and English Educator',url:config.canonical,knowsAbout:['History','Social Science','English',...content.competencies.slice(0,4)]}}).replace(/</g,'\\u003c');
+const structured=JSON.stringify({'@context':'https://schema.org','@type':'ProfilePage',mainEntity:{'@type':'Person',name:content.profile.name,jobTitle:'History & Social Science Educator',url:config.canonical,knowsAbout:['History','Social Science','English',...content.competencies.slice(0,4)]}}).replace(/</g,'\\u003c');
 const structuredHash=createHash('sha256').update(structured).digest('base64');
 for(const [route,meta] of Object.entries(routes)) {
  const depth=meta.path.endsWith('/')?meta.path.split('/').filter(Boolean).length:0;

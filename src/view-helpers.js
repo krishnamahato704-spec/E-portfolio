@@ -1,7 +1,8 @@
 import {defaultContent} from './content.js?v=editorial-20261004';
 import {recruiterFacts} from './recruiter.js?v=editorial-20261004';
+import {imageDimensions} from './image-dimensions.js?v=editorial-20261004';
 export const routes={
- home:{path:'',title:'History, Social Science & English Educator',nav:'Home'},
+ home:{path:'',title:'History & Social Science Educator',nav:'Home'},
  profile:{path:'profile/',title:'About & Education',nav:'About'},
  teaching:{path:'teaching/',title:'Teaching Experience',nav:'Experience'},
  resources:{path:'resources/',title:'Teaching Evidence',nav:'Teaching Evidence'},
@@ -31,7 +32,13 @@ export function imageUrl(url,base){
  if(url.startsWith('./assets/')||url.startsWith('assets/'))return base+url.replace(/^\.?\//,'');
  return safeUrl(url);
 }
-export function img(url,alt,base,cls='',priority=false){const src=imageUrl(url,base);return src?`<img class="${cls}" src="${esc(src)}" alt="${esc(alt)}" ${cls==='portrait'?'width="1154" height="1400"':''} ${priority?'fetchpriority="high"':'loading="lazy"'} decoding="async">`:'';}
+export function img(url,alt,base,cls='',priority=false){
+ const src=imageUrl(url,base);
+ const local=src.startsWith(base+'assets/')?src.slice(base.length):'';
+ const dimensions=imageDimensions[local];
+ const responsive=local==='assets/portrait.webp'?`srcset="${esc(base)}assets/portrait-360.webp 360w, ${esc(base)}assets/portrait-720.webp 720w, ${esc(src)} 1154w" sizes="(max-width: 650px) 340px, (max-width: 1000px) 32vw, 380px"`:'';
+ return src?`<img class="${cls}" src="${esc(src)}" ${responsive} alt="${esc(alt)}" ${dimensions?`width="${dimensions[0]}" height="${dimensions[1]}"`:''} ${priority?'fetchpriority="high"':'loading="lazy"'} decoding="async">`:'';
+}
 export function heading(label,title,desc=''){return `<header class="page-heading"><p class="eyebrow">${label}</p><h1>${title}</h1>${desc?`<p class="lead">${desc}</p>`:''}</header>`;}
 export function sectionHead(label,title,aside=''){return `<div class="section-heading"><div>${label?`<p class="eyebrow">${label}</p>`:''}<h2>${title}</h2></div>${aside}</div>`;}
 export function qualificationRows(c){return c.qualifications.map(q=>`<article class="qualification"><p class="period">${esc(q.period)}</p><div><h3>${esc(q.title)}</h3><p>${esc(q.place)}</p>${q.note?`<p class="small">${esc(q.note)}</p>`:''}${q.expected?`<p class="small">Expected completion: ${esc(q.expected)}</p>`:''}</div><span class="status ${/progress/i.test(q.status)?'progress':''}">${esc(q.status)}</span></article>`).join('');}

@@ -10,7 +10,7 @@ button,a {touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 button {cursor:pointer}
 a {color:inherit;text-decoration:none}
 a:hover {color:var(--accent-hover)}
-img {display:block;max-width:100%}
+img {display:block;max-width:100%;height:auto}
 svg {flex-shrink:0}
 [hidden] {display:none!important}
 h1,h2,h3,h4 {font-family:var(--serif);font-weight:400;color:var(--dark);line-height:1.2;text-wrap:balance}

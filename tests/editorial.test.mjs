@@ -18,11 +18,13 @@ test('Navigation exposes Home and evidence while retaining project and detail UR
  assert.match(nav,/href="\.\.\/\.\.\/">Home/);
  assert.match(nav,/aria-current="page" href="\.\.\/\.\.\/resources\/"/);
 });
-test('Hero contains one looping music film with a static fallback and no visible caption',()=>{
+test('Hero contains a secondary film that loads on request, with a static fallback',()=>{
  const home=view('home',defaultContent);
  assert.doesNotMatch(home,/<video[^>]*(?:\sautoplay| src=)/);
  assert.match(home,/<video[^>]*controls muted loop playsinline/);
- assert.match(home,/data-autoplay="true"/);
+ assert.doesNotMatch(home,/data-autoplay="true"/);
+ assert.ok(home.indexOf('class="portrait-frame"')<home.indexOf('<video '));
+ assert.match(home,/hero-film-row/);
  assert.equal((home.match(/<video\s/g)||[]).length,1);
  assert.ok(home.indexOf('<video ')<home.indexOf('class="metrics-strip"'));
  assert.match(home,/preload="none"/);assert.match(home,/Illustrative portfolio film with soft instrumental music/);

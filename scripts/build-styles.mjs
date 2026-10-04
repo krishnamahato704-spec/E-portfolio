@@ -2,7 +2,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 const root=path.resolve(import.meta.dirname,'..');
 export async function buildStyles(){
- const layers=['tokens','base','cards','layout','pages','navigation','theme','motion','print'];
+ const layers=['tokens','base','cards','layout','pages','navigation','theme','motion','identity','print'];
  const sections=await Promise.all(layers.map(async name=>{
   const source=await fs.readFile(path.join(root,'src/styles',name+'.css'),'utf8');
   return `@layer ${name} {\n${source.replaceAll('../../assets/','../assets/')}\n}`;

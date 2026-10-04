@@ -13,7 +13,7 @@ export async function generateResume(c=defaultContent){
  const ink='#17313d',muted='#52646c';
  const draw=(value,x,y,width,size=9,face='Helvetica',color=ink)=>{doc.font(face).fontSize(size).fillColor(color).text(plain(value),x,y,{width,lineGap:1.5});return doc.y;};
  draw(c.profile.name,36,32,520,23,'Helvetica-Bold');
- draw('History, Social Science & English Educator',36,62,520,11);
+ draw('History & Social Science Educator',36,62,520,11);
  draw(c.profile.location+' | '+c.profile.email,36,82,520,9,'Helvetica',muted);
  doc.fontSize(8.5).text('krishnamahato704-spec.github.io/E-portfolio/',36,99,{link:'https://krishnamahato704-spec.github.io/E-portfolio/'});
  doc.strokeColor('#c7a96b').lineWidth(1).moveTo(36,120).lineTo(559,120).stroke();

@@ -3,6 +3,7 @@ import {defaultContent} from './content.js?v=editorial-20261004';
 import {initNavigation} from './navigation.js?v=editorial-20261004';
 import {initMotion,cleanupMotion} from './motion.js?v=editorial-20261004';
 import {wireViewer,wireVideo} from './viewer.js?v=editorial-20261004';
+import {initOpening} from './identity.js?v=editorial-20261004';
 const route=document.body.dataset.route;
 const base=document.body.dataset.base;
 // The packaged module contains the exact static release content.
@@ -27,6 +28,7 @@ function wire(){
 if(route==='admin') import('./admin.js?v=editorial-20261004').then(x=>x.initStudio(base));
 else {
  wire();
+ initOpening();
  initMotion({initial:true});
  window.addEventListener('pagehide',cleanupMotion);
  window.addEventListener('pageshow',e=>{if(e.persisted)initMotion();});
