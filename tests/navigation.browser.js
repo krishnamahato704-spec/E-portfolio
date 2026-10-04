@@ -58,14 +58,16 @@ try{
   });
   await check('Tab is not trapped, and moving focus to the page dismisses the dropdown',()=>{
     const last=links.at(-1);
-    last.focus();
+    last.focus({preventScroll:true});
     assert(key('Tab')===true,'Dropdown trapped forward Tab');
     assert(key('Tab',true)===true,'Dropdown trapped reverse Tab');
-    document.querySelector('#background-control').focus();
+    document.querySelector('#background-control').focus({preventScroll:true});
     assert(document.activeElement.id==='background-control' && !panel.classList.contains('is-open'),'Focus outside did not dismiss the dropdown');
     toggle.click();
   });
   await check('Escape restores trigger focus without changing page state',async()=>{
+    window.scrollTo({top:460,behavior:'instant'});await frame();
+    const positionBeforeClose=scrollY;
     key('Escape');await frame();
     assert(toggle.getAttribute('aria-expanded')==='false' && !panel.classList.contains('is-open'),'Escape did not close navigation');
     assert(document.activeElement===toggle,'Escape did not restore focus to the trigger');
@@ -73,7 +75,7 @@ try{
     assert(originalInert.inert,'A previously inert element was incorrectly enabled');
     assert(!document.body.classList.contains('navigation-open'),'Body open class survived close');
     for(const [property,value] of Object.entries(bodyStyle))assert(document.body.style[property]===value,`${property} was not restored`);
-    assert(Math.abs(scrollY-initialPosition)<=1,'Closing moved the page away from its original position');
+    assert(Math.abs(scrollY-positionBeforeClose)<=1,'Closing moved the page away from its current position');
     assert(!panel.hasAttribute('aria-modal') && !panel.hasAttribute('role'),'Closed navigation retained modal semantics');
   });
   await check('A pointer outside dismisses the dropdown without stealing focus',()=>{
