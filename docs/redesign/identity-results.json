@@ -1,0 +1,374 @@
+{
+  "checks": 66,
+  "failed": 0,
+  "results": [
+    {
+      "engine": "chromium",
+      "name": "First home visit offers a finite introduction and skip",
+      "pass": true
+    },
+    {
+      "engine": "chromium",
+      "name": "Introduction finishes within four seconds",
+      "pass": true,
+      "details": {
+        "elapsedMs": 3294.9000000059605,
+        "totalNavigationMs": 3501
+      }
+    },
+    {
+      "engine": "chromium",
+      "name": "Introduction causes no movement of the main layout",
+      "pass": true,
+      "details": {
+        "before": {
+          "x": 0,
+          "y": 77,
+          "width": 1440,
+          "height": 5718.203125
+        },
+        "after": {
+          "x": 0,
+          "y": 77,
+          "width": 1440,
+          "height": 5718.203125
+        }
+      }
+    },
+    {
+      "engine": "chromium",
+      "name": "Real portfolio remains available and is never inert",
+      "pass": true
+    },
+    {
+      "engine": "chromium",
+      "name": "Classroom images reserve proportional frames",
+      "pass": true
+    },
+    {
+      "engine": "chromium",
+      "name": "No film download or autoplay during the opening",
+      "pass": true
+    },
+    {
+      "engine": "chromium",
+      "name": "Refresh does not replay the introduction",
+      "pass": true
+    },
+    {
+      "engine": "chromium",
+      "name": "Inner-page navigation never plays the introduction",
+      "pass": true
+    },
+    {
+      "engine": "chromium",
+      "name": "Returning home in the same session stays still",
+      "pass": true
+    },
+    {
+      "engine": "chromium",
+      "name": "Opening produces no uncaught browser errors",
+      "pass": true,
+      "details": []
+    },
+    {
+      "engine": "chromium",
+      "name": "skip immediately dismisses the opening",
+      "pass": true
+    },
+    {
+      "engine": "chromium",
+      "name": "Keyboard skip moves focus to the real content",
+      "pass": true
+    },
+    {
+      "engine": "chromium",
+      "name": "skip fits the mobile viewport",
+      "pass": true
+    },
+    {
+      "engine": "chromium",
+      "name": "escape immediately dismisses the opening",
+      "pass": true
+    },
+    {
+      "engine": "chromium",
+      "name": "escape fits the mobile viewport",
+      "pass": true
+    },
+    {
+      "engine": "chromium",
+      "name": "keyboard immediately dismisses the opening",
+      "pass": true
+    },
+    {
+      "engine": "chromium",
+      "name": "keyboard fits the mobile viewport",
+      "pass": true
+    },
+    {
+      "engine": "chromium",
+      "name": "scroll immediately dismisses the opening",
+      "pass": true
+    },
+    {
+      "engine": "chromium",
+      "name": "Mobile visitor can scroll without a trap",
+      "pass": true
+    },
+    {
+      "engine": "chromium",
+      "name": "scroll fits the mobile viewport",
+      "pass": true
+    },
+    {
+      "engine": "chromium",
+      "name": "preference immediately dismisses the opening",
+      "pass": true
+    },
+    {
+      "engine": "chromium",
+      "name": "Live reduced motion stops all decorative animations",
+      "pass": true
+    },
+    {
+      "engine": "chromium",
+      "name": "preference fits the mobile viewport",
+      "pass": true
+    },
+    {
+      "engine": "chromium",
+      "name": "reduced shows the normal portfolio immediately",
+      "pass": true
+    },
+    {
+      "engine": "chromium",
+      "name": "blocked-storage shows the normal portfolio immediately",
+      "pass": true
+    },
+    {
+      "engine": "chromium",
+      "name": "no-js shows the normal portfolio immediately",
+      "pass": true
+    },
+    {
+      "engine": "chromium",
+      "name": "script-failure shows the normal portfolio immediately",
+      "pass": true
+    },
+    {
+      "engine": "chromium",
+      "name": "A new session beginning on a detail page has no intro",
+      "pass": true
+    },
+    {
+      "engine": "chromium",
+      "name": "A new browser session receives its own first home opening",
+      "pass": true
+    },
+    {
+      "engine": "chromium",
+      "name": "Gallery arrow keys change the image",
+      "pass": true
+    },
+    {
+      "engine": "chromium",
+      "name": "Gallery can return to the first image",
+      "pass": true
+    },
+    {
+      "engine": "chromium",
+      "name": "Gallery horizontal swipe changes the image",
+      "pass": true
+    },
+    {
+      "engine": "chromium",
+      "name": "Gallery Escape restores the original trigger",
+      "pass": true
+    },
+    {
+      "engine": "webkit",
+      "name": "First home visit offers a finite introduction and skip",
+      "pass": true
+    },
+    {
+      "engine": "webkit",
+      "name": "Introduction finishes within four seconds",
+      "pass": true,
+      "details": {
+        "elapsedMs": 3244,
+        "totalNavigationMs": 3868
+      }
+    },
+    {
+      "engine": "webkit",
+      "name": "Introduction causes no movement of the main layout",
+      "pass": true,
+      "details": {
+        "before": {
+          "x": 0,
+          "y": 77,
+          "width": 1440,
+          "height": 5716.890625
+        },
+        "after": {
+          "x": 0,
+          "y": 77,
+          "width": 1440,
+          "height": 5716.890625
+        }
+      }
+    },
+    {
+      "engine": "webkit",
+      "name": "Real portfolio remains available and is never inert",
+      "pass": true
+    },
+    {
+      "engine": "webkit",
+      "name": "Classroom images reserve proportional frames",
+      "pass": true
+    },
+    {
+      "engine": "webkit",
+      "name": "No film download or autoplay during the opening",
+      "pass": true
+    },
+    {
+      "engine": "webkit",
+      "name": "Refresh does not replay the introduction",
+      "pass": true
+    },
+    {
+      "engine": "webkit",
+      "name": "Inner-page navigation never plays the introduction",
+      "pass": true
+    },
+    {
+      "engine": "webkit",
+      "name": "Returning home in the same session stays still",
+      "pass": true
+    },
+    {
+      "engine": "webkit",
+      "name": "Opening produces no uncaught browser errors",
+      "pass": true,
+      "details": []
+    },
+    {
+      "engine": "webkit",
+      "name": "skip immediately dismisses the opening",
+      "pass": true
+    },
+    {
+      "engine": "webkit",
+      "name": "Keyboard skip moves focus to the real content",
+      "pass": true
+    },
+    {
+      "engine": "webkit",
+      "name": "skip fits the mobile viewport",
+      "pass": true
+    },
+    {
+      "engine": "webkit",
+      "name": "escape immediately dismisses the opening",
+      "pass": true
+    },
+    {
+      "engine": "webkit",
+      "name": "escape fits the mobile viewport",
+      "pass": true
+    },
+    {
+      "engine": "webkit",
+      "name": "keyboard immediately dismisses the opening",
+      "pass": true
+    },
+    {
+      "engine": "webkit",
+      "name": "keyboard fits the mobile viewport",
+      "pass": true
+    },
+    {
+      "engine": "webkit",
+      "name": "scroll immediately dismisses the opening",
+      "pass": true
+    },
+    {
+      "engine": "webkit",
+      "name": "Mobile visitor can scroll without a trap",
+      "pass": true
+    },
+    {
+      "engine": "webkit",
+      "name": "scroll fits the mobile viewport",
+      "pass": true
+    },
+    {
+      "engine": "webkit",
+      "name": "preference immediately dismisses the opening",
+      "pass": true
+    },
+    {
+      "engine": "webkit",
+      "name": "Live reduced motion stops all decorative animations",
+      "pass": true
+    },
+    {
+      "engine": "webkit",
+      "name": "preference fits the mobile viewport",
+      "pass": true
+    },
+    {
+      "engine": "webkit",
+      "name": "reduced shows the normal portfolio immediately",
+      "pass": true
+    },
+    {
+      "engine": "webkit",
+      "name": "blocked-storage shows the normal portfolio immediately",
+      "pass": true
+    },
+    {
+      "engine": "webkit",
+      "name": "no-js shows the normal portfolio immediately",
+      "pass": true
+    },
+    {
+      "engine": "webkit",
+      "name": "script-failure shows the normal portfolio immediately",
+      "pass": true
+    },
+    {
+      "engine": "webkit",
+      "name": "A new session beginning on a detail page has no intro",
+      "pass": true
+    },
+    {
+      "engine": "webkit",
+      "name": "A new browser session receives its own first home opening",
+      "pass": true
+    },
+    {
+      "engine": "webkit",
+      "name": "Gallery arrow keys change the image",
+      "pass": true
+    },
+    {
+      "engine": "webkit",
+      "name": "Gallery can return to the first image",
+      "pass": true
+    },
+    {
+      "engine": "webkit",
+      "name": "Gallery horizontal swipe changes the image",
+      "pass": true
+    },
+    {
+      "engine": "webkit",
+      "name": "Gallery Escape restores the original trigger",
+      "pass": true
+    }
+  ]
+}

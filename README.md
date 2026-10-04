@@ -1,6 +1,6 @@
 # Krishna Mahato · Teaching portfolio
 
-An academic editorial portfolio for a developing History, Social Science and English educator. The design uses the supplied previews for layout and visual direction; the public repository and Supabase content supply the facts and authentic evidence.
+An editorial teaching portfolio for Krishna Mahato, a developing History and Social Science educator. English remains a documented B.Ed. pedagogy subject. The public repository and published Supabase content supply the facts and authentic evidence.
 
 ## Run and verify
 
@@ -14,6 +14,7 @@ npm run lint
 npm test
 npx playwright install chromium
 npm run test:browser
+npm run test:identity
 ```
 
 The local preview runs at http://127.0.0.1:3000/ and also supports `/E-portfolio/`. Browser checks use a separate server on port 4173. On Windows they use installed Microsoft Edge; CI uses Playwright Chromium.
@@ -21,17 +22,18 @@ The local preview runs at http://127.0.0.1:3000/ and also supports `/E-portfolio
 ## Architecture
 
 - Thirteen generated static pages preserve Home, Profile/About, Teaching/Experience, Resources/Teaching Evidence, Credentials, Gallery, Résumé, Contact, Owner Studio, three teaching details and 404 URLs.
-- `src/content.js` contains the public snapshot, legacy compatibility and validation. It combines the public `portfolio_public` row last updated on 2 October 2026 with the newly supplied Amity observation journal: six resources, eight credentials and eight gallery images.
+- `src/content.js` contains the public snapshot, legacy compatibility and validation, including the Amity observation journal: six resources, eight credentials and eight gallery images. The read-only audit on 5 October 2026 found the published row last updated at `2026-10-04T16:30:13.693024+00:00`.
 - `src/views.js`, `src/editorial.js` and `src/view-helpers.js` provide shared page layouts, escaping, navigation and media mapping. Existing detailed lesson and philosophy content remain available.
 - `src/styles/*.css` contains design tokens and separate component, layout, page, navigation, motion and print styles. The build generates a single `src/styles.css` bundle.
 - `src/app.js` uses the exact reviewed release content and wires filtering, printing and email draft preparation.
-- `src/viewer.js` uses native dialogs for keyboard-accessible image/PDF previews and muted hero video playback. Original evidence links remain available without JavaScript.
+- `src/identity.js` adds a finite, skippable opening on the first home visit per session. Reduced motion, blocked storage and direct inner-page visits show the normal portfolio immediately. It never locks scrolling or makes the page inert.
+- `src/viewer.js` uses native dialogs for image/PDF previews, gallery arrows and swipe, and visitor-requested film playback. Original evidence links remain available without JavaScript.
 - `scripts/render-resume.mjs` generates the concise one-page PDF from shared portfolio data. The web/print résumé retains the full record. A changed live record uses the current print view unless a current PDF is supplied.
 - `scripts/package-site.mjs` prepares the public `dist` artifact used by the existing GitHub Pages workflow.
 
-Fonts, photographs, evidence previews and media are local. The real portrait is retained. The existing 11-second illustrative film appears beside the introduction with an original soft instrumental score. It loops continuously, trying playback with music and falling back to muted playback if the browser requires a visitor action. A sound button and native pause controls remain available. Reduced-motion visitors see a still preview and can choose to play it. The visible caption beneath the video is removed.
+Fonts, photographs, evidence previews and media are local. The real portrait leads the hero, using smaller 360px and 720px copies when appropriate. The existing 11-second illustrative film sits below the primary hero and downloads only when requested. After play, it loops with native controls and a music toggle. A reduced-motion preference change pauses active playback; visitors can still explicitly play it.
 
-The supplied previews also guide the illustrated paper theme: pale archival maps, a globe, stone fragments, open books, manuscripts and a quill decorate the page edges and section borders. Artwork and audio provenance are recorded in `docs/THEME_ASSETS.md`.
+The visual system uses warm paper, deep teal, restrained terracotta, serif headings, fine rules and authentic classroom imagery. An abstract globe connects the opening to the hero. Previous artwork and audio provenance remain recorded in `docs/THEME_ASSETS.md`.
 
 The Amity observation record uses a rebuilt 17-page reflective journal with daily notes, original photographs and edited first-person reflections. Its dates are 1–4 December and its duration is four days; no year is supplied by the source. See [the journal source record](docs/AMITY_JOURNAL_2026-10.md) for generation and migration details. The Pehchaan certificate belongs only to the Pehchaan experience.
 
@@ -47,10 +49,10 @@ Contact prepares a `mailto:` draft for the visitor to review and send. It does n
 
 ## Deployment and checks
 
-The existing main-branch GitHub Pages workflow runs the build, lint, unit tests and browser checks before uploading `dist`. The review workflow also checks generated HTML, CSS, sitemap and résumé for drift. Vercel uses the same `dist` artifact configured by `vercel.json`.
+The existing main-branch GitHub Pages workflow runs the build, lint, unit tests, browser checks and opening checks before uploading `dist`. The review workflow also checks generated HTML, CSS, sitemap and résumé for drift. Vercel uses the same `dist` artifact configured by `vercel.json`.
 
 The automated checks cover content safety, owner edits, upload validation, late/offline Supabase reads, keyboard navigation, accessible previews, reduced motion, print behavior, eight viewport widths and desktop/mobile axe audits. Browser reports and screenshots are written to `outputs/browser-checks/`.
 
-See [the redesign audit](docs/EDITORIAL_REDESIGN_2026-10.md) for content provenance, implementation details and verification limits. Real owner authentication and production publishing were not exercised; their test paths use isolated mocks.
+See [the recruiter redesign review](docs/RECRUITER_REDESIGN_REVIEW.md) for the current audit, screenshots, changes and verification limits. The earlier [editorial audit](docs/EDITORIAL_REDESIGN_2026-10.md) retains content provenance. Real owner authentication and production publishing were not exercised; their test paths use isolated mocks.
 
-The additional accessibility suite checks every route on mobile and desktop with Chromium, Firefox and WebKit. Run `npm run test:accessibility` after installing those browsers. Remote research and database history remain documented in `docs/RESEARCH_IMPLEMENTATION.md` and `supabase/README.md`.
+The additional accessibility suite checks every route on mobile and desktop with Chromium, Firefox and WebKit. Run `npx playwright install chromium firefox webkit`, then `npm run test:accessibility`. Engine subsets can be selected with `TEST_ENGINES`; opening checks use `IDENTITY_TEST_ENGINES`. This Windows machine completed Chromium and WebKit checks; Firefox could not start because of a side-by-side assembly error, even after reinstalling its Playwright bundle. Remote research and database history remain documented in `docs/RESEARCH_IMPLEMENTATION.md` and `supabase/README.md`.

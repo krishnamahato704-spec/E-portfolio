@@ -206,12 +206,15 @@ try{
    };
   });
   await moving.goto(base,{waitUntil:'load'});
+  record('hero video: no video or music download before a visitor action',await moving.locator('.teaching-video').evaluate(v=>v.paused&&!v.getAttribute('src')));
+  await moving.locator('.video-play').click();
   await moving.waitForFunction(()=>!document.querySelector('.teaching-video').paused);
-  const heroFilm=await moving.evaluate(()=>{const v=document.querySelector('.teaching-video'),copy=document.querySelector('.hero-copy'),metrics=document.querySelector('.metrics-strip');const box=v.getBoundingClientRect(),text=copy.getBoundingClientRect();return {muted:v.muted,loop:v.loop,controls:v.controls,once:document.querySelectorAll('video').length===1,beside:box.left>text.right,beforeMetrics:box.bottom<metrics.getBoundingClientRect().top,time:v.currentTime};});
-  record('hero video: blocked sound still permits continuous video beside profile details',heroFilm.muted&&heroFilm.loop&&heroFilm.controls&&heroFilm.once&&heroFilm.beside&&heroFilm.beforeMetrics,heroFilm);
-  record('hero video: attempts automatic music and exposes sound control when blocked',await moving.evaluate(()=>window.__blockedSoundAttempts>0&&document.querySelector('.video-sound').textContent==='Sound on'&&!document.querySelector('.hero-video-panel figcaption')));
+  const heroFilm=await moving.evaluate(()=>{const v=document.querySelector('.teaching-video'),copy=document.querySelector('.hero-copy');const box=v.getBoundingClientRect(),text=copy.getBoundingClientRect();return {muted:v.muted,loop:v.loop,controls:v.controls,once:document.querySelectorAll('video').length===1,below:box.top>=text.bottom,time:v.currentTime};});
+  record('hero video: requested playback remains below the primary identity',heroFilm.loop&&heroFilm.controls&&heroFilm.once&&heroFilm.below,heroFilm);
+  record('hero video: explicit play enables music and exposes its state',await moving.evaluate(()=>!document.querySelector('.teaching-video').muted&&document.querySelector('.video-sound').textContent==='Mute music'));
   await moving.waitForTimeout(250);
   record('hero video: playback advances',await moving.locator('.teaching-video').evaluate((v,time)=>v.currentTime>time,heroFilm.time));
+  await moving.locator('.video-sound').click();
   await moving.locator('.video-sound').click();
   await moving.waitForFunction(()=>!document.querySelector('.teaching-video').muted&&!document.querySelector('.teaching-video').paused);
   record('hero video: Sound on enables music and updates the accessible control',await moving.evaluate(()=>document.querySelector('.video-sound').getAttribute('aria-pressed')==='true'&&document.querySelector('.video-sound').textContent==='Mute music'));
@@ -221,6 +224,8 @@ try{
   await moving.locator('.video-sound').click();
   record('hero video: music can be muted without stopping the film',await moving.locator('.teaching-video').evaluate(v=>v.muted&&!v.paused));
   await moving.reload({waitUntil:'load'});
+  record('hero video: refresh returns to a static poster',await moving.locator('.teaching-video').evaluate(v=>v.paused&&!v.getAttribute('src')));
+  await moving.locator('.video-play').click();
   await moving.waitForFunction(()=>!document.querySelector('.teaching-video').paused);
   record('hero video: a visitor mute is retained after refresh',await moving.locator('.teaching-video').evaluate(v=>v.muted));
   await moving.emulateMedia({reducedMotion:'reduce'});

@@ -1,0 +1,1022 @@
+[
+  {
+    "version": "before",
+    "width": 390,
+    "documentWidth": 390,
+    "resources": [
+      {
+        "name": "styles.css?v=editorial-20261004",
+        "bytes": 49237,
+        "duration": 2.800000011920929
+      },
+      {
+        "name": "hero-poster.webp",
+        "bytes": 52242,
+        "duration": 3.5
+      },
+      {
+        "name": "portrait.webp",
+        "bytes": 129204,
+        "duration": 6
+      },
+      {
+        "name": "app.js?v=editorial-20261004",
+        "bytes": 2466,
+        "duration": 5.4000000059604645
+      },
+      {
+        "name": "collections.js?v=editorial-20261004",
+        "bytes": 2442,
+        "duration": 4.5
+      },
+      {
+        "name": "navigation.js?v=editorial-20261004",
+        "bytes": 2130,
+        "duration": 4.800000011920929
+      },
+      {
+        "name": "content.js?v=editorial-20261004",
+        "bytes": 28860,
+        "duration": 4.9000000059604645
+      },
+      {
+        "name": "motion.js?v=editorial-20261004",
+        "bytes": 6013,
+        "duration": 6.200000017881393
+      },
+      {
+        "name": "viewer.js?v=editorial-20261004",
+        "bytes": 5116,
+        "duration": 7.200000017881393
+      },
+      {
+        "name": "amity-journal.js?v=editorial-20261004",
+        "bytes": 2802,
+        "duration": 2.699999988079071
+      },
+      {
+        "name": "timeline.js?v=editorial-20261004",
+        "bytes": 6924,
+        "duration": 3.5999999940395355
+      },
+      {
+        "name": "philosophy.js?v=editorial-20261004",
+        "bytes": 2878,
+        "duration": 4
+      },
+      {
+        "name": "democracy.js?v=editorial-20261004",
+        "bytes": 4996,
+        "duration": 5.0999999940395355
+      },
+      {
+        "name": "paper-texture.svg",
+        "bytes": 634,
+        "duration": 4
+      },
+      {
+        "name": "history-study.webp",
+        "bytes": 265520,
+        "duration": 5.700000017881393
+      },
+      {
+        "name": "english-study.webp",
+        "bytes": 186330,
+        "duration": 5.699999988079071
+      },
+      {
+        "name": "source-sans-3-latin.woff2",
+        "bytes": 170488,
+        "duration": 81.59999999403954
+      },
+      {
+        "name": "source-serif-4-regular.woff2",
+        "bytes": 20388,
+        "duration": 66
+      },
+      {
+        "name": "democracy-plan-preview.webp",
+        "bytes": 36314,
+        "duration": 6.300000011920929
+      },
+      {
+        "name": "mock-election-activity.webp",
+        "bytes": 558332,
+        "duration": 12.5
+      },
+      {
+        "name": "ntcc-community-report.webp",
+        "bytes": 80774,
+        "duration": 19.899999976158142
+      },
+      {
+        "name": "tlm-exhibition.webp",
+        "bytes": 288052,
+        "duration": 8.399999976158142
+      },
+      {
+        "name": "independence-day.webp",
+        "bytes": 233580,
+        "duration": 8.599999994039536
+      },
+      {
+        "name": "pehchaan-collage.webp",
+        "bytes": 412036,
+        "duration": 21.69999998807907
+      }
+    ],
+    "images": [
+      {
+        "src": "portrait.webp",
+        "width": 1154,
+        "height": 1400
+      },
+      {
+        "src": "democracy-plan-preview.webp",
+        "width": 900,
+        "height": 636
+      },
+      {
+        "src": "mock-election-activity.webp",
+        "width": 1024,
+        "height": 1536
+      },
+      {
+        "src": "ntcc-community-report.webp",
+        "width": 1013,
+        "height": 1432
+      },
+      {
+        "src": "tlm-exhibition.webp",
+        "width": 1600,
+        "height": 1200
+      },
+      {
+        "src": "pehchaan-collage.webp",
+        "width": 1800,
+        "height": 1013
+      },
+      {
+        "src": "independence-day.webp",
+        "width": 1200,
+        "height": 1600
+      }
+    ],
+    "videoRequested": false
+  },
+  {
+    "version": "before",
+    "width": 768,
+    "documentWidth": 768,
+    "resources": [
+      {
+        "name": "styles.css?v=editorial-20261004",
+        "bytes": 49237,
+        "duration": 7.5
+      },
+      {
+        "name": "hero-poster.webp",
+        "bytes": 52242,
+        "duration": 10.099999994039536
+      },
+      {
+        "name": "portrait.webp",
+        "bytes": 129204,
+        "duration": 9.800000011920929
+      },
+      {
+        "name": "app.js?v=editorial-20261004",
+        "bytes": 2466,
+        "duration": 8.5
+      },
+      {
+        "name": "paper-texture.svg",
+        "bytes": 634,
+        "duration": 4.5999999940395355
+      },
+      {
+        "name": "history-study.webp",
+        "bytes": 265520,
+        "duration": 5.799999982118607
+      },
+      {
+        "name": "english-study.webp",
+        "bytes": 186330,
+        "duration": 6.799999982118607
+      },
+      {
+        "name": "source-sans-3-latin.woff2",
+        "bytes": 170488,
+        "duration": 93.09999999403954
+      },
+      {
+        "name": "source-serif-4-regular.woff2",
+        "bytes": 20388,
+        "duration": 80
+      },
+      {
+        "name": "democracy-plan-preview.webp",
+        "bytes": 36314,
+        "duration": 11.400000005960464
+      },
+      {
+        "name": "mock-election-activity.webp",
+        "bytes": 558332,
+        "duration": 31.099999994039536
+      },
+      {
+        "name": "ntcc-community-report.webp",
+        "bytes": 80774,
+        "duration": 13.5
+      },
+      {
+        "name": "tlm-exhibition.webp",
+        "bytes": 288052,
+        "duration": 25.5
+      },
+      {
+        "name": "pehchaan-collage.webp",
+        "bytes": 412036,
+        "duration": 32.099999994039536
+      },
+      {
+        "name": "independence-day.webp",
+        "bytes": 233580,
+        "duration": 27.19999998807907
+      },
+      {
+        "name": "collections.js?v=editorial-20261004",
+        "bytes": 2442,
+        "duration": 9.199999988079071
+      },
+      {
+        "name": "content.js?v=editorial-20261004",
+        "bytes": 28860,
+        "duration": 10.699999988079071
+      },
+      {
+        "name": "navigation.js?v=editorial-20261004",
+        "bytes": 2130,
+        "duration": 13.300000011920929
+      },
+      {
+        "name": "motion.js?v=editorial-20261004",
+        "bytes": 6013,
+        "duration": 14.599999994039536
+      },
+      {
+        "name": "viewer.js?v=editorial-20261004",
+        "bytes": 5116,
+        "duration": 14.700000017881393
+      },
+      {
+        "name": "amity-journal.js?v=editorial-20261004",
+        "bytes": 2802,
+        "duration": 3.9000000059604645
+      },
+      {
+        "name": "timeline.js?v=editorial-20261004",
+        "bytes": 6924,
+        "duration": 4.5999999940395355
+      },
+      {
+        "name": "philosophy.js?v=editorial-20261004",
+        "bytes": 2878,
+        "duration": 4.199999988079071
+      },
+      {
+        "name": "democracy.js?v=editorial-20261004",
+        "bytes": 4996,
+        "duration": 4.5999999940395355
+      }
+    ],
+    "images": [
+      {
+        "src": "portrait.webp",
+        "width": 1154,
+        "height": 1400
+      },
+      {
+        "src": "democracy-plan-preview.webp",
+        "width": 900,
+        "height": 636
+      },
+      {
+        "src": "mock-election-activity.webp",
+        "width": 1024,
+        "height": 1536
+      },
+      {
+        "src": "ntcc-community-report.webp",
+        "width": 1013,
+        "height": 1432
+      },
+      {
+        "src": "tlm-exhibition.webp",
+        "width": 1600,
+        "height": 1200
+      },
+      {
+        "src": "pehchaan-collage.webp",
+        "width": 1800,
+        "height": 1013
+      },
+      {
+        "src": "independence-day.webp",
+        "width": 1200,
+        "height": 1600
+      }
+    ],
+    "videoRequested": false
+  },
+  {
+    "version": "before",
+    "width": 1440,
+    "documentWidth": 1440,
+    "resources": [
+      {
+        "name": "styles.css?v=editorial-20261004",
+        "bytes": 49237,
+        "duration": 6.5999999940395355
+      },
+      {
+        "name": "portrait.webp",
+        "bytes": 129204,
+        "duration": 10.400000005960464
+      },
+      {
+        "name": "hero-poster.webp",
+        "bytes": 52242,
+        "duration": 10.200000017881393
+      },
+      {
+        "name": "app.js?v=editorial-20261004",
+        "bytes": 2466,
+        "duration": 8.5
+      },
+      {
+        "name": "collections.js?v=editorial-20261004",
+        "bytes": 2442,
+        "duration": 5.700000017881393
+      },
+      {
+        "name": "content.js?v=editorial-20261004",
+        "bytes": 28860,
+        "duration": 8.400000005960464
+      },
+      {
+        "name": "navigation.js?v=editorial-20261004",
+        "bytes": 2130,
+        "duration": 7.899999976158142
+      },
+      {
+        "name": "motion.js?v=editorial-20261004",
+        "bytes": 6013,
+        "duration": 9.299999982118607
+      },
+      {
+        "name": "viewer.js?v=editorial-20261004",
+        "bytes": 5116,
+        "duration": 11.900000005960464
+      },
+      {
+        "name": "paper-texture.svg",
+        "bytes": 634,
+        "duration": 4.799999982118607
+      },
+      {
+        "name": "history-study.webp",
+        "bytes": 265520,
+        "duration": 15.5
+      },
+      {
+        "name": "english-study.webp",
+        "bytes": 186330,
+        "duration": 6
+      },
+      {
+        "name": "source-sans-3-latin.woff2",
+        "bytes": 170488,
+        "duration": 89.59999999403954
+      },
+      {
+        "name": "source-serif-4-regular.woff2",
+        "bytes": 20388,
+        "duration": 76.2000000178814
+      },
+      {
+        "name": "democracy-plan-preview.webp",
+        "bytes": 36314,
+        "duration": 14.599999994039536
+      },
+      {
+        "name": "ntcc-community-report.webp",
+        "bytes": 80774,
+        "duration": 20.5
+      },
+      {
+        "name": "mock-election-activity.webp",
+        "bytes": 558332,
+        "duration": 33.70000001788139
+      },
+      {
+        "name": "pehchaan-collage.webp",
+        "bytes": 412036,
+        "duration": 32.19999998807907
+      },
+      {
+        "name": "tlm-exhibition.webp",
+        "bytes": 288052,
+        "duration": 26.099999994039536
+      },
+      {
+        "name": "independence-day.webp",
+        "bytes": 233580,
+        "duration": 36
+      },
+      {
+        "name": "amity-journal.js?v=editorial-20261004",
+        "bytes": 2802,
+        "duration": 6.9000000059604645
+      },
+      {
+        "name": "timeline.js?v=editorial-20261004",
+        "bytes": 6924,
+        "duration": 9
+      },
+      {
+        "name": "philosophy.js?v=editorial-20261004",
+        "bytes": 2878,
+        "duration": 15.599999994039536
+      },
+      {
+        "name": "democracy.js?v=editorial-20261004",
+        "bytes": 4996,
+        "duration": 18.099999994039536
+      }
+    ],
+    "images": [
+      {
+        "src": "portrait.webp",
+        "width": 1154,
+        "height": 1400
+      },
+      {
+        "src": "democracy-plan-preview.webp",
+        "width": 900,
+        "height": 636
+      },
+      {
+        "src": "mock-election-activity.webp",
+        "width": 1024,
+        "height": 1536
+      },
+      {
+        "src": "ntcc-community-report.webp",
+        "width": 1013,
+        "height": 1432
+      },
+      {
+        "src": "tlm-exhibition.webp",
+        "width": 1600,
+        "height": 1200
+      },
+      {
+        "src": "pehchaan-collage.webp",
+        "width": 1800,
+        "height": 1013
+      },
+      {
+        "src": "independence-day.webp",
+        "width": 1200,
+        "height": 1600
+      }
+    ],
+    "videoRequested": false
+  },
+  {
+    "version": "after",
+    "width": 390,
+    "documentWidth": 390,
+    "resources": [
+      {
+        "name": "styles.css?v=editorial-20261004",
+        "bytes": 64787,
+        "duration": 24.80000001192093
+      },
+      {
+        "name": "portrait-360.webp",
+        "bytes": 16206,
+        "duration": 34.099999994039536
+      },
+      {
+        "name": "hero-poster.webp",
+        "bytes": 52242,
+        "duration": 41.60000002384186
+      },
+      {
+        "name": "app.js?v=editorial-20261004",
+        "bytes": 2546,
+        "duration": 33.599999994039536
+      },
+      {
+        "name": "paper-texture.svg",
+        "bytes": 634,
+        "duration": 3.399999976158142
+      },
+      {
+        "name": "source-sans-3-latin.woff2",
+        "bytes": 170488,
+        "duration": 108.2000000178814
+      },
+      {
+        "name": "source-serif-4-regular.woff2",
+        "bytes": 20388,
+        "duration": 109.19999998807907
+      },
+      {
+        "name": "source-serif-4-italic.woff2",
+        "bytes": 20392,
+        "duration": 95.30000001192093
+      },
+      {
+        "name": "democracy-plan-preview.webp",
+        "bytes": 36314,
+        "duration": 14.599999994039536
+      },
+      {
+        "name": "mock-election-activity.webp",
+        "bytes": 558332,
+        "duration": 29.600000023841858
+      },
+      {
+        "name": "ntcc-community-report.webp",
+        "bytes": 80774,
+        "duration": 15.699999988079071
+      },
+      {
+        "name": "collections.js?v=editorial-20261004",
+        "bytes": 2442,
+        "duration": 17.400000005960464
+      },
+      {
+        "name": "navigation.js?v=editorial-20261004",
+        "bytes": 2130,
+        "duration": 23
+      },
+      {
+        "name": "content.js?v=editorial-20261004",
+        "bytes": 28860,
+        "duration": 22.700000017881393
+      },
+      {
+        "name": "viewer.js?v=editorial-20261004",
+        "bytes": 7306,
+        "duration": 25.69999998807907
+      },
+      {
+        "name": "identity.js?v=editorial-20261004",
+        "bytes": 3522,
+        "duration": 25.400000005960464
+      },
+      {
+        "name": "motion.js?v=editorial-20261004",
+        "bytes": 6013,
+        "duration": 25.599999994039536
+      },
+      {
+        "name": "amity-journal.js?v=editorial-20261004",
+        "bytes": 2802,
+        "duration": 3.699999988079071
+      },
+      {
+        "name": "timeline.js?v=editorial-20261004",
+        "bytes": 6924,
+        "duration": 5.0999999940395355
+      },
+      {
+        "name": "philosophy.js?v=editorial-20261004",
+        "bytes": 2878,
+        "duration": 4.9000000059604645
+      },
+      {
+        "name": "democracy.js?v=editorial-20261004",
+        "bytes": 4996,
+        "duration": 5.200000017881393
+      },
+      {
+        "name": "school-house-placards.webp",
+        "bytes": 128856,
+        "duration": 4.200000017881393
+      },
+      {
+        "name": "tlm-exhibition.webp",
+        "bytes": 288052,
+        "duration": 9.200000017881393
+      },
+      {
+        "name": "pehchaan-collage.webp",
+        "bytes": 412036,
+        "duration": 10.5
+      },
+      {
+        "name": "independence-day.webp",
+        "bytes": 233580,
+        "duration": 24.299999982118607
+      }
+    ],
+    "images": [
+      {
+        "src": "portrait-360.webp",
+        "width": 340,
+        "height": 412
+      },
+      {
+        "src": "democracy-plan-preview.webp",
+        "width": 900,
+        "height": 636
+      },
+      {
+        "src": "mock-election-activity.webp",
+        "width": 1024,
+        "height": 1536
+      },
+      {
+        "src": "ntcc-community-report.webp",
+        "width": 1013,
+        "height": 1432
+      },
+      {
+        "src": "school-house-placards.webp",
+        "width": 1600,
+        "height": 1200
+      },
+      {
+        "src": "tlm-exhibition.webp",
+        "width": 1600,
+        "height": 1200
+      },
+      {
+        "src": "pehchaan-collage.webp",
+        "width": 1800,
+        "height": 1013
+      },
+      {
+        "src": "independence-day.webp",
+        "width": 1200,
+        "height": 1600
+      }
+    ],
+    "videoRequested": false
+  },
+  {
+    "version": "after",
+    "width": 768,
+    "documentWidth": 768,
+    "resources": [
+      {
+        "name": "styles.css?v=editorial-20261004",
+        "bytes": 64787,
+        "duration": 8.599999994039536
+      },
+      {
+        "name": "portrait-360.webp",
+        "bytes": 16206,
+        "duration": 10.099999994039536
+      },
+      {
+        "name": "hero-poster.webp",
+        "bytes": 52242,
+        "duration": 9.900000005960464
+      },
+      {
+        "name": "app.js?v=editorial-20261004",
+        "bytes": 2546,
+        "duration": 9.099999994039536
+      },
+      {
+        "name": "paper-texture.svg",
+        "bytes": 634,
+        "duration": 2.699999988079071
+      },
+      {
+        "name": "source-sans-3-latin.woff2",
+        "bytes": 170488,
+        "duration": 133.30000001192093
+      },
+      {
+        "name": "source-serif-4-regular.woff2",
+        "bytes": 20388,
+        "duration": 132.5
+      },
+      {
+        "name": "source-serif-4-italic.woff2",
+        "bytes": 20392,
+        "duration": 114.5
+      },
+      {
+        "name": "democracy-plan-preview.webp",
+        "bytes": 36314,
+        "duration": 11.5
+      },
+      {
+        "name": "mock-election-activity.webp",
+        "bytes": 558332,
+        "duration": 30.399999976158142
+      },
+      {
+        "name": "ntcc-community-report.webp",
+        "bytes": 80774,
+        "duration": 17.299999982118607
+      },
+      {
+        "name": "school-house-placards.webp",
+        "bytes": 128856,
+        "duration": 17.700000017881393
+      },
+      {
+        "name": "collections.js?v=editorial-20261004",
+        "bytes": 2442,
+        "duration": 9.199999988079071
+      },
+      {
+        "name": "content.js?v=editorial-20261004",
+        "bytes": 28860,
+        "duration": 10.599999994039536
+      },
+      {
+        "name": "navigation.js?v=editorial-20261004",
+        "bytes": 2130,
+        "duration": 9.599999994039536
+      },
+      {
+        "name": "motion.js?v=editorial-20261004",
+        "bytes": 6013,
+        "duration": 10.599999994039536
+      },
+      {
+        "name": "identity.js?v=editorial-20261004",
+        "bytes": 3522,
+        "duration": 14.300000011920929
+      },
+      {
+        "name": "viewer.js?v=editorial-20261004",
+        "bytes": 7306,
+        "duration": 11.200000017881393
+      },
+      {
+        "name": "timeline.js?v=editorial-20261004",
+        "bytes": 6924,
+        "duration": 3.5
+      },
+      {
+        "name": "democracy.js?v=editorial-20261004",
+        "bytes": 4996,
+        "duration": 5
+      },
+      {
+        "name": "philosophy.js?v=editorial-20261004",
+        "bytes": 2878,
+        "duration": 4.800000011920929
+      },
+      {
+        "name": "amity-journal.js?v=editorial-20261004",
+        "bytes": 2802,
+        "duration": 4.5
+      },
+      {
+        "name": "tlm-exhibition.webp",
+        "bytes": 288052,
+        "duration": 5
+      },
+      {
+        "name": "pehchaan-collage.webp",
+        "bytes": 412036,
+        "duration": 8.199999988079071
+      },
+      {
+        "name": "independence-day.webp",
+        "bytes": 233580,
+        "duration": 16.19999998807907
+      }
+    ],
+    "images": [
+      {
+        "src": "portrait-360.webp",
+        "width": 245,
+        "height": 298
+      },
+      {
+        "src": "democracy-plan-preview.webp",
+        "width": 900,
+        "height": 636
+      },
+      {
+        "src": "mock-election-activity.webp",
+        "width": 1024,
+        "height": 1536
+      },
+      {
+        "src": "ntcc-community-report.webp",
+        "width": 1013,
+        "height": 1432
+      },
+      {
+        "src": "school-house-placards.webp",
+        "width": 1600,
+        "height": 1200
+      },
+      {
+        "src": "tlm-exhibition.webp",
+        "width": 1600,
+        "height": 1200
+      },
+      {
+        "src": "pehchaan-collage.webp",
+        "width": 1800,
+        "height": 1013
+      },
+      {
+        "src": "independence-day.webp",
+        "width": 1200,
+        "height": 1600
+      }
+    ],
+    "videoRequested": false
+  },
+  {
+    "version": "after",
+    "width": 1440,
+    "documentWidth": 1440,
+    "resources": [
+      {
+        "name": "styles.css?v=editorial-20261004",
+        "bytes": 64787,
+        "duration": 3.7999999821186066
+      },
+      {
+        "name": "portrait-720.webp",
+        "bytes": 55096,
+        "duration": 4.5
+      },
+      {
+        "name": "hero-poster.webp",
+        "bytes": 52242,
+        "duration": 7.5
+      },
+      {
+        "name": "app.js?v=editorial-20261004",
+        "bytes": 2546,
+        "duration": 6.5999999940395355
+      },
+      {
+        "name": "paper-texture.svg",
+        "bytes": 634,
+        "duration": 3.5
+      },
+      {
+        "name": "source-sans-3-latin.woff2",
+        "bytes": 170488,
+        "duration": 118.09999999403954
+      },
+      {
+        "name": "source-serif-4-regular.woff2",
+        "bytes": 20388,
+        "duration": 116.19999998807907
+      },
+      {
+        "name": "source-serif-4-italic.woff2",
+        "bytes": 20392,
+        "duration": 106.90000000596046
+      },
+      {
+        "name": "democracy-plan-preview.webp",
+        "bytes": 36314,
+        "duration": 14
+      },
+      {
+        "name": "ntcc-community-report.webp",
+        "bytes": 80774,
+        "duration": 21.80000001192093
+      },
+      {
+        "name": "mock-election-activity.webp",
+        "bytes": 558332,
+        "duration": 34.30000001192093
+      },
+      {
+        "name": "school-house-placards.webp",
+        "bytes": 128856,
+        "duration": 31.200000017881393
+      },
+      {
+        "name": "collections.js?v=editorial-20261004",
+        "bytes": 2442,
+        "duration": 12.800000011920929
+      },
+      {
+        "name": "content.js?v=editorial-20261004",
+        "bytes": 28860,
+        "duration": 17.19999998807907
+      },
+      {
+        "name": "navigation.js?v=editorial-20261004",
+        "bytes": 2130,
+        "duration": 16.400000005960464
+      },
+      {
+        "name": "motion.js?v=editorial-20261004",
+        "bytes": 6013,
+        "duration": 16.5
+      },
+      {
+        "name": "viewer.js?v=editorial-20261004",
+        "bytes": 7306,
+        "duration": 19.5
+      },
+      {
+        "name": "identity.js?v=editorial-20261004",
+        "bytes": 3522,
+        "duration": 17.899999976158142
+      },
+      {
+        "name": "timeline.js?v=editorial-20261004",
+        "bytes": 6924,
+        "duration": 5.199999988079071
+      },
+      {
+        "name": "philosophy.js?v=editorial-20261004",
+        "bytes": 2878,
+        "duration": 4.799999982118607
+      },
+      {
+        "name": "democracy.js?v=editorial-20261004",
+        "bytes": 4996,
+        "duration": 5.9000000059604645
+      },
+      {
+        "name": "amity-journal.js?v=editorial-20261004",
+        "bytes": 2802,
+        "duration": 5.300000011920929
+      },
+      {
+        "name": "tlm-exhibition.webp",
+        "bytes": 288052,
+        "duration": 7.800000011920929
+      },
+      {
+        "name": "pehchaan-collage.webp",
+        "bytes": 412036,
+        "duration": 20.100000023841858
+      },
+      {
+        "name": "independence-day.webp",
+        "bytes": 233580,
+        "duration": 18.299999982118607
+      }
+    ],
+    "images": [
+      {
+        "src": "portrait-720.webp",
+        "width": 380,
+        "height": 460
+      },
+      {
+        "src": "democracy-plan-preview.webp",
+        "width": 900,
+        "height": 636
+      },
+      {
+        "src": "mock-election-activity.webp",
+        "width": 1024,
+        "height": 1536
+      },
+      {
+        "src": "ntcc-community-report.webp",
+        "width": 1013,
+        "height": 1432
+      },
+      {
+        "src": "school-house-placards.webp",
+        "width": 1600,
+        "height": 1200
+      },
+      {
+        "src": "tlm-exhibition.webp",
+        "width": 1600,
+        "height": 1200
+      },
+      {
+        "src": "pehchaan-collage.webp",
+        "width": 1800,
+        "height": 1013
+      },
+      {
+        "src": "independence-day.webp",
+        "width": 1200,
+        "height": 1600
+      }
+    ],
+    "videoRequested": false
+  }
+]
