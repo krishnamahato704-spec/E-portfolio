@@ -16,7 +16,7 @@ export const routes={
  '404':{path:'404.html',title:'Page Not Found'}
 };
 export const esc=s=>String(s??'').replace(/[&<>"']/g,x=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[x]));
-export const safeUrl=s=>{try{const u=new URL(s);return ['https:','http:'].includes(u.protocol)?u.href:''}catch{return ''}};
+export const safeUrl=s=>{try{const u=new URL(s);return u.protocol==='https:'?u.href:''}catch{return ''}};
 export const arrow='<span aria-hidden="true">→</span>';
 export const link=(base,route,label,cls='text-link')=>`<a class="${cls}" href="${base}${routes[route].path}">${label} ${arrow}</a>`;
 export const tag=s=>`<span class="tag">${esc(s)}</span>`;

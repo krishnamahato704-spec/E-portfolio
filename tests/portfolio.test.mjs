@@ -58,10 +58,10 @@ test('Teaching resource uploads normalize document MIME before storage',async()=
  global.fetch=async(url,options)=>{seen={url:String(url),options};return new Response(JSON.stringify({Key:'redesign/test.docx'}),{status:200,headers:{'Content-Type':'application/json'}})};
  try {
   const url=await uploadFile({name:'lesson-plan.docx',type:'',size:1024},'test-token');
-  assert.match(seen.url,/\/storage\/v1\/object\/portfolio-media\/redesign\/.+\.docx$/);
+  assert.match(seen.url,/\/storage\/v1\/object\/portfolio-media\/reviewed\/.+\.docx$/);
   assert.equal(seen.options.headers['Content-Type'],'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
   assert.equal(seen.options.headers.Authorization,'Bearer test-token');
-  assert.match(url,/\/storage\/v1\/object\/public\/portfolio-media\/redesign\/.+\.docx$/);
+  assert.match(url,/\/storage\/v1\/object\/public\/portfolio-media\/reviewed\/.+\.docx$/);
  } finally {global.fetch=original}
 });
 test('Every route renders a complete static document with one heading and working local links',async()=>{

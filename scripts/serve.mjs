@@ -21,6 +21,10 @@ http.createServer(async(req,res)=>{
    }
    target=path.join(target,'index.html');
   }
-  const data=await fs.readFile(target);res.writeHead(200,{'Content-Type':types[path.extname(target)]||'application/octet-stream','Cache-Control':'no-cache'});res.end(data);
+  const data=await fs.readFile(target);
+  // WebKit upgrades loopback HTTP resources when this production-only CSP
+  // directive is present. Keep every other CSP restriction in local previews.
+  const body=path.extname(target)==='.html'?data.toString().replace('; upgrade-insecure-requests',''):data;
+  res.writeHead(200,{'Content-Type':types[path.extname(target)]||'application/octet-stream','Cache-Control':'no-cache'});res.end(body);
  }catch{res.writeHead(404,{'Content-Type':'text/html'});res.end(await fs.readFile(path.join(root,'404.html')))}
 }).listen(port,'0.0.0.0',()=>console.log(`Server running on http://0.0.0.0:${port}/`));

@@ -1,79 +1,25 @@
-// Run /tests/app.browser.html?case=resources, ?case=contact, or ?case=failure.
-// Exercises the real app with an isolated, controllable read response.
 import {defaultContent} from '../src/content.js';
 import {view} from '../src/views.js';
-const mode=new URLSearchParams(location.search).get('case') || 'resources';
+const mode=new URLSearchParams(location.search).get('case')||'resources';
 const route=mode.startsWith('home')?'home':mode==='contact'?'contact':mode==='teaching'?'teaching':'resources';
 document.body.dataset.route=route;
-const main=document.querySelector('#main');
-const initial=structuredClone(defaultContent);
-if(mode==='home-add')initial.profile.portrait='';
-main.innerHTML=view(route,initial,'../');
-const original=main.firstElementChild;
-const originalHero=main.querySelector('.hero'),originalPortrait=main.querySelector('.portrait'),originalVideo=main.querySelector('.teaching-video');
-let resolveRead;
-const nativeFetch=window.fetch;
-const calls=[];
-window.fetch=(url,options)=>{
-  calls.push({url:String(url),method:options?.method||'GET'});
-  return new Promise(resolve=>{resolveRead=resolve;});
-};
-const results=[];
-const assert=(condition,name)=>{results.push({name,pass:!!condition});};
-try {
-  await import('../src/app.js');
-  const content=structuredClone(defaultContent);
-  content.schemaVersion=3;
-  content.profile.headline='Updated fixture teaching headline';
-  if(mode==='home-remove')content.profile.portrait='';
-  content.resources=[
-    {title:'Test lesson',category:'Lesson plan',description:'Local fixture only',url:'https://example.com/lesson.pdf'},
-    {title:'Test assessment',category:'Assessment',description:'Local fixture only',url:'https://example.com/assessment.pdf'}
-  ];
-  if(mode==='contact') {
-    const name=main.querySelector('[name=name]');
-    name.value='Local regression fixture';
-    name.dispatchEvent(new Event('input',{bubbles:true}));
-  }
-  if(mode==='teaching'){main.querySelector('details').open=false;main.querySelector('summary').click();}
-  resolveRead(new Response(JSON.stringify(mode==='failure'?{message:'Fixture unavailable'}:[{content,updated_at:'2026-09-11T00:00:00Z'}]),{status:mode==='failure'?503:200,headers:{'Content-Type':'application/json'}}));
-  await new Promise(resolve=>setTimeout(resolve,80));
-  assert(calls.length===1 && calls[0].method==='GET' && calls[0].url.includes('/rest/v1/portfolio_public?'),'One public read and no writes');
-  if(mode.startsWith('home')) {
-    assert(main.querySelector('.hero')===originalHero,'Cloud refresh preserves the existing hero node');
-    if(mode==='home')assert(main.querySelector('.portrait')===originalPortrait,'Cloud refresh preserves the existing portrait node');
-    if(mode==='home-remove')assert(!main.querySelector('.portrait')&&!!main.querySelector('.portrait-placeholder'),'Cloud refresh respects removal of the portrait');
-    if(mode==='home-add')assert(!!main.querySelector('.portrait')&&!main.querySelector('.portrait-placeholder'),'Cloud refresh adds a newly published portrait');
-    assert(main.querySelector('.hero video')===originalVideo,'Cloud refresh preserves the hero video node');
-    assert(main.querySelectorAll('video').length===1,'Film appears once beside the introduction');
-    assert(main.querySelector('.teaching-video').getAttribute('src')?.endsWith('hero-video-music.mp4'),'Hero film includes the music track');
-    assert(main.querySelector('.hero-statement').textContent.includes('Updated fixture teaching headline'),'Cloud refresh updates editable hero text');
-    assert(main.querySelectorAll('.hero').length===1,'Cloud refresh leaves exactly one hero');
-    assert(!main.querySelector('.evidence-feature'),'Explicitly replacing evidence removes the old featured artifact');
-  } else if(mode==='resources') {
-    assert(main.firstElementChild!==original,'Successful content read replaces markup');
-    assert(main.querySelectorAll('.resource-row').length===2,'New resources rendered');
-    main.querySelector('[data-filter=Assessment]').click();
-    assert(main.querySelectorAll('.resource-row:not([hidden])').length===1,'Filter handles replaced resource rows');
-    assert(main.querySelector('#resource-count').textContent==='1 of 2 files shown','Live count follows filtered rows');
-    assert(getComputedStyle(main.querySelector('.resource-row[hidden]')).display==='none','Hidden rows stay hidden under the new layout');
-    assert(main.querySelector('.resource-row:not([hidden]) h3').textContent==='Test assessment','Correct filtered resource remains');
-    main.querySelector('[data-filter=All]').click();
-    assert(main.querySelectorAll('.resource-row:not([hidden])').length===2,'All filter restores rows');
-    const search=main.querySelector('#resource-search');search.value='assessment';search.dispatchEvent(new Event('input',{bubbles:true}));
-    assert(main.querySelectorAll('.resource-row:not([hidden])').length===1,'Search works after content replacement');
-    main.querySelector('[data-filter="Lesson plan"]').click();
-    assert(!main.querySelector('#resource-empty').hidden,'Combined search and category show an empty state');
-  } else {
-    assert(main.firstElementChild===original,'Slow or failed read preserves the existing document');
-    if(mode==='contact')assert(main.querySelector('[name=name]').value==='Local regression fixture','Typed form value survives the late read');
-    if(mode==='teaching')assert(main.querySelector('details').open,'Opened activity record survives the late read');
-  }
-  assert(document.querySelectorAll('.reading-progress').length===1,'Exactly one reading-progress element');
-  assert(!main.querySelector('form.motion-enter, input.motion-enter, textarea.motion-enter'),'Form controls are excluded from reveals');
-} catch(error) { results.push({name:String(error),pass:false}); }
-finally {
-  window.fetch=nativeFetch;
-  document.querySelector('#results').textContent=JSON.stringify(results,null,2);
-  document.body.dataset.testResult=results.every(result=>result.pass)?'pass':'fail';
-}
+const main=document.querySelector('#main');main.innerHTML=view(route,defaultContent,'../');
+const hero=main.querySelector('.hero'),first=main.firstElementChild;
+const nativeFetch=window.fetch;let calls=0;
+window.fetch=async()=>{calls++;throw Error('Public visits must not depend on a live content read');};
+const results=[];const assert=(pass,name)=>results.push({pass:!!pass,name});
+try{
+ await import('../src/app.js');
+ await new Promise(r=>setTimeout(r,100));
+ assert(calls===0,'Static public release makes no Supabase reads or writes');
+ assert(main.firstElementChild===first,'The complete static document stays in place');
+ if(route==='home')assert(main.querySelector('.hero')===hero,'The original hero video remains in place');
+ if(route==='resources'){
+  const search=main.querySelector('#resource-search');search.value='unlikely-fixture-match';search.dispatchEvent(new Event('input',{bubbles:true}));
+  assert(!main.querySelector('#resource-empty').hidden,'Search exposes the empty state');
+  window.dispatchEvent(new PageTransitionEvent('pagehide',{persisted:true}));window.dispatchEvent(new PageTransitionEvent('pageshow',{persisted:true}));
+  assert(search.value==='unlikely-fixture-match'&&!main.querySelector('#resource-empty').hidden,'History restoration keeps search state');
+ }
+ if(route==='contact'){const input=main.querySelector('[name=name]');input.value='Fixture name';window.dispatchEvent(new PageTransitionEvent('pageshow',{persisted:true}));assert(input.value==='Fixture name','Form input survives history restoration');}
+}catch(e){assert(false,String(e));}
+finally{window.fetch=nativeFetch;document.querySelector('#results').textContent=JSON.stringify(results,null,2);document.body.dataset.testResult=results.every(r=>r.pass)?'pass':'fail';}

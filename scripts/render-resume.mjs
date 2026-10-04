@@ -1,10 +1,11 @@
 import PDFDocument from 'pdfkit';
 import fs from 'node:fs';
 import path from 'node:path';
-import {defaultContent} from '../src/content.js';
+import {defaultContent,publicContent} from '../src/content.js';
 const root=path.resolve(import.meta.dirname,'..');
 // The PDF is a concise single page. The web résumé retains the complete record.
 export async function generateResume(c=defaultContent){
+ c=publicContent(c);
  const stamp=new Date('2026-10-04T00:00:00Z');
  const doc=new PDFDocument({size:'A4',margin:36,bufferPages:true,info:{Title:c.profile.name+' — Teaching Résumé',Author:c.profile.name,CreationDate:stamp,ModDate:stamp}});
  const output=fs.createWriteStream(path.join(root,'assets/krishna-mahato-resume.pdf'));doc.pipe(output);

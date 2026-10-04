@@ -1,4 +1,4 @@
-// Run at a mobile/tablet width (<=1000px). The fixture renders the real header
+// The fixture renders the real compact header
 // and navigation implementation; no app.js, cloud requests or account writes.
 import {defaultContent} from '../src/content.js';
 import {header,footer,view,routes} from '../src/views.js';
@@ -28,9 +28,12 @@ let initialPosition=0;
 const bodyStyle=Object.fromEntries(['position','top','width','overflow'].map(key=>[key,document.body.style[key]]));
 
 try{
+  // Initial page loading must finish before interactions start. The separate
+  // lifecycle check below deliberately exercises pagehide/pageshow cleanup.
+  if(document.readyState!=='complete')await new Promise(resolve=>window.addEventListener('pageshow',resolve,{once:true}));
+  await document.fonts.ready;await frame();
   initNavigation();
-  await check('Mobile fixture has a semantic menu trigger and hidden closed links',()=>{
-    assert(matchMedia('(max-width: 1000px)').matches,'Run this fixture at a viewport width <=1000px');
+  await check('Compact navigation has a semantic trigger and hidden closed links',()=>{
     assert(toggle.tagName==='BUTTON' && toggle.getAttribute('aria-controls')==='navigation','Trigger must be a button associated with its panel');
     assert(toggle.getAttribute('aria-expanded')==='false','Menu must start closed');
     assert(getComputedStyle(panel).visibility==='hidden' || getComputedStyle(panel).display==='none','Closed navigation must be hidden');
@@ -38,34 +41,37 @@ try{
     assert(document.activeElement===toggle,'A closed navigation link accepted focus');
     assert(!panel.hasAttribute('role') && !panel.hasAttribute('aria-modal'),'Closed panel must not announce a modal');
   });
-  await check('Opening focuses the first link and creates an accessible modal',async()=>{
+  await check('Opening focuses ordinary navigation links without a modal',async()=>{
     window.scrollTo({top:320,behavior:'instant'});await frame();
     initialPosition=scrollY;
     toggle.click();
     assert(toggle.getAttribute('aria-expanded')==='true' && panel.classList.contains('is-open'),'Menu did not open');
-    assert(panel.getAttribute('role')==='dialog' && panel.getAttribute('aria-modal')==='true','Open panel lacks modal semantics');
-    assert(document.getElementById(panel.getAttribute('aria-labelledby'))?.textContent.trim(),'Modal has no accessible title');
+    assert(!panel.hasAttribute('role') && !panel.hasAttribute('aria-modal'),'Dropdown must not announce a dialog or modal');
     assert(document.activeElement===links[0],'Opening did not focus the first navigation link');
     assert(panel.querySelector('nav').getAttribute('aria-label')==='Main navigation','Navigation landmark label was lost');
     assert(!panel.querySelector('[role="menu"],[role="menuitem"]'),'Ordinary links must not become application menu items');
   });
-  await check('Open navigation locks scrolling and makes the background inert',()=>{
-    assert(document.body.style.position==='fixed' && document.body.style.overflow==='hidden','Background scroll is not locked');
-    assert(document.body.style.top===`-${initialPosition}px`,'Scroll position was not retained');
-    assert(main.inert && footerElement.inert && brand.inert && toggle.inert,'Background controls remain interactive');
-    assert(!panel.inert && !closeButton.inert,'The modal is inert');
-    document.querySelector('#background-control').focus();
-    assert(document.activeElement===links[0],'Focus escaped to the background');
+  await check('Dropdown stays compact and leaves page controls and scrolling available',()=>{
+    const rect=panel.getBoundingClientRect(),trigger=toggle.getBoundingClientRect();
+    assert(rect.width<=321 && rect.left>=0 && rect.right<=innerWidth,'Dropdown exceeds its compact width or viewport');
+    assert(rect.top>=trigger.bottom && rect.height<innerHeight-72,'Dropdown covers the full page');
+    assert(parseFloat(getComputedStyle(links[0]).fontSize)<=17,'Dropdown links are oversized');
+    assert(!main.inert && !footerElement.inert && !brand.inert && !toggle.inert,'Dropdown disabled page controls');
+    for(const [property,value] of Object.entries(bodyStyle))assert(document.body.style[property]===value,`${property} was changed when opening`);
+    assert(Math.abs(scrollY-initialPosition)<=1,'Opening moved the page');
   });
-  await check('Tab wraps from the final link to close, and Shift+Tab wraps back',()=>{
+  await check('Tab is not trapped, and moving focus to the page dismisses the dropdown',()=>{
     const last=links.at(-1);
-    last.focus();
-    assert(key('Tab')===false,'Forward wrap did not cancel the default Tab action');
-    assert(document.activeElement===closeButton,'Forward Tab did not wrap to the close button');
-    assert(key('Tab',true)===false,'Reverse wrap did not cancel the default Tab action');
-    assert(document.activeElement===last,'Shift+Tab did not wrap to the final link');
+    last.focus({preventScroll:true});
+    assert(key('Tab')===true,'Dropdown trapped forward Tab');
+    assert(key('Tab',true)===true,'Dropdown trapped reverse Tab');
+    document.querySelector('#background-control').focus({preventScroll:true});
+    assert(document.activeElement.id==='background-control' && !panel.classList.contains('is-open'),'Focus outside did not dismiss the dropdown');
+    toggle.click();
   });
-  await check('Escape restores trigger focus, body styles, scroll and original inert states',async()=>{
+  await check('Escape restores trigger focus without changing page state',async()=>{
+    window.scrollTo({top:460,behavior:'instant'});await frame();
+    const positionBeforeClose=scrollY;
     key('Escape');await frame();
     assert(toggle.getAttribute('aria-expanded')==='false' && !panel.classList.contains('is-open'),'Escape did not close navigation');
     assert(document.activeElement===toggle,'Escape did not restore focus to the trigger');
@@ -73,8 +79,15 @@ try{
     assert(originalInert.inert,'A previously inert element was incorrectly enabled');
     assert(!document.body.classList.contains('navigation-open'),'Body open class survived close');
     for(const [property,value] of Object.entries(bodyStyle))assert(document.body.style[property]===value,`${property} was not restored`);
-    assert(Math.abs(scrollY-initialPosition)<=1,'Closing moved the page away from its original position');
+    assert(Math.abs(scrollY-positionBeforeClose)<=1,'Closing moved the page away from its current position');
     assert(!panel.hasAttribute('aria-modal') && !panel.hasAttribute('role'),'Closed navigation retained modal semantics');
+  });
+  await check('A pointer outside dismisses the dropdown without stealing focus',()=>{
+    toggle.click();
+    document.querySelector('#background-control').dispatchEvent(new PointerEvent('pointerdown',{bubbles:true}));
+    assert(!panel.classList.contains('is-open') && toggle.getAttribute('aria-expanded')==='false','Outside pointer did not close the dropdown');
+    document.querySelector('#background-control').focus();
+    assert(document.activeElement.id==='background-control','Closing stole focus from the page');
   });
   await check('Repeated initialization and reopening retain one functioning close action',()=>{
     initNavigation();initNavigation();
@@ -91,12 +104,16 @@ try{
     assert(!panel.classList.contains('is-open') && !main.inert,'Link activation did not close and release the page');
     assert(document.body.style.position===bodyStyle.position && document.body.style.overflow===bodyStyle.overflow,'Link activation retained scroll lock');
   });
-  await check('Page lifecycle cleanup releases an open navigation',()=>{
+  await check('Initial page display preserves navigation; pagehide and history restore dismiss it',()=>{
     toggle.click();
-    window.dispatchEvent(new Event('pagehide'));
-    assert(!panel.classList.contains('is-open') && !main.inert,'Page hide left a modal open');
-    window.dispatchEvent(new Event('pageshow'));
-    assert(!document.body.classList.contains('navigation-open'),'Page restore retained stale navigation state');
+    window.dispatchEvent(new PageTransitionEvent('pageshow',{persisted:false}));
+    assert(panel.classList.contains('is-open'),'Initial page display interrupted an open dropdown');
+    window.dispatchEvent(new PageTransitionEvent('pagehide',{persisted:true}));
+    assert(!panel.classList.contains('is-open') && !main.inert,'Page hide left the dropdown open');
+    toggle.click();
+    window.dispatchEvent(new PageTransitionEvent('pageshow',{persisted:true}));
+    assert(!panel.classList.contains('is-open') && toggle.getAttribute('aria-expanded')==='false','History restore retained an open dropdown');
+    assert(!document.body.classList.contains('navigation-open'),'History restore retained stale navigation state');
   });
   await check('All generated header routes retain destinations and accurate active state',()=>{
     const navRoutes=['home','profile','teaching','resources','credentials','resume','contact'];

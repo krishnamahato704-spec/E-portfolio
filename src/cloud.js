@@ -42,12 +42,13 @@ export function validateFile(file) {
   const reportedType=(file.type||'').toLowerCase();
   const genericType=!reportedType||reportedType==='application/octet-stream';
   if(!fileTypes[ext] || (!genericType&&fileTypes[ext]!==reportedType)) throw new Error('Choose a PDF, JPG, PNG, WebP, Word (.docx) or PowerPoint (.pptx) file.');
-  if(!file.size || file.size>10*1024*1024) throw new Error('Files must be between 1 byte and 10 MB.');
+  if(!file.size || file.size>6*1024*1024) throw new Error('Files must be between 1 byte and 6 MB.');
   return ext;
 }
-export async function uploadFile(file,token) {
+export async function uploadFile(file,token,{privateSource=false}={}) {
   const ext=validateFile(file);
-  const path=`redesign/${crypto.randomUUID()}.${ext}`;
-  await request('/storage/v1/object/portfolio-media/'+path,{method:'POST',token,timeoutMs:90000,headers:{'Content-Type':fileTypes[ext],'x-upsert':'false'},body:file});
-  return `${config.url}/storage/v1/object/public/portfolio-media/${path}`;
+  const bucket=privateSource?'portfolio-private-source':'portfolio-media';
+  const path=`${privateSource?'source':'reviewed'}/${crypto.randomUUID()}.${ext}`;
+  await request('/storage/v1/object/'+bucket+'/'+path,{method:'POST',token,timeoutMs:90000,headers:{'Content-Type':fileTypes[ext],'x-upsert':'false'},body:file});
+  return `${config.url}/storage/v1/object/${privateSource?'authenticated':'public'}/${bucket}/${path}`;
 }

@@ -1,41 +1,83 @@
-name: Deploy to GitHub Pages
-
+name: Portfolio CI and Pages
 on:
   push:
-    branches: ["main"]
+    branches: [main]
+  pull_request:
+    branches: [main]
   workflow_dispatch:
-
+  repository_dispatch:
+    types: [portfolio_content_published]
+  schedule:
+    - cron: '7,22,37,52 * * * *'
 permissions:
   contents: read
-  pages: write
-  id-token: write
-
 concurrency:
-  group: "pages"
-  cancel-in-progress: false
-
+  group: portfolio-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
-  build-and-deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+  content:
     runs-on: ubuntu-latest
+    outputs:
+      changed: ${{ steps.content.outputs.changed }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-          cache: 'npm'
+      - id: content
+        if: github.event_name != 'pull_request'
+        run: node scripts/check-published-release.mjs
+      - uses: actions/upload-artifact@v4
+        if: github.event_name != 'pull_request'
+        with:
+          name: release-input
+          path: outputs/release/input.json
+  build:
+    needs: content
+    if: github.event_name != 'schedule' || needs.content.outputs.changed == 'true'
+    runs-on: ubuntu-latest
+    env:
+      BUILD_CONTENT_SOURCE: ${{ github.event_name == 'pull_request' && 'repository' || 'supabase' }}
+      BUILD_CONTENT_FILE: outputs/release/input.json
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - uses: actions/download-artifact@v4
+        if: github.event_name != 'pull_request'
+        with:
+          name: release-input
+          path: outputs/release
       - run: npm ci
       - run: npm run build
       - run: npm run lint
       - run: npm test
-      - run: npx playwright install --with-deps chromium
+      - run: npx playwright install --with-deps chromium firefox webkit
       - run: npm run test:browser
+      - run: npm run test:accessibility
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: browser-results
+          path: outputs/browser-checks
       - uses: actions/configure-pages@v5
+        if: github.event_name != 'pull_request'
       - uses: actions/upload-pages-artifact@v3
+        if: github.event_name != 'pull_request'
         with:
           path: dist
-      - name: Deploy to GitHub Pages
+  deploy:
+    needs: build
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/deploy-pages@v4
         id: deployment
-        uses: actions/deploy-pages@v4

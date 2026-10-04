@@ -1,6 +1,7 @@
 import {amityJournalResource} from './amity-journal.js?v=editorial-20261004';
+export const CURRENT_SCHEMA_VERSION = 8;
 export const defaultContent = {
-  "schemaVersion": 8,
+  "schemaVersion": CURRENT_SCHEMA_VERSION,
   "profile": {
     "name": "Krishna Mahato",
     "email": "krishnamahato704@gmail.com",
@@ -452,6 +453,18 @@ export function mergeContent(live = {}) {
   return result;
 }
 
+// Object key order from Postgres must not trigger an identical page replacement.
+export function contentSignature(content) {
+  return JSON.stringify(content, (_, value) => value && !Array.isArray(value) && typeof value==='object'
+    ? Object.fromEntries(Object.keys(value).sort().map(key=>[key,value[key]])) : value);
+}
+
+// Pending records remain editable in Studio, but are never advertised as evidence.
+export function publicContent(content) {
+  const approved=item=>!item.publicationStatus||item.publicationStatus==='Approved';
+  return {...content,...Object.fromEntries(['certificates','resources','gallery'].map(key=>[key,content[key].filter(approved)]))};
+}
+
 export function validateContent(c) {
   if(!c || typeof c!=='object' || !c.profile || !String(c.profile.name||'').trim()) throw new Error('A profile name is required.');
   if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(c.profile.email||'')) throw new Error('Enter a valid contact email.');
@@ -469,6 +482,8 @@ export function validateContent(c) {
     if(!x.title?.trim()) throw new Error('Each file or image needs a title.');
     const url=x.url||x.image;
     if(!url || !/^https:\/\//i.test(url)) throw new Error('Each file or image needs an HTTPS link.');
+    if(url.includes('/storage/v1/object/authenticated/')) throw new Error('Private source files cannot be published. Upload a reviewed public copy instead.');
+    if(x.publicationStatus && !['Approved','Pending review','Pending verification'].includes(x.publicationStatus)) throw new Error('Choose an approved or pending publication status.');
   }
   return c;
 }

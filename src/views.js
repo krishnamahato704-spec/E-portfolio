@@ -3,10 +3,12 @@ import {esc,heading,link,list,img,imageUrl} from './view-helpers.js?v=editorial-
 import {democracyView,documentUrl} from './evidence.js?v=editorial-20261004';
 import {philosophySection} from './teaching-philosophy.js?v=editorial-20261004';
 import {observationJournal,amityDays} from './amity-journal.js?v=editorial-20261004';
+import {publicContent} from './content.js?v=editorial-20261004';
 export {routes,esc,safeUrl,imageUrl} from './view-helpers.js?v=editorial-20261004';
 export {header,footer} from './editorial.js?v=editorial-20261004';
 
 export function view(route,c,base='./'){
+ if(route!=='admin')c=publicContent(c);
  const pages={home:homeView,profile:profileView,resources:resourcesView,credentials:credentialsView,resume:resumeView,contact:contactView,gallery:galleryView,democracy:democracyView};
  if(pages[route])return pages[route](c,base);
  if(route==='teaching')return teachingView(c,base,philosophySection);

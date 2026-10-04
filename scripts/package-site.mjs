@@ -1,5 +1,6 @@
-import {cp,mkdir,rm,readdir,writeFile,lstat,realpath} from 'node:fs/promises';
+import {cp,mkdir,rm,readdir,writeFile,readFile,lstat,realpath} from 'node:fs/promises';
 import path from 'node:path';
+import {createHash} from 'node:crypto';
 import {fileURLToPath} from 'node:url';
 import {routes} from '../src/views.js';
 const root=path.resolve(import.meta.dirname,'..');
@@ -23,6 +24,23 @@ export async function packageSite(){
  }
  for(const file of ['robots.txt','sitemap.xml'])await cp(path.join(root,file),path.join(output,file));
  await writeFile(path.join(output,'.nojekyll'),'');
- console.log('Packaged public pages, modules and assets into dist.');
+const release=JSON.parse(await readFile(path.join(root,'outputs/release/content.json'),'utf8'));
+const source=await readFile(path.join(root,'src/content.js'),'utf8');
+const helpers=source.slice(source.indexOf('// Merge missing fields only.'));
+if(!helpers.startsWith('// Merge missing'))throw Error('Content module boundaries changed');
+await writeFile(path.join(output,'src/content.js'),`import {amityJournalResource} from './amity-journal.js?v=editorial-20261004';\nexport const CURRENT_SCHEMA_VERSION = ${release.content.schemaVersion};\nexport const defaultContent = ${JSON.stringify(release.content)};\n${helpers}`);
+const digest=createHash('sha256').update(JSON.stringify(release.content,(_,value)=>value&&!Array.isArray(value)&&typeof value==='object'?Object.fromEntries(Object.keys(value).sort().map(key=>[key,value[key]])):value)).digest('hex');
+const version=(process.env.GITHUB_SHA||digest).slice(0,12)+'-'+digest.slice(0,10);
+async function stamp(dir){for(const entry of await readdir(dir,{withFileTypes:true})){
+ const file=path.join(dir,entry.name);
+ if(entry.isDirectory())await stamp(file);
+ else if(/\.(html|js|css)$/.test(entry.name)){
+  const text=await readFile(file,'utf8');
+  await writeFile(file,text.replace(/\?v=(?:build|editorial-20261004)\b/g,'?v='+version));
+ }
+}}
+await stamp(output);
+await writeFile(path.join(output,'release.json'),JSON.stringify({contentDigest:digest,contentUpdatedAt:release.updatedAt,source:release.source,version}));
+ console.log('Packaged the reviewed release into dist.');
 }
 if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.url))await packageSite();
