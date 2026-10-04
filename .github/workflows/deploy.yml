@@ -57,12 +57,16 @@ jobs:
       - run: npx playwright install --with-deps chromium firefox webkit
       - run: npm run test:browser
       - run: npm run test:identity
+        env:
+          IDENTITY_TEST_ENGINES: chromium,firefox,webkit
       - run: npm run test:accessibility
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: browser-results
-          path: outputs/browser-checks
+          path: |
+            outputs/browser-checks
+            outputs/redesign
       - uses: actions/configure-pages@v5
         if: github.event_name != 'pull_request'
       - uses: actions/upload-pages-artifact@v3

@@ -78,7 +78,8 @@ try {
    await g.keyboard.press('ArrowLeft');record(engine,'Gallery can return to the first image',await g.locator('#viewer-title').innerText()===first);
    await g.locator('.viewer-content').evaluate(el=>{for(const [type,x,y] of [['touchstart',300,200],['touchend',100,205]]){const event=new Event(type);Object.defineProperty(event,'changedTouches',{value:[{clientX:x,clientY:y}]});el.dispatchEvent(event);}});
    record(engine,'Gallery horizontal swipe changes the image',await g.locator('#viewer-title').innerText()!==first);
-   await g.keyboard.press('Escape');record(engine,'Gallery Escape restores the original trigger',await g.locator('.gallery-grid a').first().evaluate(a=>a===document.activeElement));
+   await g.keyboard.press('Escape');await g.locator('.evidence-viewer').waitFor({state:'detached'});
+   record(engine,'Gallery Escape restores the original trigger',await g.locator('.gallery-grid a').first().evaluate(a=>a===document.activeElement));
    await gallery.close();
   } finally {await browser.close();}
  }

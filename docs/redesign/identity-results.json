@@ -12,8 +12,8 @@
       "name": "Introduction finishes within four seconds",
       "pass": true,
       "details": {
-        "elapsedMs": 3294.9000000059605,
-        "totalNavigationMs": 3501
+        "elapsedMs": 3295.0999999940395,
+        "totalNavigationMs": 3522
       }
     },
     {
@@ -196,8 +196,8 @@
       "name": "Introduction finishes within four seconds",
       "pass": true,
       "details": {
-        "elapsedMs": 3244,
-        "totalNavigationMs": 3868
+        "elapsedMs": 3218,
+        "totalNavigationMs": 4019
       }
     },
     {

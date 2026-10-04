@@ -184,13 +184,14 @@ try{
   record('viewer: image preview opens with labelled native dialog',await page.evaluate(()=>{const dialog=document.querySelector('.evidence-viewer');return dialog?.open&&!!dialog.querySelector('img[alt]')&&!!document.getElementById(dialog.getAttribute('aria-labelledby'));}));
   record('viewer: opening focuses the close control',await page.evaluate(()=>document.activeElement.getAttribute('aria-label')==='Close evidence preview'));
   await page.keyboard.press('Escape');
-  await page.locator('.evidence-viewer').waitFor({state:'hidden'});
+  // Native dialogs hide before the queued close handler restores page state.
+  await page.locator('.evidence-viewer').waitFor({state:'detached'});
   record('viewer: Escape closes and restores the image link',await imageTrigger.evaluate(el=>document.activeElement===el&&!document.querySelector('.evidence-viewer')));
   await page.goto(base+'resources/',{waitUntil:'load'});
   const pdfTrigger=page.locator('#resource-list a[data-viewer]').first();await pdfTrigger.click();
   record('viewer: PDF preview retains an accessible title and original link',await page.evaluate(()=>{const dialog=document.querySelector('.evidence-viewer');return dialog?.open&&!!dialog.querySelector('iframe[title]')&&dialog.querySelector('.viewer-footer a').href.startsWith('https://');}));
   await page.keyboard.press('Escape');
-  await page.locator('.evidence-viewer').waitFor({state:'hidden'});
+  await page.locator('.evidence-viewer').waitFor({state:'detached'});
   record('viewer: PDF closes and restores trigger focus',await pdfTrigger.evaluate(el=>document.activeElement===el&&!document.querySelector('.evidence-viewer')));
   await page.goto(base+'resume/',{waitUntil:'load'});await page.emulateMedia({media:'print'});
   record('print: web résumé remains readable without preview or controls',await page.evaluate(()=>document.querySelector('.resume-web-summary').checkVisibility()&&!document.querySelector('.resume-overview').checkVisibility()&&document.querySelector('.resume-web-summary').innerText.includes('Education')));

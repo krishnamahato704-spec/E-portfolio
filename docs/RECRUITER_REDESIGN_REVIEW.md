@@ -60,7 +60,7 @@ At narrow widths the primary actions stack, the portrait follows the identity, q
 | Additional accessibility suite | 52 route/viewport checks across Chromium and WebKit; zero failures |
 | Firefox | Installation completed; browser startup failed before tests with Windows side-by-side assembly error for `mozglue` |
 
-The opening checks cover first/new sessions, refresh and navigation, skip, Escape, Tab, scrolling, live reduced-motion changes, unavailable storage, disabled JavaScript, script failure, absence of film downloads and unchanged main-page geometry. Functional checks retain public/fallback content loading, mocked Owner Studio edits, filters, dialogs, PDFs, print, film controls, email draft preparation, keyboard navigation and GitHub Pages paths. The Vercel preview is checked separately after deployment.
+The opening checks cover first/new sessions, refresh and navigation, skip, Escape, Tab, scrolling, live reduced-motion changes, unavailable storage, disabled JavaScript, script failure, absence of film downloads and unchanged main-page geometry. Functional checks retain public/fallback content loading, mocked Owner Studio edits, filters, dialogs, PDFs, print, film controls, email draft preparation, keyboard navigation and GitHub Pages paths. The Vercel preview is checked separately after deployment. The full CI workflow runs opening and accessibility checks in Chromium, Firefox and WebKit; reports are attached to its browser-results artifact.
 
 Automated axe and interaction checks are not a full WCAG conformance audit. Real owner login, uploads and publishing were not performed. Low-power hardware, real CPU/frame-rate profiling, screen-reader use and field Core Web Vitals remain unverified.
 
@@ -94,7 +94,7 @@ This assessment concerns the interface. No recruiter study was conducted, so the
 - Checks: `scripts/check-browser.mjs`, `scripts/check-identity.mjs`, `scripts/capture-redesign.mjs`, `tests/editorial.test.mjs`, `package.json`, existing review/deploy workflows.
 - Documentation: this report, `README.md`, selected screenshots and result JSON in `docs/redesign/`.
 
-The full local comparison is `outputs/redesign/comparison.html`. Before and after captures cover Home at 390/768/1440, Experience, Teaching Evidence, Democracy, Credentials, Résumé, About, Gallery and Contact at 390/1440, plus the mobile menu and opening keyframes. Selected permanent review images are linked below.
+The full [local comparison](http://127.0.0.1:3000/outputs/redesign/comparison.html) is saved in `outputs/redesign/comparison.html`. Before and after captures cover Home at 390/768/1440, Experience, Teaching Evidence, Democracy, Credentials, Résumé, About, Gallery and Contact at 390/1440, plus the mobile menu and opening keyframes. Selected permanent review images are linked below.
 
 | View | Before | After |
 | --- | --- | --- |
@@ -110,6 +110,8 @@ No Supabase changes were made. Published schema 8 content, RLS, storage authoriz
 
 ### Review and remaining work
 
-Branch: `codex/portfolio-immersive-redesign`. Local preview: `http://127.0.0.1:3000/E-portfolio/`. The pull request and hosted preview will be linked here once created. Production merge and publication require the owner's explicit approval.
+Branch: `codex/portfolio-immersive-redesign`. [Draft pull request #18](https://github.com/krishnamahato704-spec/E-portfolio/pull/18). [Vercel preview](https://e-portfolio-rahrbxpbc-krishnamahato704-spec.vercel.app/). [Local preview](http://127.0.0.1:3000/E-portfolio/). Production merge and publication require the owner's explicit approval.
+
+Vercel deployment `dpl_2YZt1sGiFLZ3hfaNcznJvEgAUyWR` is READY for implementation commit `29e292e`. Its home, Democracy page, intro module, release manifest and `/E-portfolio/teaching/democracy/` compatibility path returned 200 through the authenticated Vercel connector. The preview uses the reviewed repository snapshot. Existing Vercel authentication protection remains enabled, so opening the URL may require the owner's Vercel login. [Latest GitHub Actions checks](https://github.com/krishnamahato704-spec/E-portfolio/pull/18/checks) provide Linux verification in addition to the local results above.
 
 Before merge, review the visual direction and opening on the hosted preview. Direct Wix editing was not completed or approved. Verify Firefox on another machine, check a real low-power phone and screen reader, and exercise real owner sign-in and publishing using a safe review record. Future teaching evidence could include an anonymised completed learner response, marked feedback and a completed lesson reflection, with permission and source context.
