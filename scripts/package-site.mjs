@@ -30,7 +30,7 @@ const helpers=source.slice(source.indexOf('// Merge missing fields only.'));
 if(!helpers.startsWith('// Merge missing'))throw Error('Content module boundaries changed');
 await writeFile(path.join(output,'src/content.js'),`import {amityJournalResource} from './amity-journal.js?v=editorial-20261004';\nexport const CURRENT_SCHEMA_VERSION = ${release.content.schemaVersion};\nexport const defaultContent = ${JSON.stringify(release.content)};\n${helpers}`);
 const digest=createHash('sha256').update(JSON.stringify(release.content,(_,value)=>value&&!Array.isArray(value)&&typeof value==='object'?Object.fromEntries(Object.keys(value).sort().map(key=>[key,value[key]])):value)).digest('hex');
-const version=(process.env.GITHUB_SHA||digest).slice(0,12)+'-'+digest.slice(0,10);
+const version=(process.env.GITHUB_SHA||process.env.VERCEL_GIT_COMMIT_SHA||digest).slice(0,12)+'-'+digest.slice(0,10);
 async function stamp(dir){for(const entry of await readdir(dir,{withFileTypes:true})){
  const file=path.join(dir,entry.name);
  if(entry.isDirectory())await stamp(file);

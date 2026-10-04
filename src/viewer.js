@@ -54,11 +54,13 @@ export function wireVideo(root=document){
    if(!video.getAttribute('src'))video.src=video.dataset.src;
    play.hidden=true;
    video.muted=!audible;
+   updateSound();
    if(focus)video.focus();
    try{await video.play();}
    catch{
     // An audible autoplay rejection must not prevent the requested continuous film.
     video.muted=true;
+    updateSound();
     try{await video.play();}catch{play.hidden=false;}
    }
    updateSound();
