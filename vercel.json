@@ -4,7 +4,7 @@
   "buildCommand": "npm run build",
   "installCommand": "npm ci",
   "outputDirectory": "dist",
-  "rewrites": [
-    {"source": "/E-portfolio/:path*", "destination": "/:path*"}
+  "redirects": [
+    {"source": "/E-portfolio/:path*", "destination": "/:path*", "permanent": true}
   ]
 }
