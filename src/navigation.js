@@ -30,7 +30,7 @@ export function initNavigation() {
  document.addEventListener('pointerdown',dismissOutside);
  document.addEventListener('focusin',dismissOutside);
  window.addEventListener('pagehide',()=>close(false));
- window.addEventListener('pageshow',()=>close(false));
+ window.addEventListener('pageshow',e=>{if(e.persisted)close(false)});
  // Only the header surface changes; content and menu position remain stable.
  const updateSurface=()=>header.classList.toggle('is-scrolled',scrollY>24);
  window.addEventListener('scroll',updateSurface,{passive:true});updateSurface();

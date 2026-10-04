@@ -28,6 +28,10 @@ let initialPosition=0;
 const bodyStyle=Object.fromEntries(['position','top','width','overflow'].map(key=>[key,document.body.style[key]]));
 
 try{
+  // Initial page loading must finish before interactions start. The separate
+  // lifecycle check below deliberately exercises pagehide/pageshow cleanup.
+  if(document.readyState!=='complete')await new Promise(resolve=>window.addEventListener('pageshow',resolve,{once:true}));
+  await document.fonts.ready;await frame();
   initNavigation();
   await check('Compact navigation has a semantic trigger and hidden closed links',()=>{
     assert(toggle.tagName==='BUTTON' && toggle.getAttribute('aria-controls')==='navigation','Trigger must be a button associated with its panel');
@@ -100,12 +104,16 @@ try{
     assert(!panel.classList.contains('is-open') && !main.inert,'Link activation did not close and release the page');
     assert(document.body.style.position===bodyStyle.position && document.body.style.overflow===bodyStyle.overflow,'Link activation retained scroll lock');
   });
-  await check('Page lifecycle cleanup releases an open navigation',()=>{
+  await check('Initial page display preserves navigation; pagehide and history restore dismiss it',()=>{
     toggle.click();
-    window.dispatchEvent(new Event('pagehide'));
+    window.dispatchEvent(new PageTransitionEvent('pageshow',{persisted:false}));
+    assert(panel.classList.contains('is-open'),'Initial page display interrupted an open dropdown');
+    window.dispatchEvent(new PageTransitionEvent('pagehide',{persisted:true}));
     assert(!panel.classList.contains('is-open') && !main.inert,'Page hide left the dropdown open');
-    window.dispatchEvent(new Event('pageshow'));
-    assert(!document.body.classList.contains('navigation-open'),'Page restore retained stale navigation state');
+    toggle.click();
+    window.dispatchEvent(new PageTransitionEvent('pageshow',{persisted:true}));
+    assert(!panel.classList.contains('is-open') && toggle.getAttribute('aria-expanded')==='false','History restore retained an open dropdown');
+    assert(!document.body.classList.contains('navigation-open'),'History restore retained stale navigation state');
   });
   await check('All generated header routes retain destinations and accurate active state',()=>{
     const navRoutes=['profile','teaching','resources','credentials','gallery','resume','contact'];
