@@ -12,7 +12,7 @@ try{
   try{
    const firstPaint=await browser.newContext({viewport:{width:1440,height:1000}}),first=await firstPaint.newPage();
    await first.route('**/src/app.js*',async route=>{await new Promise(r=>setTimeout(r,900));await route.continue();});
-   const initialLoad=first.goto(base);
+   const initialLoad=first.goto(base,{waitUntil:'domcontentloaded'});
    await first.locator('html.opening-pending .hero-film').waitFor({state:'attached'});
    await first.waitForFunction(()=>getComputedStyle(document.querySelector('.hero-film')).position==='fixed');
    record(engine,'Before the app loads, the first screen is the full-screen film poster and Home is hidden',await first.evaluate(()=>{
@@ -24,7 +24,18 @@ try{
    await firstPaint.close();
    const ctx=await browser.newContext({viewport:{width:1440,height:1000}}),page=await ctx.newPage();
    const errors=[];page.on('pageerror',error=>errors.push(error.message));
-   await page.goto(base);await page.locator('.identity-intro').waitFor();
+   // Native media can hold WebKit's load event beyond a finite introduction.
+   // Observe the running sequence as soon as the document and module are ready.
+   await page.goto(base,{waitUntil:'domcontentloaded'});
+   try{await page.locator('.intro-running').waitFor();}
+   catch(error){
+    console.error('Opening state when the sequence was not observed',engine,await page.evaluate(()=>({
+     ready:document.readyState,hidden:document.hidden,scroll:scrollY,pending:document.documentElement.classList.contains('opening-pending'),
+     intro:document.querySelector('.identity-intro')?.className,filmState:document.querySelector('.hero-film')?.readyState,
+     filmError:document.querySelector('.hero-film')?.error?.code,status:document.querySelector('.film-status')?.textContent
+    })));
+    throw error;
+   }
    const started=Date.now();
    record(engine,'First visit has one finite film introduction',await page.locator('.identity-intro').count()===1);
    record(engine,'Film starts muted and voice stays paused',await page.locator('.hero-film').evaluate(v=>v.muted&&!v.paused)&&await page.locator('#opening-audio').evaluate(a=>a.paused));
