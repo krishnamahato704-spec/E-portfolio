@@ -26,6 +26,24 @@ http.createServer(async(req,res)=>{
   // WebKit upgrades loopback HTTP resources when this production-only CSP
   // directive is present. Keep every other CSP restriction in local previews.
   const body=path.extname(target)==='.html'?data.toString().replace('; upgrade-insecure-requests',''):data;
-  res.writeHead(200,{'Content-Type':types[path.extname(target)]||'application/octet-stream','Cache-Control':'no-cache'});res.end(body);
+  const headers={'Content-Type':types[path.extname(target)]||'application/octet-stream','Cache-Control':'no-cache'};
+  // Native media engines use byte ranges to buffer and seek through the film.
+  if(/\.(mp4|mp3)$/.test(target)){
+   headers['Accept-Ranges']='bytes';
+   if(req.headers.range){
+    const match=/^bytes=(\d*)-(\d*)$/.exec(req.headers.range);
+    let start=0,end=data.length-1;
+    if(match&&(match[1]||match[2])){
+     if(match[1]){start=Number(match[1]);if(match[2])end=Math.min(Number(match[2]),end);}
+     else start=Math.max(0,data.length-Number(match[2]));
+    }
+    if(!match||!(match[1]||match[2])||!Number.isSafeInteger(start)||!Number.isSafeInteger(end)||start<0||start>=data.length||end<start){
+     res.writeHead(416,{...headers,'Content-Range':`bytes */${data.length}`});res.end();return;
+    }
+    const chunk=data.subarray(start,end+1);
+    res.writeHead(206,{...headers,'Content-Range':`bytes ${start}-${end}/${data.length}`,'Content-Length':chunk.length});res.end(chunk);return;
+   }
+  }
+  res.writeHead(200,{...headers,'Content-Length':Buffer.byteLength(body)});res.end(body);
  }catch{res.writeHead(404,{'Content-Type':'text/html'});res.end(await fs.readFile(path.join(root,'404.html')))}
 }).listen(port,'0.0.0.0',()=>console.log(`Server running on http://0.0.0.0:${port}/`));

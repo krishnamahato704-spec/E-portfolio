@@ -86,4 +86,5 @@ tests/page-media.test.mjs
 tests/philosophy.test.mjs
 tests/portfolio.test.mjs
 tests/recruiter.test.mjs
+tests/serve-media.test.mjs
 tests/site-origin.test.mjs

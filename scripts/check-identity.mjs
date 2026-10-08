@@ -8,6 +8,7 @@ const record=(engine,name,pass,details)=>{results.push({engine,name,pass:!!pass,
 try{
  for(let i=0;i<80;i++){try{if((await fetch(base)).ok)break;}catch{}await new Promise(r=>setTimeout(r,100));}
  for(const engine of (process.env.IDENTITY_TEST_ENGINES||'chromium').split(',')){
+  console.log('Checking film introduction and gallery in',engine);
   const browser=await {chromium,firefox,webkit}[engine].launch({headless:true});
   try{
    const firstPaint=await browser.newContext({viewport:{width:1440,height:1000}}),first=await firstPaint.newPage();
@@ -19,7 +20,16 @@ try{
     const film=document.querySelector('.hero-film'),rect=film.getBoundingClientRect();
     return rect.width>=innerWidth&&rect.height>=innerHeight&&!document.querySelector('h1').checkVisibility({checkVisibilityCSS:true})&&!document.querySelector('.site-header').checkVisibility({checkVisibilityCSS:true});
    }));
-   await initialLoad;await first.locator('.intro-running').waitFor();
+   await initialLoad;
+   try{await first.locator('.intro-running').waitFor();}
+   catch(error){
+    console.error('First-paint opening state',engine,await first.evaluate(()=>({
+     ready:document.readyState,hidden:document.hidden,pending:document.documentElement.classList.contains('opening-pending'),
+     intro:document.querySelector('.identity-intro')?.className,filmState:document.querySelector('.hero-film')?.readyState,
+     filmError:document.querySelector('.hero-film')?.error?.code,status:document.querySelector('.film-status')?.textContent
+    })));
+    throw error;
+   }
    record(engine,'Loaded video takes over the first-screen cover before Home is revealed',await first.evaluate(()=>getComputedStyle(document.querySelector('.identity-intro'),'::before').opacity==='1'&&document.querySelector('.hero-film').getBoundingClientRect().width>=innerWidth));
    await firstPaint.close();
    const ctx=await browser.newContext({viewport:{width:1440,height:1000}}),page=await ctx.newPage();
