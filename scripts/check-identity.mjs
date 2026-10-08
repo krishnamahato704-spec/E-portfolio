@@ -67,9 +67,9 @@ try{
    await page.locator('#home-contact-title').scrollIntoViewIfNeeded();
    await page.waitForFunction(()=>document.querySelector('.hero-film').paused);
    record(engine,'Film decoding pauses when the hero is off screen',await page.locator('.hero-film').evaluate(v=>v.paused));
-   await page.evaluate(()=>scrollTo(0,0));await page.waitForFunction(()=>!document.querySelector('.hero-film').paused);
+   await page.evaluate(()=>scrollTo({top:0,behavior:'instant'}));await page.waitForFunction(()=>!document.querySelector('.hero-film').paused);
    await page.locator('[data-film-pause]').click();
-   await page.locator('#home-contact-title').scrollIntoViewIfNeeded();await page.evaluate(()=>scrollTo(0,0));await page.waitForTimeout(150);
+   await page.locator('#home-contact-title').scrollIntoViewIfNeeded();await page.evaluate(()=>scrollTo({top:0,behavior:'instant'}));await page.waitForFunction(()=>scrollY===0);await page.waitForTimeout(150);
    record(engine,'Returning to the hero preserves an intentional film pause',await page.locator('.hero-film').evaluate(v=>v.paused));
    await page.reload();
    await page.locator('.intro-skip').waitFor();

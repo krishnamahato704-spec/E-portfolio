@@ -8,9 +8,9 @@ motion and direct links remain available. The default voice level is 65%.
 Quiet F-major ambience follows the introduction. The default portfolio volume
 is 20%. Eleven public pages have distinct short, two-note navigation sounds.
 The sounds use one lazy Web Audio context, with no audio library or background
-music download. Volume and mute persist for the browsing session. Ambience
-also rereads those choices when a cached page returns through Back, including
-changes made on another page. Ambience
+music download. Volume and mute persist for the browsing session. The audio
+controller rereads those choices when a cached page returns through Back,
+including changes made on another page. Ambience
 ducks during the spoken opening or another audible media player, and suspends
 in a hidden tab. Navigation uses ordinary links with no imposed delay. A full
 page navigation briefly recreates the audio engine. If the browser blocks its
