@@ -79,7 +79,10 @@ viewer, print, recruiter-access, content validation and owner authorization
 checks remain.
 
 The required CI runs Chrome/Firefox opening and sound checks on Linux and the
-same full suite in native macOS WebKit before Pages deploys. Windows Playwright
+same full suite in native macOS WebKit before Pages deploys.
+The Linux runner provides a PulseAudio virtual output so Firefox can start its
+real audio graph without a physical sound device. Audio APIs are not mocked.
+Windows Playwright
 WebKit has no Web Audio API; locally it tests the unsupported-audio fallback
 and supplied HTML-audio opening. macOS CI requires the real Web Audio tests.
 The obsolete SDK-instantiation test was removed together with that unused
