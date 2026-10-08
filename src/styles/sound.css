@@ -1,0 +1,15 @@
+.portfolio-sound {position:fixed;bottom:16px;left:var(--gutter);z-index:45;display:flex;align-items:center;gap:4px;padding:4px;background:var(--paper);color:var(--ink);border:1px solid var(--line-strong);border-radius:30px;box-shadow:var(--shadow)}
+.portfolio-sound[hidden] {display:none}
+.portfolio-sound>button,.portfolio-sound summary {min-height:44px;padding:9px 13px;border:0;background:transparent;color:var(--ink);font-size:.875rem;cursor:pointer}
+.portfolio-sound summary {display:flex;align-items:center;list-style:none;border-left:1px solid var(--line);border-radius:0 24px 24px 0}
+.portfolio-sound summary::-webkit-details-marker {display:none}
+.portfolio-sound details {position:relative}
+.sound-level {position:absolute;bottom:calc(100% + 12px);left:-95px;width:230px;padding:16px;background:var(--paper);border:1px solid var(--line-strong);border-radius:var(--radius);box-shadow:var(--shadow)}
+.sound-level label {display:flex;justify-content:space-between;gap:12px;font-size:.875rem}
+.sound-level input {width:100%;height:44px;padding:0;accent-color:var(--accent)}
+.sound-level p {margin:0;font-size:.8rem;color:var(--muted)}
+html.opening-pending .portfolio-sound,body:has(.identity-intro) .portfolio-sound {visibility:hidden}
+/* The phone hero is short; the separate opening must still fill the screen. */
+.identity-intro .hero-film {height:100svh}
+@media(max-width:760px){.portfolio-sound{bottom:calc(76px + env(safe-area-inset-bottom));left:12px}.portfolio-sound>button,.portfolio-sound summary{padding-inline:10px}}
+@media print{.portfolio-sound{display:none!important}}

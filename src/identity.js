@@ -1,3 +1,4 @@
+import {enablePortfolioSound,mutePortfolioSound,isPortfolioSoundOn} from './sound.js?v=editorial-20261004';
 // One supplied film moves from the opening back into the readable Home hero.
 let dispose=()=>{};
 export function cleanupOpening(){dispose();dispose=()=>{};}
@@ -13,17 +14,22 @@ export function initOpening({auto=true}={}){
  const controls=hero.querySelector('[data-film-controls]'),pause=hero.querySelector('[data-film-pause]');
  const sound=hero.querySelector('[data-film-sound]'),status=hero.querySelector('.film-status');
  const progress=hero.querySelector('.film-progress span');
- let intro=null,timer=0,started=0,soundEnabled=false,generation=0;
+ let intro=null,timer=0,started=0,soundEnabled=false,generation=0,filmSize=null,heroVisible=true;
  const say=text=>{if(status)status.textContent=text;};
  const sync=()=>{pause.textContent=film.paused?'Play film':'Pause film';};
  const stopAudio=()=>{
   audio.pause();audio.currentTime=0;soundEnabled=false;
-  sound.setAttribute('aria-pressed','false');sound.textContent='Sound on';
-  if(intro)intro.querySelector('.intro-sound').textContent='Play with voice & piano';
+  syncSound();
+ };
+ const syncSound=()=>{
+  const on=isPortfolioSoundOn()||soundEnabled&&!audio.paused;
+  sound.setAttribute('aria-pressed',String(on));sound.textContent=on?'Mute sound':'Turn on sound';
+  if(intro)intro.querySelector('.intro-sound').textContent=on?'Mute sound':'Turn on sound';
  };
  const frameFilm=()=>{
   if(innerWidth>760){film.style.objectPosition='76% top';return;}
-  const width=film.clientWidth,height=film.clientHeight;
+  filmSize??={width:film.clientWidth,height:film.clientHeight};
+  const {width,height}=filmSize;
   const ratio=film.videoWidth&&film.videoHeight?film.videoWidth/film.videoHeight:16/9;
   const renderedWidth=Math.max(width,height*ratio),overflow=renderedWidth-width;
   const time=film.currentTime;
@@ -36,26 +42,28 @@ export function initOpening({auto=true}={}){
   generation++;clearTimeout(timer);timer=0;
   const restore=intro?.contains(document.activeElement);
   if(intro){hero.prepend(film);intro.remove();intro=null;}
-  hero.classList.remove('intro-active');stopAudio();frameFilm();
+  hero.classList.remove('intro-active');stopAudio();filmSize=null;frameFilm();
+  window.dispatchEvent(new CustomEvent('portfolio-intro-state',{detail:{active:false}}));
   if(reveal)boot?.release();
   if(restore)document.querySelector('#main')?.focus({preventScroll:true});
  };
  const load=()=>{if(!film.getAttribute('src'))film.src=film.dataset.src;};
  const play=async()=>{load();try{await film.play();sync();return true;}catch{film.pause();sync();say('Film playback is unavailable. The portfolio remains ready to read.');return false;}};
  const enableSound=()=>{
-  soundEnabled=true;sound.setAttribute('aria-pressed','true');sound.textContent='Sound off';
-  if(intro)intro.querySelector('.intro-sound').textContent='Mute voice & piano';
+  enablePortfolioSound();
+  soundEnabled=true;
+  audio.volume=Math.min(.85,(Number(document.querySelector('[data-sound-volume]')?.value)||20)/100*3.25);
   audio.currentTime=Math.min(Math.max(0,(performance.now()-started)/1000),7.9);
-  audio.play().catch(()=>{stopAudio();say('Audio could not play. Use Sound on to try again.');});
+  audio.play().then(syncSound).catch(()=>{stopAudio();say('Audio could not play. Use Turn on sound to try again.');});
  };
  const restart=()=>{
   started=performance.now();film.currentTime=0;frameFilm();
   intro.classList.remove('intro-running');
-  // Restart the film, name reveal and transition together after a sound gesture.
+  // Restart the finite sequence after an explicit replay.
   void intro.offsetWidth;intro.classList.add('intro-running');
   clearTimeout(timer);timer=setTimeout(finish,8000);
  };
- const begin=async(withSound=false,requested=false)=>{
+ const begin=async(withSound=false,requested=false,waitForEntry=false)=>{
   finish({reveal:false});const pending=generation;
   if(preference.matches){
    if(withSound){started=performance.now();enableSound();timer=setTimeout(finish,8000);}
@@ -63,49 +71,66 @@ export function initOpening({auto=true}={}){
    boot?.release();
    return;
   }
-  // Measure the final frame before moving the same video into the opening.
-  document.documentElement.classList.add('opening-measure');
-  const target=film.getBoundingClientRect();
-  document.documentElement.classList.remove('opening-measure');
   film.pause();film.currentTime=0;
   intro=document.createElement('div');intro.className='identity-intro';
   intro.setAttribute('role','region');intro.setAttribute('aria-label','Portfolio introduction');
-  for(const [key,value] of Object.entries({left:target.left,top:target.top,width:target.width,height:target.height}))intro.style.setProperty('--film-'+key,value+'px');
-  intro.innerHTML='<div class="intro-name-card"><p class="intro-greeting">Hi, my name is</p><p class="intro-name"></p><p class="intro-role"></p></div><span class="intro-film-label">Illustrative film</span><div class="intro-controls"><button type="button" class="intro-skip">Skip to portfolio</button><button type="button" class="intro-sound">Play with voice &amp; piano</button></div>';
+  intro.innerHTML='<div class="intro-entry"><p class="eyebrow">A short introduction</p><button type="button" class="button primary" data-intro-enter>Enter with sound</button><p>Voice and piano, followed by quiet background sound.</p><p class="small" data-intro-status role="status"></p></div><div class="intro-name-card"><p class="intro-greeting">Hi, my name is</p><p class="intro-name"></p><p class="intro-role"></p></div><span class="intro-film-label">Illustrative film</span><div class="intro-controls"><button type="button" class="intro-skip">Skip to portfolio</button><button type="button" class="intro-sound" hidden>Mute sound</button></div>';
   intro.querySelector('.intro-name').textContent=hero.querySelector('h1').textContent;
   intro.querySelector('.intro-role').textContent=hero.querySelector('.hero-role').textContent;
   intro.prepend(film);document.body.append(intro);hero.classList.add('intro-active');
+  window.dispatchEvent(new CustomEvent('portfolio-intro-state',{detail:{active:true}}));
   // Replace the first-paint film cover synchronously, before awaiting playback.
-  boot?.release();frameFilm();
+  boot?.release();filmSize=null;frameFilm();
   intro.querySelector('.intro-skip').addEventListener('click',finish,options);
-  intro.querySelector('.intro-sound').addEventListener('click',()=>{if(soundEnabled)stopAudio();else{restart();enableSound();}},options);
-  intro.querySelector('.intro-sound').disabled=true;
-  started=performance.now();timer=setTimeout(finish,2500);
-  if(withSound)enableSound();
-  if(!await play()){if(pending===generation)finish();return;}
-  if(events.signal.aborted||pending!==generation)return;
-  if(!requested&&(scrollY>24||document.hidden)){finish();return;}
-  intro.querySelector('.intro-sound').disabled=false;
-  restart();
-  if(withSound){
-   if(soundEnabled){audio.currentTime=0;intro.querySelector('.intro-sound').textContent='Mute voice & piano';}
-   intro.querySelector('.intro-sound').focus({preventScroll:true});
-  }
+  intro.querySelector('.intro-sound').addEventListener('click',()=>{if(soundEnabled||isPortfolioSoundOn()){mutePortfolioSound();stopAudio();}else enableSound();},options);
+  const start=async soundOn=>{
+   const button=intro?.querySelector('[data-intro-enter]');if(!button||button.disabled)return;
+   button.disabled=true;intro.querySelector('[data-intro-status]').textContent='Starting introduction…';
+   window.dispatchEvent(new CustomEvent('portfolio-intro-state',{detail:{active:true}}));
+   started=performance.now();timer=setTimeout(finish,5000);
+   // Both media play requests happen inside the entry click, before any await.
+   if(soundOn)enableSound();
+   if(!await play()){if(pending===generation)finish();return;}
+   if(events.signal.aborted||pending!==generation)return;
+   if(!requested&&(scrollY>24||document.hidden)){finish();return;}
+   intro.querySelector('.intro-entry').hidden=true;
+   intro.querySelector('.intro-sound').hidden=false;
+   restart();syncSound();
+   if(soundEnabled)audio.currentTime=0;
+   // A late media promise must not steal focus from a visitor already using Skip.
+   if(soundOn&&!intro.contains(document.activeElement))intro.querySelector('.intro-sound').focus({preventScroll:true});
+  };
+  intro.querySelector('[data-intro-enter]').addEventListener('click',()=>start(true),options);
+  if(!waitForEntry)start(withSound);
+  else if(document.activeElement===document.body)intro.querySelector('[data-intro-enter]').focus({preventScroll:true});
  };
- pause.addEventListener('click',()=>{if(film.paused)play();else{film.pause();finish();sync();}},options);
- sound.addEventListener('click',()=>{if(soundEnabled)stopAudio();else if(intro)enableSound();else begin(true,true);},options);
- hero.querySelector('[data-film-replay]').addEventListener('click',()=>begin(false,true),options);
+ pause.addEventListener('click',()=>{if(film.paused){hero.dataset.userPaused='false';play();}else{hero.dataset.userPaused='true';film.pause();finish();sync();}},options);
+ sound.addEventListener('click',()=>{if(isPortfolioSoundOn()){mutePortfolioSound();stopAudio();}else if(intro)enableSound();else begin(true,true);},options);
+ hero.querySelector('[data-film-replay]').addEventListener('click',()=>begin(true,true),options);
+ window.addEventListener('portfolio-sound-change',event=>{
+  syncSound();audio.volume=Math.min(.85,event.detail.volume*3.25);
+  if(!event.detail.enabled&&soundEnabled)stopAudio();
+ },options);
  film.addEventListener('play',sync,options);film.addEventListener('pause',sync,options);
  film.addEventListener('error',()=>{finish();sync();say('Film unavailable. Showing the portfolio poster.');},options);
  film.addEventListener('timeupdate',()=>{frameFilm();if(progress)progress.style.width=(film.duration?film.currentTime/film.duration*100:0)+'%';},options);
- film.addEventListener('loadedmetadata',frameFilm,options);
- window.addEventListener('resize',()=>{if(intro)finish();else frameFilm();},options);
+ film.addEventListener('loadedmetadata',()=>{filmSize=null;frameFilm();},options);
+ window.addEventListener('resize',()=>{filmSize=null;if(intro)finish();else frameFilm();},options);
  document.addEventListener('keydown',event=>{if(event.key==='Escape')finish();},options);
  document.addEventListener('focusin',event=>{if(intro&&!intro.contains(event.target))finish();},options);
  window.addEventListener('scroll',()=>{if(intro)finish();},{passive:true,...options});
- document.addEventListener('visibilitychange',()=>{if(document.hidden){film.pause();finish();sync();}},options);
+ document.addEventListener('visibilitychange',()=>{if(document.hidden){film.pause();finish();sync();}else if(heroVisible&&!preference.matches&&hero.dataset.userPaused!=='true'&&film.getAttribute('src'))play();},options);
+ if('IntersectionObserver' in window){
+  const observer=new IntersectionObserver(entries=>{
+   heroVisible=entries[0].isIntersecting;
+   if(intro)return;
+   if(!heroVisible)film.pause();
+   else if(!document.hidden&&!preference.matches&&hero.dataset.userPaused!=='true'&&film.getAttribute('src'))play();
+  });
+  observer.observe(hero);events.signal.addEventListener('abort',()=>observer.disconnect(),{once:true});
+ }
  preference.addEventListener('change',()=>{film.pause();finish();sync();},options);
- controls.hidden=false;
+ controls.hidden=false;syncSound();
  dispose=()=>{finish();film.pause();events.abort();};
  if(!auto||preference.matches||scrollY>24||location.hash){boot?.release();return;}
  try{
@@ -113,6 +138,6 @@ export function initOpening({auto=true}={}){
   // use the eligibility already selected by the pre-paint script.
   if(!boot?.pending){if(sessionStorage.getItem('portfolio-identity-seen'))play();return;}
   sessionStorage.setItem('portfolio-identity-seen','1');
- }catch{boot?.release();return;}
- begin();
+ }catch{/* Entry and its controls also work when storage is unavailable. */}
+ begin(false,false,true);
 }

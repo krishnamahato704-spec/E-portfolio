@@ -17,7 +17,10 @@ for(const [engine,launcher] of Object.entries({chromium,webkit})){
   await page.waitForFunction(()=>getComputedStyle(document.querySelector('.hero-film')).position==='fixed');
   const firstPaintFilm=await page.evaluate(()=>!document.querySelector('h1').checkVisibility({checkVisibilityCSS:true})&&document.querySelector('.hero-film').getBoundingClientRect().width>=innerWidth);
   if(engine==='chromium')await page.screenshot({path:path.join(out,`first-frame-${width}.png`)});
-  await loading;await page.unroute('**/src/app.js*');await page.locator('.intro-running').waitFor();
+  await loading;await page.unroute('**/src/app.js*');
+  await page.locator('[data-intro-enter]').waitFor();
+  if(engine==='chromium')await page.screenshot({path:path.join(out,`entry-${width}.png`)});
+  await page.locator('[data-intro-enter]').click();await page.locator('.intro-running').waitFor();
   if(engine==='chromium')await page.screenshot({path:path.join(out,`film-${width}.png`)});
   await page.waitForTimeout(2800);
   if(engine==='chromium')await page.screenshot({path:path.join(out,`name-${width}.png`)});
@@ -37,6 +40,6 @@ for(const [engine,launcher] of Object.entries({chromium,webkit})){
  }}finally{await browser.close();}
 }
 await fs.writeFile(path.join(out,'accessibility.json'),JSON.stringify(checks,null,2));
-await fs.writeFile(path.join(out,'index.html'),`<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Restored portfolio opening</title><style>body{margin:0;padding:24px;background:#fffaf4;color:#382f2a;font:16px/1.5 system-ui}main{max-width:1400px;margin:auto}a{color:#78432e}.frames{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}figure{margin:0}img{width:100%;border:1px solid #e8ddcf}figcaption{padding-block:10px}@media(max-width:700px){.frames{grid-template-columns:1fr}}</style><main><h1>Video → name reveal → homepage</h1><p><a href="${base}?intro=1">Replay the local opening</a>. Choose “Play with voice &amp; piano” to hear the supplied recording. This preview has not been deployed.</p>${[1440,390].map(width=>`<h2>${width===1440?'Desktop':'Phone'}</h2><div class="frames">${[['first-frame','First screen while video loads'],['film','Video starts'],['name','Your name appears'],['home-film','Homepage opens']].map(([name,label])=>`<figure><img src="${name}-${width}.png" alt="${label}"><figcaption>${label}</figcaption></figure>`).join('')}</div>`).join('')}</main></html>`);
+await fs.writeFile(path.join(out,'index.html'),`<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Portfolio opening and sound</title><style>body{margin:0;padding:24px;background:#fffaf4;color:#382f2a;font:16px/1.5 system-ui}main{max-width:1400px;margin:auto}a{color:#78432e}.frames{display:grid;grid-template-columns:repeat(5,1fr);gap:18px}figure{margin:0}img{width:100%;border:1px solid #e8ddcf}figcaption{padding-block:10px}@media(max-width:700px){.frames{grid-template-columns:1fr}}</style><main><h1>Enter with sound → film → homepage</h1><p><a href="${base}?intro=1">Play the opening</a>. “Enter with sound” starts the supplied voice and piano. Quiet ambience follows, with a distinct sound for each portfolio page and accessible mute and volume controls.</p>${[1440,390].map(width=>`<h2>${width===1440?'Desktop':'Phone'}</h2><div class="frames">${[['first-frame','First screen while the app loads'],['entry','Enter with sound'],['film','Video starts'],['name','Your name appears'],['home-film','Homepage opens']].map(([name,label])=>`<figure><img src="${name}-${width}.png" alt="${label}"><figcaption>${label}</figcaption></figure>`).join('')}</div>`).join('')}</main></html>`);
 console.log(JSON.stringify(checks,null,2));
 if(checks.some(c=>c.failures.length))process.exitCode=1;

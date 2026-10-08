@@ -10,13 +10,18 @@ assets/krishna-mahato-resume.pdf
 assets/opening-soundtrack.mp3
 assets/philosophy/lev-vygotsky.webp
 assets/philosophy/rabindranath-tagore.webp
+assets/theme/subject-art/economics-study-small.webp
 assets/theme/subject-art/economics-study.webp
+assets/theme/subject-art/english-pedagogy-small.webp
 assets/theme/subject-art/english-pedagogy.webp
+assets/theme/subject-art/history-sources-small.webp
 assets/theme/subject-art/history-sources.webp
+assets/theme/subject-art/teaching-practice-small.webp
 assets/theme/subject-art/teaching-practice.webp
 contact/index.html
 credentials/index.html
 docs/APPROVED_DESIGN_RELEASE.md
+docs/AUDIO_PERFORMANCE_QA.md
 docs/DESIGN_SYSTEM.md
 docs/PHILOSOPHY_PORTRAITS.md
 docs/QA.md
@@ -24,6 +29,7 @@ docs/SUBJECT_ILLUSTRATIONS.md
 docs/approved-design-files.txt
 gallery/index.html
 index.html
+package-lock.json
 package.json
 profile/index.html
 resources/index.html
@@ -45,6 +51,7 @@ scripts/serve.mjs
 scripts/site-origin.mjs
 sitemap.xml
 src/app.js
+src/cloud.js
 src/collections.js
 src/config.js
 src/democracy.js
@@ -54,9 +61,11 @@ src/evidence.js
 src/identity.js
 src/image-dimensions.js
 src/motion.js
+src/navigation.js
 src/opening-boot.js
 src/page-history.json
 src/page-media.js
+src/sound.js
 src/styles.css
 src/styles/base.css
 src/styles/cards.css
@@ -69,6 +78,7 @@ src/styles/page-identities.css
 src/styles/page-palettes.css
 src/styles/print.css
 src/styles/recruiter-access.css
+src/styles/sound.css
 src/styles/theme.css
 src/styles/tokens.css
 src/teaching-philosophy.js
@@ -89,3 +99,4 @@ tests/portfolio.test.mjs
 tests/recruiter.test.mjs
 tests/serve-media.test.mjs
 tests/site-origin.test.mjs
+vercel.json

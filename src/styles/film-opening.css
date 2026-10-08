@@ -16,6 +16,7 @@ html.opening-pending .opening-hero>:not(.hero-film) {visibility:hidden}
 html.opening-pending .opening-hero {z-index:1000}
 html.opening-pending:not(.opening-measure) .opening-hero .hero-film {position:fixed;inset:0;width:100vw;height:100svh;z-index:1;opacity:1;filter:none}
 .intro-active .hero-film {animation:none}
+.intro-active::after {content:'';position:absolute;inset:0 0 0 35%;z-index:-2;background:url('../../assets/hero-poster.webp') 76% top / cover no-repeat;opacity:.8;pointer-events:none}
 .identity-intro {position:fixed;inset:0;z-index:1000;display:block;isolation:isolate;pointer-events:none}
 .identity-intro::before {content:'';position:absolute;inset:0;z-index:-2;background:var(--paper)}
 .intro-running::before {animation:opening-cover 8s ease both}
@@ -28,12 +29,17 @@ html.opening-pending:not(.opening-measure) .opening-hero .hero-film {position:fi
 .intro-role {font-size:clamp(1rem,2vw,1.4rem);margin:14px 0 0}
 .intro-controls {position:absolute;top:max(20px,env(safe-area-inset-top));right:var(--gutter);display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px;max-width:calc(100% - var(--gutter)*2);pointer-events:auto}
 .intro-controls button {background:var(--paper);border-color:var(--line-strong);color:var(--ink);box-shadow:var(--shadow);font-size:.9rem}
+.intro-entry {position:absolute;left:var(--gutter);bottom:clamp(90px,13vh,145px);width:min(380px,calc(100% - var(--gutter)*2));padding:24px;background:var(--paper);color:var(--ink);border-left:4px solid var(--accent);border-radius:0 12px 12px 0;pointer-events:auto}
+.intro-entry .button {margin-block:10px;min-height:48px}
+.intro-entry p {margin:0;font-size:.9rem}
+.intro-entry .eyebrow {font-size:.8rem}
+.intro-entry [role=status]:empty {display:none}
 .intro-film-label {position:absolute;left:var(--gutter);bottom:24px;padding:7px 12px;background:var(--paper);color:var(--ink);border-radius:20px;font-size:.875rem}
 .intro-running .intro-film-label {animation:opening-caption 8s ease both}
 @keyframes opening-film {
- 0% {left:0;top:0;width:100vw;height:100svh;transform:scale(1);opacity:1;filter:none}
- 25%,62.5% {left:0;top:0;width:100vw;height:100svh;transform:scale(1.055);opacity:1;filter:none}
- 100% {left:var(--film-left);top:var(--film-top);width:var(--film-width);height:var(--film-height);transform:scale(1);opacity:.8;filter:saturate(.9)}
+ 0% {transform:scale(1);opacity:1}
+ 25%,72% {transform:scale(1.035);opacity:1}
+ 100% {transform:scale(1.045);opacity:0}
 }
 @keyframes opening-name {
  0%,14% {opacity:0;translate:0 18px}
@@ -47,6 +53,7 @@ html.opening-pending:not(.opening-measure) .opening-hero .hero-film {position:fi
  .hero-copy {padding:20px}.hero-identity {gap:16px}.hero-avatar {width:80px;height:80px}
 }
 @media(max-width:760px) {
+ .intro-active::after {inset:0 0 auto;height:210px;background-position:50% top}
  html.opening-pending .hero-film {object-position:73% top}
  .hero-film {left:0;width:100%;height:300px;object-position:50% top;opacity:.8}
  .hero-content {grid-template-columns:1fr;padding-block:260px 144px;gap:18px}

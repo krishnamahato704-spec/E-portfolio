@@ -32,7 +32,8 @@ export function initNavigation() {
  window.addEventListener('pagehide',()=>close(false));
  window.addEventListener('pageshow',e=>{if(e.persisted)close(false)});
  // Only the header surface changes; content and menu position remain stable.
- const updateSurface=()=>header.classList.toggle('is-scrolled',scrollY>24);
+ let scrolled;
+ const updateSurface=()=>{const next=scrollY>24;if(next!==scrolled){scrolled=next;header.classList.toggle('is-scrolled',next);}};
  window.addEventListener('scroll',updateSurface,{passive:true});updateSurface();
  // Preserve a menu already opened through the native fallback during loading.
  if(document.querySelector('.fallback-navigation')?.open)toggle.click();

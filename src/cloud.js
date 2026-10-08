@@ -1,4 +1,4 @@
-import {config} from './config.js';
+import {config} from './config.js?v=editorial-20261004';
 import {validateContent} from './content.js?v=editorial-20261004';
 const fileTypes=Object.freeze({pdf:'application/pdf',jpg:'image/jpeg',jpeg:'image/jpeg',png:'image/png',webp:'image/webp',docx:'application/vnd.openxmlformats-officedocument.wordprocessingml.document',pptx:'application/vnd.openxmlformats-officedocument.presentationml.presentation'});
 export async function request(path,options={}) {

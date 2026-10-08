@@ -209,7 +209,7 @@ try{
   const motion=await context({reducedMotion:'no-preference'});const moving=await motion.newPage();
   await moving.goto(base,{waitUntil:'load'});
   await moving.locator('.intro-skip').waitFor();
-  record('opening: first visit starts muted with a skip action',await moving.locator('.hero-film').evaluate(v=>v.muted&&!v.paused)&&await moving.locator('.identity-intro').count()===1);
+  record('opening: first visit offers entry with sound and a skip action',await moving.locator('[data-intro-enter]').isVisible()&&await moving.locator('.hero-film').evaluate(v=>v.paused)&&await moving.locator('.identity-intro').count()===1);
   await moving.locator('.intro-skip').click();
   await moving.locator('[data-film-sound]').click();
   await moving.waitForFunction(()=>!document.querySelector('#opening-audio').paused);

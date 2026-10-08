@@ -14,7 +14,7 @@ export function photoPlate(record,base,cls='',priority=false){
 
 // Subject illustrations are design assets, not uploaded teaching evidence.
 const subjectFiles={history:'history-sources',economics:'economics-study',english:'english-pedagogy',teaching:'teaching-practice'};
-const subjectUrl=subject=>'assets/theme/subject-art/'+subjectFiles[subject]+'.webp';
+const subjectUrl=subject=>'assets/theme/subject-art/'+subjectFiles[subject]+'-small.webp';
 export function studyInterval(base,first='history',second='english',layout='shelf'){
  const subjects=[first,second].filter(subject=>Object.hasOwn(subjectFiles,subject));
  const style=['shelf','notes','arc'].includes(layout)?layout:'shelf';
