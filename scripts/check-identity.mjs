@@ -196,6 +196,10 @@ try{
    if(await soundPage.locator('[data-sound-toggle]').getAttribute('aria-pressed')!=='true')await soundPage.locator('[data-sound-toggle]').click();
    await soundPage.waitForFunction(()=>portfolioAudioContexts[0]?.state==='running');
    record(engine,'Changing to Evidence starts its own two-note cue',await soundPage.evaluate(()=>{const notes=JSON.parse(sessionStorage.getItem('audit-sound-notes')||'[]');return notes.some(f=>Math.abs(f-349.23)<.01)&&notes.some(f=>Math.abs(f-523.25)<.01);}));
+   await soundPage.evaluate(()=>{sessionStorage.setItem('portfolio-sound',JSON.stringify({enabled:false,volume:.13}));window.dispatchEvent(new PageTransitionEvent('pageshow',{persisted:true}));});
+   await soundPage.waitForFunction(()=>portfolioAudioContexts[0].state==='suspended');
+   record(engine,'A restored history page respects mute and volume changed on another page',await soundPage.locator('[data-sound-toggle]').getAttribute('aria-pressed')==='false'&&await soundPage.locator('[data-sound-volume]').inputValue()==='13');
+   await soundPage.locator('[data-sound-toggle]').click();await soundPage.waitForFunction(()=>portfolioAudioContexts[0].state==='running');
    await soundPage.evaluate(()=>{Object.defineProperty(document,'hidden',{configurable:true,value:true});document.dispatchEvent(new Event('visibilitychange'));});
    await soundPage.waitForFunction(()=>portfolioAudioContexts[0].state==='suspended');
    record(engine,'A hidden browser tab suspends ambience',await soundPage.locator('[data-sound-toggle]').getAttribute('aria-pressed')==='false');

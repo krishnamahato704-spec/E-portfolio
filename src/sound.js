@@ -17,7 +17,8 @@ export function initSound(){
  let enabled=false,volume=.2,context,master,ambient,filter;
  let introActive=!!window.portfolioOpeningBoot?.pending,revision=0,pendingCue=null;
  const players=new Set();
- try{const saved=JSON.parse(sessionStorage.getItem(storageKey)||'null');if(saved){enabled=saved.enabled===true;volume=Number.isFinite(saved.volume)?Math.max(0,Math.min(1,saved.volume)):.2;}}catch{}
+ const readPreferences=()=>{try{const saved=JSON.parse(sessionStorage.getItem(storageKey)||'null');if(saved){enabled=saved.enabled===true;volume=Number.isFinite(saved.volume)?Math.max(0,Math.min(1,saved.volume)):.2;}}catch{}};
+ readPreferences();
  const save=()=>{try{sessionStorage.setItem(storageKey,JSON.stringify({enabled,volume}));}catch{}};
  const notify=()=>{
   const playing=enabled&&volume>0&&context?.state==='running'&&!document.hidden;
@@ -121,10 +122,15 @@ export function initSound(){
  }catch{}
  document.addEventListener('visibilitychange',()=>{
   if(document.hidden){revision++;context?.suspend().catch(()=>{});notify();}
-  else resume();
+  else {readPreferences();if(enabled)resume();else {revision++;context?.suspend().catch(()=>{});notify();}}
  });
  window.addEventListener('pagehide',()=>{revision++;context?.suspend().catch(()=>{});});
- window.addEventListener('pageshow',event=>{if(event.persisted)resume();});
+ window.addEventListener('pageshow',event=>{
+  if(!event.persisted)return;
+  // Back can restore an older document whose mute state changed on another page.
+  readPreferences();
+  if(enabled)resume();else {revision++;context?.suspend().catch(()=>{});notify();}
+ });
  panel.hidden=false;notify();
  if(enabled)resume();
 }
