@@ -4,6 +4,7 @@ export function wireCollections(root=document, options={}) {
     {list:'resource-list',row:'.resource-row',input:'resource-search',attribute:'data-filter',count:'resource-count',empty:'resource-empty',noun:'files'},
     {list:'experience-list',row:'.experience-row',input:'experience-search',attribute:'data-experience-filter',count:'experience-count',empty:'experience-empty',noun:'experiences'},
     {list:'credential-list',row:'.certificate-card',input:'credential-search',attribute:'data-credential-filter',count:'credential-count',empty:'credential-empty',noun:'credentials'},
+    {list:'gallery-list',row:'.gallery-card',input:'gallery-search',attribute:'data-gallery-filter',count:'gallery-count',empty:'gallery-empty',noun:'gallery records'},
   ];
   for(const group of groups){
     const list=root.querySelector('#'+group.list);
@@ -19,7 +20,7 @@ export function wireCollections(root=document, options={}) {
       const terms=(input?.value||'').trim().toLocaleLowerCase().split(/\s+/).filter(Boolean);
       let shown=0;
       for(const row of rows){
-        row.hidden=(category!=='All'&&row.dataset.category!==category)||!terms.every(term=>text.get(row).includes(term));
+        row.hidden=(category!=='All'&&!(row.dataset.categories||row.dataset.category||'').split('|').includes(category))||!terms.every(term=>text.get(row).includes(term));
         if(!row.hidden)shown++;
       }
       if(count)count.textContent=`${shown} of ${rows.length} ${group.noun} shown`;

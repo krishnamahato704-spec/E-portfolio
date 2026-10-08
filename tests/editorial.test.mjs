@@ -4,33 +4,74 @@ import fs from 'node:fs/promises';
 import {defaultContent} from '../src/content.js';
 import {view,header} from '../src/views.js';
 
-test('Recruiter metrics follow published claims and owner edits, without inferring exam results',()=>{
+
+test('Home puts teaching evidence before education while About preserves the full academic timeline',()=>{
  const c=structuredClone(defaultContent);
- c.experiences[0].duration='12';c.experiences[0].points=[];
- c.profile.directTeaching='History · Class 8';c.profile.eligibility='Owner examination — Applied';
+ c.experiences[0].duration='12';c.experiences[0].institution='Owner school';
  const home=view('home',c);
- assert.match(home,/12 Weeks/);assert.doesNotMatch(home,/15\+/);
- assert.match(home,/Owner examination/);assert.match(home,/Class 8/);
- assert.doesNotMatch(home,/Classes 6–9 · select Class 11 History/);
+ const profile=view('profile',c);
+ assert.ok(profile.indexOf('2014')<profile.indexOf('2017'));
+ assert.ok(profile.indexOf('2017')<profile.indexOf('2018–2021'));
+ assert.ok(home.indexOf('<h3>B.Ed.</h3>')<home.indexOf('<h3>B.A. History'));
+ assert.doesNotMatch(home,/<h3>Class X/);
+ assert.match(profile,/<h3>Class X/);
+ assert.ok(home.indexOf('Education &amp; Credentials')<home.indexOf('Professional Learning'));
+ assert.ok(home.indexOf('Selected Teaching Evidence')<home.indexOf('My Teaching Journey'));
+ assert.ok(home.indexOf('My Teaching Journey')<home.indexOf('Education &amp; Credentials'));
+ assert.match(home,/Current studies \(Concurrent\)/);
+ assert.match(home,/Owner school/);assert.match(home,/12 Weeks/);
+ assert.doesNotMatch(home,/recruiter-snapshot|metrics-strip/);
+ c.profile.eligibility='Owner examination — Applied';
+ assert.match(view('resume',c),/Owner examination/);
+});
+
+test('Homepage hiring and contact summaries use the owner facts without inferred eligibility',()=>{
+ const c=structuredClone(defaultContent);
+ c.profile.availability='August 2028';c.profile.roles=['Owner role <script>'];
+ c.profile.subjects=['Owner subject <script>'];
+ c.profile.workPreferences='Owner relocation preference';
+ const home=view('home',c);
+ assert.match(home,/Available August 2028/);
+ assert.match(home,/Roles of interest:<\/strong> Owner role &lt;script&gt;/);
+ assert.match(home,/Subjects of interest:<\/strong> Owner subject &lt;script&gt;/);
+ assert.match(home,/Owner relocation preference/);
+ assert.match(home,/<details class="hero-recruiter-brief"><summary>Roles &amp; subjects of interest<\/summary>/);
+ assert.match(home,/href="mailto:krishnamahato704@gmail.com"/);
+ assert.doesNotMatch(home,/Available May 2027|PGT History/);
+ c.profile.availability='';c.profile.roles=[];c.profile.workPreferences='';
+ const cleared=view('home',c);
+ assert.doesNotMatch(cleared,/Available from|hero-availability|Roles of interest/);
+});
+
+test('Homepage previews existing published work and respects evidence removal',()=>{
+ const home=view('home',defaultContent);
+ assert.match(home,/Selected Teaching Evidence/);
+ assert.match(home,/href="\.\/teaching\/democracy\/"/);
+ assert.match(home,/href="\.\/assets\/evidence\/mock-election-activity.webp" data-viewer/);
+ assert.match(home,/href="\.\/assets\/evidence\/ntcc-community-report.pdf" data-viewer/);
+ assert.match(home,/Planning evidence/);
+ const cleared=structuredClone(defaultContent);cleared.resources=[];cleared.gallery=[];
+ const withoutEvidence=view('home',cleared);
+ assert.doesNotMatch(withoutEvidence,/Democracy · Lesson Plan|Mock election activity|Community Work and Adult Literacy/);
 });
 test('Navigation exposes Home and evidence while retaining project and detail URLs',()=>{
  const nav=header('democracy','../../',defaultContent);
  assert.match(nav,/href="\.\.\/\.\.\/">Home/);
  assert.match(nav,/aria-current="page" href="\.\.\/\.\.\/resources\/"/);
+ assert.match(nav,/<nav class="mobile-shortcuts" aria-label="Quick access">/);
+ assert.match(nav,/href="\.\.\/\.\.\/resume\/"/);
+ assert.doesNotMatch(header('admin','../',defaultContent),/mobile-shortcuts/);
 });
-test('Hero contains a secondary film that loads on request, with a static fallback',()=>{
+
+test('Film hero has a static fallback, user controls and original evidence links',()=>{
  const home=view('home',defaultContent);
  assert.doesNotMatch(home,/<video[^>]*(?:\sautoplay| src=)/);
- assert.match(home,/<video[^>]*controls muted loop playsinline/);
- assert.doesNotMatch(home,/data-autoplay="true"/);
- assert.ok(home.indexOf('class="portrait-frame"')<home.indexOf('<video '));
- assert.match(home,/hero-film-row/);
+ assert.match(home,/preload="none"/);
+ assert.match(home,/class="hero-avatar"/);
  assert.equal((home.match(/<video\s/g)||[]).length,1);
- assert.ok(home.indexOf('<video ')<home.indexOf('class="metrics-strip"'));
- assert.match(home,/preload="none"/);assert.match(home,/Illustrative portfolio film with soft instrumental music/);
- assert.match(home,/hero-video-music\.mp4/);assert.match(home,/Turn on instrumental music/);
- const film=home.match(/<figure class="hero-video-panel">([\s\S]*?)<\/figure>/)?.[1];
- assert.ok(film);assert.doesNotMatch(film,/film-caption|Silent|<figcaption/);
+ assert.match(home,/hero-video-opt\.mp4/);
+ assert.match(home,/opening-soundtrack\.mp3/);
+ assert.match(home,/data-film-pause/);assert.match(home,/data-film-replay/);
  assert.match(view('credentials',defaultContent),/data-original-url="https:/);
  assert.match(view('resources',defaultContent),/data-viewer/);
 });

@@ -1,0 +1,64 @@
+/* Colored subject art fills open margins; personal photographs stay secondary. */
+main::before,main::after {display:none}
+.distinctive-page>.page-photo-backdrop {display:none}
+.page-atmosphere {position:absolute;inset:0;z-index:-1;display:grid;grid-auto-rows:minmax(0,1fr);overflow:hidden;pointer-events:none;user-select:none;--art-opacity:.58;background:radial-gradient(ellipse 42% 350px at 4% 12%,#dfb25c24,transparent 80%),radial-gradient(ellipse 35% 420px at 98% 28%,#83b3b72b,transparent 80%),radial-gradient(ellipse 40% 320px at 5% 50%,#d9998226,transparent 80%),radial-gradient(ellipse 35% 380px at 97% 70%,#a295ba24,transparent 80%),radial-gradient(ellipse 38% 350px at 9% 91%,#7fb6a124,transparent 80%)}
+.atmosphere-home {top:480px}
+.atmosphere-credentials,.atmosphere-resume {--art-opacity:.44}
+.atmosphere-admin,.atmosphere-404 {--art-opacity:.38}
+.atmosphere-scene {position:relative;min-height:0;overflow:visible;isolation:isolate}
+.atmosphere-image {position:absolute;top:50%;width:min(42vw,470px);height:min(100%,460px);max-width:none;object-fit:contain;transform:translateY(-50%);opacity:var(--art-opacity);filter:none;pointer-events:none}
+.scene-right .atmosphere-image {right:-20px}
+.scene-left .atmosphere-image {left:-20px}
+.scene-photo .atmosphere-image {width:min(30vw,340px);height:min(82%,280px);opacity:.095;filter:saturate(.6);border-radius:24px;mask-image:linear-gradient(transparent,#000 20%,#000 80%,transparent);transform:translateY(-50%) rotate(-4deg)}
+.scene-photo.scene-right .atmosphere-image {transform:translateY(-50%) rotate(4deg)}
+.page-atmosphere .image-error {display:none}
+
+/* These quiet, noninteractive illustrations occupy actual gaps, not text areas. */
+.study-interval {position:relative;isolation:isolate;width:min(var(--content-width),calc(100% - var(--gutter)*2));height:172px;margin:14px auto;pointer-events:none;user-select:none;background:radial-gradient(ellipse 28% 62% at 14% 56%,#dfb25c33,transparent 90%),radial-gradient(ellipse 30% 58% at 86% 48%,#80b5b83a,transparent 90%),radial-gradient(ellipse 42% 45% at 51% 51%,#d89b8b1c,transparent 90%)}
+.distinctive-page .study-interval {width:100%}
+.study-illustration {position:absolute;top:50%;width:190px;height:166px;object-fit:contain;opacity:.94;transform:translateY(-50%);max-width:38%}
+.study-left {left:30px}.study-right {right:30px}
+.study-trace {position:absolute;left:24%;right:24%;top:54%;height:1px;background:linear-gradient(90deg,#c6a357,#bf8e76,#75a6aa)}
+.study-trace::before,.study-trace::after {content:'';position:absolute;top:-5px;width:11px;height:11px;border:2px solid #b18468;background:var(--paper);border-radius:50%}
+.study-trace::before {left:0}.study-trace::after {right:0;border-color:#709d9d}
+.interval-notes {background:radial-gradient(ellipse 30% 66% at 17% 57%,#82b6ad38,transparent 90%),radial-gradient(ellipse 30% 62% at 82% 50%,#dca07836,transparent 90%)}
+.interval-notes .study-left {left:8%;transform:translateY(-50%) rotate(-5deg)}
+.interval-notes .study-right {right:8%;transform:translateY(-50%) rotate(4deg)}
+.interval-notes .study-trace {left:31%;right:31%;transform:rotate(-3deg)}
+.interval-arc {background:radial-gradient(ellipse 30% 66% at 24% 50%,#e3bb6133,transparent 90%),radial-gradient(ellipse 30% 62% at 74% 57%,#b499c12e,transparent 90%)}
+.interval-arc .study-left {left:14%}.interval-arc .study-right {right:14%}
+.interval-arc .study-trace {left:36%;right:36%;top:44%;height:52px;border:1px solid #b69c70;border-bottom:0;border-radius:90% 90% 0 0;background:none}
+.interval-arc .study-trace::before,.interval-arc .study-trace::after {top:auto;bottom:-5px}
+
+/* The images stay visible in margins and between sections. Text stays on paper. */
+.profile-page .profile-story,.profile-interests .beyond-grid,.teaching-page .learning-section,
+.catalogue-note,.resources-page .archive-note,.contact-page .contact-form-section {background:var(--sheet)}
+.section-heading h2,.section-heading .eyebrow,.section-heading>.text-link,
+.education-caption,.education-details-link,.current-studies-label,.collection-count,
+.breadcrumb,.recruiter-details summary,.teaching-approach>summary {background:var(--paper)}
+.section-heading h2,.section-heading .eyebrow {width:fit-content;padding-inline:6px;margin-left:-6px;box-decoration-break:clone}
+.section-heading>.text-link,.education-details-link {padding-inline:10px;border-radius:6px}
+.education-caption,.collection-count {width:fit-content;padding-inline:6px}
+.recruiter-details,.teaching-approach {position:relative;background:var(--sheet);padding:14px 20px;border:1px solid var(--line);border-radius:var(--radius)}
+.profile-page .profile-study,.resume-title .lead {background:var(--paper)}
+.resume-title {background:var(--paper);padding-inline:20px;border-radius:var(--radius)}
+.gallery-opening>div {background:var(--sheet);border-radius:var(--radius)}
+
+@media(max-width:760px) {
+ .page-atmosphere {--art-opacity:.42}
+ .atmosphere-home {top:560px}
+ .atmosphere-credentials,.atmosphere-resume {--art-opacity:.32}
+ .atmosphere-image {width:74vw;height:min(100%,300px)}
+ .scene-right .atmosphere-image {right:-50px}.scene-left .atmosphere-image {left:-50px}
+ .scene-photo .atmosphere-image {width:62vw;height:min(80%,240px);opacity:.075}
+ .study-interval {height:120px;margin-block:12px}
+ .study-illustration {width:126px;height:116px;max-width:38%;opacity:.94}
+ .study-left,.interval-notes .study-left {left:6px}
+ .study-right,.interval-notes .study-right {right:6px}
+ .interval-arc .study-left {left:3%}.interval-arc .study-right {right:3%}
+ .study-trace,.interval-notes .study-trace {left:39%;right:39%}
+ .interval-arc .study-trace {left:41%;right:41%;height:32px}
+ .section-heading h2 {padding-inline:4px;margin-left:-4px}
+ .resume-title {padding-inline:12px}
+}
+@media print {.page-atmosphere,.study-interval {display:none!important}}

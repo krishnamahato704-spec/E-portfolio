@@ -73,7 +73,7 @@ test('Every route renders a complete static document with one heading and workin
   const ids=[...html.matchAll(/\bid="([^"]+)"/g)].map(x=>x[1]);assert.equal(ids.length,new Set(ids).size,route+' duplicate IDs');
   for(const [,href] of html.matchAll(/(?:href|src)="([^"]+)"/g)){
    if(/^(https?:|mailto:|data:)/.test(href))continue;
-   const [pathname,hash]=href.split('#');const raw=pathname.split('?')[0];let target=raw.startsWith('/E-portfolio/')?path.resolve(root,raw.slice('/E-portfolio/'.length)):raw?path.resolve(path.dirname(file),raw):file;
+   const [pathname,hash]=href.split('#');const raw=pathname.split('?')[0];let target=raw.startsWith('/E-portfolio/')?path.resolve(root,raw.slice('/E-portfolio/'.length)):raw.startsWith('/')?path.resolve(root,'.'+raw):raw?path.resolve(path.dirname(file),raw):file;
    if(raw.endsWith('/'))target=path.join(target,'index.html');
    await fs.access(target).catch(()=>assert.fail(`${route}: missing ${href}`));
    if(hash && path.extname(target)==='.pdf'){assert.match(hash,/^page=[1-9]\d*$/);const pdf=await fs.readFile(target);assert.equal(pdf.subarray(0,5).toString(),'%PDF-');const pages=(pdf.toString('latin1').match(/\/Type\s*\/Page\b/g)||[]).length;assert.ok(Number(hash.slice(5))<=pages,`${route}: PDF page outside document ${href}`);}

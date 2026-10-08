@@ -1,269 +1,196 @@
-/* Recruiter-first editorial layouts; shared patterns, no runtime dependency. */
-h2 {font-size:var(--h2)}
-.section-heading {margin-bottom:32px}
-.section-heading h2 {max-width:24ch}
-.brand-caption {display:block}
-.brand-caption small {font-size:.68rem}
-.header-inner {gap:20px}
-.navigation-links {gap:clamp(12px,1.25vw,20px)}
-.header-cta {display:none}
-.opening-inner {grid-template-columns:minmax(0,1.35fr) minmax(0,.85fr);gap:clamp(32px,7vw,100px);padding-block:64px 52px}
-.hero-atlas {position:absolute;inset:0 0 auto auto;width:min(700px,65vw);color:var(--gold);opacity:.17;z-index:-1;overflow:hidden;pointer-events:none}
-.identity-atlas {display:block;width:100%;height:auto}
-.opening-label {border-left:2px solid var(--accent);padding-left:14px;max-width:none}
-.opening-label span {padding-inline:10px;color:var(--muted)}
-.opening-hero h1 {font-size:var(--display);line-height:.98;margin-block:26px;letter-spacing:-.055em}
-.opening-hero h1 span,.opening-hero h1 em {display:block}
-.opening-hero h1 em {font-style:italic;color:var(--accent-hover)}
-.hero-role {font-family:var(--sans);font-size:clamp(1.05rem,1.65vw,1.4rem);line-height:1.5;max-width:32ch}
-.hero-statement {font:clamp(1.15rem,1.8vw,1.4rem)/1.6 var(--serif);max-width:34ch;margin-top:20px}
-.hero-meta {gap:12px 20px;font-size:.875rem;margin-block:24px}
-.opening-visual {gap:18px;max-width:380px;width:100%;justify-self:end}
-.opening-hero .portrait-frame {width:100%;padding:12px 12px 0;border-radius:2px;background:var(--sheet);border:1px solid var(--line-strong);position:relative}
-.opening-hero .portrait-frame::before {content:'';position:absolute;top:26px;right:-16px;bottom:26px;left:26px;z-index:-1;background:var(--dark)}
-.opening-hero .portrait-window {aspect-ratio:4/4.6;border-radius:0}
-.opening-hero .portrait {object-position:50% 25%;mix-blend-mode:normal}
-.opening-hero .portrait-frame figcaption {display:flex;justify-content:space-between;gap:12px;padding-block:14px;font-size:.8rem}
-.opening-hero .portrait-frame figcaption span {margin:0;font-size:inherit}
-.current-card {padding:12px 0;background:none;border:0;box-shadow:none;gap:12px}
-.current-card>.icon {width:24px;height:24px}
-.current-card h2 {font:600 .95rem/1.4 var(--sans)}
-.current-card .eyebrow {display:none}
-.current-card p:not(.eyebrow) {font-size:.8rem}
-.current-card .opening-status {font-size:.8rem;color:var(--accent-hover)}
-.hero-film-row {display:grid;grid-template-columns:minmax(0,1fr) 260px;align-items:center;gap:54px;padding-block:26px 30px;border-top:1px solid var(--line-strong)}
-.hero-film-row .film-note {max-width:75ch;margin-top:8px;font-size:.95rem;color:var(--muted)}
-.hero-film-row .small {font-size:.75rem}
-.hero-video-panel {padding:5px;box-shadow:none}
-.video-play .icon {width:40px;height:40px}
-.video-play {font-size:.75rem;background:#193f3b33}
-.video-sound {top:8px;right:8px;padding:7px 10px;font-size:.7rem}
-.recruiter-snapshot {display:grid;grid-template-columns:.75fr 1.6fr;gap:60px;align-items:start}
-.snapshot-heading h2 {margin-block:12px 20px}
-.snapshot-heading h2 em {font-style:italic;color:var(--accent-hover)}
-.snapshot-grid {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px;margin:0}
-.snapshot-grid>div {border-top:1px solid var(--line-strong);padding-top:12px;min-width:0}
-.snapshot-grid dt,.evidence-lens dt {font-size:.72rem;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
-.snapshot-grid dd {font-size:.96rem;line-height:1.5;margin:0;overflow-wrap:anywhere}
-.metrics-strip {background:var(--dark);padding-block:20px;border:0;color:var(--sheet)}
-.metrics-grid strong,.metrics-grid span,.metrics-grid .icon {color:var(--sheet)}
-.metrics-grid span {opacity:.85}
-.metrics-grid>div {border-color:#ffffff30}
-.selected-evidence-grid {grid-template-columns:1.2fr 1fr;gap:24px}
-.selected-evidence-card:first-child {grid-row:span 2}
-.selected-evidence-card:first-child h3 {font-size:2.2rem;line-height:1.16;max-width:20ch}
-.selected-evidence-card:first-child .evidence-card-media {height:260px;background:#eae5d8}
-.selected-evidence-card .evidence-card-body {padding:24px}
-.selected-evidence-card:not(:first-child) {display:grid;grid-template-columns:130px minmax(0,1fr)}
-.selected-evidence-card:not(:first-child) .evidence-card-media {height:100%;padding:12px;border:0;border-right:1px solid var(--line)}
-.selected-evidence-card:not(:first-child) .evidence-card-body {padding:20px}
-.selected-evidence-card:not(:first-child) .resource-desc {font-size:.875rem;margin-top:8px}
-.selected-evidence-card:not(:first-child) h3 {font-size:1.3rem}
-.evidence-number {background:var(--dark);color:var(--sheet);border-radius:0;width:30px;height:30px;font:.8rem var(--sans);left:10px;top:10px}
-.evidence-lens {display:grid;gap:12px;border-top:1px solid var(--line);padding-top:16px;margin-block:16px 0}
-.evidence-lens dt {margin-bottom:4px;font-size:.65rem}
-.evidence-lens dd {margin:0;font-size:.86rem;line-height:1.5}
-.current-practice {display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);gap:64px;padding-inline:36px;margin-block:32px;border:1px solid var(--line)}
-.current-practice h2 {margin-block:16px;max-width:24ch}
-.current-practice .status {margin-left:10px;text-transform:none;letter-spacing:normal}
-.current-practice .current-period {font-size:.875rem;color:var(--accent-hover);margin-bottom:16px}
-.current-practice .lead {font-size:1.05rem}
-.current-practice .plain-list {font-size:.92rem;margin-block:20px 26px}
-.current-practice figure {align-self:center}
-.current-practice .gallery-image {aspect-ratio:4/4.7;object-fit:contain;background:var(--surface-muted);border-radius:0}
-.home-journey {background:none}
-.school-stages {gap:40px;margin-top:44px}
-.school-stage h3 {font-size:1.35rem}
-.home-philosophy {padding-inline:32px;margin-block:32px;border:0}
-.practice-grid article {display:block}
-.practice-grid .icon-disc {width:40px;height:40px;background:none;border:1px solid var(--line-strong);margin-bottom:18px}
-.practice-grid .icon-disc .icon {width:22px;height:22px}
-.practice-grid h3 {font-size:1.45rem;margin-bottom:14px}
-.practice-grid p {font-size:.96rem}
-.home-records {grid-template-columns:1fr;gap:64px}
-.home-records>div+div {padding:0;border:0}
-.home-records h2 {font-size:var(--h2)}
-.moments-grid {grid-template-columns:1.5fr 1fr 1fr;gap:24px}
-.moments-grid .gallery-image {aspect-ratio:4/3;object-fit:contain;background:var(--surface-muted);border-radius:0}
-.moments-grid figcaption {font-size:.9rem}
-.moments-grid figcaption span {font-size:.8rem}
-figcaption p {font-size:.83rem;color:var(--muted);margin-top:8px}
-.credential-highlights {grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
-.credential-highlight {display:block;padding:22px}
-.credential-highlight>.icon {margin-bottom:12px}
-.credential-highlight h3 {font-size:1rem}
-.credential-highlight p {font-size:.85rem}
-.credential-highlight span {font-size:.72rem}
-.connect-strip {padding-block:44px;border-top:1px solid var(--dark)}
-.page-heading {padding-block:64px 44px;max-width:1000px}
-.page-heading .lead {font-size:1.18rem;max-width:62ch}
-.profile-hero .page-heading {padding:0}
-.profile-portrait {border-radius:0;padding:12px}
-.profile-story {border-left:2px solid var(--accent);padding-left:30px}
-.experience-row {margin-bottom:36px}
-.milestone-card {padding:32px;gap:40px;box-shadow:none}
-.milestone-record.is-active .milestone-card {border-color:var(--accent)}
-.milestone-title {font-size:1.8rem}
-.milestone-header .card-meta {color:var(--accent-hover)}
-.experience-reflection {border-left-width:2px;padding:20px}
-.evidence-library-grid {grid-template-columns:repeat(2,minmax(0,1fr));gap:28px}
-.evidence-library-grid .flagship-evidence {grid-column:1/-1;display:grid;grid-template-columns:.8fr 1.2fr}
-.evidence-library-grid .flagship-evidence .evidence-card-media {height:100%;min-height:320px;border-bottom:0;border-right:1px solid var(--line);padding:24px}
-.evidence-library-grid .flagship-evidence h3 {font-size:2rem}
-.evidence-library-grid .flagship-evidence .evidence-card-body {padding:32px}
-.certificate-grid {gap:28px}
-.certificate-image {padding:24px;background:var(--surface-muted)}
-.certificate-body {padding:24px}
-.gallery-grid {grid-template-columns:repeat(2,minmax(0,1fr));gap:36px}
-.gallery-grid figure {padding:0;border:0;background:none}
-.gallery-grid figure:first-child {grid-column:1/-1;display:grid;grid-template-columns:1.4fr 1fr;gap:32px;align-items:center;padding-bottom:32px;border-bottom:1px solid var(--line)}
-.gallery-grid .gallery-image {aspect-ratio:4/3;border-radius:0}
-.gallery-grid figcaption {font-size:1rem}
-.gallery-grid figcaption p {font-size:.94rem;max-width:50ch}
-.gallery-grid figcaption strong {font:1.3rem var(--serif)}
-.planning-lens-card {border-top:3px solid var(--dark);padding:26px}
-.lesson-overview {display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;padding:32px;margin-bottom:48px;background:var(--sheet);border:1px solid var(--line)}
-.lesson-overview h2 {font-size:2rem;margin-block:12px 18px}
-.lesson-overview p:not(.eyebrow) {font-size:.95rem;color:var(--muted)}
-.lesson-overview figure>a {display:block;background:var(--surface-muted);padding:16px}
-.lesson-overview img {width:100%;height:auto}
-.democracy-stage {padding-block:36px}
-.democracy-stage h2 {font-size:1.9rem}
-.democracy-page .page-heading h1 em {font-style:italic;color:var(--accent-hover)}
-.case-meta {padding-block:20px}
-.case-layout .evidence-aside {position:sticky;top:calc(var(--header-height) + 24px)}
-.contact-note {border-left:2px solid var(--accent)}
-.resume-web-summary {border-top:3px solid var(--dark)}
-.evidence-viewer[open] {display:flex;flex-direction:column}
-.viewer-content {flex:1;min-height:0;height:auto}
-.viewer-footer {height:auto;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px;padding:12px 20px}
-.viewer-paging {display:flex;gap:14px;align-items:center;font-size:.875rem}
-.viewer-paging .button {min-width:44px;min-height:44px;padding:8px}
-/* The overlay never changes geometry, hides page content or locks scrolling. */
-.identity-intro {position:fixed;inset:0;z-index:90;background:var(--paper);pointer-events:none;animation:intro-exit 3200ms linear forwards;contain:layout paint}
-.intro-art {position:absolute;inset:0;display:grid;place-items:center;overflow:hidden}
-.intro-art>.identity-atlas {position:absolute;width:min(75vh,650px);color:var(--gold);opacity:.26;animation:intro-atlas 1.3s var(--ease) both}
-.intro-copy {position:relative;width:min(560px,calc(100% - 48px));text-align:center;color:var(--dark)}
-.intro-km {display:block;font:clamp(4rem,10vw,7rem)/1 var(--serif);letter-spacing:-.07em;animation:intro-reveal 700ms 700ms both}
-.intro-km span {color:var(--accent-hover)}
-.intro-name {font:clamp(1.8rem,4vw,2.8rem)/1.2 var(--serif);margin-top:20px;animation:intro-reveal 600ms 1050ms both}
-.intro-role {margin-top:12px;font-size:clamp(.95rem,2vw,1.15rem);animation:intro-reveal 500ms 1350ms both}
-.intro-timeline {display:flex;justify-content:space-between;position:relative;margin:32px auto 0;padding-top:20px;max-width:390px;font-size:.72rem;text-transform:uppercase;letter-spacing:.12em}
-.intro-timeline::before {content:'';position:absolute;top:0;left:0;right:0;height:1px;background:var(--dark);transform-origin:left;animation:intro-line 700ms 100ms both}
-.intro-timeline span {position:relative;animation:intro-reveal 450ms 500ms both}
-.intro-timeline span::before {content:'';position:absolute;top:-23px;left:calc(50% - 3px);width:6px;height:6px;border-radius:50%;background:var(--accent-hover)}
-.intro-timeline span:last-child {animation-delay:850ms}
-.intro-principles {font-size:.78rem;margin-top:24px;color:var(--muted);animation:intro-reveal 500ms 1600ms both}
-.intro-skip {position:absolute;bottom:32px;right:var(--gutter);pointer-events:auto;min-height:44px;padding:10px 16px;border:1px solid var(--line-strong);background:var(--sheet);font-size:.875rem;border-radius:2px}
-.intro-skip span {margin-left:20px}
-@keyframes intro-line {from {transform:scaleX(0)}to {transform:scaleX(1)}}
-@keyframes intro-reveal {from {opacity:0;transform:translateY(8px)}to {opacity:1;transform:none}}
-@keyframes intro-atlas {from {opacity:0;transform:scale(.98)}to {opacity:.26;transform:none}}
-@keyframes intro-exit {0%,82% {opacity:1}100% {opacity:0;visibility:hidden}}
-@media (min-width:1001px) and (max-width:1150px) {.brand-caption {display:none}}
-@media (max-width:1000px) {
- .opening-inner {gap:36px;padding-block:48px}
- .opening-hero h1 {font-size:clamp(3.6rem,7.2vw,5.5rem)}
- .recruiter-snapshot {grid-template-columns:1fr;gap:32px}
- .snapshot-heading h2 br {display:none}
- .snapshot-heading {display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;align-items:center}
- .snapshot-heading>.eyebrow {width:100%}
- .snapshot-heading h2 {margin:0}
- .selected-evidence-grid {grid-template-columns:1fr 1fr}
- .selected-evidence-card:first-child {grid-column:1/-1;grid-row:auto;display:grid;grid-template-columns:1fr 1fr}
- .selected-evidence-card:first-child .evidence-card-media {height:100%;min-height:280px}
- .selected-evidence-card:not(:first-child) {display:flex}
- .selected-evidence-card:not(:first-child) .evidence-card-media {height:180px;border-bottom:1px solid var(--line);border-right:0}
- .current-practice {gap:32px;padding-inline:28px}
- .credential-highlights {grid-template-columns:repeat(2,minmax(0,1fr))}
- .milestone-card {padding:26px;gap:24px}
+/* Approved education-first design. Earlier atlas/recruiter overrides removed. */
+.opening-hero {position:relative;isolation:isolate;min-height:480px;color:white;background:var(--dark);overflow:hidden}
+.hero-film {position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:76% top;z-index:-2;opacity:.7}
+.opening-hero::before {content:'';position:absolute;inset:0;background:linear-gradient(90deg,#123d49ef 0%,#123d49b8 42%,#123d490d 100%);z-index:-1;pointer-events:none;opacity:1}
+.hero-content {display:grid;grid-template-columns:minmax(0,1fr) 270px;gap:40px;align-items:center;padding-block:36px 74px}
+.hero-copy {padding:0;min-width:0}
+.hero-identity {display:flex;align-items:center;gap:22px;margin-bottom:16px}
+.hero-identity>div {min-width:0}
+.hero-avatar {width:128px;height:128px;flex:none;object-fit:cover;object-position:50% 25%;border:4px solid white;border-radius:50%;box-shadow:0 0 0 2px var(--accent)}
+.opening-label {color:white;letter-spacing:.065em;font-size:.82rem;margin-bottom:8px}
+.opening-label::before {content:'';display:inline-block;width:32px;height:3px;background:var(--accent);margin-right:14px;vertical-align:middle}
+.opening-hero h1 {font:700 var(--display)/1.08 var(--sans);letter-spacing:-.035em;color:white;margin:0 0 3px;text-wrap:balance}
+.hero-role {font:700 clamp(1.3rem,2.5vw,2.05rem)/1.25 var(--sans);color:white;max-width:none}
+.hero-statement {font:1.1rem/1.55 var(--sans);color:white;max-width:60ch;margin:12px 0 20px}
+.hero-meta {gap:10px;margin:16px 0 0;color:white;font-size:.8rem}
+.hero-meta li {background:#123d49e6;border:1px solid #ffffff40;border-radius:24px;padding:5px 12px}
+.hero-meta .icon {color:white}
+.hero-availability {font-weight:600}
+.hero-recruiter-brief {margin-top:16px;max-width:78ch;font-size:.9rem;line-height:1.5;color:white}
+.hero-recruiter-brief p+p {margin-top:6px}
+.opening-hero .button.secondary {color:white;background:#123d4980;border-color:white}
+.opening-hero .button.secondary:hover {background:var(--dark)}
+.current-card {background:white;color:var(--ink);border:1px solid var(--line);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);align-self:center}
+.current-card>.icon {color:var(--dark);width:28px;height:28px}
+.current-card h2 {font-size:1.2rem;margin:6px 0}
+.current-card .eyebrow {font-size:.65rem;color:var(--dark);letter-spacing:.05em}
+.current-card .status {margin-top:10px}
+.hero-controls {position:absolute;bottom:16px;left:0;right:0;display:flex;justify-content:flex-end;align-items:center;gap:8px;z-index:3}
+.film-caption {display:flex;align-items:center;gap:14px;margin-right:auto;min-width:0}
+.film-label {font-size:.85rem;color:white;white-space:nowrap}
+.hero-controls button,.intro-skip,.intro-sound {min-height:44px;border:1px solid #ffffffa0;background:#123d49e6;color:white;border-radius:24px;padding:8px 14px;font-size:.8rem}
+.film-progress {width:120px;height:3px;background:#ffffff70;overflow:hidden;border-radius:3px}
+.film-progress span {display:block;height:100%;width:0;background:white}
+.home-education {position:relative;padding-top:28px;padding-bottom:20px;border-bottom:0}
+.education-caption {font-size:.9rem;color:var(--muted);margin-top:-12px}
+.education-focus {display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:28px;list-style:none;padding:0;margin:20px 0 0}
+.education-details-link {display:inline-flex;gap:10px;margin-top:18px;padding-bottom:5px;border-bottom:1px solid var(--line-strong);font-size:.9rem}
+.section-heading {margin-bottom:26px}
+.section-heading h2::after {content:'';display:block;width:32px;height:3px;margin-top:8px;background:var(--accent)}
+.education-completed,.education-current {display:grid;gap:28px;list-style:none;padding:0;margin:28px 0 0}
+.education-completed {grid-template-columns:repeat(3,minmax(0,1fr));position:relative}
+.education-completed::before {content:'';position:absolute;left:20px;right:20px;top:15px;height:1px;background:var(--accent)}
+.education-current {grid-template-columns:repeat(2,minmax(0,1fr));max-width:940px;margin:0 auto;padding-top:22px;border-top:1px solid var(--accent)}
+.education-record {position:relative;min-width:0;padding-top:36px}
+.education-node {position:absolute;top:6px;left:18px;width:18px;height:18px;border:3px solid var(--paper);outline:1px solid var(--accent);background:var(--accent);border-radius:50%}
+.education-period {position:absolute;top:0;left:48px;display:inline-block;border-radius:20px;background:var(--action);color:white;font-size:.8rem;line-height:1.4;padding:4px 14px}
+.education-card {display:flex;gap:16px;min-height:154px;padding:20px;background:white;border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+.education-card h3 {font-size:1.15rem;margin-bottom:6px}
+.education-card p {font-size:.88rem;line-height:1.4;margin:0;color:var(--muted)}
+.education-card .education-note {font-size:.78rem;margin-top:9px}
+.education-score {display:block;font-size:.95rem;margin-top:8px}
+.education-card .status {margin-top:10px}
+.current-studies {margin:32px auto 0;max-width:940px}
+.current-studies-label {position:relative;z-index:1;width:fit-content;margin:0 auto -12px;padding:4px 18px;border-radius:24px;background:var(--pending-bg);color:var(--pending);font-size:.8rem}
+.education-current .education-record {padding-top:36px}
+.professional-learning {padding-block:16px 22px}
+.professional-learning .section-heading,.home-journey .section-heading {margin-bottom:16px}
+.professional-learning h2,.home-journey h2 {font-size:1.85rem}
+.learning-highlights {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.learning-highlight {display:flex;align-items:center;gap:14px;border:1px solid var(--line);border-radius:var(--radius);padding:14px;background:white;min-width:0}
+.learning-highlight h3 {font:600 1rem/1.3 var(--sans)}
+.learning-highlight p {font-size:.8rem;color:var(--muted);margin-top:4px}
+.home-journey {padding-top:14px;padding-bottom:32px;border:0;background:none}
+.selected-evidence {padding-block:24px 32px;border:0}
+.selected-evidence-grid {grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.selected-evidence-card:last-child:nth-child(3) {grid-column:auto;display:flex;flex-direction:column}
+.selected-evidence-card .evidence-card-media,.selected-evidence-card:last-child:nth-child(3) .evidence-card-media {height:170px;aspect-ratio:auto;border-right:0;border-bottom:1px solid var(--line)}
+.selected-evidence-card .evidence-card-body {padding:18px}
+.selected-evidence-card h3 {font-size:1.2rem}
+.selected-evidence-card .card-meta {font-size:.875rem}
+.selected-evidence-card .card-actions {padding-top:12px}
+.home-contact {margin-block:24px 44px;padding:28px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:28px;align-items:center;background:white;border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+.home-contact h2 {margin:8px 0 10px}
+.home-contact h2::after {content:'';display:block;width:32px;height:3px;margin-top:8px;background:var(--accent)}
+.home-contact .small {margin-top:8px}
+.home-contact-actions {display:flex;flex-direction:column;align-items:flex-start;gap:14px;min-width:0}
+.home-contact .email-link {display:flex;align-items:center;gap:8px;font-size:.9rem;overflow-wrap:anywhere}
+.home-contact .email-link .icon {width:19px;height:19px}
+.school-stages {margin-top:26px;gap:20px;border-top-color:var(--accent)}
+.school-stage {background:white;border:1px solid var(--line);border-radius:var(--radius);padding:18px;gap:14px}
+.school-stage .stage-node {top:-6px;left:24px;background:var(--accent)}
+.school-stage h3 {font-size:1.05rem}
+.school-stage .stage-period {font-size:.8rem;margin-top:8px}
+.school-stage .text-link {font-size:.8rem;margin-top:8px}
+.profile-hero {display:flex;align-items:center;gap:36px;justify-content:space-between;max-width:none;padding-right:36px}
+.profile-hero>div {max-width:760px;min-width:0}
+.profile-name {font:600 1.4rem var(--serif);margin-top:8px}
+.profile-portrait {width:150px;flex:none;border:0;background:none;padding:0}
+.profile-portrait .portrait {aspect-ratio:1;width:150px;border-radius:50%;border:4px solid white;object-fit:cover;object-position:50% 25%;mix-blend-mode:normal}
+.profile-hero .hero-meta {color:var(--ink);margin:16px 0}
+.profile-hero .hero-meta li {background:var(--surface-muted);border-color:var(--line)}
+.profile-hero .hero-meta .icon {color:var(--dark)}
+.profile-story,.beyond-grid article,.contact-dossier,.contact-form-section {background:white;border:1px solid var(--line);border-radius:var(--radius);padding:28px}
+.profile-story {margin-top:28px}
+.beyond-grid {grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.beyond-grid article {padding:22px}
+.classroom-feature figure {display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:center;background:white;border:1px solid var(--line);border-radius:var(--radius);padding:20px}
+.classroom-feature .gallery-image {max-height:340px;object-fit:contain;background:var(--surface-muted)}
+.evidence-library-grid,.certificate-grid,.gallery-grid {grid-template-columns:repeat(2,minmax(0,1fr))}
+.evidence-card-body h3,.certificate-body h3 {font-size:1.5rem}
+.evidence-number {display:none}.evidence-lens {display:none}
+.evidence-card-media {height:260px;background:var(--surface-muted)}
+.certificate-image {background:var(--surface-muted)}
+.gallery-grid figure {padding:0;overflow:hidden}
+.gallery-grid figcaption {padding:18px 22px}
+.gallery-grid .gallery-image {border-radius:0;aspect-ratio:16/10;object-fit:contain;background:var(--surface-muted)}
+.case-layout,.democracy-layout {display:grid;grid-template-columns:minmax(0,1.8fr) minmax(260px,1fr);gap:28px;align-items:start}
+.case-record,.case-layout>.prose,.evidence-aside {background:white;border:1px solid var(--line);border-radius:var(--radius);padding:26px;min-width:0}
+.case-layout>.prose,.democracy-layout>.prose {max-width:none}
+.evidence-aside {position:sticky;top:88px;max-width:none}
+.case-meta {display:flex;flex-wrap:wrap;gap:12px;margin:0 0 28px;align-items:center}
+.case-meta>span:not(.status) {font-size:.9rem;border-right:1px solid var(--line);padding-right:12px}
+.case-context-image {width:100%;max-height:400px;object-fit:contain;background:var(--surface-muted);border-radius:8px;margin-bottom:24px}
+.community-activities {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-block:20px}
+.community-activities>section {padding:18px;background:var(--paper);border:1px solid var(--line);border-radius:8px}
+.community-activities .icon-disc {width:36px;height:36px;margin-bottom:12px;color:var(--action);font-weight:600}
+.observation-day {background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:20px;border-left:3px solid var(--accent)}
+.lesson-overview {grid-template-columns:1fr;background:white;border:1px solid var(--line);padding:24px;border-radius:var(--radius)}
+.lesson-glance {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:20px 0}
+.lesson-glance>div {padding:14px;background:var(--surface-muted);border-radius:8px}
+.lesson-glance dt {font-size:.8rem;color:var(--muted)}
+.lesson-glance dd {margin:4px 0 0;font-weight:600}
+.lesson-sequence {list-style:none;padding:0 0 0 18px;border-left:1px solid var(--accent);counter-reset:lesson}
+.lesson-sequence li {position:relative;padding:0 0 24px 12px;counter-increment:lesson}
+.lesson-sequence li::before {content:counter(lesson);position:absolute;left:-32px;top:0;width:28px;height:28px;display:grid;place-items:center;border-radius:50%;color:white;background:var(--action);border:3px solid white;font-size:.75rem}
+.lesson-sequence h3 {font-size:1.15rem;margin-bottom:8px}
+.evidence-details {margin-top:24px;border-top:1px solid var(--line);padding-top:8px}
+.evidence-details .democracy-stage {padding-block:20px;min-height:0;background:none;box-shadow:none;border:0;border-bottom:1px solid var(--line)}
+.evidence-details .stage-header {position:static;display:flex;gap:12px}
+.evidence-details .stage-badge {font-size:.7rem;color:var(--muted)}
+.contact-avatar {width:90px;height:90px;object-fit:cover;object-position:50% 25%;border-radius:50%;margin-bottom:18px}
+.contact-layout {gap:28px;margin-top:10px}
+.contact-form-section .contact-form {padding:0;background:none;border:0}
+.contact-note {background:var(--surface-muted)}
+.teaching-approach {margin-block:28px;border:1px solid var(--line);padding:12px 22px;border-radius:var(--radius);background:white}
+.teaching-approach>summary {font-weight:600}
+.teaching-approach .philosophy-intro-col {position:static}
+.studio-signin-card {width:min(100%,480px);margin:32px auto 64px;padding:32px;display:grid;gap:20px;background:white;border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+.studio-signin-card h2 {text-align:center}.admin-page {padding-bottom:40px}
+.studio-nav,.editor-panel,.entry-card,.studio-toolbar {border-radius:var(--radius);background:white}
+.editor-section {border:1px solid var(--line);background:white;border-radius:var(--radius);padding:24px;margin-block:24px}
+.editor-item {border-radius:var(--radius);background:var(--paper)}
+.preview-dialog {border-radius:var(--radius)}
+.not-found {padding-bottom:80px;min-height:60vh}.not-found>.actions {margin-top:12px}
+.resume-web-summary {background:white;border:1px solid var(--line);border-radius:var(--radius)}
+.resume-overview {background:white;border:1px solid var(--line);border-radius:var(--radius);padding:28px}
+.resume-preview {background:var(--surface-muted)}
+.identity-intro {display:flex;align-items:center;gap:8px;flex:none}
+.intro-active [data-film-sound],.intro-active [data-film-replay] {display:none}
+.intro-active .hero-film {animation:film-settle 8s ease-out both}
+@keyframes film-settle {from {transform:scale(1.12);transform-origin:76% 25%} to {transform:scale(1)}}
+@media(max-width:1000px) {
+ .hero-content {grid-template-columns:minmax(0,1fr) 230px;gap:24px}
+ .current-card {padding:16px}.current-card>.icon {display:none}
+ .education-card {padding:16px;gap:12px}.education-card>.icon-disc {width:38px;height:38px}
+ .case-layout,.democracy-layout {grid-template-columns:1fr}.evidence-aside {position:static}
 }
-@media (max-width:750px) {
- .lesson-overview {grid-template-columns:1fr;gap:28px;padding:22px}
- .current-practice {grid-template-columns:1fr}
- .current-practice figure {max-width:450px}
- .current-practice .gallery-image {aspect-ratio:4/3}
- .case-layout .evidence-aside {position:static}
- .moments-grid {grid-template-columns:1fr 1fr}
- .moments-grid figure:first-child {grid-column:1/-1}
- .evidence-library-grid .flagship-evidence {display:flex}
- .evidence-library-grid .flagship-evidence .evidence-card-media {height:260px;min-height:0;border-right:0}
+@media(max-width:760px) {
+ .hero-content {grid-template-columns:1fr;padding-block:30px 112px;gap:24px}
+ .hero-film {object-position:62% top;opacity:.5}
+ .opening-hero::before {background:linear-gradient(90deg,#123d49e6,#123d4999 70%,#123d4940)}
+ .opening-hero h1 {font-size:clamp(2.35rem,8.7vw,3.5rem)}
+ .hero-role {font-size:1.35rem}.hero-statement {font-size:1rem}
+ .hero-copy .actions {display:grid;grid-template-columns:1fr;gap:10px}
+ .hero-identity {display:block}.hero-avatar {width:108px;height:108px;margin-bottom:18px}.current-card {display:flex;padding:16px;width:100%}.current-card>.icon {display:block}
+ .hero-controls {flex-wrap:wrap;justify-content:flex-start;gap:6px;bottom:16px}
+ .hero-controls button {font-size:.8rem;padding:8px 10px}.identity-intro {gap:6px}
+ .film-caption {width:100%;margin:0 0 6px;gap:12px}.film-progress {width:auto;flex:1}.film-label {font-size:.875rem}
+ .education-completed,.education-current,.education-focus {grid-template-columns:1fr;gap:18px;padding:0 0 0 25px;border:0;margin:20px 0 0 9px;border-left:1px solid var(--accent)}
+ .education-completed::before {display:none}.education-record,.education-current .education-record {padding-top:32px}
+ .education-node {left:-34px;top:6px}.education-period {left:12px}
+ .current-studies {margin-top:24px}.current-studies-label {margin:0 0 0 18px}
+ .education-card {min-height:0;padding:16px}.education-card .education-note {font-size:.875rem}
+ .learning-highlights {grid-template-columns:1fr;gap:12px}.learning-highlight {padding:12px}
+ .school-stages {grid-template-columns:1fr;gap:18px;border-top:0;margin-left:9px;padding-left:25px;border-left:1px solid var(--accent)}
+ .school-stage {padding:16px;display:flex}.school-stage .stage-node {left:-31px;top:22px}
+ .section-heading {align-items:flex-start;gap:12px}.section-heading>.text-link {font-size:.8rem}
+ .hero-meta,.education-period,.current-studies-label,.learning-highlight p,.school-stage .stage-period,.school-stage .text-link,.small,.card-meta,.status {font-size:.875rem}
+ .current-card .eyebrow {font-size:.8rem}.current-card p:not(.eyebrow) {font-size:.875rem}
+ .selected-evidence-grid {grid-template-columns:1fr;gap:16px}
+ .selected-evidence-card,.selected-evidence-card:last-child:nth-child(3) {display:grid;grid-template-columns:105px minmax(0,1fr);align-items:stretch}
+ .selected-evidence-card .evidence-card-media,.selected-evidence-card:last-child:nth-child(3) .evidence-card-media {height:100%;min-height:150px;padding:10px;border-bottom:0;border-right:1px solid var(--line)}
+ .selected-evidence-card .evidence-card-body {padding:14px}
+ .selected-evidence-card h3 {font-size:1.05rem}.selected-evidence-card .eyebrow {font-size:.75rem}
+ .home-contact {grid-template-columns:1fr;padding:22px;gap:22px}.home-contact-actions {width:100%}.home-contact-actions>.button {width:100%}
+ .profile-hero {flex-direction:column-reverse;align-items:flex-start;gap:18px;padding:24px}
+ .profile-portrait,.profile-portrait .portrait {width:110px}.profile-hero .lead {font-size:1rem}
+ .beyond-grid,.classroom-feature figure,.evidence-library-grid,.certificate-grid,.gallery-grid {grid-template-columns:1fr}
+ .profile-story {padding:22px}.story-columns {grid-template-columns:1fr;gap:16px}
+ .evidence-card-media {height:230px}.case-record,.case-layout>.prose,.evidence-aside {padding:20px}
+ .lesson-glance,.community-activities {grid-template-columns:1fr}.contact-layout {grid-template-columns:1fr}
+ .contact-dossier,.contact-form-section {padding:22px}.resume-overview {padding:18px}
+ .studio-signin-card {padding:24px}
 }
-@media (max-width:650px) {
- .opening-inner {grid-template-columns:1fr;padding-block:36px 30px;gap:32px}
- .opening-label {font-size:.65rem;line-height:1.7}
- .opening-hero h1 {font-size:clamp(3.5rem,15vw,5rem);margin-block:22px}
- .hero-role {font-size:1.08rem;max-width:32ch}
- .hero-statement {font-size:1.2rem;max-width:30ch}
- .hero-meta {font-size:.8rem;gap:12px;margin-block:22px}
- .hero-copy .actions {display:grid;grid-template-columns:1fr}
- .hero-copy .actions .button {justify-content:space-between;font-size:.9rem}
- .opening-visual {max-width:340px;justify-self:center}
- .opening-hero .portrait-frame {padding:10px 10px 0}
- .opening-hero .portrait-frame::before {right:-10px}
- .opening-hero .portrait-window {width:100%;height:auto;aspect-ratio:4/4.6}
- .opening-hero .portrait-frame .portrait {min-height:0}
- .opening-hero .portrait-frame figcaption {font-size:.72rem;gap:8px}
- .current-card {display:flex;padding:8px 0}
- .current-card h2 {font-size:.9rem}
- .hero-film-row {grid-template-columns:1fr;gap:20px;padding-block:24px}
- .hero-film-row .hero-video-panel {width:100%;max-width:340px}
- .hero-film-row .film-note {font-size:.94rem}
- .hero-atlas {width:100%;top:120px;opacity:.12}
- .recruiter-snapshot {gap:28px}
- .snapshot-heading {display:block}
- .snapshot-heading h2 {margin-block:12px}
- .snapshot-grid {grid-template-columns:1fr 1fr;gap:24px 20px}
- .snapshot-grid dd {font-size:.9rem}
- .snapshot-grid dt {font-size:.65rem}
- .selected-evidence-grid {grid-template-columns:1fr}
- .selected-evidence-card:first-child {display:flex;grid-column:auto}
- .selected-evidence-card:first-child .evidence-card-media {height:220px;min-height:0}
- .selected-evidence-card:first-child h3 {font-size:1.8rem}
- .selected-evidence-card .evidence-card-body {padding:22px}
- .selected-evidence-card:not(:first-child) .evidence-card-media {height:200px}
- .selected-evidence-card:last-child:nth-child(3) {grid-column:auto}
- .current-practice {padding:28px 20px;gap:26px;margin-block:24px}
- .current-practice h2 {font-size:1.9rem}
- .current-practice .actions {align-items:flex-start;flex-direction:column}
- .home-philosophy {padding:32px 20px;margin-block:24px}
- .practice-grid article {display:block}
- .practice-grid article+article {padding-top:26px}
- .practice-grid h3 {font-size:1.4rem}
- .school-stages {gap:0}
- .school-stage {padding-bottom:28px}
- .school-stage h3 {font-size:1.2rem}
- .home-records {gap:44px}
- .home-records .section-heading {flex-direction:column;align-items:flex-start}
- .moments-grid {gap:20px 14px}
- .moments-grid figure:first-child .gallery-image {aspect-ratio:4/3}
- .moments-grid .gallery-image {aspect-ratio:1}
- .moments-grid figcaption {font-size:.8rem}
- .moments-grid figcaption p {font-size:.78rem}
- .credential-highlight {padding:18px 14px}
- .credential-highlight h3 {font-size:.9rem}
- .credential-highlight p {font-size:.8rem}
- .page-heading {padding-block:36px 32px}
- .profile-story {padding-left:18px}
- .evidence-library-grid {grid-template-columns:1fr}
- .evidence-library-grid .flagship-evidence {grid-column:auto}
- .evidence-library-grid .flagship-evidence .evidence-card-body {padding:22px}
- .evidence-library-grid .flagship-evidence h3 {font-size:1.6rem}
- .milestone-card {padding:22px 17px}
- .milestone-title {font-size:1.3rem}
- .gallery-grid {grid-template-columns:1fr;gap:32px}
- .gallery-grid figure:first-child {display:block;grid-column:auto;padding-bottom:0;border:0}
- .gallery-grid figcaption {font-size:.9rem}
- .planning-lens-card {padding:20px}
- .democracy-stage h2 {font-size:1.6rem}
- .intro-timeline {font-size:.65rem;letter-spacing:.08em}
- .intro-skip {bottom:24px}
-}
-@media(prefers-reduced-motion:reduce) {.identity-intro {display:none}}
-@media print {
- .identity-intro,.hero-atlas,.hero-film-row {display:none}
- .recruiter-snapshot,.current-practice,.home-records {display:block;background:none;border:0}
- .opening-hero .portrait-frame::before {display:none}
- .opening-inner {padding-block:20px}
- .case-layout .evidence-aside {position:static}
-}
+@media(prefers-reduced-motion:reduce) {.identity-intro,.intro-active .hero-film {animation:none}.hero-film {transform:none}}
+@media(max-width:360px) {.hero-film {object-position:66% top}}

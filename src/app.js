@@ -3,7 +3,7 @@ import {defaultContent} from './content.js?v=editorial-20261004';
 import {initNavigation} from './navigation.js?v=editorial-20261004';
 import {initMotion,cleanupMotion} from './motion.js?v=editorial-20261004';
 import {wireViewer,wireVideo} from './viewer.js?v=editorial-20261004';
-import {initOpening} from './identity.js?v=editorial-20261004';
+import {initOpening,cleanupOpening} from './identity.js?v=editorial-20261004';
 const route=document.body.dataset.route;
 const base=document.body.dataset.base;
 // The packaged module contains the exact static release content.
@@ -16,7 +16,7 @@ function wire(){
   try{await navigator.clipboard.writeText(e.currentTarget.dataset.email);status.textContent='Email address copied.'}catch{status.textContent='Please select and copy the email address above.'}
  });
  document.querySelector('#contact-form')?.addEventListener('submit',e=>{
-  e.preventDefault(); const f=new FormData(e.currentTarget);
+  e.preventDefault(); if(!e.currentTarget.reportValidity())return; const f=new FormData(e.currentTarget);
   const body=`Hello Krishna,\n\n${f.get('message')}\n\n${f.get('name')}\n${f.get('school')}\n${f.get('email')}`;
   location.href=`mailto:${content.profile.email}?subject=${encodeURIComponent('Teaching enquiry'+(f.get('school')?' — '+f.get('school'):''))}&body=${encodeURIComponent(body)}`;
   document.querySelector('#contact-status').textContent='Your email draft is ready to open. If no email app opens, use the email address alongside this form. Nothing has been sent by this website.';
@@ -30,6 +30,6 @@ else {
  wire();
  initOpening();
  initMotion({initial:true});
- window.addEventListener('pagehide',cleanupMotion);
- window.addEventListener('pageshow',e=>{if(e.persisted)initMotion();});
+ window.addEventListener('pagehide',()=>{cleanupOpening();cleanupMotion();});
+ window.addEventListener('pageshow',e=>{if(e.persisted){initMotion();initOpening({auto:false});}});
 }

@@ -1,8 +1,13 @@
-/* A quiet paper surface. Authentic evidence provides the imagery. */
-body {background-image:url('../../assets/theme/paper-texture.svg')}
-.opening-hero {background:var(--paper)}
-.opening-hero::before {background:none}
-.current-practice {background:var(--sheet)}
-.home-philosophy {background:var(--surface-muted)}
-.site-footer {background:var(--sheet)}
-@media print {body {background-image:none}}
+/* Actual transparent illustrations from the approved design references. */
+body {background-color:var(--paper);background-image:none}
+main {position:relative;isolation:isolate}
+main::before,main::after {content:'';position:absolute;top:440px;bottom:0;width:230px;pointer-events:none;z-index:-1;background-repeat:no-repeat;background-size:230px auto;opacity:.35}
+main::before {left:0;background-image:url('../../assets/theme/english-study.webp');background-size:880px auto;background-position:left 20px}
+main::after {right:0;background-image:url('../../assets/theme/history-study.webp');background-size:880px auto;background-position:right 20px}
+.page-heading {position:relative;isolation:isolate;max-width:none;overflow:hidden;padding:40px 32px;margin-top:28px;margin-bottom:28px;background:var(--surface-muted);border:1px solid var(--line);border-radius:var(--radius)}
+.page-heading::after {content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;background:url('../../assets/theme/history-study.webp') no-repeat right bottom / 340px auto;opacity:.18}
+.page-heading .eyebrow {color:var(--muted);margin-bottom:8px}
+.page-heading .lead {max-width:65ch;margin-top:14px}
+@media(min-width:1000px) {.page-heading {padding-right:320px}.page-heading.profile-hero {padding-right:32px}}
+@media(max-width:760px) {main::before,main::after {width:100px;background-size:180px auto;opacity:.18}.page-heading {padding:28px 22px}.page-heading::after {background-size:200px auto;opacity:.1}}
+@media print {main::before,main::after,.page-heading::after {display:none}}

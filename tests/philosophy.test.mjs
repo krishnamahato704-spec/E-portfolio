@@ -80,3 +80,25 @@ test('Belief to practice transition bridges directly to Democracy teaching desig
   assert.ok(html.includes('Explore the Democracy teaching design'), 'Democracy link present');
   assert.ok(html.includes('href="../teaching/democracy/"'), 'Democracy relative URL correctly resolved');
 });
+
+test('Home places the illustrated teaching philosophy immediately before contact and retains Experience', async () => {
+  const {view} = await import('../src/views.js');
+  const {defaultContent} = await import('../src/content.js');
+  const home = view('home', defaultContent, '../../');
+  const section = home.slice(home.indexOf('<section id="teaching-philosophy"'), home.indexOf('<section class="container connect-strip home-contact"'));
+  assert.ok(section.startsWith('<section id="teaching-philosophy"'));
+  assert.ok(section.trimEnd().endsWith('</section>'));
+  assert.ok(home.indexOf('teaching-philosophy') < home.indexOf('home-contact-title'));
+  for (const [name,asset] of [['Rabindranath Tagore','rabindranath-tagore'],['Lev Vygotsky','lev-vygotsky']]) {
+    assert.ok(section.includes(`src="../../assets/philosophy/${asset}.webp"`));
+    assert.ok(section.includes(`alt="Portrait of ${name}"`));
+  }
+  for (const principle of defaultContent.practice) assert.ok(section.includes(principle.title));
+  assert.ok(section.includes('href="../../teaching/"'));
+  assert.ok(!section.includes('<details'));
+  const experience = view('teaching', defaultContent, '../../');
+  assert.ok(experience.includes('<summary>My teaching approach</summary>'));
+  assert.equal((experience.match(/class="philosophy-principle"/g)||[]).length, 3);
+  assert.ok(experience.includes('Rabindranath Tagore'));
+  assert.ok(experience.includes('Lev Vygotsky'));
+});

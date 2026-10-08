@@ -1,0 +1,114 @@
+/* Light page palettes. Body-scoped tokens also reach navigation, footers,
+   dialogs and owner controls without depending on JavaScript. */
+body[data-route="home"] {
+ --paper:#fffaf4; --surface-muted:#f4ece0; --ink:#382f2a; --dark:#633f31;
+ --muted:#655b54; --accent:#b47a57; --action:#965237; --accent-hover:#78432e;
+ --accent-soft:#f2e2d5; --line:#e8ddcf; --line-strong:#998575; --gold:#b47a57;
+}
+body[data-route="profile"] {
+ --paper:#f5f8f1; --surface-muted:#e6eedf; --ink:#273b30; --dark:#355543;
+ --muted:#53624f; --accent:#789467; --action:#456849; --accent-hover:#35533a;
+ --accent-soft:#dfe8d4; --line:#d6e0d0; --line-strong:#83947b; --gold:#789467;
+}
+body[data-route="teaching"] {
+ --paper:#f2f7fc; --surface-muted:#e5eef8; --ink:#293e55; --dark:#385775;
+ --muted:#536779; --accent:#668cad; --action:#3f6288; --accent-hover:#2e4b6a;
+ --accent-soft:#dce8f5; --line:#d3e0ed; --line-strong:#7f94a9; --gold:#668cad;
+}
+body[data-route="resources"] {
+ --paper:#fff7f1; --surface-muted:#f5e8de; --ink:#4a352c; --dark:#714938;
+ --muted:#705d52; --accent:#bc8f72; --action:#a0523a; --accent-hover:#80422e;
+ --accent-soft:#f1dece; --line:#ead8ca; --line-strong:#a18a79; --gold:#bc8f72;
+}
+body[data-route="credentials"] {
+ --paper:#f8f6fc; --surface-muted:#ece7f5; --ink:#3d3654; --dark:#574776;
+ --muted:#675c77; --accent:#a28cbb; --action:#6b5691; --accent-hover:#534172;
+ --accent-soft:#e8def2; --line:#ded5e9; --line-strong:#9584a6; --gold:#a28cbb;
+}
+body[data-route="resume"] {
+ --paper:#f6f7f9; --surface-muted:#e8ecf1; --ink:#313b49; --dark:#48566a;
+ --muted:#5c6778; --accent:#8795aa; --action:#51647f; --accent-hover:#3f5068;
+ --accent-soft:#e0e6ed; --line:#d7dfe7; --line-strong:#8793a2; --gold:#8795aa;
+}
+body[data-route="contact"] {
+ --paper:#fcf5f7; --surface-muted:#f3e4ea; --ink:#4c333e; --dark:#75465a;
+ --muted:#725866; --accent:#b8889c; --action:#97556e; --accent-hover:#784257;
+ --accent-soft:#efd8e2; --line:#e8d4de; --line-strong:#a48394; --gold:#b8889c;
+}
+body[data-route="gallery"] {
+ --paper:#faf9ee; --surface-muted:#efedda; --ink:#3e432b; --dark:#59613a;
+ --muted:#606448; --accent:#96995f; --action:#6b7444; --accent-hover:#515934;
+ --accent-soft:#e8e8ca; --line:#deddc5; --line-strong:#919574; --gold:#96995f;
+}
+body[data-route="pehchaan"] {
+ --paper:#fffaf0; --surface-muted:#f5edcf; --ink:#4e4028; --dark:#785b2c;
+ --muted:#706049; --accent:#bd9a54; --action:#8a642b; --accent-hover:#6f4f23;
+ --accent-soft:#f0e4b9; --line:#e8debe; --line-strong:#a18e64; --gold:#bd9a54;
+}
+body[data-route="observation"] {
+ --paper:#f2faf9; --surface-muted:#ddf0eb; --ink:#294a47; --dark:#386a62;
+ --muted:#4d665f; --accent:#78a99e; --action:#38796d; --accent-hover:#2d6158;
+ --accent-soft:#d2e9e1; --line:#cce2dc; --line-strong:#759b91; --gold:#78a99e;
+}
+body[data-route="democracy"] {
+ --paper:#f4f6fd; --surface-muted:#e7ecfb; --ink:#333d61; --dark:#4c598a;
+ --muted:#5c6681; --accent:#8d9dc8; --action:#5267a0; --accent-hover:#405280;
+ --accent-soft:#dde4f9; --line:#d5ddf0; --line-strong:#8998b8; --gold:#8d9dc8;
+}
+body[data-route="admin"] {
+ --paper:#f8f5fa; --surface-muted:#eee4f1; --ink:#493751; --dark:#685078;
+ --muted:#6b5b76; --accent:#ac8cba; --action:#785889; --accent-hover:#5d426d;
+ --accent-soft:#e8d8ed; --line:#e0d1e5; --line-strong:#a087ac; --gold:#ac8cba;
+}
+body[data-route="404"] {
+ --paper:#fbf7f1; --surface-muted:#f0e7db; --ink:#4d4135; --dark:#76614b;
+ --muted:#6f6255; --accent:#b59a78; --action:#88704f; --accent-hover:#6c583e;
+ --accent-soft:#eadcc8; --line:#e5d9c8; --line-strong:#a2917a; --gold:#b59a78;
+}
+body[data-route] {
+ --dark-line:var(--line); --shadow:0 5px 24px color-mix(in srgb,var(--ink) 7%,transparent);
+ --background:var(--paper); --border:var(--line);
+ background:var(--paper); color:var(--ink);
+}
+body[data-route]::selection {background:var(--accent-soft);color:var(--ink)}
+.site-header {background:color-mix(in srgb,var(--paper) 65%,white);border-color:var(--line)}
+.site-footer {background:var(--surface-muted);color:var(--ink);border-top:1px solid var(--line)}
+.site-footer .monogram,.site-footer .footer-name,.site-footer .footer-identity p,.site-footer .footer-bottom,.site-footer a {color:var(--ink)}
+.site-footer a:hover {color:var(--accent-hover)}
+.site-footer .footer-bottom {border-top-color:var(--line)}
+.site-footer .text-link,.site-footer .footer-bottom,.site-footer .footer-identity p {font-size:.875rem}
+main::before,main::after {opacity:.16}
+.photo-plate,.profile-page .profile-portrait,.desk-documents img,.folio-certificate,.misplaced-document {background:var(--sheet)}
+.photo-pin {background:var(--accent-soft);border-color:var(--line)}
+.cover-photo-credit {background:var(--sheet);color:var(--ink);border:1px solid var(--line);box-shadow:var(--shadow)}
+.resource-desc,.milestone-summary,.experience-details .plain-list,.practice-grid p {color:var(--muted)}
+.tag {color:var(--muted)}
+input,textarea,select {border-color:var(--line-strong)}
+dialog::backdrop {background:color-mix(in srgb,var(--ink) 45%,transparent)}
+
+/* Home text and controls use the page palette; film composition is separate. */
+.opening-hero {background:var(--surface-muted);color:var(--ink)}
+.opening-hero h1,.opening-label,.hero-role,.hero-statement,.hero-recruiter-brief,.film-label {color:var(--ink)}
+.opening-hero .hero-meta,.opening-hero .hero-meta .icon {color:var(--ink)}
+.opening-hero .hero-meta li {background:var(--surface-muted);border-color:var(--line)}
+.opening-hero .button.secondary {color:var(--dark);background:var(--sheet);border-color:var(--line-strong)}
+.opening-hero .button.secondary:hover {background:var(--accent-soft)}
+.hero-controls button,.intro-skip,.intro-sound {background:var(--sheet);border-color:var(--line-strong);color:var(--ink)}
+.film-progress {background:var(--line-strong)}.film-progress span {background:var(--action)}
+
+/* Photographic covers keep light, nearly opaque surfaces behind their text. */
+.journey-cover {background:var(--surface-muted);color:var(--ink)}
+.journey-cover::after {background:linear-gradient(90deg,var(--surface-muted) 5%,color-mix(in srgb,var(--surface-muted) 98%,transparent) 38%,color-mix(in srgb,var(--surface-muted) 18%,transparent) 76%)}
+.journey-cover h1,.journey-cover .lead,.journey-cover .eyebrow {color:var(--ink)}
+.journey-cover .text-link {color:var(--dark);border-color:var(--line-strong)}
+.observation-cover {background:var(--surface-muted);color:var(--ink)}
+.observation-cover::after {background:linear-gradient(0deg,var(--surface-muted),color-mix(in srgb,var(--surface-muted) 98%,transparent) 53%,color-mix(in srgb,var(--surface-muted) 24%,transparent))}
+.observation-cover h1,.observation-cover .lead,.observation-cover .eyebrow {color:var(--ink)}
+.postcard-photo {background:var(--surface-muted);color:var(--ink)}
+.postcard-photo::after {background:linear-gradient(transparent 25%,color-mix(in srgb,var(--surface-muted) 98%,transparent))}
+.postcard-name {color:var(--ink);background:var(--sheet);border-radius:5px;padding:5px 10px}
+
+@media(max-width:760px) {
+ .journey-cover::after {background:linear-gradient(90deg,color-mix(in srgb,var(--surface-muted) 98%,transparent),color-mix(in srgb,var(--surface-muted) 92%,transparent))}
+ main::before,main::after {opacity:.09}
+}

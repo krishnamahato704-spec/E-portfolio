@@ -1,6 +1,7 @@
 node_modules/
 work/
 outputs/
+output/
 dist/
 portfolio-source.zip
 npm-*.tgz

@@ -1,7 +1,7 @@
 name: Review redesigned portfolio
 on:
   push:
-    branches: ["main", "redesign/**", "feature/editorial-motion", "feature/editorial-identity", "feature/recruiter-experience"]
+    branches: ["main", "codex/**", "redesign/**", "feature/editorial-motion", "feature/editorial-identity", "feature/recruiter-experience"]
   pull_request:
     branches: [main]
 permissions:
@@ -9,6 +9,8 @@ permissions:
 jobs:
   validate:
     runs-on: ubuntu-latest
+    env:
+      SITE_URL: https://e-portfolio-lake-nine.vercel.app/
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -17,6 +19,7 @@ jobs:
           cache: 'npm'
       - run: npm ci
       - run: npm run build
+      - run: npm run test:palettes
       - run: npm test
       - run: npx playwright install --with-deps chromium
       - run: npm run test:browser

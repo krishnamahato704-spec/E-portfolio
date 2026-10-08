@@ -36,7 +36,7 @@ export function img(url,alt,base,cls='',priority=false){
  const src=imageUrl(url,base);
  const local=src.startsWith(base+'assets/')?src.slice(base.length):'';
  const dimensions=imageDimensions[local];
- const responsive=local==='assets/portrait.webp'?`srcset="${esc(base)}assets/portrait-360.webp 360w, ${esc(base)}assets/portrait-720.webp 720w, ${esc(src)} 1154w" sizes="(max-width: 650px) 340px, (max-width: 1000px) 32vw, 380px"`:'';
+ const responsive=local==='assets/portrait.webp'?`srcset="${esc(base)}assets/portrait-360.webp 360w, ${esc(base)}assets/portrait-720.webp 720w, ${esc(src)} 1154w" sizes="${cls==='hero-avatar'?'(max-width: 760px) 108px, 128px':cls==='contact-avatar'?'90px':cls==='profile-portrait-photo'?'(max-width: 760px) 70vw, 340px':'(max-width: 650px) 140px, 180px'}"`:'';
  return src?`<img class="${cls}" src="${esc(src)}" ${responsive} alt="${esc(alt)}" ${dimensions?`width="${dimensions[0]}" height="${dimensions[1]}"`:''} ${priority?'fetchpriority="high"':'loading="lazy"'} decoding="async">`:'';
 }
 export function heading(label,title,desc=''){return `<header class="page-heading"><p class="eyebrow">${label}</p><h1>${title}</h1>${desc?`<p class="lead">${desc}</p>`:''}</header>`;}

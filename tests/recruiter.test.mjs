@@ -28,7 +28,7 @@ test('Owner edits control study status and experience text across recruiter page
 test('Recruiter fields are optional, escaped and labelled as interests',()=>{
  const c=mergeContent();c.profile.location='<script>bad()</script>';
  assert.match(view('home',c),/&lt;script&gt;bad\(\)&lt;\/script&gt;/);
- assert.match(view('home',c),/Boards of interest/);
+ assert.match(view('profile',c),/Boards of interest/);
  c.profile.location='';c.profile.targetBoards='';
  assert.ok(!recruiterFacts(c).some(([k])=>k==='Based in'||k==='Boards of interest'));
  assert.ok(recruitmentGaps(c).some(x=>x.includes('current city')));

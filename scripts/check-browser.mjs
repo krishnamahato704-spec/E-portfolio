@@ -140,7 +140,7 @@ try{
       record(`${name}: ${mode} has usable navigation`,state.navLinks>=6,state.navLinks);
       record(`${name}: ${mode} fits 320px`,state.documentWidth<=321,state.documentWidth);
       if(name==='home'){
-        const hero=await p.evaluate(()=>{const image=document.querySelector('.portrait'),video=document.querySelector('.teaching-video');return {portraitVisible:!!image&&image.checkVisibility({checkOpacity:true,checkVisibilityCSS:true})&&image.naturalWidth>0,portraitSrc:image?.getAttribute('src'),poster:video?.getAttribute('poster'),videoSource:video?.getAttribute('src')||'',heroVideo:!!document.querySelector('.hero video')}});
+        const hero=await p.evaluate(()=>{const image=document.querySelector('.hero-avatar'),video=document.querySelector('.hero-film');return {portraitVisible:!!image&&image.checkVisibility({checkOpacity:true,checkVisibilityCSS:true})&&image.naturalWidth>0,portraitSrc:image?.getAttribute('src'),poster:video?.getAttribute('poster'),videoSource:video?.getAttribute('src')||'',heroVideo:!!document.querySelector('.hero video')}});
         record(`home: ${mode} shows portrait and hero video fallback`,hero.portraitVisible&&!!hero.poster&&hero.portraitSrc!==hero.poster&&!hero.videoSource&&hero.heroVideo,hero);
         await p.screenshot({path:path.join(output,`home-${mode}-320.png`),fullPage:false});
       }
@@ -175,12 +175,20 @@ try{
   await page.keyboard.press('Escape');
   record('keyboard: Escape restores trigger and page access',await page.evaluate(()=>document.activeElement.matches('.menu-toggle')&&!document.querySelector('main').inert&&document.querySelector('.menu-toggle').getAttribute('aria-expanded')==='false'));
   record('keyboard: trigger has visible focus indicator',await toggle.evaluate(el=>{const s=getComputedStyle(el);return s.outlineStyle!=='none'&&parseFloat(s.outlineWidth)>=2}));
-  record('reduced motion: hero video starts static',await page.locator('.teaching-video').evaluate(v=>v.paused&&!v.getAttribute('src')));
-  await page.locator('.video-play').click();
-  await page.waitForFunction(()=>!document.querySelector('.teaching-video').paused);
-  record('reduced motion: visitor can explicitly play the hero film with music',await page.locator('.teaching-video').evaluate(v=>!v.paused&&!v.muted));
-  await page.locator('.teaching-video').evaluate(v=>v.pause());
-  const imageTrigger=page.locator('.moments-grid a[data-viewer]').first();await imageTrigger.click();
+
+  record('reduced motion: hero starts with a static poster',await page.locator('.hero-film').evaluate(v=>v.paused&&!v.getAttribute('src')));
+  await page.locator('[data-film-pause]').click();
+  await page.waitForFunction(()=>!document.querySelector('.hero-film').paused);
+  record('reduced motion: explicit film play is available and muted',await page.locator('.hero-film').evaluate(v=>!v.paused&&v.muted));
+  await page.locator('[data-film-pause]').click();
+  for(const [suffix,kind,label] of [['.webp','img','classroom material'],['.pdf','iframe','community report']]){
+    const trigger=page.locator(`.selected-evidence-card a[data-viewer][href$="${suffix}"]`);await trigger.click();
+    record(`homepage: ${label} opens its original evidence viewer`,await page.evaluate(kind=>{const dialog=document.querySelector('.evidence-viewer');return dialog?.open&&!!dialog.querySelector(kind)&&dialog.querySelector('.viewer-footer a').href.startsWith('https://');},kind));
+    await page.keyboard.press('Escape');await page.locator('.evidence-viewer').waitFor({state:'detached'});
+    record(`homepage: closing ${label} restores its link`,await trigger.evaluate(el=>document.activeElement===el));
+  }
+  await page.goto(base+'gallery/');
+  const imageTrigger=page.locator('.gallery-grid a[data-viewer]').first();await imageTrigger.click();
   record('viewer: image preview opens with labelled native dialog',await page.evaluate(()=>{const dialog=document.querySelector('.evidence-viewer');return dialog?.open&&!!dialog.querySelector('img[alt]')&&!!document.getElementById(dialog.getAttribute('aria-labelledby'));}));
   record('viewer: opening focuses the close control',await page.evaluate(()=>document.activeElement.getAttribute('aria-label')==='Close evidence preview'));
   await page.keyboard.press('Escape');
@@ -197,44 +205,20 @@ try{
   record('print: web résumé remains readable without preview or controls',await page.evaluate(()=>document.querySelector('.resume-web-summary').checkVisibility()&&!document.querySelector('.resume-overview').checkVisibility()&&document.querySelector('.resume-web-summary').innerText.includes('Education')));
   await keys.close();
 
-  const motion=await context({reducedMotion:'no-preference'});const moving=await motion.newPage();
-  await moving.addInitScript(()=>{
-   const nativePlay=HTMLMediaElement.prototype.play;
-   window.__blockedSoundAttempts=0;
-   HTMLMediaElement.prototype.play=function(){
-    if(!this.muted&&!navigator.userActivation.isActive){window.__blockedSoundAttempts++;return Promise.reject(new DOMException('Browser test: audible autoplay blocked','NotAllowedError'));}
-    return nativePlay.call(this);
-   };
-  });
-  await moving.goto(base,{waitUntil:'load'});
-  record('hero video: no video or music download before a visitor action',await moving.locator('.teaching-video').evaluate(v=>v.paused&&!v.getAttribute('src')));
-  await moving.locator('.video-play').click();
-  await moving.waitForFunction(()=>!document.querySelector('.teaching-video').paused);
-  const heroFilm=await moving.evaluate(()=>{const v=document.querySelector('.teaching-video'),copy=document.querySelector('.hero-copy');const box=v.getBoundingClientRect(),text=copy.getBoundingClientRect();return {muted:v.muted,loop:v.loop,controls:v.controls,once:document.querySelectorAll('video').length===1,below:box.top>=text.bottom,time:v.currentTime};});
-  record('hero video: requested playback remains below the primary identity',heroFilm.loop&&heroFilm.controls&&heroFilm.once&&heroFilm.below,heroFilm);
-  record('hero video: explicit play enables music and exposes its state',await moving.evaluate(()=>!document.querySelector('.teaching-video').muted&&document.querySelector('.video-sound').textContent==='Mute music'));
-  await moving.waitForTimeout(250);
-  record('hero video: playback advances',await moving.locator('.teaching-video').evaluate((v,time)=>v.currentTime>time,heroFilm.time));
-  await moving.locator('.video-sound').click();
-  await moving.locator('.video-sound').click();
-  await moving.waitForFunction(()=>!document.querySelector('.teaching-video').muted&&!document.querySelector('.teaching-video').paused);
-  record('hero video: Sound on enables music and updates the accessible control',await moving.evaluate(()=>document.querySelector('.video-sound').getAttribute('aria-pressed')==='true'&&document.querySelector('.video-sound').textContent==='Mute music'));
-  await moving.locator('.teaching-video').evaluate(v=>{v.currentTime=v.duration-.2;});
-  await moving.waitForTimeout(600);
-  record('hero video: film and embedded music continue across the loop boundary',await moving.locator('.teaching-video').evaluate(v=>!v.paused&&!v.muted&&v.currentTime<3));
-  await moving.locator('.video-sound').click();
-  record('hero video: music can be muted without stopping the film',await moving.locator('.teaching-video').evaluate(v=>v.muted&&!v.paused));
-  await moving.reload({waitUntil:'load'});
-  record('hero video: refresh returns to a static poster',await moving.locator('.teaching-video').evaluate(v=>v.paused&&!v.getAttribute('src')));
-  await moving.locator('.video-play').click();
-  await moving.waitForFunction(()=>!document.querySelector('.teaching-video').paused);
-  record('hero video: a visitor mute is retained after refresh',await moving.locator('.teaching-video').evaluate(v=>v.muted));
-  await moving.emulateMedia({reducedMotion:'reduce'});
-  await moving.waitForTimeout(100);
-  record('reduced motion: changing preference pauses active hero video',await moving.locator('.teaching-video').evaluate(v=>v.paused));
-  record('reduced motion: changing preference clears decorative animations',await moving.evaluate(()=>document.getAnimations().filter(a=>a.playState==='running').length===0));
-  await motion.close();
 
+  const motion=await context({reducedMotion:'no-preference'});const moving=await motion.newPage();
+  await moving.goto(base,{waitUntil:'load'});
+  await moving.locator('.intro-skip').waitFor();
+  record('opening: first visit starts muted with a skip action',await moving.locator('.hero-film').evaluate(v=>v.muted&&!v.paused)&&await moving.locator('.identity-intro').count()===1);
+  await moving.locator('.intro-skip').click();
+  await moving.locator('[data-film-sound]').click();
+  await moving.waitForFunction(()=>!document.querySelector('#opening-audio').paused);
+  record('opening: sound requires an explicit visitor action',await moving.locator('[data-film-sound]').getAttribute('aria-pressed')==='true');
+  await moving.locator('.intro-skip').click();
+  record('opening: skip stops the voice track',await moving.locator('#opening-audio').evaluate(audio=>audio.paused));
+  await moving.emulateMedia({reducedMotion:'reduce'});
+  record('opening: live reduced motion pauses the film',await moving.locator('.hero-film').evaluate(video=>video.paused));
+  await motion.close();
   const failed=results.filter(result=>!result.pass);
   await fs.writeFile(path.join(output,'results.json'),JSON.stringify({base,checkedAt:new Date().toISOString(),checks:results.length,failed:failed.length,limitations:'Semantic and interaction checks are not a full WCAG conformance audit. No field Core Web Vitals measurement.',results},null,2));
   console.log(`${results.length-failed.length}/${results.length} browser checks passed. Report: outputs/browser-checks/results.json`);

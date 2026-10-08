@@ -15,7 +15,7 @@ export function cleanupMotion() {
 }
 
 export function initMotion({ initial = false } = {}) {
-  const previousVideo = document.querySelector('#main .teaching-video');
+  const previousVideo = document.querySelector('#main .hero-film');
   const resumeVideo = !!previousVideo && !previousVideo.paused;
   cleanupMotion();
   const root = document.querySelector('#main');
@@ -30,7 +30,7 @@ export function initMotion({ initial = false } = {}) {
   let frame = 0;
   let progress;
   const marked = new Set();
-  const video = root.querySelector('.teaching-video');
+  const video = root.querySelector('.hero-film');
   const finish = element => element.classList.remove('motion-enter', 'motion-hero');
   const stop = () => {
     video?.pause();
@@ -85,7 +85,7 @@ export function initMotion({ initial = false } = {}) {
   });
   const selector = [
     '.section-heading', '.page-heading', '.snapshot-grid > div', '.school-stage',
-    '.practice-grid > article', '.experience-row', '.qualification', '.resource-row',
+    '.practice-grid > article', '.experience-row', '.qualification', '.education-card', '.resource-row',
     '.certificate-card', '.gallery-grid > figure', '.profile-facts', '.prose > h2',
     '.evidence-aside', '.note-panel', '.pull-quote', '.influence-row > div',
     '.design-teaser', '.resource-feature', '.presentation-callout', '.closing-section',

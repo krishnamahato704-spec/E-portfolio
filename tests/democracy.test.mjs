@@ -24,7 +24,7 @@ test('initDemocracy safely exits when no democracy layout exists', () => {
   });
 });
 
-test('Democracy lesson design renders exactly 6 instructional stages in correct sequence', async () => {
+test('Democracy retains the six detailed source sections in their original sequence', async () => {
   const {view} = await import('../src/views.js');
   const {defaultContent} = await import('../src/content.js');
   const html = view('democracy', defaultContent, '../');
@@ -35,12 +35,12 @@ test('Democracy lesson design renders exactly 6 instructional stages in correct 
 
   // Verify each stage ID and badge
   const expectedStages = [
-    {id: 'stage-question', badge: 'STAGE 01', title: 'The shared learning intention'},
-    {id: 'stage-explore', badge: 'STAGE 02', title: 'Begin with what learners know'},
-    {id: 'stage-discuss', badge: 'STAGE 03', title: 'Use visuals and questions'},
-    {id: 'stage-explain', badge: 'STAGE 04', title: 'Oral and written ways to respond'},
-    {id: 'stage-assess', badge: 'STAGE 05', title: 'Check for understanding'},
-    {id: 'stage-reflect', badge: 'STAGE 06', title: 'Reflect and adjust'}
+    {id: 'stage-question', badge: '01', title: 'The shared learning intention'},
+    {id: 'stage-explore', badge: '02', title: 'Begin with what learners know'},
+    {id: 'stage-discuss', badge: '03', title: 'Use visuals and questions'},
+    {id: 'stage-explain', badge: '04', title: 'Oral and written ways to respond'},
+    {id: 'stage-assess', badge: '05', title: 'Check for understanding'},
+    {id: 'stage-reflect', badge: '06', title: 'Reflect and adjust'}
   ];
 
   for (const st of expectedStages) {
@@ -50,31 +50,19 @@ test('Democracy lesson design renders exactly 6 instructional stages in correct 
   }
 });
 
-test('Democracy sticky planning lens renders stage navigation, local progress, and active stage label', async () => {
-  const {view} = await import('../src/views.js');
-  const {defaultContent} = await import('../src/content.js');
-  const html = view('democracy', defaultContent, '../');
 
-  // Local progress indicator present
-  assert.ok(html.includes('democracy-local-progress'), 'Local progress indicator present');
-  assert.ok(html.includes('id="democracy-stage-counter"'), 'Stage counter present');
-  assert.ok(html.includes('id="democracy-progress-bar"'), 'Local progress bar present');
-  assert.ok(html.includes('id="democracy-active-stage-label"'), 'Active stage label present');
-
-  // Stage navigation present with 6 links
-  assert.ok(html.includes('democracy-stage-nav'), 'Stage navigation present');
-  assert.ok(html.includes('href="#stage-question"'), 'Stage 1 link present');
-  assert.ok(html.includes('href="#stage-explore"'), 'Stage 2 link present');
-  assert.ok(html.includes('href="#stage-discuss"'), 'Stage 3 link present');
-  assert.ok(html.includes('href="#stage-explain"'), 'Stage 4 link present');
-  assert.ok(html.includes('href="#stage-assess"'), 'Stage 5 link present');
-  assert.ok(html.includes('href="#stage-reflect"'), 'Stage 6 link present');
-
-  // Non-delivered lesson truth notice is preserved
-  assert.ok(html.includes('truth-notice'), 'Truth notice is preserved');
-  assert.ok(html.includes('The lesson plan is available. Completed student work and supervisor feedback are not included.'), 'Truth notice text accurate');
+test('Compact lesson leads with four steps and retains source access and evidence limits',async()=>{
+ const {view}=await import('../src/views.js');
+ const {defaultContent}=await import('../src/content.js');
+ const html=view('democracy',defaultContent,'../../');
+ const sequence=html.match(/<ol class="lesson-sequence">([\s\S]*?)<\/ol>/)[1];
+ assert.equal((sequence.match(/<li>/g)||[]).length,4);
+ assert.match(html,/Planning evidence/);
+ assert.match(html,/not a report of a delivered lesson/);
+ assert.match(html,/<details class="evidence-details">/);
+ assert.match(html,/download="democracy-lesson-plan.pdf"/);
+ assert.doesNotMatch(html,/democracy-stage-counter|democracy-stage-nav/);
 });
-
 test('Democracy story retains readable content without hiding future stages', async () => {
   const {view} = await import('../src/views.js');
   const {defaultContent} = await import('../src/content.js');
@@ -85,7 +73,6 @@ test('Democracy story retains readable content without hiding future stages', as
   assert.ok(html.includes('does not specify differentiated tasks'), 'Pathway 2 preserved');
 
   // Continuation bridge to Chapter 04 Resources
-  assert.ok(html.includes('NEXT CHAPTER / 04'), 'Continuation bridge tag present');
   assert.ok(html.includes('Teacher’s Resource Library'), 'Bridge title present');
   assert.ok(html.includes('resources/'), 'Bridge link present');
 });

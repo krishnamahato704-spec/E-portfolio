@@ -4,7 +4,7 @@ import {createHash} from 'node:crypto';
 import {fileURLToPath} from 'node:url';
 import {routes} from '../src/views.js';
 const root=path.resolve(import.meta.dirname,'..');
-export async function packageSite(){
+export async function packageSite({siteUrl}={}){
  const output=path.resolve(root,'dist');
  if(path.dirname(output)!==root||path.basename(output)!=='dist')throw Error('Unexpected build output');
  const existing=await lstat(output).catch(()=>null);
@@ -15,6 +15,11 @@ export async function packageSite(){
  await mkdir(path.join(output,'src'),{recursive:true});
  for(const entry of await readdir(path.join(root,'src'))){
   if(/\.(js|css|json)$/.test(entry))await cp(path.join(root,'src',entry),path.join(output,'src',entry));
+ }
+ if(siteUrl){
+  const configPath=path.join(output,'src/config.js');
+  const source=await readFile(configPath,'utf8');
+  await writeFile(configPath,source.replace(/canonical: '[^']*'/,'canonical: '+JSON.stringify(siteUrl)));
  }
  await cp(path.join(root,'assets'),path.join(output,'assets'),{recursive:true});
  for(const {path:route} of Object.values(routes)){

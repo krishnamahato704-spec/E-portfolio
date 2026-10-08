@@ -8,7 +8,7 @@ export function sourceDate(){
  if(!Number.isFinite(date.getTime()))throw Error('Invalid source date');
  return date.toISOString();
 }
-export async function loadPublishedContent({remote=process.env.BUILD_CONTENT_SOURCE==='supabase',fetcher=fetch,inputFile=fetcher===fetch?process.env.BUILD_CONTENT_FILE:undefined}={}){
+export async function loadPublishedContent({remote=(process.env.BUILD_CONTENT_SOURCE||(process.env.VERCEL?'supabase':'repository'))==='supabase',fetcher=fetch,inputFile=fetcher===fetch?process.env.BUILD_CONTENT_FILE:undefined}={}){
  if(remote&&inputFile){
   const release=JSON.parse(await fs.readFile(inputFile,'utf8'));
   if(release.content?.schemaVersion!==CURRENT_SCHEMA_VERSION||!Number.isFinite(Date.parse(release.updatedAt)))throw Error('Invalid release input.');

@@ -1,8 +1,11 @@
 @page {size:A4;margin:14mm}
 @media print {
+ .mobile-shortcuts {display:none!important}
+ body:has(.mobile-shortcuts) {padding-bottom:0}
+ .page-photo-backdrop,.resume-title,.journey-cover,.journey-index,.desk-documents,.certificate-fan,.gallery-opening,.profile-photo-collage,.journal-photo-strip {display:none!important}
  :root {--gutter:0;--section-space:20px}
  body {font:10pt/1.45 Arial,sans-serif;background:white;color:#111}
- body::before,.site-header,.site-footer,.skip-link,.reading-progress,.print-actions,.resume-overview,.page-heading,.recruiter-details,.hero-video-panel,.connect-strip,.collection-tools,.hero-contact,.video-play,.evidence-viewer {display:none!important}
+ body::before,main::before,main::after,.site-header,.site-footer,.skip-link,.reading-progress,.print-actions,.resume-overview,.page-heading,.recruiter-details,.hero-video-panel,.connect-strip,.collection-tools,.hero-contact,.video-play,.hero-film,.hero-controls,.identity-intro,.evidence-viewer {display:none!important}
  h1,h2,h3,h4,.lead,.small {color:#111}
  .container {width:100%;max-width:none}
  .resume-web-summary {border:0;padding:0;max-width:none}
@@ -20,4 +23,7 @@
  .philosophy-layout {display:block}.philosophy-intro-col {margin-bottom:25px}
  .timeline-track {display:none}.experience-row {display:block}.milestone-rail {display:none}.milestone-card {margin-block:20px;border-color:#bbb}
  .experience-details>.plain-list {display:block!important}
+ .education-card,.education-period,.education-record {break-inside:avoid;background:white;color:#111;box-shadow:none}
+ .education-completed,.education-current {display:block;border:0}.education-completed::before,.education-node {display:none}
+ .education-record {padding-top:0;margin-block:12px}.education-period {position:static;padding:0}
 }

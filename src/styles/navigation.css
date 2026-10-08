@@ -1,18 +1,27 @@
-.site-header {position:sticky;top:0;z-index:40;background:#fffdf9f5;border-bottom:1px solid var(--line)}
+.site-header {position:sticky;top:0;z-index:40;background:#fffffffa;border-bottom:1px solid var(--line)}
 .site-header.is-scrolled {box-shadow:var(--shadow)}
 .header-inner {min-height:var(--header-height);display:flex;align-items:center;gap:24px}
 .brand {display:flex;align-items:center;gap:12px;flex-shrink:0}
-.monogram {font:2.25rem/1 var(--serif);color:var(--accent-hover);letter-spacing:-.07em}
+.monogram {font:600 2.25rem/1 var(--serif);color:var(--dark);letter-spacing:-.07em}
+.monogram>span {color:var(--accent)}
 .brand-caption {display:none;font-size:.85rem;line-height:1.35}
 .brand-caption small {display:block;color:var(--muted);font-size:.7rem}
 .navigation-panel {margin-left:auto}
 .navigation-links {display:flex;align-items:center;gap:clamp(15px,1.65vw,24px)}
 .navigation-links a {font-size:.9rem;white-space:nowrap;display:inline-flex;align-items:center;min-height:var(--header-height);border-bottom:2px solid transparent;padding-top:2px}
-.navigation-links a[aria-current] {color:var(--dark);font-weight:600;border-bottom-color:var(--dark)}
+.navigation-links a[aria-current] {color:var(--dark);font-weight:600;border-bottom-color:var(--accent)}
 .navigation-links a:hover {border-bottom-color:var(--accent)}
+@media(min-width:1001px) {.navigation-links a[href$="contact/"] {display:none}}
 .header-cta {flex-shrink:0;font-size:.84rem;min-height:42px;padding:9px 15px}
 .menu-toggle,.menu-close,.navigation-top,.navigation-note,.fallback-navigation {display:none}
-.site-footer {border-top:1px solid var(--line);margin-top:48px;padding-block:30px 16px;background:var(--sheet)}
+.site-footer {border-top:1px solid var(--dark-line);margin-top:40px;padding-block:28px 18px;background:var(--dark);color:white}
+.site-footer .monogram,.site-footer .footer-name,.site-footer .footer-identity p,.site-footer .footer-bottom,.site-footer a {color:white}
+.site-footer a:hover {color:#d8eee8}
+.site-footer .text-link {border:0;font-size:.82rem;white-space:nowrap}
+.site-footer .footer-top nav {flex-wrap:wrap;gap:10px 20px;justify-content:flex-end}
+.site-footer .footer-bottom {border-top-color:#ffffff35;flex-wrap:wrap}
+.footer-location,.email-link {display:inline-flex;align-items:center;gap:8px}
+.footer-location .icon,.email-link .icon {width:18px;height:18px}
 .footer-top,.footer-bottom {display:flex;align-items:center;justify-content:space-between;gap:20px}
 .footer-identity {display:flex;gap:18px;align-items:center}
 .footer-name {font:1.2rem var(--serif);color:var(--dark)}

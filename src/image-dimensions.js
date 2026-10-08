@@ -1,5 +1,21 @@
 // Intrinsic sizes of the local evidence assets.
 export const imageDimensions = {
+  "assets/theme/subject-art/teaching-practice.webp": [
+    1254,
+    1254
+  ],
+  "assets/theme/subject-art/english-pedagogy.webp": [
+    1254,
+    1254
+  ],
+  "assets/theme/subject-art/economics-study.webp": [
+    1254,
+    1254
+  ],
+  "assets/theme/subject-art/history-sources.webp": [
+    1254,
+    1254
+  ],
   "assets/certificate-1.webp": [
     902,
     1400
@@ -159,5 +175,13 @@ export const imageDimensions = {
   "assets/evidence/amity-journal/table-tennis.webp": [
     422,
     377
+  ],
+  "assets/philosophy/rabindranath-tagore.webp": [
+    688,
+    900
+  ],
+  "assets/philosophy/lev-vygotsky.webp": [
+    735,
+    1014
   ]
 };

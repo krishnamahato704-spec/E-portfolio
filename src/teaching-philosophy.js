@@ -1,5 +1,47 @@
-import {esc,list,link} from './view-helpers.js?v=editorial-20261004';
+import {esc,list,link,img} from './view-helpers.js?v=editorial-20261004';
 import {democracyResource} from './evidence.js?v=editorial-20261004';
+
+const influences = [
+  {
+    name:'Rabindranath Tagore',
+    image:'assets/philosophy/rabindranath-tagore.webp',
+    theme:'tagore',
+    thesis:'Room for curiosity & creative expression.',
+    note:'Holistic education and creative inquiry remind me to keep History connected to the whole learner, cultivating imagination alongside analytical critique.',
+    source:'https://commons.wikimedia.org/wiki/File:Rabindranath_Tagore_1930.jpg'
+  },
+  {
+    name:'Lev Vygotsky',
+    image:'assets/philosophy/lev-vygotsky.webp',
+    theme:'vygotsky',
+    thesis:'Support toward independent reasoning.',
+    note:'Dialogue, guided source work, and the zone of proximal development help learners advance from scaffolded inquiry to autonomous historical explanation.',
+    source:'https://commons.wikimedia.org/wiki/File:Lev-Semyonovich-Vygotsky-1896-1934.jpg'
+  }
+];
+
+export function homePhilosophySection(c,base){
+  return `<section id="teaching-philosophy" class="container section home-philosophy" aria-labelledby="home-philosophy-title">
+ <header class="home-philosophy-heading">
+  <div><p class="eyebrow">Ideas that guide my teaching</p><h2 id="home-philosophy-title">My Teaching Philosophy</h2></div>
+  <p class="home-philosophy-intro">Start with the learner. Understanding grows through curiosity, dialogue and support toward independent thinking.</p>
+ </header>
+ <div class="home-influences">${influences.map(person=>`
+  <article class="home-influence influence-${person.theme}">
+   <figure class="home-influence-portrait">
+    ${img(person.image,'Portrait of '+person.name,base,'thinker-portrait')}
+    <figcaption><a href="${person.source}" class="portrait-source" target="_blank" rel="noopener noreferrer">Portrait source<span class="sr-only">: ${person.name} on Wikimedia Commons (opens in a new tab)</span> ↗</a></figcaption>
+   </figure>
+   <div class="home-influence-copy"><p class="eyebrow">Intellectual influence</p><h3>${esc(person.name)}</h3><p class="home-influence-thesis">${esc(person.thesis)}</p><p>${esc(person.note)}</p></div>
+  </article>`).join('')}
+ </div>
+ <div class="home-philosophy-principles">${c.practice.map((p,i)=>`
+  <article><span class="home-principle-number" aria-hidden="true">${String(i+1).padStart(2,'0')}</span><h3>${esc(p.title)}</h3><p>${esc(p.text)}</p></article>`).join('')}
+ </div>
+ <div class="home-philosophy-links">${link(base,'teaching','Read my full teaching approach','text-link')}${democracyResource(c)?link(base,'democracy','Explore the Democracy lesson plan','text-link'):''}</div>
+</section>`;
+}
+
 export function philosophySection(c,base){
   const implications = [
     'Plan example: questions about prior knowledge lead to discussion of elections and peaceful protest (pages 3–5).',

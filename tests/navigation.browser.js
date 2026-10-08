@@ -128,31 +128,34 @@ try{
       assert(fallbackLinks.length===navRoutes.length,`${route}: missing native fallback link`);
       fallbackLinks.forEach((link,index)=>assert(link.getAttribute('href')===base+routes[navRoutes[index]].path,`${route}: incorrect native fallback target`));
       const expected=['pehchaan','observation'].includes(route)?'teaching':route==='democracy'?'resources':navRoutes.includes(route)?route:null;
-      const current=[...rendered.querySelectorAll('a[aria-current="page"]')];
+      const current=[...rendered.querySelectorAll('#navigation a[aria-current="page"]')];
       assert(current.length===(expected?1:0),`${route}: incorrect number of active links`);
       if(expected)assert(current[0].getAttribute('href')===base+routes[expected].path,`${route}: wrong active destination`);
+      const quickCurrent=[...rendered.querySelectorAll('.mobile-shortcuts a[aria-current="page"]')];
+      assert(quickCurrent.length===Number(['resume','resources','contact'].includes(expected)),`${route}: wrong active quick-access link`);
     }
   });
   await check('Hero CTAs retain teaching and existing printable resume functionality',()=>{
     const home=fragment(view('home',defaultContent,'../'));
-    const actions=[...home.querySelectorAll('.hero .actions a')];
+    const actions=[...home.querySelectorAll('.hero .actions a.button')];
     assert(actions.length===2,'Hero must have two primary actions');
-    assert(actions[0].textContent.includes('View Teaching Evidence') && actions[0].getAttribute('href')==='../resources/','Evidence CTA reaches the original resource route');
-    assert(actions[1].textContent.includes('Download Résumé') && actions[1].getAttribute('href')==='../assets/krishna-mahato-resume.pdf','Resume CTA downloads the generated PDF');
+    assert(actions[0].textContent.includes('View evidence') && actions[0].getAttribute('href')==='../resources/','Evidence CTA reaches the original resource route');
+    assert(actions[1].getAttribute('aria-label')==='Download résumé PDF' && actions[1].hasAttribute('download') && actions[1].getAttribute('href')==='../assets/krishna-mahato-resume.pdf','Resume CTA downloads the generated PDF');
+    assert(home.querySelector('.hero-contact-link').getAttribute('href')==='../contact/','Contact action reaches the existing contact page');
     assert(fragment(view('resume',defaultContent,'../')).querySelector('button#print-resume')?.textContent.includes('Print / save as PDF'),'Printable resume control was removed');
   });
   await check('Live status follows existing internship and teacher-education evidence',()=>{
-    const status=content=>fragment(view('home',content,'../')).querySelector('.opening-status');
-    assert(status(defaultContent).textContent.includes('Currently developing through school internship'),'Existing ongoing internship is not represented');
+    const status=content=>fragment(view('home',content,'../')).querySelector('.current-card');
+    assert(status(defaultContent).textContent.includes('Panchsheel'),'Existing ongoing internship is not represented');
     const noInternship=structuredClone(defaultContent);
     noInternship.experiences=[];
-    assert(!status(noInternship).textContent.includes('school internship'),'Removed internship still appears current');
-    assert(status(noInternship).textContent.includes('Currently developing through teacher education'),'Current B.Ed. evidence did not provide an accurate fallback');
+    assert(!status(noInternship),'Removed internship still appears current');
+    assert(fragment(view('home',noInternship,'../')).querySelector('.opening-label').textContent.includes('B.Ed. & M.A. History in progress'),'Current study evidence is missing');
     noInternship.qualifications.forEach(qualification=>{qualification.status='Completed'});
-    assert(!status(noInternship).textContent.includes('Currently developing') && !status(noInternship).querySelector('.status-dot'),'No ongoing evidence must produce a static status without a live dot');
+    assert(!status(noInternship)&&!fragment(view('home',noInternship,'../')).querySelector('.opening-label').textContent.includes('in progress'),'Completed studies remain presented as current');
     const completedInternship=structuredClone(defaultContent);
     completedInternship.experiences.forEach(experience=>{experience.status='Completed'});
-    assert(!status(completedInternship).textContent.includes('school internship'),'Completed internship is presented as current');
+    assert(!status(completedInternship),'Completed internship is presented as current');
   });
 }finally{
   key('Escape');

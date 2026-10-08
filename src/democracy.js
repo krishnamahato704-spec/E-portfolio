@@ -20,6 +20,9 @@ export function initDemocracy(root = document) {
   if (!stages.length) return;
 
   const navLinks = [...container.querySelectorAll('.democracy-stage-nav a')];
+  // The compact four-step layout keeps the source analysis in a disclosure.
+  // It needs no sticky six-section tracker.
+  if (!navLinks.length) return;
   const counterEl = container.querySelector('#democracy-stage-counter .active-stage-num');
   const progressBar = container.querySelector('#democracy-progress-bar');
   const activeLabelEl = container.querySelector('#democracy-active-stage-label');

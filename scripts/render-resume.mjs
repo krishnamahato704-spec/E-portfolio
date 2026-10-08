@@ -2,21 +2,22 @@ import PDFDocument from 'pdfkit';
 import fs from 'node:fs';
 import path from 'node:path';
 import {defaultContent,publicContent} from '../src/content.js';
+import {resolveSiteUrl} from './site-origin.mjs';
 const root=path.resolve(import.meta.dirname,'..');
 // The PDF is a concise single page. The web résumé retains the complete record.
-export async function generateResume(c=defaultContent){
+export async function generateResume(c=defaultContent,{siteUrl=resolveSiteUrl()}={}){
  c=publicContent(c);
  const stamp=new Date('2026-10-04T00:00:00Z');
  const doc=new PDFDocument({size:'A4',margin:36,bufferPages:true,info:{Title:c.profile.name+' — Teaching Résumé',Author:c.profile.name,CreationDate:stamp,ModDate:stamp}});
  const output=fs.createWriteStream(path.join(root,'assets/krishna-mahato-resume.pdf'));doc.pipe(output);
  const plain=s=>String(s??'').replace(/[–—]/g,'-').replace(/[‘’]/g,"'").replace(/[“”]/g,'"');
- const ink='#17313d',muted='#52646c';
+ const ink='#123d49',muted='#52666f';
  const draw=(value,x,y,width,size=9,face='Helvetica',color=ink)=>{doc.font(face).fontSize(size).fillColor(color).text(plain(value),x,y,{width,lineGap:1.5});return doc.y;};
  draw(c.profile.name,36,32,520,23,'Helvetica-Bold');
  draw('History & Social Science Educator',36,62,520,11);
  draw(c.profile.location+' | '+c.profile.email,36,82,520,9,'Helvetica',muted);
- doc.fontSize(8.5).text('krishnamahato704-spec.github.io/E-portfolio/',36,99,{link:'https://krishnamahato704-spec.github.io/E-portfolio/'});
- doc.strokeColor('#c7a96b').lineWidth(1).moveTo(36,120).lineTo(559,120).stroke();
+ doc.fontSize(8.5).text(siteUrl.replace('https://',''),36,99,{link:siteUrl});
+ doc.strokeColor('#b57a55').lineWidth(1).moveTo(36,120).lineTo(559,120).stroke();
  const left={x:36,width:205,y:136},right={x:269,width:290,y:136};
  const text=(col,value,size=9,face='Helvetica',color=ink)=>{col.y=draw(value,col.x,col.y,col.width,size,face,color)+2;};
  const section=(col,label)=>{col.y+=7;text(col,label.toUpperCase(),9.5,'Helvetica-Bold','#854a2b');doc.strokeColor('#dddcd6').lineWidth(.5).moveTo(col.x,col.y).lineTo(col.x+col.width,col.y).stroke();col.y+=7;};

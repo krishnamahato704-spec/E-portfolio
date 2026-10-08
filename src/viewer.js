@@ -29,7 +29,7 @@ export function wireViewer(root=document){
    // Gallery navigation is confined to the collection the visitor opened.
    const collection=link.closest('.gallery-grid,.moments-grid');
    if(picture&&collection){
-    const links=[...collection.querySelectorAll('a[data-viewer]')];
+    const links=[...collection.querySelectorAll('a[data-viewer]')].filter(a=>!a.closest('.gallery-card[hidden]'));
     let index=links.indexOf(link),startX=0,startY=0;
     const controls=document.createElement('div');controls.className='viewer-paging';
     const previous=document.createElement('button'),next=document.createElement('button'),position=document.createElement('span');
