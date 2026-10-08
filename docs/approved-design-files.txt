@@ -7,7 +7,8 @@ admin/index.html
 assets/fonts/Source-Serif-4-OFL.md
 assets/fonts/source-serif-4-semibold.woff2
 assets/krishna-mahato-resume.pdf
-assets/opening-soundtrack.mp3
+assets/opening-music-credits.txt
+assets/opening-piano.mp3
 assets/philosophy/lev-vygotsky.webp
 assets/philosophy/rabindranath-tagore.webp
 assets/theme/subject-art/economics-study-small.webp
@@ -43,6 +44,7 @@ scripts/check-browser.mjs
 scripts/check-identity.mjs
 scripts/check-palette-contrast.mjs
 scripts/check-recruiter-access.mjs
+scripts/compose-opening-music.mjs
 scripts/load-published-content.mjs
 scripts/package-site.mjs
 scripts/page-palettes.mjs
@@ -65,7 +67,6 @@ src/navigation.js
 src/opening-boot.js
 src/page-history.json
 src/page-media.js
-src/sound.js
 src/styles.css
 src/styles/base.css
 src/styles/cards.css
@@ -73,12 +74,12 @@ src/styles/film-opening.css
 src/styles/home-philosophy.css
 src/styles/identity.css
 src/styles/navigation.css
+src/styles/opening-music.css
 src/styles/page-atmosphere.css
 src/styles/page-identities.css
 src/styles/page-palettes.css
 src/styles/print.css
 src/styles/recruiter-access.css
-src/styles/sound.css
 src/styles/theme.css
 src/styles/tokens.css
 src/teaching-philosophy.js

@@ -1,0 +1,14 @@
+Opening piano music
+
+An original eight-second melody arranged for this portfolio.
+No voice recording, vocals, background ambience or navigation effects.
+
+Piano samples: Salamander Grand Piano by Alexander Holm.
+Source: https://github.com/Tonejs/audio/tree/master/salamander
+Sample licence: Creative Commons Attribution 3.0 Unported.
+https://creativecommons.org/licenses/by/3.0/
+
+The samples were pitch-shifted, mixed into a new melody and chord accompaniment,
+given a small room reflection and faded out for the portfolio opening.
+This rendered track uses the same CC BY 3.0 licence. Attribution should accompany
+redistribution. The website links to this credit file beside the film controls.

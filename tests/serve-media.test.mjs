@@ -12,11 +12,11 @@ test('Preview server provides exact media byte ranges, suffix ranges and unsatis
  try{
   let ready=false;
   for(let i=0;i<60;i++){
-   try{if((await fetch(base+'assets/opening-soundtrack.mp3',{method:'HEAD'})).ok){ready=true;break;}}catch{}
+   try{if((await fetch(base+'assets/opening-piano.mp3',{method:'HEAD'})).ok){ready=true;break;}}catch{}
    await new Promise(resolve=>setTimeout(resolve,50));
   }
   assert.ok(ready,'preview starts');
-  for(const file of ['assets/hero-video-opt.mp4','assets/opening-soundtrack.mp3']){
+  for(const file of ['assets/hero-video-opt.mp4','assets/opening-piano.mp3']){
    const bytes=await fs.readFile(path.join(root,file));
    const full=await fetch(base+file,{method:'HEAD'});
    assert.equal(full.status,200);

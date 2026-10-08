@@ -2,7 +2,6 @@ import {wireCollections} from './collections.js?v=editorial-20261004';
 import {initNavigation} from './navigation.js?v=editorial-20261004';
 import {initMotion,cleanupMotion} from './motion.js?v=editorial-20261004';
 import {wireViewer} from './viewer.js?v=editorial-20261004';
-import {initSound} from './sound.js?v=editorial-20261004';
 const route=document.body.dataset.route;
 const base=document.body.dataset.base;
 initNavigation();
@@ -25,7 +24,6 @@ function wire(){
 if(route==='admin') import('./admin.js?v=editorial-20261004').then(x=>x.initStudio(base));
 else {
  wire();
- initSound();
  let opening;
  if(route==='home')import('./identity.js?v=editorial-20261004').then(module=>{opening=module;module.initOpening();});
  initMotion({initial:true});

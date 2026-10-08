@@ -1,0 +1,3 @@
+/* Keep the separate opening full screen after the shorter mobile hero rules. */
+.identity-intro .hero-film {height:100svh}
+.film-music-credit {font-size:.875rem;color:var(--ink);text-decoration:underline;text-underline-offset:3px}

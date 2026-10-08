@@ -70,7 +70,8 @@ test('Film hero has a static fallback, user controls and original evidence links
  assert.match(home,/class="hero-avatar"/);
  assert.equal((home.match(/<video\s/g)||[]).length,1);
  assert.match(home,/hero-video-opt\.mp4/);
- assert.match(home,/opening-soundtrack\.mp3/);
+ assert.match(home,/opening-piano\.mp3/);
+ assert.doesNotMatch(home,/opening-soundtrack|portfolio-sound/);
  assert.match(home,/data-film-pause/);assert.match(home,/data-film-replay/);
  assert.match(view('credentials',defaultContent),/data-original-url="https:/);
  assert.match(view('resources',defaultContent),/data-viewer/);
@@ -88,4 +89,5 @@ test('Automatically generated résumé stays on one PDF page',async()=>{
 test('GitHub Pages package includes deep routes and public assets while excluding development files',async()=>{
  for(const file of ['index.html','src/styles.css','src/editorial.js','assets/portfolio-film.vtt','assets/krishna-mahato-resume.pdf','teaching/democracy/index.html','admin/index.html','sitemap.xml'])await fs.access(new URL('../dist/'+file,import.meta.url));
  for(const file of ['.env','node_modules','outputs','tests','.git','scripts'])await assert.rejects(fs.access(new URL('../dist/'+file,import.meta.url)));
+ for(const file of ['assets/opening-soundtrack.mp3','src/sound.js'])await assert.rejects(fs.access(new URL('../dist/'+file,import.meta.url)));
 });

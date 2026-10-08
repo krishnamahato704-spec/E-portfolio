@@ -1,4 +1,3 @@
-import {enablePortfolioSound,mutePortfolioSound,isPortfolioSoundOn} from './sound.js?v=editorial-20261004';
 // One supplied film moves from the opening back into the readable Home hero.
 let dispose=()=>{};
 export function cleanupOpening(){dispose();dispose=()=>{};}
@@ -12,7 +11,7 @@ export function initOpening({auto=true}={}){
  const preference=matchMedia('(prefers-reduced-motion: reduce)');
  const events=new AbortController(),options={signal:events.signal};
  const controls=hero.querySelector('[data-film-controls]'),pause=hero.querySelector('[data-film-pause]');
- const sound=hero.querySelector('[data-film-sound]'),status=hero.querySelector('.film-status');
+ const status=hero.querySelector('.film-status');
  const progress=hero.querySelector('.film-progress span');
  let intro=null,timer=0,started=0,soundEnabled=false,generation=0,audioGeneration=0,filmSize=null,heroVisible=true;
  const say=text=>{if(status)status.textContent=text;};
@@ -23,9 +22,9 @@ export function initOpening({auto=true}={}){
   syncSound();
  };
  const syncSound=()=>{
-  const on=isPortfolioSoundOn()||soundEnabled&&!audio.paused;
-  sound.setAttribute('aria-pressed',String(on));sound.textContent=on?'Mute sound':'Turn on sound';
-  if(intro)intro.querySelector('.intro-sound').textContent=on?'Mute sound':'Turn on sound';
+  const on=soundEnabled&&!audio.paused;
+  const control=intro?.querySelector('.intro-sound');
+  if(control){control.setAttribute('aria-pressed',String(on));control.textContent=on?'Mute music':'Unmute music';}
  };
  const frameFilm=()=>{
   if(innerWidth>760){film.style.objectPosition='76% top';return;}
@@ -44,7 +43,6 @@ export function initOpening({auto=true}={}){
   const restore=intro?.contains(document.activeElement);
   if(intro){hero.prepend(film);intro.remove();intro=null;}
   hero.classList.remove('intro-active');stopAudio();filmSize=null;frameFilm();
-  window.dispatchEvent(new CustomEvent('portfolio-intro-state',{detail:{active:false}}));
   if(reveal)boot?.release();
   if(restore)document.querySelector('#main')?.focus({preventScroll:true});
  };
@@ -52,11 +50,10 @@ export function initOpening({auto=true}={}){
  const play=async()=>{load();try{await film.play();if(document.hidden||!intro&&!heroVisible||hero.dataset.userPaused==='true'){film.pause();sync();return false;}sync();return true;}catch{film.pause();sync();say('Film playback is unavailable. The portfolio remains ready to read.');return false;}};
  const enableSound=()=>{
   const request=++audioGeneration;
-  enablePortfolioSound();
   soundEnabled=true;
-  audio.volume=Math.min(.85,(Number(document.querySelector('[data-sound-volume]')?.value)||20)/100*3.25);
+  audio.volume=.48;
   audio.currentTime=Math.min(Math.max(0,(performance.now()-started)/1000),7.9);
-  audio.play().then(()=>{if(request===audioGeneration)syncSound();}).catch(()=>{if(request===audioGeneration){stopAudio();say('Audio could not play. Use Turn on sound to try again.');}});
+  audio.play().then(()=>{if(request===audioGeneration)syncSound();}).catch(()=>{if(request===audioGeneration){stopAudio();say('Music could not play. Replay the introduction to try again.');}});
  };
  const restart=()=>{
   started=performance.now();film.currentTime=0;frameFilm();
@@ -76,20 +73,18 @@ export function initOpening({auto=true}={}){
   film.pause();film.currentTime=0;
   intro=document.createElement('div');intro.className='identity-intro';
   intro.setAttribute('role','region');intro.setAttribute('aria-label','Portfolio introduction');
-  intro.innerHTML='<div class="intro-entry"><p class="eyebrow">A short introduction</p><button type="button" class="button primary" data-intro-enter>Enter with sound</button><p>Voice and piano, followed by quiet background sound.</p><p class="small" data-intro-status role="status"></p></div><div class="intro-name-card"><p class="intro-greeting">Hi, my name is</p><p class="intro-name"></p><p class="intro-role"></p></div><span class="intro-film-label">Illustrative film</span><div class="intro-controls"><button type="button" class="intro-skip">Skip to portfolio</button><button type="button" class="intro-sound" hidden>Mute sound</button></div>';
+  intro.innerHTML='<div class="intro-entry"><p class="eyebrow">A short introduction</p><button type="button" class="button primary" data-intro-enter>Enter with music</button><p>A short piano melody accompanies the opening film.</p><p class="small" data-intro-status role="status"></p></div><div class="intro-name-card"><p class="intro-greeting">Hi, my name is</p><p class="intro-name"></p><p class="intro-role"></p></div><span class="intro-film-label">Illustrative film</span><div class="intro-controls"><button type="button" class="intro-skip">Skip to portfolio</button><button type="button" class="intro-sound" aria-pressed="false" hidden>Mute music</button></div>';
   intro.querySelector('.intro-name').textContent=hero.querySelector('h1').textContent;
   intro.querySelector('.intro-role').textContent=hero.querySelector('.hero-role').textContent;
   intro.prepend(film);document.body.append(intro);hero.classList.add('intro-active');
-  window.dispatchEvent(new CustomEvent('portfolio-intro-state',{detail:{active:true}}));
   // Replace the first-paint film cover synchronously, before awaiting playback.
   boot?.release();filmSize=null;frameFilm();
   intro.querySelector('.intro-skip').addEventListener('click',finish,options);
-  intro.querySelector('.intro-sound').addEventListener('click',()=>{if(soundEnabled||isPortfolioSoundOn()){mutePortfolioSound();stopAudio();}else enableSound();},options);
+  intro.querySelector('.intro-sound').addEventListener('click',()=>{if(soundEnabled)stopAudio();else enableSound();},options);
   const start=async soundOn=>{
    const button=intro?.querySelector('[data-intro-enter]');if(!button||button.disabled)return;
    button.disabled=true;intro.querySelector('[data-intro-status]').textContent='Starting introduction…';
    hero.dataset.userPaused='false';
-   window.dispatchEvent(new CustomEvent('portfolio-intro-state',{detail:{active:true}}));
    started=performance.now();timer=setTimeout(finish,5000);
    // Both media play requests happen inside the entry click, before any await.
    if(soundOn)enableSound();
@@ -107,12 +102,8 @@ export function initOpening({auto=true}={}){
   else if(document.activeElement===document.body)intro.querySelector('[data-intro-enter]').focus({preventScroll:true});
  };
  pause.addEventListener('click',()=>{if(film.paused){hero.dataset.userPaused='false';play();}else{hero.dataset.userPaused='true';film.pause();finish();sync();}},options);
- sound.addEventListener('click',()=>{if(isPortfolioSoundOn()){mutePortfolioSound();stopAudio();}else if(intro)enableSound();else begin(true,true);},options);
  hero.querySelector('[data-film-replay]').addEventListener('click',()=>begin(true,true),options);
- window.addEventListener('portfolio-sound-change',event=>{
-  syncSound();audio.volume=Math.min(.85,event.detail.volume*3.25);
-  if(!event.detail.enabled&&soundEnabled)stopAudio();
- },options);
+ for(const event of ['play','pause','ended'])audio.addEventListener(event,syncSound,options);
  film.addEventListener('play',sync,options);film.addEventListener('pause',sync,options);
  film.addEventListener('error',()=>{finish();sync();say('Film unavailable. Showing the portfolio poster.');},options);
  film.addEventListener('timeupdate',()=>{frameFilm();if(progress)progress.style.width=(film.duration?film.currentTime/film.duration*100:0)+'%';},options);

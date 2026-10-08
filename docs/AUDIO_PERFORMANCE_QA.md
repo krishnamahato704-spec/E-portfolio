@@ -1,20 +1,21 @@
 # Audio and performance changes
 
-The regular Home entry now offers **Enter with sound**. That click starts the
-supplied voice-and-piano recording and the eight-second film introduction.
-Audible playback requires a visitor gesture in browsers. Skip, mute, reduced
-motion and direct links remain available. The default voice level is 65%.
+The regular Home entry offers **Enter with music**. That click starts a new
+instrumental acoustic piano melody and the eight-second film introduction.
+The owner's spoken recording has been removed from the public asset package.
+The continuous background chord, page-change sounds, Web Audio controller and
+floating volume widget have also been removed. Pages are silent after the
+opening. Old session sound preferences cannot reactivate the removed sounds.
 
-Quiet F-major ambience follows the introduction. The default portfolio volume
-is 20%. Eleven public pages have distinct short, two-note navigation sounds.
-The sounds use one lazy Web Audio context, with no audio library or background
-music download. Volume and mute persist for the browsing session. The audio
-controller rereads those choices when a cached page returns through Back,
-including changes made on another page. Ambience
-ducks during the spoken opening or another audible media player, and suspends
-in a hidden tab. Navigation uses ordinary links with no imposed delay. A full
-page navigation briefly recreates the audio engine. If the browser blocks its
-automatic restart, **Resume sound** enables it again.
+The piano is a locally rendered eight-second melody using Alexander Holm's
+Salamander piano samples (CC BY 3.0). Credits and the sample source are in
+`assets/opening-music-credits.txt`, linked beside the film controls. The optional
+composition script recreates the saved MP3; ordinary builds require no audio
+service, extra npm dependency or music engine. The track fades in and out,
+contains no vocals and plays at 48% media volume. Audible playback requires a
+visitor gesture in browsers. Skip, mute, reduced motion and direct links remain
+available. Ending, skipping or leaving the opening stops the music. Replay
+starts the same tune.
 
 The film uses a compositor-friendly zoom and crossfade into Home instead of
 resizing its layout on every frame. It pauses when its hero is off screen and
@@ -40,7 +41,7 @@ full screen on phones; the shorter phone hero applies after the introduction.
 ## Local measurements
 
 The same 390px Chromium check used 4x CPU throttling, cold contexts, an
-eight-second Home introduction and twelve scroll steps. The new opening also
+eight-second Home introduction and twelve scroll steps. The earlier optimized opening also
 enabled audio. These are single local laboratory runs, not field Core Web
 Vitals or a guarantee about every device.
 
@@ -73,23 +74,18 @@ logs.
 
 ## Verification
 
-Real-browser checks cover the entry gesture, supplied voice playback, finite
-opening, keyboard skip, mobile full-screen cover, film visibility and manual
-pause, lazy audio creation, actual low-level ambient output, volume adjustment,
-mute persistence, route cues and hidden-tab suspension. Existing page, filter,
-viewer, print, recruiter-access, content validation and owner authorization
-checks remain.
+Real-browser checks cover the entry gesture, actual piano playback, finite
+opening, mute, keyboard skip, mobile full-screen cover, film visibility and
+manual pause. They also check that inner pages and normal browsing stay silent,
+including sessions with sound enabled by the previous release. The old voice
+asset and Web Audio module must be absent from the production package. Existing
+page, filter, viewer, print, recruiter-access, content validation and owner
+API tests remain.
 
-The required CI runs Chrome/Firefox opening and sound checks on Linux and the
-same full suite in native macOS WebKit before Pages deploys.
-The Linux runner provides a PulseAudio virtual output so Firefox can start its
-real audio graph without a physical sound device.
-Normal playback checks use native audio; failure cases inject playback errors.
-Windows Playwright
-WebKit has no Web Audio API; locally it tests the unsupported-audio fallback
-and supplied HTML-audio opening. macOS CI requires the real Web Audio tests.
-The obsolete SDK-instantiation test was removed together with that unused
-wrapper; the actual Supabase API tests remain.
+Required CI runs Chrome/Firefox opening checks on Linux and the same suite in
+native macOS WebKit before Pages deploys. The Linux runner provides an audio
+output for Firefox. Normal playback checks use native HTMLAudio; failure cases
+inject playback errors. There is no Web Audio API dependency in the website.
 
 Desktop and phone opening screenshots and accessibility results are saved in
 `output/portfolio-design-review/opening/`. All thirteen pages retain their

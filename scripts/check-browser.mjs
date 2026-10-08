@@ -209,13 +209,13 @@ try{
   const motion=await context({reducedMotion:'no-preference'});const moving=await motion.newPage();
   await moving.goto(base,{waitUntil:'load'});
   await moving.locator('.intro-skip').waitFor();
-  record('opening: first visit offers entry with sound and a skip action',await moving.locator('[data-intro-enter]').isVisible()&&await moving.locator('.hero-film').evaluate(v=>v.paused)&&await moving.locator('.identity-intro').count()===1);
+  record('opening: first visit offers entry with music and a skip action',await moving.locator('[data-intro-enter]').isVisible()&&await moving.locator('.hero-film').evaluate(v=>v.paused)&&await moving.locator('.identity-intro').count()===1);
   await moving.locator('.intro-skip').click();
-  await moving.locator('[data-film-sound]').click();
+  await moving.locator('[data-film-replay]').click();
   await moving.waitForFunction(()=>!document.querySelector('#opening-audio').paused);
-  record('opening: sound requires an explicit visitor action',await moving.locator('[data-film-sound]').getAttribute('aria-pressed')==='true');
+  record('opening: sound requires an explicit visitor action',await moving.locator('#opening-audio').evaluate(audio=>!audio.paused&&audio.volume===.48));
   await moving.locator('.intro-skip').click();
-  record('opening: skip stops the voice track',await moving.locator('#opening-audio').evaluate(audio=>audio.paused));
+  record('opening: skip stops the opening music',await moving.locator('#opening-audio').evaluate(audio=>audio.paused));
   await moving.emulateMedia({reducedMotion:'reduce'});
   record('opening: live reduced motion pauses the film',await moving.locator('.hero-film').evaluate(video=>video.paused));
   await motion.close();

@@ -46,7 +46,7 @@ try{
    // Observe the running sequence as soon as the document and module are ready.
    await page.goto(base,{waitUntil:'domcontentloaded'});
    await page.locator('[data-intro-enter]').waitFor();
-   record(engine,'Default entry requests sound before the film and voice start',await page.locator('.hero-film').evaluate(v=>v.paused)&&await page.locator('#opening-audio').evaluate(a=>a.paused)&&await page.locator('[data-intro-enter]').textContent()==='Enter with sound');
+   record(engine,'Default entry requests sound before the film and music start',await page.locator('.hero-film').evaluate(v=>v.paused)&&await page.locator('#opening-audio').evaluate(a=>a.paused)&&await page.locator('[data-intro-enter]').textContent()==='Enter with music');
    await page.locator('[data-intro-enter]').click();
    try{await page.locator('.intro-running').waitFor();}
    catch(error){
@@ -59,7 +59,7 @@ try{
    }
    record(engine,'First visit has one finite film introduction',await page.locator('.identity-intro').count()===1);
    await page.waitForFunction(()=>!document.querySelector('#opening-audio').paused);
-   record(engine,'Entry starts the film and supplied voice track together',await page.locator('.hero-film').evaluate(v=>v.muted&&!v.paused)&&await page.locator('#opening-audio').evaluate(a=>!a.paused&&a.volume>0&&a.volume<=.85));
+   record(engine,'Entry starts the film and opening piano track together',await page.locator('.hero-film').evaluate(v=>v.muted&&!v.paused)&&await page.locator('#opening-audio').evaluate(a=>!a.paused&&a.volume>0&&a.volume<=.85));
    record(engine,'Full-screen opening uses one visible film and preserves the underlying page',await page.evaluate(()=>document.querySelectorAll('video').length===1&&document.querySelector('.identity-intro .hero-film').getBoundingClientRect().width>=innerWidth*.95&&!document.querySelector('main').inert&&getComputedStyle(document.querySelector('.hero-film')).opacity==='1'));
    await page.waitForTimeout(2800);
    record(engine,'Name and greeting appear after the initial video',await page.evaluate(()=>getComputedStyle(document.querySelector('.intro-name-card')).opacity==='1'&&document.querySelector('.intro-name').textContent===document.querySelector('h1').textContent&&document.querySelector('.intro-greeting').textContent==='Hi, my name is'));
@@ -68,7 +68,7 @@ try{
    await page.locator('.identity-intro').waitFor({state:'detached',timeout:10000});
    const elapsed=await page.evaluate(()=>introSequenceTiming.finished-introSequenceTiming.started);
    record(engine,'Introduction settles after eight seconds',elapsed>=7900&&elapsed<10000,{elapsedMs:Math.round(elapsed)});
-   record(engine,'Final homepage is readable and voice stops',await page.locator('h1').isVisible()&&await page.locator('#opening-audio').evaluate(a=>a.paused));
+   record(engine,'Final homepage is readable and opening music stops',await page.locator('h1').isVisible()&&await page.locator('#opening-audio').evaluate(a=>a.paused));
    record(engine,'Background film settles at a softer opacity',await page.locator('.hero-film').evaluate(v=>getComputedStyle(v).opacity==='0.8'));
    record(engine,'Background film continues playing after the opening settles',await page.locator('.hero-film').evaluate(v=>!v.paused&&v.loop));
    await page.locator('#home-contact-title').scrollIntoViewIfNeeded();
@@ -88,12 +88,12 @@ try{
    await page.locator('.intro-skip').click();
    await page.locator('[data-film-replay]').click();await page.waitForFunction(()=>!document.querySelector('#opening-audio').paused);
    await page.locator('.intro-sound').click();
-   record(engine,'Visitor can mute voice and piano while the opening continues',await page.locator('#opening-audio').evaluate(a=>a.paused)&&await page.locator('.identity-intro').count()===1&&await page.locator('[data-film-sound]').getAttribute('aria-pressed')==='false');
+   record(engine,'Visitor can mute the opening piano while the opening continues',await page.locator('#opening-audio').evaluate(a=>a.paused)&&await page.locator('.identity-intro').count()===1&&await page.locator('.intro-sound').getAttribute('aria-pressed')==='false');
    await page.locator('.intro-skip').click();
    await page.locator('[data-film-replay]').click();await page.locator('.intro-skip').waitFor();
    await page.locator('.intro-skip').focus();await page.keyboard.press('Enter');
    record(engine,'Keyboard skip restores main focus',await page.evaluate(()=>document.activeElement.id==='main'));
-   await page.goto(base+'resources/');record(engine,'Inner pages have no film or voice',await page.locator('video,audio,.identity-intro').count()===0);
+   await page.goto(base+'resources/');record(engine,'Inner pages have no film or music',await page.locator('video,audio,.identity-intro').count()===0);
    await page.locator('.site-header .brand').click();await page.waitForURL(base);
    record(engine,'Following an internal Home link keeps the page ready to read',await page.locator('.identity-intro').count()===0);
    record(engine,'No browser exceptions',errors.length===0,errors);
@@ -127,9 +127,9 @@ try{
    record(engine,'A late-loading film does not interrupt a visitor who has started reading',await reading.locator('.identity-intro').count()===0&&await reading.evaluate(()=>scrollY>24));
    await delayed.close();
    const cancelled=await browser.newContext(),cancelPage=await cancelled.newPage();
-   await cancelPage.addInitScript(()=>{const play=HTMLMediaElement.prototype.play;HTMLMediaElement.prototype.play=function(){return this instanceof HTMLAudioElement?new Promise((resolve,reject)=>{window.rejectPendingVoice=()=>reject(new DOMException('Interrupted','AbortError'));}):play.call(this);};});
-   await cancelPage.goto(base);await cancelPage.locator('[data-intro-enter]').click();await cancelPage.locator('.intro-skip').click();await cancelPage.evaluate(()=>window.rejectPendingVoice());await cancelPage.waitForTimeout(50);
-   record(engine,'A cancelled voice request does not report an error after Skip',await cancelPage.locator('.identity-intro').count()===0&&!(await cancelPage.locator('.film-status').textContent()));
+   await cancelPage.addInitScript(()=>{const play=HTMLMediaElement.prototype.play;HTMLMediaElement.prototype.play=function(){return this instanceof HTMLAudioElement?new Promise((resolve,reject)=>{window.rejectPendingMusic=()=>reject(new DOMException('Interrupted','AbortError'));}):play.call(this);};});
+   await cancelPage.goto(base);await cancelPage.locator('[data-intro-enter]').click();await cancelPage.locator('.intro-skip').click();await cancelPage.evaluate(()=>window.rejectPendingMusic());await cancelPage.waitForTimeout(50);
+   record(engine,'A cancelled music request does not report an error after Skip',await cancelPage.locator('.identity-intro').count()===0&&!(await cancelPage.locator('.film-status').textContent()));
    await cancelled.close();
    for(const mode of ['reduced','blocked-storage','no-js','media-failure','autoplay-blocked','app-failure']){
     const context=await browser.newContext({reducedMotion:mode==='reduced'?'reduce':'no-preference',javaScriptEnabled:mode!=='no-js'}),p=await context.newPage();
@@ -161,62 +161,18 @@ try{
    await g.keyboard.press('Escape');await g.locator('.evidence-viewer').waitFor({state:'detached'});
    record(engine,'Gallery Escape restores trigger focus',await trigger.evaluate(el=>document.activeElement===el));
    await gallery.close();
-   const soundContext=await browser.newContext({reducedMotion:'reduce'}),soundPage=await soundContext.newPage();
-   await soundPage.addInitScript(()=>{
-    window.portfolioAudioContexts=[];
+   const silentContext=await browser.newContext({reducedMotion:'reduce'}),silentPage=await silentContext.newPage();
+   await silentPage.addInitScript(()=>{
+    sessionStorage.setItem('portfolio-sound',JSON.stringify({enabled:true,volume:.2}));
+    window.audioEngineCount=0;
     const Native=window.AudioContext||window.webkitAudioContext;
-    if(Native)window.AudioContext=new Proxy(Native,{construct(Target,args){
-     const ctx=new Target(...args);window.portfolioAudioContexts.push(ctx);
-     const createGain=ctx.createGain.bind(ctx);
-     ctx.createGain=()=>{const gain=createGain(),connect=gain.connect.bind(gain);gain.connect=(destination,...rest)=>{if(destination===ctx.destination){window.portfolioSoundAnalyser=ctx.createAnalyser();connect(window.portfolioSoundAnalyser);}return connect(destination,...rest);};return gain;};
-     const createOscillator=ctx.createOscillator.bind(ctx);
-     ctx.createOscillator=()=>{const node=createOscillator(),start=node.start.bind(node);node.start=(...args)=>{try{const records=JSON.parse(sessionStorage.getItem('audit-sound-notes')||'[]');records.push(node.frequency.value);sessionStorage.setItem('audit-sound-notes',JSON.stringify(records));}catch{}return start(...args);};return node;};
-     return ctx;
-    }});
+    if(Native)window.AudioContext=new Proxy(Native,{construct(Target,args){window.audioEngineCount++;return new Target(...args);}});
    });
-   await soundPage.goto(base+'profile/');
-   record(engine,'No audio context or music download before a visitor enables sound',await soundPage.evaluate(()=>portfolioAudioContexts.length===0&&performance.getEntriesByType('resource').every(r=>!r.name.includes('.mp3'))));
-   const hasWebAudio=await soundPage.evaluate(()=>!!(window.AudioContext||window.webkitAudioContext));
-   if(!hasWebAudio){
-    if(engine!=='webkit'||process.platform!=='win32')throw Error('Web Audio is required in the supported CI browsers');
-    await soundPage.locator('[data-sound-toggle]').click();
-    record(engine,'Windows WebKit without Web Audio keeps the page readable and reports unsupported sound',await soundPage.locator('h1').isVisible()&&await soundPage.locator('.portfolio-sound [role=status]').textContent()==='Sound is unavailable. The portfolio remains ready to read.');
-    await soundContext.close();continue;
+   for(const route of ['profile/','','resources/']){
+    await silentPage.goto(base+route);
+    record(engine,`Silent ${route||'Home'} ignores old ambience preferences and has no music widget`,await silentPage.evaluate(()=>audioEngineCount===0&&!document.querySelector('.portfolio-sound')&&[...document.querySelectorAll('audio')].every(audio=>audio.paused)&&performance.getEntriesByType('resource').every(r=>!r.name.includes('.mp3')&&!r.name.includes('/sound.js'))));
    }
-   await soundPage.locator('[data-sound-toggle]').click();
-   try{await soundPage.waitForFunction(()=>document.querySelector('.portfolio-sound').dataset.sound==='on');}
-   catch(error){console.error('Audio activation state',engine,await soundPage.evaluate(()=>({contexts:portfolioAudioContexts.map(c=>({state:c.state,currentTime:c.currentTime,sampleRate:c.sampleRate})),status:document.querySelector('.portfolio-sound [role=status]').textContent,hidden:document.hidden,api:typeof AudioContext})));throw error;}
-   record(engine,'Quiet ambience uses one running audio context',await soundPage.evaluate(()=>portfolioAudioContexts.length===1&&portfolioAudioContexts[0].state==='running'&&document.querySelector('[data-sound-volume]').value==='20'));
-   await soundPage.waitForTimeout(600);
-   const amplitude=await soundPage.evaluate(()=>{const samples=new Float32Array(portfolioSoundAnalyser.fftSize);portfolioSoundAnalyser.getFloatTimeDomainData(samples);return Math.sqrt(samples.reduce((sum,value)=>sum+value*value,0)/samples.length);});
-   record(engine,'Ambient output is audible at a low level',amplitude>0&&amplitude<.05,{rmsAmplitude:amplitude});
-   await soundPage.locator('.portfolio-sound summary').click();
-   await soundPage.locator('[data-sound-volume]').focus();await soundPage.keyboard.press('ArrowRight');
-   record(engine,'Keyboard volume adjustment updates the visible value',await soundPage.locator('.portfolio-sound output').textContent()==='21%');
-   await soundPage.locator('[data-sound-toggle]').click();
-   await soundPage.waitForFunction(()=>portfolioAudioContexts[0].state==='suspended');
-   record(engine,'Mute suspends the audio engine',await soundPage.locator('[data-sound-toggle]').getAttribute('aria-pressed')==='false');
-   await soundPage.locator('.site-header .brand').click();
-   await soundPage.waitForURL(base);await soundPage.locator('.portfolio-sound').waitFor({state:'visible'});
-   record(engine,'Mute and volume preferences survive navigation',await soundPage.evaluate(()=>document.querySelector('[data-sound-volume]').value==='21'&&document.querySelector('[data-sound-toggle]').getAttribute('aria-pressed')==='false'));
-   if(await soundPage.locator('.intro-skip').count())await soundPage.locator('.intro-skip').click();
-   await soundPage.locator('[data-sound-toggle]').click();await soundPage.waitForFunction(()=>portfolioAudioContexts[0]?.state==='running');
-   const cues=await soundPage.evaluate(async()=>{const sound=await import(new URL(document.querySelector('script[type=module][src]').src).href.replace(/app\.js/, 'sound.js'));return Object.values(sound.routeCues).map(notes=>notes.join(','));});
-   record(engine,'Every portfolio page has a distinct navigation cue',new Set(cues).size===cues.length&&cues.length===11);
-   await soundPage.locator('.site-footer a[href$="resources/"]').click();
-   record(engine,'Normal navigation reaches the destination without a sound delay',soundPage.url()===base+'resources/');
-   await soundPage.locator('.portfolio-sound').waitFor({state:'visible'});
-   if(await soundPage.locator('[data-sound-toggle]').getAttribute('aria-pressed')!=='true')await soundPage.locator('[data-sound-toggle]').click();
-   await soundPage.waitForFunction(()=>portfolioAudioContexts[0]?.state==='running');
-   record(engine,'Changing to Evidence starts its own two-note cue',await soundPage.evaluate(()=>{const notes=JSON.parse(sessionStorage.getItem('audit-sound-notes')||'[]');return notes.some(f=>Math.abs(f-349.23)<.01)&&notes.some(f=>Math.abs(f-523.25)<.01);}));
-   await soundPage.evaluate(()=>{sessionStorage.setItem('portfolio-sound',JSON.stringify({enabled:false,volume:.13}));window.dispatchEvent(new PageTransitionEvent('pageshow',{persisted:true}));});
-   await soundPage.waitForFunction(()=>portfolioAudioContexts[0].state==='suspended');
-   record(engine,'A restored history page respects mute and volume changed on another page',await soundPage.locator('[data-sound-toggle]').getAttribute('aria-pressed')==='false'&&await soundPage.locator('[data-sound-volume]').inputValue()==='13');
-   await soundPage.locator('[data-sound-toggle]').click();await soundPage.waitForFunction(()=>portfolioAudioContexts[0].state==='running');
-   await soundPage.evaluate(()=>{Object.defineProperty(document,'hidden',{configurable:true,value:true});document.dispatchEvent(new Event('visibilitychange'));});
-   await soundPage.waitForFunction(()=>portfolioAudioContexts[0].state==='suspended');
-   record(engine,'A hidden browser tab suspends ambience',await soundPage.locator('[data-sound-toggle]').getAttribute('aria-pressed')==='false');
-   await soundContext.close();
+   await silentContext.close();
   }finally{await browser.close();}
  }
 }finally{server.kill();await fs.mkdir('outputs/redesign',{recursive:true});await fs.writeFile('outputs/redesign/identity-results.json',JSON.stringify({checks:results.length,failed:results.filter(r=>!r.pass).length,results},null,2));}
