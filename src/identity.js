@@ -14,10 +14,11 @@ export function initOpening({auto=true}={}){
  const controls=hero.querySelector('[data-film-controls]'),pause=hero.querySelector('[data-film-pause]');
  const sound=hero.querySelector('[data-film-sound]'),status=hero.querySelector('.film-status');
  const progress=hero.querySelector('.film-progress span');
- let intro=null,timer=0,started=0,soundEnabled=false,generation=0,filmSize=null,heroVisible=true;
+ let intro=null,timer=0,started=0,soundEnabled=false,generation=0,audioGeneration=0,filmSize=null,heroVisible=true;
  const say=text=>{if(status)status.textContent=text;};
  const sync=()=>{pause.textContent=film.paused?'Play film':'Pause film';};
  const stopAudio=()=>{
+  audioGeneration++;
   audio.pause();audio.currentTime=0;soundEnabled=false;
   syncSound();
  };
@@ -48,13 +49,14 @@ export function initOpening({auto=true}={}){
   if(restore)document.querySelector('#main')?.focus({preventScroll:true});
  };
  const load=()=>{if(!film.getAttribute('src'))film.src=film.dataset.src;};
- const play=async()=>{load();try{await film.play();sync();return true;}catch{film.pause();sync();say('Film playback is unavailable. The portfolio remains ready to read.');return false;}};
+ const play=async()=>{load();try{await film.play();if(document.hidden||!intro&&!heroVisible||hero.dataset.userPaused==='true'){film.pause();sync();return false;}sync();return true;}catch{film.pause();sync();say('Film playback is unavailable. The portfolio remains ready to read.');return false;}};
  const enableSound=()=>{
+  const request=++audioGeneration;
   enablePortfolioSound();
   soundEnabled=true;
   audio.volume=Math.min(.85,(Number(document.querySelector('[data-sound-volume]')?.value)||20)/100*3.25);
   audio.currentTime=Math.min(Math.max(0,(performance.now()-started)/1000),7.9);
-  audio.play().then(syncSound).catch(()=>{stopAudio();say('Audio could not play. Use Turn on sound to try again.');});
+  audio.play().then(()=>{if(request===audioGeneration)syncSound();}).catch(()=>{if(request===audioGeneration){stopAudio();say('Audio could not play. Use Turn on sound to try again.');}});
  };
  const restart=()=>{
   started=performance.now();film.currentTime=0;frameFilm();
@@ -86,6 +88,7 @@ export function initOpening({auto=true}={}){
   const start=async soundOn=>{
    const button=intro?.querySelector('[data-intro-enter]');if(!button||button.disabled)return;
    button.disabled=true;intro.querySelector('[data-intro-status]').textContent='Starting introduction…';
+   hero.dataset.userPaused='false';
    window.dispatchEvent(new CustomEvent('portfolio-intro-state',{detail:{active:true}}));
    started=performance.now();timer=setTimeout(finish,5000);
    // Both media play requests happen inside the entry click, before any await.
@@ -96,7 +99,6 @@ export function initOpening({auto=true}={}){
    intro.querySelector('.intro-entry').hidden=true;
    intro.querySelector('.intro-sound').hidden=false;
    restart();syncSound();
-   if(soundEnabled)audio.currentTime=0;
    // A late media promise must not steal focus from a visitor already using Skip.
    if(soundOn&&!intro.contains(document.activeElement))intro.querySelector('.intro-sound').focus({preventScroll:true});
   };
@@ -118,7 +120,7 @@ export function initOpening({auto=true}={}){
  window.addEventListener('resize',()=>{filmSize=null;if(intro)finish();else frameFilm();},options);
  document.addEventListener('keydown',event=>{if(event.key==='Escape')finish();},options);
  document.addEventListener('focusin',event=>{if(intro&&!intro.contains(event.target))finish();},options);
- window.addEventListener('scroll',()=>{if(intro)finish();},{passive:true,...options});
+ window.addEventListener('scroll',()=>{if(intro&&scrollY>24)finish();},{passive:true,...options});
  document.addEventListener('visibilitychange',()=>{if(document.hidden){film.pause();finish();sync();}else if(heroVisible&&!preference.matches&&hero.dataset.userPaused!=='true'&&film.getAttribute('src'))play();},options);
  if('IntersectionObserver' in window){
   const observer=new IntersectionObserver(entries=>{

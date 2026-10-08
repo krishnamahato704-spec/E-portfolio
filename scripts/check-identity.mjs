@@ -35,6 +35,13 @@ try{
    await firstPaint.close();
    const ctx=await browser.newContext({viewport:{width:1440,height:1000}}),page=await ctx.newPage();
    const errors=[];page.on('pageerror',error=>errors.push(error.message));
+   await page.addInitScript(()=>{
+    const timing=window.introSequenceTiming={};let sequence;
+    new MutationObserver(()=>{
+     if(!sequence){sequence=document.querySelector('.identity-intro.intro-running');if(sequence)timing.started=performance.now();}
+     else if(!sequence.isConnected&&!timing.finished)timing.finished=performance.now();
+    }).observe(document,{subtree:true,childList:true,attributes:true,attributeFilter:['class']});
+   });
    // Native media can hold WebKit's load event beyond a finite introduction.
    // Observe the running sequence as soon as the document and module are ready.
    await page.goto(base,{waitUntil:'domcontentloaded'});
@@ -50,7 +57,6 @@ try{
     })));
     throw error;
    }
-   const started=Date.now();
    record(engine,'First visit has one finite film introduction',await page.locator('.identity-intro').count()===1);
    await page.waitForFunction(()=>!document.querySelector('#opening-audio').paused);
    record(engine,'Entry starts the film and supplied voice track together',await page.locator('.hero-film').evaluate(v=>v.muted&&!v.paused)&&await page.locator('#opening-audio').evaluate(a=>!a.paused&&a.volume>0&&a.volume<=.85));
@@ -60,7 +66,8 @@ try{
    await page.waitForTimeout(3500);
    record(engine,'Film fades to the homepage during the final transition',await page.locator('.hero-film').evaluate(v=>parseFloat(getComputedStyle(v).opacity)<1));
    await page.locator('.identity-intro').waitFor({state:'detached',timeout:10000});
-   record(engine,'Introduction settles after eight seconds',Date.now()-started>=7300&&Date.now()-started<10000,{elapsedMs:Date.now()-started});
+   const elapsed=await page.evaluate(()=>introSequenceTiming.finished-introSequenceTiming.started);
+   record(engine,'Introduction settles after eight seconds',elapsed>=7900&&elapsed<10000,{elapsedMs:Math.round(elapsed)});
    record(engine,'Final homepage is readable and voice stops',await page.locator('h1').isVisible()&&await page.locator('#opening-audio').evaluate(a=>a.paused));
    record(engine,'Background film settles at a softer opacity',await page.locator('.hero-film').evaluate(v=>getComputedStyle(v).opacity==='0.8'));
    record(engine,'Background film continues playing after the opening settles',await page.locator('.hero-film').evaluate(v=>!v.paused&&v.loop));
@@ -71,8 +78,9 @@ try{
    await page.locator('[data-film-pause]').click();
    await page.locator('#home-contact-title').scrollIntoViewIfNeeded();await page.evaluate(()=>scrollTo({top:0,behavior:'instant'}));await page.waitForFunction(()=>scrollY===0);await page.waitForTimeout(150);
    record(engine,'Returning to the hero preserves an intentional film pause',await page.locator('.hero-film').evaluate(v=>v.paused));
-   await page.reload();
-   await page.locator('.intro-skip').waitFor();
+   await page.reload({waitUntil:'domcontentloaded'});
+   try{await page.locator('.intro-skip').waitFor();}
+   catch(error){console.error('Reload opening state',engine,await page.evaluate(()=>({scroll:scrollY,hidden:document.hidden,pending:window.portfolioOpeningBoot?.pending,focus:document.activeElement?.outerHTML.slice(0,250),intro:document.querySelector('.identity-intro')?.className,status:document.querySelector('.film-status')?.textContent,navigation:performance.getEntriesByType('navigation')[0]?.type})));throw error;}
    record(engine,'Refreshing Home opens with the film even in an existing session',await page.locator('.identity-intro').count()===1);
    await page.locator('.intro-skip').click();
    await page.goto(base+'?intro=1');await page.locator('.intro-skip').waitFor();
@@ -115,9 +123,14 @@ try{
     const play=HTMLMediaElement.prototype.play;
     HTMLMediaElement.prototype.play=function(){return this instanceof HTMLVideoElement?new Promise(resolve=>setTimeout(resolve,700)).then(()=>play.call(this)):play.call(this);};
    });
-   await reading.goto(base);await reading.evaluate(()=>scrollTo(0,400));await reading.waitForTimeout(1200);
+   await reading.goto(base);await reading.locator('[data-intro-enter]').click();await reading.evaluate(()=>scrollTo(0,400));await reading.waitForTimeout(1200);
    record(engine,'A late-loading film does not interrupt a visitor who has started reading',await reading.locator('.identity-intro').count()===0&&await reading.evaluate(()=>scrollY>24));
    await delayed.close();
+   const cancelled=await browser.newContext(),cancelPage=await cancelled.newPage();
+   await cancelPage.addInitScript(()=>{const play=HTMLMediaElement.prototype.play;HTMLMediaElement.prototype.play=function(){return this instanceof HTMLAudioElement?new Promise((resolve,reject)=>{window.rejectPendingVoice=()=>reject(new DOMException('Interrupted','AbortError'));}):play.call(this);};});
+   await cancelPage.goto(base);await cancelPage.locator('[data-intro-enter]').click();await cancelPage.locator('.intro-skip').click();await cancelPage.evaluate(()=>window.rejectPendingVoice());await cancelPage.waitForTimeout(50);
+   record(engine,'A cancelled voice request does not report an error after Skip',await cancelPage.locator('.identity-intro').count()===0&&!(await cancelPage.locator('.film-status').textContent()));
+   await cancelled.close();
    for(const mode of ['reduced','blocked-storage','no-js','media-failure','autoplay-blocked','app-failure']){
     const context=await browser.newContext({reducedMotion:mode==='reduced'?'reduce':'no-preference',javaScriptEnabled:mode!=='no-js'}),p=await context.newPage();
     if(mode==='blocked-storage')await p.addInitScript(()=>Object.defineProperty(window,'sessionStorage',{get(){throw new DOMException('Unavailable','SecurityError');}}));
