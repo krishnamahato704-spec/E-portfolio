@@ -58,7 +58,7 @@ jobs:
       - run: npm run test:browser
       - run: npm run test:identity
         env:
-          IDENTITY_TEST_ENGINES: chromium,firefox,webkit
+          IDENTITY_TEST_ENGINES: chromium,firefox
       - run: npm run test:accessibility
       - uses: actions/upload-artifact@v4
         if: always()
@@ -73,8 +73,38 @@ jobs:
         if: github.event_name != 'pull_request'
         with:
           path: dist
+  opening-webkit:
+    needs: content
+    if: github.event_name != 'schedule' || needs.content.outputs.changed == 'true'
+    # Linux WPE WebKit closes its media page during native video tests.
+    # Keep the full WebKit suite required on its native macOS implementation.
+    runs-on: macos-latest
+    env:
+      BUILD_CONTENT_SOURCE: ${{ github.event_name == 'pull_request' && 'repository' || 'supabase' }}
+      BUILD_CONTENT_FILE: outputs/release/input.json
+      IDENTITY_TEST_ENGINES: webkit
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - uses: actions/download-artifact@v4
+        if: github.event_name != 'pull_request'
+        with:
+          name: release-input
+          path: outputs/release
+      - run: npm ci
+      - run: npm run build
+      - run: npx playwright install webkit
+      - run: npm run test:identity
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: webkit-opening-results
+          path: outputs/redesign
   deploy:
-    needs: build
+    needs: [build, opening-webkit]
     if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     permissions:

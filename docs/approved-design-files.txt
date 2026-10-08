@@ -1,3 +1,4 @@
+.github/workflows/deploy.yml
 .github/workflows/review.yml
 .gitignore
 404.html
