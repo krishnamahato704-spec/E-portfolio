@@ -171,7 +171,8 @@ try{
     await soundContext.close();continue;
    }
    await soundPage.locator('[data-sound-toggle]').click();
-   await soundPage.waitForFunction(()=>document.querySelector('.portfolio-sound').dataset.sound==='on');
+   try{await soundPage.waitForFunction(()=>document.querySelector('.portfolio-sound').dataset.sound==='on');}
+   catch(error){console.error('Audio activation state',engine,await soundPage.evaluate(()=>({contexts:portfolioAudioContexts.map(c=>({state:c.state,currentTime:c.currentTime,sampleRate:c.sampleRate})),status:document.querySelector('.portfolio-sound [role=status]').textContent,hidden:document.hidden,api:typeof AudioContext})));throw error;}
    record(engine,'Quiet ambience uses one running audio context',await soundPage.evaluate(()=>portfolioAudioContexts.length===1&&portfolioAudioContexts[0].state==='running'&&document.querySelector('[data-sound-volume]').value==='20'));
    await soundPage.waitForTimeout(600);
    const amplitude=await soundPage.evaluate(()=>{const samples=new Float32Array(portfolioSoundAnalyser.fftSize);portfolioSoundAnalyser.getFloatTimeDomainData(samples);return Math.sqrt(samples.reduce((sum,value)=>sum+value*value,0)/samples.length);});
