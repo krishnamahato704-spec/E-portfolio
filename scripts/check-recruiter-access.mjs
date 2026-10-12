@@ -67,7 +67,7 @@ try{
   check(engine,'No-JavaScript résumé link reaches the complete record',page.url()===new URL('resume/',base).href&&await page.locator('.resume-web-summary').isVisible());
   await fallback.close();
   const moving=await browser.newContext({viewport:{width:390,height:900}});
-  const intro=await moving.newPage();await intro.goto(base+'?intro=1');await intro.locator('.intro-skip').waitFor();
+  const intro=await moving.newPage();await intro.goto(base+'?intro=1',{waitUntil:'domcontentloaded'});await intro.locator('.intro-skip').waitFor();
   check(engine,'Film opening hides the shortcut bar and clearly labels its exit',!await intro.locator('.mobile-shortcuts').isVisible()&&await intro.locator('.intro-skip').textContent()==='Skip to portfolio');
   await intro.locator('.intro-skip').focus();
   await intro.keyboard.press('Enter');

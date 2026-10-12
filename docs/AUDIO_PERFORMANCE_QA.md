@@ -1,4 +1,32 @@
-# Audio and performance changes
+# Opening and performance record
+
+## Current opening · 12 October 2026
+
+Home now starts a silent 3.2-second opening automatically, including a
+one-second dissolve through the page background into Home. The added zoom has
+been removed and mobile framing updates interpolate gently to keep the subject
+visible. During the dissolve, one captured frame covers the opening while the
+same video continues in the hero. No second video decoder is used.
+
+The entry, music, replay and progress controls have been removed. Skip and
+film play/pause remain. Escape, scrolling, keyboard focus, resizing and reduced
+motion immediately dismiss the opening. Slow playback cannot extend its
+deadline. The real-browser checks cover these paths, media failures and the
+desktop/mobile transition. Current screenshots and results are written to
+`outputs/redesign/`.
+
+The cleanup removes the obsolete music stylesheet, progress styles and Firefox
+audio-output setup in CI. Release packaging uses the shared content signature
+instead of a second copy of its sorting logic. A read-only check confirmed that
+the published Supabase schema 8 content matches the repository snapshot. Both
+public tables retain row security, anonymous writes are blocked, and private
+source storage remains private. No database changes were needed. The security
+advisor still reports the existing [disabled leaked-password protection](https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection).
+
+## Earlier audio and performance work
+
+The remaining sections record the earlier eight-second opening and its
+measurements. They do not describe the current opening controls or timing.
 
 The regular Home entry offers **Enter with music**. That click starts a new
 instrumental acoustic piano melody and the eight-second film introduction.

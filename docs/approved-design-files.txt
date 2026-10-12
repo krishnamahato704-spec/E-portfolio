@@ -74,7 +74,6 @@ src/styles/film-opening.css
 src/styles/home-philosophy.css
 src/styles/identity.css
 src/styles/navigation.css
-src/styles/opening-music.css
 src/styles/page-atmosphere.css
 src/styles/page-identities.css
 src/styles/page-palettes.css

@@ -93,8 +93,7 @@ dialog::backdrop {background:color-mix(in srgb,var(--ink) 45%,transparent)}
 .opening-hero .hero-meta li {background:var(--surface-muted);border-color:var(--line)}
 .opening-hero .button.secondary {color:var(--dark);background:var(--sheet);border-color:var(--line-strong)}
 .opening-hero .button.secondary:hover {background:var(--accent-soft)}
-.hero-controls button,.intro-skip,.intro-sound {background:var(--sheet);border-color:var(--line-strong);color:var(--ink)}
-.film-progress {background:var(--line-strong)}.film-progress span {background:var(--action)}
+.hero-controls button,.intro-skip {background:var(--sheet);border-color:var(--line-strong);color:var(--ink)}
 
 /* Photographic covers keep light, nearly opaque surfaces behind their text. */
 .journey-cover {background:var(--surface-muted);color:var(--ink)}

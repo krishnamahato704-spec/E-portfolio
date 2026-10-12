@@ -1,4 +1,4 @@
-// Optional authoring tool. The site serves the saved eight-second MP3.
+// Archived authoring tool for the earlier eight-second opening MP3.
 // Original melody using Alexander Holm's CC BY 3.0 Salamander piano samples.
 import fs from 'node:fs/promises';
 import path from 'node:path';

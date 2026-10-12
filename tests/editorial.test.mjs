@@ -70,15 +70,12 @@ test('Film hero has a static fallback, user controls and original evidence links
  assert.match(home,/class="hero-avatar"/);
  assert.equal((home.match(/<video\s/g)||[]).length,1);
  assert.match(home,/hero-video-opt\.mp4/);
- assert.match(home,/opening-piano\.mp3/);
- assert.doesNotMatch(home,/opening-soundtrack|portfolio-sound/);
- assert.match(home,/data-film-pause/);assert.match(home,/data-film-replay/);
+ assert.doesNotMatch(home,/<audio|opening-soundtrack|portfolio-sound|data-film-replay|film-progress/);
+ assert.match(home,/data-film-pause/);
  assert.match(view('credentials',defaultContent),/data-original-url="https:/);
  assert.match(view('resources',defaultContent),/data-viewer/);
 });
-test('Music video contains video and AAC audio tracks and theme artwork is locally packaged',async()=>{
- const video=await fs.readFile(new URL('../assets/hero-video-music.mp4',import.meta.url));
- assert.ok(video.includes(Buffer.from('vide'))&&video.includes(Buffer.from('soun'))&&video.includes(Buffer.from('mp4a')));
+test('Theme artwork is locally packaged',async()=>{
  for(const file of ['history-study.webp','english-study.webp','paper-texture.svg'])await fs.access(new URL('../dist/assets/theme/'+file,import.meta.url));
 });
 test('Automatically generated résumé stays on one PDF page',async()=>{

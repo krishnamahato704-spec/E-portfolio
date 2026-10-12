@@ -63,9 +63,10 @@
 .home-education .education-card>.icon-disc .icon {width:21px;height:21px}
 .home-education .education-details-link {min-height:44px;align-items:center;font-size:1rem}
 
-/* The opening remains film-first. Its exit is now easier to identify. */
-.intro-controls .intro-skip {background:var(--action);color:var(--on-dark);border-color:var(--action);font-size:1rem;font-weight:600;padding-inline:18px}
-.intro-controls .intro-skip:hover {background:var(--accent-hover);border-color:var(--accent-hover);color:var(--on-dark)}
+/* One quiet exit keeps the short opening optional. */
+.identity-intro .hero-film {height:100svh}
+.intro-controls .intro-skip {background:var(--paper);color:var(--ink);border-color:var(--line-strong);font-size:.9rem;font-weight:400;padding-inline:14px;box-shadow:none}
+.intro-controls .intro-skip:hover {background:var(--surface-muted)}
 html.opening-pending .mobile-shortcuts,body:has(.identity-intro) .mobile-shortcuts {visibility:hidden}
 
 @media(max-width:1000px) {
@@ -118,7 +119,6 @@ html.opening-pending .mobile-shortcuts,body:has(.identity-intro) .mobile-shortcu
  .hero-avatar {width:58px;height:58px}.hero-identity {gap:12px}
  .hero-copy .actions .button {flex-basis:100%}
  .hero-controls button {padding-inline:8px}
- .intro-controls {display:grid;grid-template-columns:1fr;justify-items:stretch}
  .intro-controls button {min-height:44px}
  .selected-evidence-card,.selected-evidence-card:last-child:nth-child(3) {grid-template-columns:76px minmax(0,1fr)}
  .selected-evidence-card .evidence-card-media {padding:8px}
