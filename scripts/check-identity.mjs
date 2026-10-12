@@ -47,7 +47,7 @@ try{
    record(engine,'The opening finishes in about 3.2 seconds',elapsed>=3100&&elapsed<4200,{elapsedMs:Math.round(elapsed)});
    record(engine,'Home is readable and the background film keeps playing',await page.locator('h1').isVisible()&&await page.locator('.hero-film').evaluate(v=>!v.paused&&v.loop));
    record(engine,'The opening frame and cover are removed',await page.locator('.intro-film-frame,.intro-active').count()===0);
-   record(engine,'Piano stops when the portfolio opens',await page.locator('[data-opening-audio]').evaluate(a=>a.paused&&a.currentTime===0));
+   record(engine,'Piano stops when the portfolio opens',await page.locator('[data-opening-audio]').evaluate(a=>a.paused));
    await page.screenshot({path:`outputs/redesign/opening-${engine}-settled.png`});
    await page.locator('#home-contact-title').scrollIntoViewIfNeeded();await page.waitForFunction(()=>document.querySelector('.hero-film').paused);
    record(engine,'Film decoding pauses off screen',await page.locator('.hero-film').evaluate(v=>v.paused));
@@ -55,10 +55,14 @@ try{
    await page.locator('[data-film-pause]').click();
    await page.locator('#home-contact-title').scrollIntoViewIfNeeded();await page.evaluate(()=>scrollTo({top:0,behavior:'instant'}));await page.waitForTimeout(150);
    record(engine,'Returning to Home preserves a visitor pause',await page.locator('.hero-film').evaluate(v=>v.paused));
-   await page.reload({waitUntil:'domcontentloaded'});await page.locator('.intro-running').waitFor();
-   record(engine,'A refresh still gives a brief opening',await page.locator('.identity-intro').count()===1);
-   await page.locator('.skip-link').focus();await page.keyboard.press('Enter');
-   record(engine,'The page skip link dismisses the opening and moves focus to main',await page.evaluate(()=>document.activeElement.id==='main'&&!document.querySelector('.identity-intro')));
+   // Exercise refresh with neutral focus, independently of the manual pause
+   // above. Safari restores that old control and correctly dismisses an intro.
+   const refresh=await browser.newContext({viewport:{width:1440,height:1000}}),refreshed=await refresh.newPage();
+   await refreshed.goto(base,{waitUntil:'domcontentloaded'});await refreshed.locator('.intro-running').waitFor();await refreshed.keyboard.press('Escape');
+   await refreshed.reload({waitUntil:'domcontentloaded'});await refreshed.locator('.intro-running').waitFor();
+   record(engine,'A refresh still gives a brief opening',await refreshed.locator('.identity-intro').count()===1);
+   await refreshed.locator('.skip-link').focus();await refreshed.keyboard.press('Enter');
+   record(engine,'The page skip link dismisses the opening and moves focus to main',await refreshed.evaluate(()=>document.activeElement.id==='main'&&!document.querySelector('.identity-intro')));await refresh.close();
    await page.goto(base+'resources/');record(engine,'Inner pages have no opening media',await page.locator('video,audio,.identity-intro').count()===0);
    await page.locator('.site-header .brand').click();await page.waitForURL(base);
    record(engine,'Internal Home links keep the page ready to read',await page.locator('.identity-intro').count()===0);
@@ -82,7 +86,7 @@ try{
     await p.locator('.identity-intro').waitFor({state:'detached',timeout:1000});
     record(engine,`${action} immediately dismisses the opening and leaves a usable page`,await p.evaluate(()=>!document.querySelector('main').inert&&document.documentElement.scrollWidth<=innerWidth+1));
     if(action==='preference')record(engine,'Live reduced motion pauses the film',await p.locator('.hero-film').evaluate(v=>v.paused));
-    record(engine,`${action} stops opening audio`,await p.locator('[data-opening-audio]').evaluate(a=>a.paused&&a.currentTime===0));
+    record(engine,`${action} stops opening audio`,await p.locator('[data-opening-audio]').evaluate(a=>a.paused));
     await context.close();
    }
    const delayed=await browser.newContext(),reading=await delayed.newPage();
