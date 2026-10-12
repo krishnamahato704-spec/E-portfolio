@@ -21,7 +21,7 @@ try{
     return rect.width>=innerWidth&&rect.height>=innerHeight&&!document.querySelector('h1').checkVisibility({checkVisibilityCSS:true})&&!document.querySelector('.site-header').checkVisibility({checkVisibilityCSS:true});
    }));
    await initialLoad;await first.locator('.intro-running').waitFor();
-   record(engine,'The opening starts automatically without an entry gate',await first.locator('.intro-controls button').count()===1&&await first.locator('[data-intro-enter],.intro-sound,[data-film-replay],audio').count()===0);
+   record(engine,'The opening starts automatically with no text or buttons',await first.locator('.identity-intro button,.identity-intro a,.intro-name-card,[data-intro-enter],.intro-sound,[data-film-replay]').count()===0);
    await firstPaint.close();
    const ctx=await browser.newContext({viewport:{width:1440,height:1000}}),page=await ctx.newPage();
    const errors=[];page.on('pageerror',error=>errors.push(error.message));
@@ -37,16 +37,17 @@ try{
    record(engine,'One muted video fills the opening without locking the page',await page.evaluate(()=>document.querySelectorAll('video').length===1&&document.querySelector('.identity-intro .hero-film').getBoundingClientRect().width>=innerWidth&&!document.querySelector('main').inert&&document.querySelector('.hero-film').muted));
    record(engine,'Automatic entry preserves keyboard focus',await page.evaluate(()=>document.activeElement===document.body));
    await page.waitForFunction(()=>performance.now()-introSequenceTiming.started>=950);
-   record(engine,'The name arrives gently with a still crop and no added zoom',await page.evaluate(()=>getComputedStyle(document.querySelector('.intro-name-card')).opacity==='1'&&document.querySelector('.intro-name').textContent===document.querySelector('h1').textContent&&getComputedStyle(document.querySelector('.hero-film')).transform==='none'));
+   record(engine,'The unobstructed film keeps the earlier gentle zoom',await page.evaluate(()=>document.querySelector('.identity-intro').children.length===1&&new DOMMatrix(getComputedStyle(document.querySelector('.hero-film')).transform).a>1&&new DOMMatrix(getComputedStyle(document.querySelector('.hero-film')).transform).a<1.05));
    await page.screenshot({path:`outputs/redesign/opening-${engine}-desktop.png`});
    await page.waitForFunction(()=>{const intro=document.querySelector('.intro-settling');return intro&&Number(getComputedStyle(intro).opacity)<.8&&Number(getComputedStyle(intro).opacity)>.1;});
-   record(engine,'The dissolve returns the same film to Home before the cover clears',await page.evaluate(()=>document.querySelectorAll('video').length===1&&!!document.querySelector('.opening-hero>.hero-film')&&document.querySelector('.intro-film-frame').getBoundingClientRect().width>=innerWidth&&getComputedStyle(document.querySelector('.hero-film')).opacity==='0.8'));
+   record(engine,'The dissolve goes directly into Home without a separate paper fade',await page.evaluate(()=>document.querySelectorAll('video').length===1&&!!document.querySelector('.opening-hero>.hero-film')&&document.querySelector('.intro-film-frame').getBoundingClientRect().width>=innerWidth&&getComputedStyle(document.querySelector('.intro-film-frame')).opacity==='1'&&getComputedStyle(document.querySelector('.hero-film')).opacity==='0.8'));
    await page.screenshot({path:`outputs/redesign/opening-${engine}-transition.png`});
    await page.locator('.identity-intro').waitFor({state:'detached',timeout:4500});
    const elapsed=await page.evaluate(()=>introSequenceTiming.finished-introSequenceTiming.started);
    record(engine,'The opening finishes in about 3.2 seconds',elapsed>=3100&&elapsed<4200,{elapsedMs:Math.round(elapsed)});
    record(engine,'Home is readable and the background film keeps playing',await page.locator('h1').isVisible()&&await page.locator('.hero-film').evaluate(v=>!v.paused&&v.loop));
    record(engine,'The opening frame and cover are removed',await page.locator('.intro-film-frame,.intro-active').count()===0);
+   record(engine,'Piano stops when the portfolio opens',await page.locator('[data-opening-audio]').evaluate(a=>a.paused&&a.currentTime===0));
    await page.screenshot({path:`outputs/redesign/opening-${engine}-settled.png`});
    await page.locator('#home-contact-title').scrollIntoViewIfNeeded();await page.waitForFunction(()=>document.querySelector('.hero-film').paused);
    record(engine,'Film decoding pauses off screen',await page.locator('.hero-film').evaluate(v=>v.paused));
@@ -54,19 +55,19 @@ try{
    await page.locator('[data-film-pause]').click();
    await page.locator('#home-contact-title').scrollIntoViewIfNeeded();await page.evaluate(()=>scrollTo({top:0,behavior:'instant'}));await page.waitForTimeout(150);
    record(engine,'Returning to Home preserves a visitor pause',await page.locator('.hero-film').evaluate(v=>v.paused));
-   await page.reload({waitUntil:'domcontentloaded'});await page.locator('.intro-skip').waitFor();
+   await page.reload({waitUntil:'domcontentloaded'});await page.locator('.intro-running').waitFor();
    record(engine,'A refresh still gives a brief opening',await page.locator('.identity-intro').count()===1);
-   await page.locator('.intro-skip').focus();await page.keyboard.press('Enter');
-   record(engine,'Keyboard skip restores main focus immediately',await page.evaluate(()=>document.activeElement.id==='main'&&!document.querySelector('.identity-intro')));
+   await page.locator('.skip-link').focus();await page.keyboard.press('Enter');
+   record(engine,'The page skip link dismisses the opening and moves focus to main',await page.evaluate(()=>document.activeElement.id==='main'&&!document.querySelector('.identity-intro')));
    await page.goto(base+'resources/');record(engine,'Inner pages have no opening media',await page.locator('video,audio,.identity-intro').count()===0);
    await page.locator('.site-header .brand').click();await page.waitForURL(base);
    record(engine,'Internal Home links keep the page ready to read',await page.locator('.identity-intro').count()===0);
    record(engine,'No browser exceptions',errors.length===0,errors);await ctx.close();
    const firstPhone=await browser.newContext({viewport:{width:320,height:844}}),phone=await firstPhone.newPage();
    await phone.goto(base,{waitUntil:'domcontentloaded'});await phone.locator('.intro-running').waitFor();
-   record(engine,'The narrow phone opening fills the screen with one reachable skip',await phone.evaluate(()=>{
-    const film=document.querySelector('.identity-intro .hero-film').getBoundingClientRect(),skip=document.querySelector('.intro-skip').getBoundingClientRect();
-    return film.width>=innerWidth&&film.height>=innerHeight-1&&skip.left>=0&&skip.right<=innerWidth&&skip.top>=0&&skip.height>=44&&document.documentElement.scrollWidth<=innerWidth+1;
+   record(engine,'The narrow phone opening fills the screen without buttons or overflow',await phone.evaluate(()=>{
+    const film=document.querySelector('.identity-intro .hero-film').getBoundingClientRect();
+    return film.width>=innerWidth&&film.height>=innerHeight-1&&!document.querySelector('.identity-intro button')&&document.documentElement.scrollWidth<=innerWidth+1;
    }));
    await phone.waitForTimeout(950);await phone.screenshot({path:`outputs/redesign/opening-${engine}-phone.png`});
    await firstPhone.close();
@@ -81,6 +82,7 @@ try{
     await p.locator('.identity-intro').waitFor({state:'detached',timeout:1000});
     record(engine,`${action} immediately dismisses the opening and leaves a usable page`,await p.evaluate(()=>!document.querySelector('main').inert&&document.documentElement.scrollWidth<=innerWidth+1));
     if(action==='preference')record(engine,'Live reduced motion pauses the film',await p.locator('.hero-film').evaluate(v=>v.paused));
+    record(engine,`${action} stops opening audio`,await p.locator('[data-opening-audio]').evaluate(a=>a.paused&&a.currentTime===0));
     await context.close();
    }
    const delayed=await browser.newContext(),reading=await delayed.newPage();
@@ -100,9 +102,33 @@ try{
     await p.goto(base+(mode==='fragment'?'#teaching-evidence':mode==='reduced'?'?intro=1':''),{waitUntil:'domcontentloaded'});
     await p.waitForFunction(()=>!document.documentElement.classList.contains('opening-pending')&&!document.querySelector('.identity-intro'),null,{timeout:5000});
     record(engine,`${mode} leaves content readable without a gate`,await p.locator('h1').isVisible());
-    if(mode==='reduced')record(engine,'Reduced motion retains a static poster with explicit playback',await p.locator('.hero-film').evaluate(v=>v.paused&&!v.getAttribute('src')));
+    if(mode==='reduced')record(engine,'Reduced motion loads neither film nor piano',await p.locator('.hero-film,[data-opening-audio]').evaluateAll(media=>media.every(m=>m.paused&&!m.getAttribute('src'))));
     await context.close();
    }
+   const sound=await browser.newContext(),audible=await sound.newPage();
+   await audible.addInitScript(()=>{
+    const play=HTMLMediaElement.prototype.play;
+    let gesture=false;
+    document.addEventListener('keydown',event=>{if(event.isTrusted)gesture=true;},{capture:true});
+    HTMLMediaElement.prototype.play=function(){
+     if(this instanceof HTMLAudioElement&&!gesture)return Promise.reject(new DOMException('Gesture required','NotAllowedError'));
+     return play.call(this);
+    };
+   });
+   await audible.goto(base,{waitUntil:'domcontentloaded'});await audible.locator('.intro-running').waitFor();
+   record(engine,'Blocked audio leaves the automatic film running with no prompt',await audible.locator('[data-opening-audio]').evaluate(a=>a.paused)&&await audible.locator('.identity-intro button').count()===0);
+   await audible.keyboard.press('s');await audible.waitForFunction(()=>{const a=document.querySelector('[data-opening-audio]');return !a.paused&&a.readyState>=2;});
+   record(engine,'A natural key gesture can start the quiet local piano',await audible.locator('[data-opening-audio]').evaluate(a=>a.currentSrc.endsWith('/assets/opening-piano.mp3')&&!a.loop&&a.duration<3.4));
+   await audible.locator('.identity-intro').waitFor({state:'detached',timeout:4200});
+   await audible.waitForFunction(()=>{const a=document.querySelector('[data-opening-audio]');return a.paused&&a.currentTime===0;},{},{timeout:1000});
+   record(engine,'No piano continues behind the portfolio',await audible.locator('[data-opening-audio]').evaluate(a=>a.paused&&a.currentTime===0));await sound.close();
+   const lateSound=await browser.newContext(),late=await lateSound.newPage();
+   await late.addInitScript(()=>{
+    const play=HTMLMediaElement.prototype.play;
+    HTMLMediaElement.prototype.play=function(){return this instanceof HTMLAudioElement?new Promise(resolve=>setTimeout(resolve,700)).then(()=>play.call(this)):play.call(this);};
+   });
+   await late.goto(base,{waitUntil:'domcontentloaded'});await late.locator('.intro-running').waitFor();await late.keyboard.press('Escape');await late.waitForTimeout(1100);
+   record(engine,'Late audio playback is stopped after an early dismissal',await late.locator('[data-opening-audio]').evaluate(a=>a.paused));await lateSound.close();
    const gallery=await browser.newContext({reducedMotion:'reduce'}),g=await gallery.newPage();
    await g.goto(base+'gallery/');await g.locator('[data-gallery-filter="TLM"]').click();
    record(engine,'Gallery filtering still updates visible rows',await g.locator('.gallery-card:not([hidden])').count()>0&&await g.locator('.gallery-card[hidden]').count()>0);

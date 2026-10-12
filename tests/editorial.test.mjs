@@ -70,7 +70,8 @@ test('Film hero has a static fallback, user controls and original evidence links
  assert.match(home,/class="hero-avatar"/);
  assert.equal((home.match(/<video\s/g)||[]).length,1);
  assert.match(home,/hero-video-opt\.mp4/);
- assert.doesNotMatch(home,/<audio|opening-soundtrack|portfolio-sound|data-film-replay|film-progress/);
+ assert.match(home,/<audio data-opening-audio preload="none" data-src="\.\/assets\/opening-piano\.mp3" aria-hidden="true"><\/audio>/);
+ assert.doesNotMatch(home,/opening-soundtrack|portfolio-sound|data-film-replay|film-progress/);
  assert.match(home,/data-film-pause/);
  assert.match(view('credentials',defaultContent),/data-original-url="https:/);
  assert.match(view('resources',defaultContent),/data-viewer/);

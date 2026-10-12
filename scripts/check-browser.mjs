@@ -208,10 +208,10 @@ try{
 
   const motion=await context({reducedMotion:'no-preference'});const moving=await motion.newPage();
   await moving.goto(base,{waitUntil:'domcontentloaded'});
-  await moving.locator('.intro-skip').waitFor();
-  record('opening: first visit starts automatically with one skip action',await moving.locator('.intro-controls button').count()===1&&await moving.locator('[data-intro-enter],.intro-sound,[data-film-replay],audio').count()===0&&await moving.locator('.identity-intro').count()===1);
-  await moving.locator('.intro-skip').click();
-  record('opening: skip reveals the portfolio immediately',await moving.locator('.identity-intro').count()===0&&await moving.locator('h1').isVisible());
+  await moving.locator('.intro-running').waitFor();
+  record('opening: first visit starts automatically without overlay buttons',await moving.locator('.identity-intro button,[data-intro-enter],.intro-sound,[data-film-replay]').count()===0&&await moving.locator('.identity-intro').count()===1);
+  await moving.keyboard.press('Escape');
+  record('opening: Escape reveals the portfolio and stops piano immediately',await moving.locator('.identity-intro').count()===0&&await moving.locator('h1').isVisible()&&await moving.locator('[data-opening-audio]').evaluate(a=>a.paused));
   await moving.emulateMedia({reducedMotion:'reduce'});
   record('opening: live reduced motion pauses the film',await moving.locator('.hero-film').evaluate(video=>video.paused));
   await motion.close();

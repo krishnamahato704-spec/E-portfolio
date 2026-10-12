@@ -14,24 +14,16 @@ html.opening-pending #main>:not(.opening-hero),
 html.opening-pending .opening-hero>:not(.hero-film) {visibility:hidden}
 html.opening-pending .opening-hero {z-index:1000}
 html.opening-pending:not(.opening-measure) .opening-hero .hero-film {position:fixed;inset:0;width:100vw;height:100svh;z-index:1;opacity:1;filter:none}
-.identity-intro {position:fixed;inset:0;z-index:1000;display:block;isolation:isolate;pointer-events:none;opacity:1;transition:opacity 700ms cubic-bezier(.4,0,.2,1) 300ms}
+.identity-intro {position:fixed;inset:0;z-index:1000;display:block;isolation:isolate;overflow:hidden;pointer-events:none;opacity:1;transition:opacity 1000ms cubic-bezier(.3,.6,.2,1)}
 .identity-intro::before {content:'';position:absolute;inset:0;z-index:-2;background:var(--paper)}
 .identity-intro.intro-settling {opacity:0}
 .identity-intro .hero-film,.intro-film-frame {position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:76% top;z-index:-1;opacity:1;filter:none;transform:none}
-.intro-settling .intro-film-frame {animation:opening-frame 500ms ease both}
-.intro-name-card {position:absolute;left:var(--gutter);bottom:clamp(92px,13vh,145px);max-width:calc(100% - var(--gutter)*2);padding:24px 30px;background:var(--paper);color:var(--ink);border-left:4px solid var(--accent);border-radius:0 12px 12px 0;opacity:0}
-.intro-running .intro-name-card {animation:opening-name 3200ms cubic-bezier(.4,0,.2,1) both}
-.intro-greeting {font-size:clamp(1rem,2vw,1.4rem);margin:0 0 8px}
-.intro-name {font:600 clamp(2.4rem,6.5vw,6rem)/1.04 var(--serif);letter-spacing:-.035em;margin:0;color:var(--dark)}
-.intro-role {font-size:clamp(1rem,2vw,1.4rem);margin:14px 0 0}
-.intro-controls {position:absolute;top:max(20px,env(safe-area-inset-top));right:var(--gutter);display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px;max-width:calc(100% - var(--gutter)*2);pointer-events:auto}
-.intro-controls button {background:var(--paper);border-color:var(--line-strong);color:var(--ink);box-shadow:var(--shadow);font-size:.9rem}
-@keyframes opening-name {
- 0% {opacity:0;transform:translateY(6px)}
- 25%,62.5% {opacity:1;transform:translateY(0)}
- 75%,100% {opacity:0;transform:translateY(0)}
+.intro-running .hero-film {animation:opening-film 3200ms cubic-bezier(.3,.6,.2,1) both}
+@keyframes opening-film {
+ 0% {transform:scale(1)}
+ 25%,72% {transform:scale(1.035)}
+ 100% {transform:scale(1.045)}
 }
-@keyframes opening-frame {to {opacity:0}}
 @media(max-width:1000px) and (min-width:761px) {
  .hero-content {grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:24px}
  .hero-copy {padding:20px}.hero-identity {gap:16px}.hero-avatar {width:80px;height:80px}
@@ -43,9 +35,5 @@ html.opening-pending:not(.opening-measure) .opening-hero .hero-film {position:fi
  .hero-content {grid-template-columns:1fr;padding-block:260px 144px;gap:18px}
  .hero-copy {padding:20px}.current-card {justify-self:stretch;width:100%;background:var(--paper)}
  .hero-controls {gap:8px}.film-caption {width:100%;margin-bottom:0;justify-content:space-between;gap:12px;padding:7px 12px}
- .intro-name-card {left:var(--gutter);right:var(--gutter);bottom:92px;padding:20px}
- .intro-name {font-size:clamp(2.35rem,10vw,4rem)}
- .intro-controls {left:var(--gutter);right:var(--gutter);justify-content:flex-end;gap:6px}
- .intro-controls button {padding-inline:10px;font-size:.875rem}
 }
 @media(prefers-reduced-motion:reduce) {.identity-intro * {animation:none!important}}

@@ -67,11 +67,11 @@ try{
   check(engine,'No-JavaScript résumé link reaches the complete record',page.url()===new URL('resume/',base).href&&await page.locator('.resume-web-summary').isVisible());
   await fallback.close();
   const moving=await browser.newContext({viewport:{width:390,height:900}});
-  const intro=await moving.newPage();await intro.goto(base+'?intro=1',{waitUntil:'domcontentloaded'});await intro.locator('.intro-skip').waitFor();
-  check(engine,'Film opening hides the shortcut bar and clearly labels its exit',!await intro.locator('.mobile-shortcuts').isVisible()&&await intro.locator('.intro-skip').textContent()==='Skip to portfolio');
-  await intro.locator('.intro-skip').focus();
+  const intro=await moving.newPage();await intro.goto(base+'?intro=1',{waitUntil:'domcontentloaded'});await intro.locator('.intro-running').waitFor();
+  check(engine,'Film opening hides shortcuts and has no overlay buttons',!await intro.locator('.mobile-shortcuts').isVisible()&&await intro.locator('.identity-intro button').count()===0);
+  await intro.locator('.skip-link').focus();
   await intro.keyboard.press('Enter');
-  check(engine,'Keyboard-focused skip restores quick access and main focus',await intro.locator('.mobile-shortcuts').isVisible()&&await intro.evaluate(()=>document.activeElement.id==='main'));
+  check(engine,'Keyboard navigation restores quick access and main focus',await intro.locator('.mobile-shortcuts').isVisible()&&await intro.evaluate(()=>document.activeElement.id==='main'));
   await moving.close();
  }finally{await browser.close();}
 }

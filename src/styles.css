@@ -442,7 +442,7 @@ main::after {right:0;background-image:url('../assets/theme/history-study.webp');
 .hero-controls {position:absolute;bottom:16px;left:0;right:0;display:flex;justify-content:flex-end;align-items:center;gap:8px;z-index:3}
 .film-caption {display:flex;align-items:center;gap:14px;margin-right:auto;min-width:0}
 .film-label {font-size:.85rem;color:white;white-space:nowrap}
-.hero-controls button,.intro-skip {min-height:44px;border:1px solid #ffffffa0;background:#123d49e6;color:white;border-radius:24px;padding:8px 14px;font-size:.8rem}
+.hero-controls button {min-height:44px;border:1px solid #ffffffa0;background:#123d49e6;color:white;border-radius:24px;padding:8px 14px;font-size:.8rem}
 .home-education {position:relative;padding-top:28px;padding-bottom:20px;border-bottom:0}
 .education-caption {font-size:.9rem;color:var(--muted);margin-top:-12px}
 .education-focus {display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:28px;list-style:none;padding:0;margin:20px 0 0}
@@ -931,7 +931,7 @@ dialog::backdrop {background:color-mix(in srgb,var(--ink) 45%,transparent)}
 .opening-hero .hero-meta li {background:var(--surface-muted);border-color:var(--line)}
 .opening-hero .button.secondary {color:var(--dark);background:var(--sheet);border-color:var(--line-strong)}
 .opening-hero .button.secondary:hover {background:var(--accent-soft)}
-.hero-controls button,.intro-skip {background:var(--sheet);border-color:var(--line-strong);color:var(--ink)}
+.hero-controls button {background:var(--sheet);border-color:var(--line-strong);color:var(--ink)}
 
 /* Photographic covers keep light, nearly opaque surfaces behind their text. */
 .journey-cover {background:var(--surface-muted);color:var(--ink)}
@@ -968,24 +968,16 @@ html.opening-pending #main>:not(.opening-hero),
 html.opening-pending .opening-hero>:not(.hero-film) {visibility:hidden}
 html.opening-pending .opening-hero {z-index:1000}
 html.opening-pending:not(.opening-measure) .opening-hero .hero-film {position:fixed;inset:0;width:100vw;height:100svh;z-index:1;opacity:1;filter:none}
-.identity-intro {position:fixed;inset:0;z-index:1000;display:block;isolation:isolate;pointer-events:none;opacity:1;transition:opacity 700ms cubic-bezier(.4,0,.2,1) 300ms}
+.identity-intro {position:fixed;inset:0;z-index:1000;display:block;isolation:isolate;overflow:hidden;pointer-events:none;opacity:1;transition:opacity 1000ms cubic-bezier(.3,.6,.2,1)}
 .identity-intro::before {content:'';position:absolute;inset:0;z-index:-2;background:var(--paper)}
 .identity-intro.intro-settling {opacity:0}
 .identity-intro .hero-film,.intro-film-frame {position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:76% top;z-index:-1;opacity:1;filter:none;transform:none}
-.intro-settling .intro-film-frame {animation:opening-frame 500ms ease both}
-.intro-name-card {position:absolute;left:var(--gutter);bottom:clamp(92px,13vh,145px);max-width:calc(100% - var(--gutter)*2);padding:24px 30px;background:var(--paper);color:var(--ink);border-left:4px solid var(--accent);border-radius:0 12px 12px 0;opacity:0}
-.intro-running .intro-name-card {animation:opening-name 3200ms cubic-bezier(.4,0,.2,1) both}
-.intro-greeting {font-size:clamp(1rem,2vw,1.4rem);margin:0 0 8px}
-.intro-name {font:600 clamp(2.4rem,6.5vw,6rem)/1.04 var(--serif);letter-spacing:-.035em;margin:0;color:var(--dark)}
-.intro-role {font-size:clamp(1rem,2vw,1.4rem);margin:14px 0 0}
-.intro-controls {position:absolute;top:max(20px,env(safe-area-inset-top));right:var(--gutter);display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px;max-width:calc(100% - var(--gutter)*2);pointer-events:auto}
-.intro-controls button {background:var(--paper);border-color:var(--line-strong);color:var(--ink);box-shadow:var(--shadow);font-size:.9rem}
-@keyframes opening-name {
- 0% {opacity:0;transform:translateY(6px)}
- 25%,62.5% {opacity:1;transform:translateY(0)}
- 75%,100% {opacity:0;transform:translateY(0)}
+.intro-running .hero-film {animation:opening-film 3200ms cubic-bezier(.3,.6,.2,1) both}
+@keyframes opening-film {
+ 0% {transform:scale(1)}
+ 25%,72% {transform:scale(1.035)}
+ 100% {transform:scale(1.045)}
 }
-@keyframes opening-frame {to {opacity:0}}
 @media(max-width:1000px) and (min-width:761px) {
  .hero-content {grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:24px}
  .hero-copy {padding:20px}.hero-identity {gap:16px}.hero-avatar {width:80px;height:80px}
@@ -997,10 +989,6 @@ html.opening-pending:not(.opening-measure) .opening-hero .hero-film {position:fi
  .hero-content {grid-template-columns:1fr;padding-block:260px 144px;gap:18px}
  .hero-copy {padding:20px}.current-card {justify-self:stretch;width:100%;background:var(--paper)}
  .hero-controls {gap:8px}.film-caption {width:100%;margin-bottom:0;justify-content:space-between;gap:12px;padding:7px 12px}
- .intro-name-card {left:var(--gutter);right:var(--gutter);bottom:92px;padding:20px}
- .intro-name {font-size:clamp(2.35rem,10vw,4rem)}
- .intro-controls {left:var(--gutter);right:var(--gutter);justify-content:flex-end;gap:6px}
- .intro-controls button {padding-inline:10px;font-size:.875rem}
 }
 @media(prefers-reduced-motion:reduce) {.identity-intro * {animation:none!important}}
 
@@ -1071,10 +1059,8 @@ html.opening-pending:not(.opening-measure) .opening-hero .hero-film {position:fi
 .home-education .education-card>.icon-disc .icon {width:21px;height:21px}
 .home-education .education-details-link {min-height:44px;align-items:center;font-size:1rem}
 
-/* One quiet exit keeps the short opening optional. */
+/* The opening fills the viewport without visible controls. */
 .identity-intro .hero-film {height:100svh}
-.intro-controls .intro-skip {background:var(--paper);color:var(--ink);border-color:var(--line-strong);font-size:.9rem;font-weight:400;padding-inline:14px;box-shadow:none}
-.intro-controls .intro-skip:hover {background:var(--surface-muted)}
 html.opening-pending .mobile-shortcuts,body:has(.identity-intro) .mobile-shortcuts {visibility:hidden}
 
 @media(max-width:1000px) {
@@ -1127,7 +1113,6 @@ html.opening-pending .mobile-shortcuts,body:has(.identity-intro) .mobile-shortcu
  .hero-avatar {width:58px;height:58px}.hero-identity {gap:12px}
  .hero-copy .actions .button {flex-basis:100%}
  .hero-controls button {padding-inline:8px}
- .intro-controls button {min-height:44px}
  .selected-evidence-card,.selected-evidence-card:last-child:nth-child(3) {grid-template-columns:76px minmax(0,1fr)}
  .selected-evidence-card .evidence-card-media {padding:8px}
  .selected-evidence-card .evidence-card-body {padding:14px}

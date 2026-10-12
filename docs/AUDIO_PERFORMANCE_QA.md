@@ -2,21 +2,30 @@
 
 ## Current opening · 12 October 2026
 
-Home now starts a silent 3.2-second opening automatically, including a
-one-second dissolve through the page background into Home. The added zoom has
-been removed and mobile framing updates interpolate gently to keep the subject
-visible. During the dissolve, one captured frame covers the opening while the
-same video continues in the hero. No second video decoder is used.
+Home starts a 3.2-second full-screen opening automatically, including the
+earlier gentle zoom and a one-second dissolve directly into Home. No text or
+buttons cover the video. Mobile framing updates interpolate gently to keep
+the subject visible. During the dissolve, one captured frame covers the opening
+while the same video continues in the hero. No second video decoder is used.
 
-The entry, music, replay and progress controls have been removed. Skip and
-film play/pause remain. Escape, scrolling, keyboard focus, resizing and reduced
-motion immediately dismiss the opening. Slow playback cannot extend its
-deadline. The real-browser checks cover these paths, media failures and the
-desktop/mobile transition. Current screenshots and results are written to
-`outputs/redesign/`.
+The opening piano is edited to 3.2 seconds, reduced to 16% amplitude and given
+a 350ms fade-in and one-second fade-out in the audio file. The fades work even
+where script changes to media volume are unsupported. Audible autoplay is
+attempted; when blocked, the film continues and a natural pointer or key gesture
+can enable sound during the opening. There is no entry or sound prompt. Audio
+stops on completion, dismissal, reduced motion, hiding or leaving the page;
+late playback promises cannot restart it behind the portfolio.
 
-The cleanup removes the obsolete music stylesheet, progress styles and Firefox
-audio-output setup in CI. Release packaging uses the shared content signature
+The entry, skip, music, replay and progress controls have been removed from the
+opening. Film play/pause remains on Home. Escape, scrolling, keyboard focus,
+resizing and reduced motion immediately dismiss the opening. Slow playback
+cannot extend its deadline. Real-browser checks cover these paths, audio and
+video failures and the desktop/mobile transition. Current screenshots and
+results are written to `outputs/redesign/`.
+
+The cleanup removes the obsolete music stylesheet, progress styles and opening
+control styles. Firefox CI retains a virtual audio output for native playback
+checks. Release packaging uses the shared content signature
 instead of a second copy of its sorting logic. A read-only check confirmed that
 the published Supabase schema 8 content matches the repository snapshot. Both
 public tables retain row security, anonymous writes are blocked, and private

@@ -6,7 +6,7 @@ export function initOpening({auto=true}={}){
  const hero=document.querySelector('.opening-hero');
  const boot=window.portfolioOpeningBoot;
  if(document.body.dataset.route!=='home'||!hero)return;
- const film=hero.querySelector('.hero-film');
+ const film=hero.querySelector('.hero-film'),audio=hero.querySelector('[data-opening-audio]');
  if(!film)return;
  const preference=matchMedia('(prefers-reduced-motion: reduce)');
  const events=new AbortController(),options={signal:events.signal};
@@ -14,13 +14,35 @@ export function initOpening({auto=true}={}){
  const status=hero.querySelector('.film-status');
  const hold=2200,fade=1000;
  let intro=null,timer=0,generation=0,heroVisible=true,filmSize=null;
+ let started=0,audioGeneration=0,audioPending=false;
  const say=text=>{if(status)status.textContent=text;};
  const sync=()=>{if(pause)pause.textContent=film.paused?'Play film':'Pause film';};
+ const stopAudio=()=>{
+  audioGeneration++;audioPending=false;
+  if(audio){audio.pause();audio.currentTime=0;}
+ };
+ const playAudio=()=>{
+  if(!audio||!intro||audioPending||!audio.paused||document.hidden||preference.matches)return;
+  const elapsed=performance.now()-started;
+  if(elapsed>=hold)return;
+  const request=++audioGeneration;audioPending=true;
+  if(!audio.getAttribute('src'))audio.src=audio.dataset.src;
+  // The asset itself is quiet and fades out at 3.2s, including on browsers
+  // that do not allow scripts to change media volume.
+  audio.currentTime=elapsed/1000;
+  // Audible autoplay is optional. A denied request never creates an entry gate.
+  audio.play().then(()=>{
+   if(request!==audioGeneration||!intro||document.hidden||preference.matches){audio.pause();return;}
+   // Keep the baked fade aligned with the opening if media loading was slow.
+   audio.currentTime=Math.min((performance.now()-started)/1000,(hold+fade)/1000);
+   audioPending=false;
+  }).catch(()=>{if(request===audioGeneration)audioPending=false;});
+ };
  const frameFilm=()=>{
   if(innerWidth>760){film.style.objectPosition='76% top';return;}
   if(!intro?.contains(film)){film.style.objectPosition='50% top';return;}
   // Cache geometry and interpolate media updates so the phone crop follows
-  // the subject without the old stepwise jumps or an added zoom.
+  // the subject without the old stepwise jumps.
   filmSize??={width:film.clientWidth,height:film.clientHeight};
   const {width,height}=filmSize,ratio=film.videoWidth&&film.videoHeight?film.videoWidth/film.videoHeight:16/9;
   const renderedWidth=Math.max(width,height*ratio),overflow=renderedWidth-width;
@@ -29,7 +51,7 @@ export function initOpening({auto=true}={}){
   film.style.objectPosition=position*100+'% top';
  };
  const finish=()=>{
-  generation++;clearTimeout(timer);timer=0;
+  generation++;clearTimeout(timer);timer=0;stopAudio();
   const restore=intro?.contains(document.activeElement);
   if(intro){if(intro.contains(film))hero.prepend(film);intro.remove();intro=null;}
   film.style.removeProperty('transition');filmSize=null;frameFilm();boot?.release();
@@ -52,6 +74,7 @@ export function initOpening({auto=true}={}){
    const frame=document.createElement('canvas');frame.className='intro-film-frame';
    frame.width=film.videoWidth;frame.height=film.videoHeight;frame.setAttribute('aria-hidden','true');
    frame.style.objectPosition=getComputedStyle(film).objectPosition;
+   frame.style.transform=getComputedStyle(film).transform;
    try{
     const context=frame.getContext('2d');
     if(context){context.drawImage(film,0,0);intro.prepend(frame);}
@@ -63,16 +86,12 @@ export function initOpening({auto=true}={}){
  const begin=()=>{
   intro=document.createElement('div');intro.className='identity-intro intro-running';
   intro.setAttribute('role','region');intro.setAttribute('aria-label','Portfolio introduction');
-  intro.innerHTML='<div class="intro-name-card"><p class="intro-greeting">Hi, my name is</p><p class="intro-name"></p><p class="intro-role"></p></div><div class="intro-controls"><button type="button" class="intro-skip">Skip to portfolio</button></div>';
-  intro.querySelector('.intro-name').textContent=hero.querySelector('h1').textContent;
-  intro.querySelector('.intro-role').textContent=hero.querySelector('.hero-role').textContent;
   film.style.transition='none';
   intro.prepend(film);document.body.append(intro);
   boot?.release();frameFilm();
   requestAnimationFrame(()=>{if(intro?.contains(film))film.style.removeProperty('transition');});
-  intro.querySelector('.intro-skip').addEventListener('click',finish,options);
   // The sequence has a fixed deadline, including on slow media connections.
-  timer=setTimeout(settle,hold);
+  started=performance.now();timer=setTimeout(settle,hold);playAudio();
   const pending=generation;
   play().then(playing=>{if(!playing&&pending===generation)finish();});
  };
@@ -85,7 +104,11 @@ export function initOpening({auto=true}={}){
  film.addEventListener('loadedmetadata',()=>{filmSize=null;frameFilm();},options);
  film.addEventListener('error',()=>{finish();sync();say('Film unavailable. Showing the portfolio poster.');},options);
  window.addEventListener('resize',()=>{if(intro)finish();else frameFilm();},options);
- document.addEventListener('keydown',event=>{if(event.key==='Escape')finish();},options);
+ document.addEventListener('keydown',event=>{
+  if(event.key==='Escape')finish();
+  else if(event.key!=='Tab'&&event.isTrusted)playAudio();
+ },options);
+ document.addEventListener('pointerdown',event=>{if(event.isTrusted)playAudio();},{passive:true,...options});
  document.addEventListener('focusin',event=>{if(intro&&!intro.contains(event.target))finish();},options);
  window.addEventListener('scroll',()=>{if(intro&&scrollY>24)finish();},{passive:true,...options});
  document.addEventListener('visibilitychange',()=>{

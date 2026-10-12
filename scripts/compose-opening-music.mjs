@@ -1,4 +1,4 @@
-// Archived authoring tool for the earlier eight-second opening MP3.
+// Optional authoring tool for the opening piano; playback uses a shorter fade.
 // Original melody using Alexander Holm's CC BY 3.0 Salamander piano samples.
 import fs from 'node:fs/promises';
 import path from 'node:path';
@@ -49,6 +49,6 @@ for(let i=0;i<frames;i++){
 }
 const header=Buffer.alloc(44);header.write('RIFF');header.writeUInt32LE(pcm.length+36,4);header.write('WAVEfmt ',8);header.writeUInt32LE(16,16);header.writeUInt16LE(1,20);header.writeUInt16LE(2,22);header.writeUInt32LE(rate,24);header.writeUInt32LE(rate*4,28);header.writeUInt16LE(4,32);header.writeUInt16LE(16,34);header.write('data',36);header.writeUInt32LE(pcm.length,40);
 const wav=path.join(work,'opening-piano.wav');await fs.writeFile(wav,Buffer.concat([header,pcm]));
-const encoded=spawnSync(ffmpeg,['-hide_banner','-loglevel','error','-y','-i',wav,'-c:a','libmp3lame','-b:a','128k',path.join(root,'assets/opening-piano.mp3')],{windowsHide:true});
+const encoded=spawnSync(ffmpeg,['-hide_banner','-loglevel','error','-y','-i',wav,'-t','3.2','-af','volume=0.16,afade=t=in:d=0.35,afade=t=out:st=2.2:d=1','-c:a','libmp3lame','-b:a','128k',path.join(root,'assets/opening-piano.mp3')],{windowsHide:true});
 if(encoded.status!==0)throw Error(encoded.stderr.toString());
-console.log('Saved eight seconds of acoustic piano melody, with a gentle fade and no voice.');
+console.log('Saved 3.2 seconds of quiet acoustic piano, with gentle fades and no voice.');
