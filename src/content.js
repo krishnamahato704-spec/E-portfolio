@@ -122,7 +122,7 @@ export const defaultContent = {
       "summary": "Four days observing classroom lessons, student activities, learning spaces and school routines, documented in a reflective journal.",
       "title": "Observation Internship · Amity International School, Mayur Vihar",
       "type": "Four-day school observation",
-      "period": "1–4 December",
+      "period": "1–4 December 2025",
       "reflection": "I noticed how examples, discussion and practical work affected participation. The visit helped me connect B.Ed. theory with classroom management, lesson planning and the care teachers provide beyond lessons.",
       "points": [
         "Observed lessons in Classes VIII, IX, X and XII, including Social Studies, exam-answer guidance and Kinship, Caste and Class.",
@@ -403,6 +403,9 @@ export function mergeContent(live = {}) {
     const id=e.id||(/panchsheel/i.test(e.title)?'panchsheel':/pehchaan/i.test(e.title)?'pehchaan':/amity.*mayur/i.test(e.title)?'observation':e.title);
     const original=defaultContent.experiences.find(x=>x.id===id);
     const merged={...original,...e,id};
+    // Apply the owner's confirmed year only to the exact earlier placeholder.
+    // Other dates, removed entries and later owner corrections stay authoritative.
+    if(id==='observation'&&['1–4 December','1-4 December','1–4 December · year not recorded'].includes(e.period))merged.period=original.period;
     if(older && id==='observation' && e.period==='May 2026')Object.assign(merged,{period:original.period,type:original.type,duration:original.duration,durationUnit:original.durationUnit});
     if((live.schemaVersion||0)<8 && id==='observation' && ['24–28 November 2025','May 2026'].includes(e.period)) {
       Object.assign(merged,{period:original.period,type:original.type,duration:original.duration,durationUnit:original.durationUnit});
@@ -427,6 +430,10 @@ export function mergeContent(live = {}) {
     const original=defaultContent.resources.find(x=>x.url===r.url);
     if(!original)return r;
     const merged={...original,...r};
+    if(r.id===amityJournalResource.id){
+      if(['1–4 December','1-4 December'].includes(r.date))merged.date=amityJournalResource.date;
+      if(r.description==='Edited journal with four daily records, original photographs, reflections and self-reflection. Rebuilt from the supplied handwritten journal; the source does not state a year.')merged.description=amityJournalResource.description;
+    }
     if(older) {
       if(['Democracy','Teaching Democracy: More Than a Definition'].includes(r.title))merged.title=original.title;
       if(!r.grade||r.grade==='Classes 6–8 (Middle School)')merged.grade=original.grade;

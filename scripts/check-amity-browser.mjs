@@ -5,9 +5,9 @@ import {loadContent} from '../src/cloud.js';
 import assert from 'node:assert/strict';
 const row=await loadContent();const content=validateContent(mergeContent(row.content));
 const observation=content.experiences.find(e=>e.id==='observation');
-assert.equal(observation.period,'1–4 December');assert.equal(observation.duration,'4');
+assert.equal(observation.period,'1–4 December 2025');assert.equal(observation.duration,'4');
 assert.ok(content.resources.some(r=>r.id==='amity-observation-journal'));
-const base='http://127.0.0.1:3000/E-portfolio/';
+const base=process.env.PREVIEW_URL||'http://127.0.0.1:3000/E-portfolio/';
 const browser=await chromium.launch({headless:true,executablePath:process.env.CHROME_PATH});
 const output=new URL('../outputs/amity-browser/',import.meta.url);await fs.mkdir(output,{recursive:true});
 try {
@@ -19,10 +19,12 @@ try {
   await page.getByText('The four-day record',{exact:true}).waitFor();
   assert.equal(await page.locator('main .observation-day').count(),4);
   assert.equal(await page.locator('main img[src*="certificate-2"]').count(),0);
-  assert.ok(await page.getByText('1–4 December',{exact:true}).isVisible());
-  for(const img of await page.locator('main img').all())await img.scrollIntoViewIfNeeded();
-  await page.waitForFunction(()=>[...document.querySelectorAll('main img')].every(i=>i.complete&&i.naturalWidth));
-  assert.ok(await page.evaluate(()=>[...document.querySelectorAll('main img')].every(i=>i.complete&&i.naturalWidth)));
+  assert.ok(await page.getByText('1–4 December 2025',{exact:true}).isVisible());
+  // Phone layouts omit decorative images. Check the visible records without
+  // forcing hidden, lazy decoration into view.
+  for(const img of await page.locator('main img').all())if(await img.isVisible())await img.scrollIntoViewIfNeeded();
+  await page.waitForFunction(()=>[...document.querySelectorAll('main img')].filter(i=>i.getClientRects().length&&getComputedStyle(i).visibility!=='hidden').every(i=>i.complete&&i.naturalWidth));
+  assert.ok(await page.evaluate(()=>[...document.querySelectorAll('main img')].filter(i=>i.getClientRects().length&&getComputedStyle(i).visibility!=='hidden').every(i=>i.complete&&i.naturalWidth)));
   assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
   await page.screenshot({path:new URL(`observation-${width}.png`,output).pathname.slice(1),fullPage:true});
   const read=page.getByRole('link',{name:'Read reflective journal',exact:false});await read.click();
@@ -33,7 +35,7 @@ try {
   assert.match(response.headers()['content-type'],/application\/pdf/);
   assert.equal((await response.body()).subarray(0,5).toString(),'%PDF-');
   await page.keyboard.press('Escape');await dialog.waitFor({state:'hidden'});await assert.doesNotReject(()=>read.evaluate(e=>{if(document.activeElement!==e)throw new Error('Focus not restored');}));
-  const download=page.getByRole('link',{name:'Download journal PDF'});
+  const download=page.getByRole('link',{name:'Download journal PDF',exact:false});
   assert.equal(await download.getAttribute('download'),'amity-observation-reflective-journal.pdf');
   assert.equal(errors.length,0,errors.join('\n'));
   await context.close();

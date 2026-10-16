@@ -46,7 +46,7 @@ styles = {
 c = canvas.Canvas(str(OUT), pagesize=A4, pageCompression=1)
 c.setTitle(DATA['title'] + ' - Amity International School, Mayur Vihar')
 c.setAuthor(DATA['author'])
-c.setSubject('Four-day observation, 1-4 December; edited from the supplied handwritten journal')
+c.setSubject('Four-day observation, '+DATA['period']+'; year confirmed by the owner')
 
 def para(text, y, style='body', x=LEFT, width=WIDTH):
     p = Paragraph(html.escape(text), styles[style])
@@ -95,7 +95,7 @@ label('B.Ed. / FIELD OBSERVATION', LEFT,H-55,9,HexColor('#ddbd88'))
 for text, y in [('School Observation',H-122),('Reflective Journal',H-164)]:
     c.setFont('SerifBold',32); c.setFillColor(PAPER); c.drawString(LEFT,y,text)
 c.setFont('Body',12); c.drawString(LEFT,H-207,'Amity International School, Mayur Vihar')
-c.setFont('BodyBold',11); c.drawString(LEFT,H-245,'1-4 December  /  Four-day observation')
+c.setFont('BodyBold',11); c.drawString(LEFT,H-245,DATA['period']+'  /  Four-day observation')
 im=PILImage.open(PUBLIC/'campus.webp')
 c.drawImage(ImageReader(im),LEFT,220,width=WIDTH,height=WIDTH*im.height/im.width)
 label('KRISHNA MAHATO',LEFT,164,13,INK)

@@ -1,70 +1,62 @@
 # Portfolio design preview
 
-The initial layout was approved on 7 October 2026. The requested page-layout, light-color and full-page background refinements are local previews awaiting review.
+16 October 2026. This revision applies the owner's approved Mentora-inspired warm appearance. The owner approved the local preview for publication on 16 October; release scope is recorded in `WARM_RELEASE_2026-10-16.md`. The Botanical and 15 October reports describe earlier versions.
 
-The final education-first homepage and corrected page boards from the original chat are the visual reference. Six final boards are readable locally. Owner Studio and 404 follow the approved written brief because their exported image is truncated. Earlier local prototypes and the previous atlas/recruiter layout are historical references.
+## Typography and colour
 
-## Shared styles
+Keep self-hosted Source Sans 3 for body text, controls and the personal name, and Source Serif 4 semibold for headings. Retain their packaged OFL notices. No additional font or framework is required.
 
-- Every route has its own light background and accent palette. Opaque white cards keep documents and text readable.
-- Headings, text, links, buttons, navigation, footers and dialogs inherit the route's color tokens. Filled actions use darker accent colors with white text; large areas use pale colors.
-- Self-hosted Source Sans 3 for body, controls and the personal name; Source Serif 4 semibold for section headings. The font names were a proposed choice, not established from the PNGs. Adobe's semibold webfont and OFL license are packaged locally.
-- Compact KM. navigation, 1240px content maximum, fluid gutters, 12px card corners and a light footer that matches each page.
-- Colored illustrations of history, economics, English language learning and lesson planning appear in the margins and gaps from the top to the bottom of each page. Small published photographic accents remain secondary. Opaque panels keep evidence and text readable.
-- Each inner page has its own composition. Evidence uses indexed document rows, Credentials a three-column certificate wall, and Gallery a varied photo mosaic. Each becomes a readable phone layout. About preserves the full academic timeline; Home leads with current studies and the latest completed degree.
+Every route uses the same warm academic palette. Home's introduction and the footer use chocolate with light text. Long records use cream backgrounds and light document panels. Primary actions and selected filters use copper; headings use chocolate. Status colours still carry their existing labelled meanings. Primary action buttons retain a minimum 48px height, including when phone labels wrap.
 
-## Page colors
-
-| Page | Light palette |
+| Role | Colour |
 | --- | --- |
-| Home | Warm ivory and terracotta |
-| About | Sage and cream |
-| Experience | Powder blue and slate |
-| Teaching Evidence | Peach and clay |
-| Credentials | Lavender and pearl |
-| Résumé | Stone and blue grey |
-| Contact | Dusty rose and white |
-| Gallery | Ivory and olive |
-| Pehchaan | Honey cream and ochre |
-| Observation | Aqua and mint |
-| Democracy | Periwinkle and blue |
-| Owner Studio | Lilac and plum |
-| Page not found | Sand and taupe |
+| Reading canvas | `#FBF7F0` |
+| Default document surface | `#FFFDF9` |
+| Warm highlight | `#F2E7D9` |
+| Main text | `#30251F` |
+| Secondary text | `#6D5849` |
+| Primary actions | `#965333` |
+| Action hover and focus | `#754026` |
+| Headings, hero and footer | `#3B2E26` |
+| Control borders | `#8D7360` |
+| Decorative rules | `#DED0C0` |
 
-The page-palettes stylesheet is the source of the route colors. Its body-scoped tokens work without JavaScript and also color dialogs outside the main content. The build reads the same source for each page's mobile browser theme color. The palette check verifies 130 main text/button pairs at a minimum of 4.5:1, including secondary text on pale surfaces. Photo covers use nearly opaque light gradients behind text. The Home film controls and timing remain intact.
+Planning evidence has a blue badge, ongoing/in-progress records amber and completed records green. Text labels carry the meaning as well as colour. Page-wide action colours do not imply different actions between routes.
 
-## Page composition
+## Composition
 
-Home: a clearly visible illustrative film beside an ivory introduction panel, with an authentic portrait, compact current-study summary, evidence and résumé actions, and expandable roles and subjects of interest. The Home background film uses 80% opacity and slightly reduced saturation, with no page-wide ivory wash. Phones show a 210px film area above the overlapping text panel, with a small portrait beside the name. Contact is also available in the desktop hero and the mobile shortcut bar. An owner-driven facts strip follows the hero, recording the current internship, subjects actually taught, availability, location and relocation preference. Selected Teaching Evidence comes next, with a large featured plan and smaller supporting material and report cards. Each preview includes its existing description and original-file access. My Teaching Journey precedes the education overview and Professional Learning. My Teaching Philosophy then sits immediately above the closing contact panel, with locally stored archival portraits of Rabindranath Tagore and Lev Vygotsky, the existing influence descriptions and all three owner-authored teaching principles. Warm parchment and pale sage panels keep this section within the Home theme. The fuller classroom implications remain under Experience → My teaching approach. Portrait sources are linked below each photograph and recorded in PHILOSOPHY_PORTRAITS.md. Education & Credentials features B.Ed., M.A. History and the latest completed degree, with a link to the full About timeline.
+Home leads with a larger authentic portrait, current degrees in progress, teaching identity, earliest joining and current teaching scope. Current internship, additional teaching and relocation preferences follow. Evidence precedes the journey and education. Detailed roles and subjects remain expandable.
 
-The contact panel includes availability, the email address, contact and résumé links. Secondary labels use at least 14px text; reading text uses 16px or larger with comfortable line spacing and paragraph widths limited to 68 characters where appropriate. Shared buttons, card corners, photo shadows and section headings remain consistent while individual page layouts and colors stay distinct. The three home evidence previews use existing published material and original-file viewers; the Democracy example retains its Planning evidence label. Owner changes and removals control these summaries.
+The introduction is open copy over the existing muted film, with a chocolate scrim, copper primary and outlined secondary actions. It keeps 28px internal space on desktop, 20px on phones and 18px at 320px. The scrim uses `#30241D` at 95% on the left, 90% through 48% width and 75% on the right; phones use 90%. The darker right edge protects the gallery captions even over bright footage. Original background illustrations appear below the introduction.
 
-Public pages have a fixed Résumé, Evidence and Contact bar below 761px. It uses ordinary links, works without JavaScript, marks the relevant current page, and reserves space below the footer including device safe-area padding. Root scroll padding keeps focused fields and end-of-page links above the bar. The bar is hidden during the film introduction and in print, and is omitted from Owner Studio and 404. The Home fragment #teaching-evidence provides a direct application link to the selected work without starting the opening. Résumé and Evidence route URLs also provide direct entry.
+A five-photo compilation sits beside the introduction on desktop and below it on phones. It uses existing published school, teaching-material and community photographs, retaining their captions and original image viewers. Slides move horizontally every six seconds with pause, previous/next, keyboard and swipe controls. Focus and manual navigation stop rotation until explicitly restarted. Hover, off-screen and hidden-page states pause rotation; page restoration preserves the pause and selection. Reduced motion/data saving keep it static unless requested. Only the first original photograph appears without JavaScript. Removed, pending and replaced records remain governed by current content. The fixed Résumé, Evidence and Contact links retain safe-area spacing, keyboard clearance, no-JavaScript navigation and print hiding.
 
-About: a framed portrait and an individual photograph beside the Independence Day display, a personal story spread, the full academic timeline, a compact interests strip and a school-display feature. Its background alternates between history, economics, English and lesson-planning illustrations, with small individual-display and library photo accents. Paired history/economics and English/teaching designs fill the gaps around the academic timeline. Group photographs are omitted from this page. Recruiter details remain available in a disclosure.
+The gallery has no outer card. A 6px cream image border, light captions over the dark scrim and separate cream controls keep the photograph distinct. Controls retain 44px minimum touch targets. Keyboard focus uses a light outline with a 5px offset. Print uses dark captions and hides controls/video.
 
-Experience: a photographic school-practice cover, chronological index, searchable field notes with alternating photographs and text, learning areas and an expandable teaching approach. Pehchaan can match Teaching and Community without changing the database record.
+Film/gallery controls reserve their real layout space before enhancement, while remaining invisible, inert and hidden from assistive technology. Initialisation enables them without moving direct fragment targets. The no-JavaScript stylesheet removes unavailable controls.
 
-Teaching Evidence: a document desk with genuine plan and activity previews, a side note and compact numbered catalogue rows. Credentials: a centered heading, three original document samples and a certificate wall. Gallery: a large exhibition photograph and a varied mosaic with wide community photographs and a horizontal material record. Every published entry retains its original viewer, context and search/filter controls.
+Teaching Evidence leads into searchable, labelled light records with warm thumbnail areas. Phone descriptions use the card's full reading width, with a smaller thumbnail beside the title. The mobile decorative document display is omitted; the side note follows the collection. Credentials use light card bodies and warm image areas, and omit their decorative certificate fan on phones. Original records and galleries retain their existing viewers and removal rules.
 
-Democracy: a lesson notebook with a classroom-material cover, four planning steps, source PDF aside and six detailed source sections in a disclosure. Its status remains Planning evidence. Pehchaan uses a community photo story, numbered activity notes, certificate and report. Observation uses a campus cover, three photographs from the supplied journal, four daily records and the original journal without inventing a year.
+After owner feedback, selected original illustrations are restored at reduced repetition and opacity: two margin subjects and a faint published-photo accent per desktop page, with one smaller subject scene on phones. Compact section interludes show the original subject images at 76px tall on desktop and 56px on phones. The earlier blanket hide rule was removed. Original assets remain untouched.
 
-Résumé: a document desk with a compact action sidebar, readable PDF preview and separate full web record. The generated PDF remains one page. Contact: a personal school-display postcard beside the email-draft form. Owner Studio keeps its real authentication, upload, preview and version-checked publish handlers, with a portrait workspace heading. The 404 route uses an original material preview as a misplaced-document illustration.
+Ordinary reading sections, education summaries and philosophy copy use spacing and rules instead of additional framed panels. Flat canvas-coloured surfaces protect text from the underlying artwork. Evidence, credentials, photographs and contact forms retain useful frames. Decoration is noninteractive, excluded from the accessibility tree and hidden in print.
 
-Photographic accents and photo plates are rendered from the current published records, not fixed CSS image URLs. Owner replacements, removals and pending publication status control decorative uses as well as evidence cards. Original observation photographs are available only while their original journal remains published. Decorative images have empty alternative text; actual photo plates have context and original-file viewers. Subject illustrations are separate design assets, not teaching evidence or owner uploads.
+The Home philosophy retains both archival portraits, sources, influence descriptions and all three existing principles. Smaller portraits sit beside the copy on phones instead of occupying separate tall blocks. Headings use a consistent scale; small descriptive labels and field names use ordinary case. Shared reading sizes and line lengths remain intact.
 
-The page-atmosphere layer replaces the old oversized photo watermarks with four subject illustrations and smaller photographic accents. History uses source books, maps, a compass and a magnifying glass. Economics uses a ledger, coins, a scale and symbolic charts. English pedagogy uses literature, a pen and speech bubbles. Teaching uses a lesson notebook, activity cards and a classroom board. Their ochre, terracotta, teal, blue and lilac colors sit alongside each route's existing light palette. The stationary scenes alternate down the full page height. Home starts below the film hero. No teaching evidence or personal photographs were generated. See [the illustration record](SUBJECT_ILLUSTRATIONS.md) for files and prompts.
+## Opening and media
 
-Subject illustrations retain visible color in the margins. Paired illustrations use near-full color in actual gaps between sections, with three arrangements and light multicolor washes. Their height drops from 172px to 120px on phones. Photographic accents are smaller and use low opacity, reduced saturation and soft fades. Reading sections, forms, cards and exposed headings have opaque white or page-colored surfaces. The decorations have no links, motion or keyboard targets, are hidden from assistive technology, and disappear in print. Image-loading failures leave the light page palette visible.
+The first eligible session visit uses a 2.2-second film hold and 1-second dissolve. Visible Skip to portfolio and Enable music buttons appear on the initial poster and remain during the sequence. Skip works through the blocking bootstrap even when the app module is unavailable. Music is requested only by its own button and stops on dismissal or completion. Unrelated keys and pointer gestures do not start it.
 
-## Film and motion
+Refreshes and internal returns in the same session do not replay the full-screen opening. `?intro=1` requests an explicit opening preview. The same muted video continues as the Home background when eligible, using one decoder. Reduced motion and data-saving/2G connections prevent automatic film and photo rotation. Fragment entry bypasses the opening; the background pauses when Home is off screen. Missing scripts, blocked storage, media failure and a four-second watchdog preserve readable Home. Pause film and Hide film respect manual choices; Hide film returns focus to the playback control. Music never continues behind the portfolio.
 
-A small blocking Home script selects the opening before the first browser paint. Its poster fills the screen while the app and video load, so Home cannot flash before the film. The same video takes over that cover synchronously before playback is awaited. If the app fails, a four-second watchdog reveals the readable portfolio. The first eligible homepage visit then runs the eight-second opening described in the exported chat: full-screen film, gentle zoom, “Hi, my name is” and a large name reveal, then the film settles into Home and reveals navigation and the page content. The same video element is moved into the opening and returned to the hero on completion; no second film is downloaded. The opening starts at full opacity, then softens to the 80% Home treatment as the film settles. Name text uses an ivory panel and the supplied film remains labelled as illustrative. “Enter with music” starts an instrumental acoustic piano melody after a visitor action; music stops at the end or on skip. Replay uses the same tune. The owner’s voice, continuing ambience and navigation sounds have been removed. A clearly labelled “Skip to portfolio” action uses the page's main button color. The muted background film loops independently.
+Local document sizes come from their actual files through generated metadata; unknown remote sizes are left unlabelled. The original classroom-material image is preserved, with responsive 360/720px WebP previews. Essential portrait and first evidence imagery have deliberate loading priority and intrinsic dimensions.
 
-Pause, sound, replay, Escape and skip controls are available. Scrolling or moving focus to the underlying page ends the opening. Reduced motion, blocked storage, unavailable media, blocked autoplay and missing JavaScript preserve a readable static homepage. New Home arrivals and refreshes start with the film even in an existing session. Internal Home links and history returns keep the page ready to read; `?intro=1` explicitly previews it again in an existing session, while still respecting reduced motion. Cleanup returns the video to the hero and restores controls after history navigation. Mobile framing follows the supplied film's changing subject position, keeping the face visible during the transition. The film-opening style layer owns this composition after the page palette layer.
+## Sources and build
 
-## Source and build
+Edit source files, not generated route HTML or combined CSS. `home-media.css` follows `portfolio-theme.css` and precedes print. Shared route colours remain in `page-palettes.css`, with matching fallback tokens. `npm run build` regenerates file metadata, 13 pages, CSS, the one-page résumé and `dist`. The résumé uses matching brown/copper accents on white paper.
 
-The shared CSS layers supply the base styles. The page-identities layer defines individual layouts; page-palettes supplies route colors and lighter photographic overlays. The film-opening layer supplies the video-first loading state, film treatment and transition. The recruiter-access layer defines shared reading sizes, the compact Home layout, evidence hierarchy and mobile shortcuts. The page-atmosphere layer follows it and supplies the distributed background scenes and protected reading surfaces. The home-philosophy layer adds the portrait panels and responsive principle layout. Print follows these layers and keeps the résumé readable in black on white. src/styles.css and all route HTML are generated by the build. Do not edit generated files independently. Database schema version 8, storage buckets, private-source access and owner publication rules are unchanged.
+Mentora's public preview supplied visual direction; the adaptation uses original project CSS and the existing fonts/media. No Hostinger template code, photographs, fonts or sample claims were imported, and template redistribution rights are unverified. The preceding Botanical source notice remains packaged for provenance. Source details are in `assets/credits/design-theme.md`. No additional font, framework, image, music or paid dependency is introduced. The shared library records the current composition only as a project-specific style reference.
 
-SITE_URL supplies one origin to HTML, metadata, sitemap, packaged browser config and résumé. Vercel defaults to the configured portfolio domain. Pages builds derive their own origin from the GitHub repository. Review CI explicitly uses the Vercel origin when checking committed generated files.
+The owner confirmed the observation period as 1–4 December 2025 on 15 October 2026. Pages, metadata, the résumé and the typeset journal use that date. Narrow compatibility corrections replace the exact earlier placeholders in schema 8 content while preserving other owner edits and removals. The original scanned journal remains untouched.
+
+Owner authentication, optimistic publishing, schema 8 and private storage remain in the existing architecture. The prepared HTTP headers and optional content-release bridge require an approved hosted release and configuration verification. See [publishing and security](PUBLISHING_AND_SECURITY.md) and the [private evidence checklist](PRIVATE_EVIDENCE_CHECKLIST.md).

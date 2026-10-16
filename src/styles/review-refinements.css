@@ -1,0 +1,174 @@
+/* Recruiter review: one editorial style, light page tints and optional media. */
+body {--brand:#633f31}
+.monogram,.monogram>span,.site-footer .monogram {color:var(--brand)}
+.brand-name {font:600 1rem/1.25 var(--sans);color:var(--brand);max-width:110px}
+.header-inner {gap:18px}
+.navigation-links {gap:clamp(12px,1.2vw,20px)}
+.button.primary {color:#fff}
+.button.secondary,.button.light {border-color:var(--line-strong);color:var(--ink);background:var(--sheet)}
+.actions {align-items:stretch}
+.actions .button {min-height:48px}
+.status.planning {background:#e8edf8;color:#344b79;border:1px solid #9daed0}
+.status.progress {background:#fff1d6;color:#695024;border:1px solid #b39963}
+.status:not(.progress):not(.planning) {background:#ecf3eb;color:#2e5f43;border:1px solid #8caf9c}
+.file-size {font-size:.875rem;font-weight:400;color:var(--muted);white-space:nowrap}
+.button.primary .file-size {color:#fff}
+.resource-thumb,.archive-cert-img,.plate-image {background:var(--surface-muted)}
+.photo-plate,.folio-certificate,.desk-documents img {transform:none;box-shadow:var(--shadow)}
+
+.opening-hero {min-height:0}
+.hero-content {grid-template-columns:minmax(0,1.7fr) minmax(300px,.85fr);gap:32px;padding-block:32px;align-items:center}
+.hero-copy {border:1px solid var(--line);padding:28px;background:var(--paper);box-shadow:none}
+.hero-avatar {width:144px;height:144px;border-radius:12px;box-shadow:none;object-position:50% 25%}
+.hero-identity {gap:24px;margin-bottom:20px}
+.opening-hero h1 {font-size:clamp(2.5rem,4vw,3.7rem)}
+.hero-role {font-size:clamp(1.25rem,2vw,1.7rem)}
+.hero-statement {margin:12px 0 18px;max-width:52ch}
+.hero-film {display:none;opacity:1;border-radius:var(--radius);filter:saturate(.85)}
+.hero-visual {min-width:0;padding:14px;background:var(--sheet);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+.hero-film-home {position:relative;min-width:0}
+.hero-practice-photo {padding:0;margin:0;border:0;border-radius:8px;box-shadow:none;transform:none}
+.hero-practice-photo a {display:block;background:var(--surface-muted);border-radius:8px;overflow:hidden}
+.hero-practice-photo .plate-image {height:300px;width:100%;object-fit:contain}
+.hero-practice-photo figcaption {padding:14px 2px 4px;font-size:1rem;line-height:1.45;color:var(--ink)}
+.hero-practice-photo figcaption span {font-size:.875rem;color:var(--muted)}
+.hero-media-note {padding:24px;color:var(--muted);background:var(--surface-muted)}
+.hero-film-home .hero-film[data-manual-play] {display:block;position:absolute;inset:0;width:100%;height:100%;z-index:2;object-fit:cover}
+.hero-film-home:has(.hero-film[data-manual-play]) .hero-practice-photo {visibility:hidden}
+.hero-controls {position:static;inset:auto;width:100%;padding:14px 0 0;flex-wrap:wrap;justify-content:flex-start;gap:8px;border-top:1px solid var(--line);margin-top:14px}
+.film-caption {border:0;padding:0;background:none;margin:0;flex:1}
+.hero-controls button {border-radius:6px;background:var(--sheet);color:var(--ink);border:1px solid var(--line-strong)}
+.hero-controls .film-label {color:var(--muted);font-size:.875rem}
+.hero-joining {display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:18px;color:var(--ink)}
+.hero-joining span {color:var(--muted)}
+.hero-teaching-scope {font-size:1rem;line-height:1.5;color:var(--muted);margin-top:6px;max-width:56ch}
+.hero-recruiter-brief {max-width:60ch;margin-top:12px}
+.hiring-essentials .current-card {background:transparent}
+.opening-entry-controls {display:none}
+html.opening-pending .opening-entry-controls,body:has(.identity-intro) .opening-entry-controls {display:flex;position:fixed;right:24px;bottom:24px;z-index:1002;gap:10px;flex-wrap:wrap;padding:12px;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);visibility:visible;pointer-events:auto;box-shadow:var(--shadow)}
+.opening-entry-controls .button {min-height:48px}
+.identity-intro .hero-film {display:block;inset:0;width:100%;height:100svh;border-radius:0;filter:none}
+html.opening-pending .opening-hero>.hero-film {display:block;position:fixed;inset:0;width:100vw;height:100svh;border-radius:0;opacity:1;filter:none}
+.skip-link:focus {z-index:1003}
+
+/* Keep a few margin illustrations; remove the extra photo treatment. */
+.page-atmosphere {--art-opacity:.18;background:none}
+.scene-photo {display:none}
+.study-interval {height:64px;margin-block:8px;background:none}
+.study-illustration {width:92px;height:64px;opacity:.55;transform:translateY(-50%)}
+.study-trace {opacity:.45}
+.interval-arc .study-trace {height:1px;border:0;border-radius:0;background:var(--line-strong);top:50%}
+.study-trace::before,.study-trace::after {display:none}
+.evidence-desk {min-height:0;grid-template-columns:minmax(0,1fr) 170px;padding:24px;gap:24px}
+.evidence-desk h1 {margin-top:4px}
+.evidence-desk .lead {font-size:1.05rem;line-height:1.55;margin-top:12px}
+.desk-documents {height:150px}
+.desk-documents img {height:145px;width:105px;padding:4px;transform:none}
+.desk-material {right:0;top:0}.desk-plan {left:0;top:8px}
+.catalogue-layout {grid-template-columns:minmax(0,1fr) 230px;gap:24px;margin-top:24px}
+.catalogue-files {grid-column:1;grid-row:1;min-width:0}
+.catalogue-note {grid-column:2;grid-row:1}
+.resources-page .collection-tools {padding:14px}
+.resources-page .collection-tools .filters {margin-top:10px}
+.resources-page .collection-count {margin-block:10px 14px}
+.credential-folio {text-align:left;display:grid;grid-template-columns:1fr 240px;gap:24px;padding:24px}
+.folio-copy {max-width:none;margin:0}
+.folio-copy .lead {margin-top:12px}
+.certificate-fan {height:120px;margin:0;gap:8px}
+.folio-certificate {width:30%;height:100px;padding:4px;transform:none}
+.folio-certificate:nth-child(n) {transform:none}
+.home-influence {grid-template-columns:100px minmax(0,1fr);gap:20px;padding:20px;align-items:start}
+.thinker-portrait {border-radius:6px}
+.home-influence-copy .eyebrow {display:none}
+.home-influence-copy h3 {margin-top:0}
+.home-philosophy-principles {padding:22px;gap:20px}
+
+@media(max-width:1100px) {
+ .brand-name {display:none}
+ .hero-content {grid-template-columns:minmax(0,1.5fr) minmax(260px,1fr);gap:24px}
+ .hero-practice-photo .plate-image {height:250px}
+ .hero-avatar {width:116px;height:116px}
+ .hero-identity {gap:18px}
+ .home-influences {grid-template-columns:1fr}
+}
+@media(max-width:760px) {
+ .brand-name {display:block;max-width:none;font-size:.95rem}
+ .opening-hero>.hero-film {display:none}
+ .opening-hero>.hero-film[data-manual-play] {display:block;position:relative;inset:auto;width:100%;height:190px;border-radius:0}
+ .hero-content {display:block;padding-block:24px}
+ .hero-visual {padding:0;margin-top:14px;border:0;background:none;box-shadow:none}
+ .hero-film-home {display:none}
+ .hero-visual:has(.hero-film[data-manual-play]) .hero-film-home {display:block;height:190px;margin-bottom:12px}
+ .hero-practice-photo {display:none}
+ .hero-copy {padding:20px;border:1px solid var(--line)}
+ .hero-identity {gap:16px;margin-bottom:16px;align-items:center}
+ .hero-avatar {width:100px;height:120px;border-width:2px;border-radius:10px}
+ .opening-hero h1 {font-size:clamp(1.9rem,7vw,2.7rem);line-height:1.08}
+ .opening-label {font-size:.875rem;line-height:1.45}
+ .hero-role {font-size:1.3rem}
+ .hero-statement {font-size:1rem;margin-block:12px 16px}
+ .hero-joining {margin-top:16px;font-size:1rem}
+ .hero-teaching-scope {font-size:.95rem}
+ .hero-copy .actions {display:grid;grid-template-columns:1fr 1fr;gap:10px}
+ .hero-copy .actions .button {min-height:48px;padding:10px;font-size:1rem}
+ .hero-controls {gap:12px;width:auto;flex-wrap:wrap;padding-top:0;margin:0;border:0}
+ .hero-controls button {font-size:.875rem;padding:4px 10px;min-height:36px}
+ .film-caption {width:auto}
+ .opening-entry-controls {max-width:calc(100vw - 24px)}
+ html.opening-pending .opening-entry-controls,body:has(.identity-intro) .opening-entry-controls {right:12px;bottom:12px;padding:10px;gap:8px}
+ .opening-entry-controls .button {padding-inline:12px;font-size:.95rem}
+ .hiring-essentials-grid {grid-template-columns:1fr;padding-block:18px;gap:12px}
+ .hiring-fact {display:grid;grid-template-columns:115px 1fr;gap:12px}
+ .hiring-fact dt {margin:0}
+ .page-atmosphere {display:none}
+ .study-interval {height:1px;margin-block:14px;background:var(--line)}
+ .study-interval>img,.study-trace {display:none}
+ .evidence-desk {display:block;padding:20px;min-height:0}
+ .evidence-desk h1 {font-size:2.25rem}
+ .desk-documents,.certificate-fan {display:none}
+ .desk-label {margin-top:12px}
+ .catalogue-layout {display:flex;flex-direction:column;margin-top:18px;gap:20px}
+ .catalogue-files {order:-1;width:100%}
+ .catalogue-note {position:static;width:100%;padding:18px}
+ .catalogue-note .catalogue-photo {display:none}
+ .resources-page .collection-tools .filters {gap:6px}
+ .resources-page .filter {padding:6px 9px;font-size:.875rem}
+ .resources-page .resource-row,.resources-page .flagship-evidence {display:block}
+ .resources-page .resource-row::after {content:'';display:block;clear:both}
+ .resources-page .resource-row .evidence-card-media {float:right;width:84px;height:116px;min-height:0;margin:18px 18px 8px 14px;padding:0;border:0;border-radius:4px;overflow:hidden}
+ .resources-page .resource-row .resource-thumb {height:100%;position:static;object-fit:contain}
+ .resources-page .resource-row .evidence-card-body {display:block;padding:20px}
+ .resources-page .evidence-card-body h3 {font-size:1.3rem;line-height:1.3}
+ .resources-page .resource-desc {clear:both;padding-top:8px;font-size:1rem}
+ .resources-page .evidence-lens {margin-top:16px}
+ .resources-page .card-actions {margin-top:4px}
+ .credential-folio {display:block;padding:20px}
+ .credential-folio h1 {font-size:2.5rem}
+ .credentials-page .collection-tools {margin-top:18px}
+ .home-influence {display:block;padding:18px;min-width:0}
+ .home-influence-portrait {float:left;width:74px;margin:0 16px 6px 0}
+ .home-influence::after {content:'';display:block;clear:both}
+ .thinker-portrait {aspect-ratio:3/4}
+ .portrait-source {font-size:.875rem;line-height:1.25;min-height:44px}
+ .home-influence-copy h3 {font-size:1.4rem;margin:0 0 10px}
+ .home-influence-copy p {line-height:1.6}
+ .home-philosophy-heading {margin-bottom:18px;gap:12px}
+ .home-philosophy-intro {font-size:1rem}
+ .home-influences {gap:16px}
+ .home-philosophy-principles {margin-top:18px;padding:18px;gap:16px}
+ .home-principle-number {float:left;font-size:1.2rem;margin:0 10px 0 0}
+ .home-philosophy-principles article+article {padding-top:16px}
+ .home-philosophy-principles h3 {font-size:1.15rem;margin-bottom:8px}
+}
+@media(max-width:360px) {
+ .hero-copy {padding:18px}
+ .hero-avatar {width:82px;height:104px}
+ .hero-identity {gap:12px}
+ .hero-copy .actions .button {flex-basis:auto;font-size:.95rem}
+ .hiring-fact {grid-template-columns:105px 1fr;gap:8px}
+}
+@media print {
+ .opening-entry-controls,.hero-controls {display:none!important}
+ .page-atmosphere,.study-interval {display:none}
+ .catalogue-layout {display:block}
+}

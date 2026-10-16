@@ -20,8 +20,10 @@ jobs:
       - run: npm ci
       - run: npm run build
       - run: npm run test:palettes
+      - run: npm run lint
       - run: npm test
       - run: npx playwright install --with-deps chromium
+      - run: npm run test:recruiters
       - run: npm run test:browser
       - run: npm run test:identity
       - name: Verify committed pages match their source

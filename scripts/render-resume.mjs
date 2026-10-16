@@ -1,3 +1,4 @@
+import {experiencePeriod} from '../src/recruiter.js';
 import PDFDocument from 'pdfkit';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -11,16 +12,16 @@ export async function generateResume(c=defaultContent,{siteUrl=resolveSiteUrl()}
  const doc=new PDFDocument({size:'A4',margin:36,bufferPages:true,info:{Title:c.profile.name+' — Teaching Résumé',Author:c.profile.name,CreationDate:stamp,ModDate:stamp}});
  const output=fs.createWriteStream(path.join(root,'assets/krishna-mahato-resume.pdf'));doc.pipe(output);
  const plain=s=>String(s??'').replace(/[–—]/g,'-').replace(/[‘’]/g,"'").replace(/[“”]/g,'"');
- const ink='#123d49',muted='#52666f';
+ const ink='#30251f',muted='#6d5849';
  const draw=(value,x,y,width,size=9,face='Helvetica',color=ink)=>{doc.font(face).fontSize(size).fillColor(color).text(plain(value),x,y,{width,lineGap:1.5});return doc.y;};
  draw(c.profile.name,36,32,520,23,'Helvetica-Bold');
  draw('History & Social Science Educator',36,62,520,11);
  draw(c.profile.location+' | '+c.profile.email,36,82,520,9,'Helvetica',muted);
  doc.fontSize(8.5).text(siteUrl.replace('https://',''),36,99,{link:siteUrl});
- doc.strokeColor('#b57a55').lineWidth(1).moveTo(36,120).lineTo(559,120).stroke();
+ doc.strokeColor('#965333').lineWidth(1).moveTo(36,120).lineTo(559,120).stroke();
  const left={x:36,width:205,y:136},right={x:269,width:290,y:136};
  const text=(col,value,size=9,face='Helvetica',color=ink)=>{col.y=draw(value,col.x,col.y,col.width,size,face,color)+2;};
- const section=(col,label)=>{col.y+=7;text(col,label.toUpperCase(),9.5,'Helvetica-Bold','#854a2b');doc.strokeColor('#dddcd6').lineWidth(.5).moveTo(col.x,col.y).lineTo(col.x+col.width,col.y).stroke();col.y+=7;};
+ const section=(col,label)=>{col.y+=7;text(col,label.toUpperCase(),9.5,'Helvetica-Bold','#3b2e26');doc.strokeColor('#ded0c0').lineWidth(.5).moveTo(col.x,col.y).lineTo(col.x+col.width,col.y).stroke();col.y+=7;};
  section(left,'Professional profile');text(left,c.profile.summary,9);
  text(left,'Available: '+c.profile.availability,9,'Helvetica-Bold');text(left,c.profile.workPreferences,8.8);
  text(left,c.profile.eligibility,8.5,'Helvetica',muted);
@@ -30,7 +31,7 @@ export async function generateResume(c=defaultContent,{siteUrl=resolveSiteUrl()}
  section(left,'Skills & languages');text(left,c.competencies.join(' · '),8.5);text(left,c.profile.languages.join(' · '),8.5);
  section(right,'Teaching & observation experience');
  for(const e of c.experiences){
-  text(right,e.institution||e.title,10,'Helvetica-Bold');text(right,e.type+' | '+e.period+' | '+e.status,8.4,'Helvetica',muted);
+  text(right,e.institution||e.title,10,'Helvetica-Bold');text(right,e.type+' | '+experiencePeriod(e)+' | '+e.status,8.4,'Helvetica',muted);
   const points=e.id==='panchsheel'?(e.points||[]).filter((_,i)=>[0,1,3].includes(i)):(e.points||[]).slice(0,3);
   for(const point of points)text(right,'• '+point,8.8);right.y+=6;
  }

@@ -12,15 +12,15 @@ const ratio=(a,b)=>{const values=[luminance(a),luminance(b)].sort((a,b)=>b-a);re
 const results=[];
 for(const route of Object.keys(routes)){
  const colors=palettes[route];assert.ok(colors,`Missing palette: ${route}`);
- for(const background of ['paper','surface-muted'])assert.ok(luminance(colors[background])>.8,`${route}: keep large backgrounds light`);
- const pairs=[...['ink','dark','muted','accent-hover'].flatMap(text=>['paper','surface-muted'].map(background=>[text,background])),['action','white'],['accent-hover','white']];
- for(const [text,background] of pairs){
+ for(const background of ['paper','surface-muted'])assert.ok(luminance(colors[background])>.75,`${route}: keep reading backgrounds light`);
+ const pairs=[...['ink','dark','muted','accent-hover'].flatMap(text=>['paper','surface-muted'].map(background=>[text,background,4.5])),['action','white',4.5],['accent-hover','white',4.5],['on-dark','dark',4.5],['accent-soft','dark',4.5],['line-strong','white',3],['line-strong','surface-muted',3]];
+ for(const [text,background,minimum] of pairs){
   const contrast=ratio(colors[text],background==='white'?'#ffffff':colors[background]);
-  results.push({route,text,background,ratio:Number(contrast.toFixed(2))});
-  assert.ok(contrast>=4.5,`${route}: ${text} on ${background} has ${contrast.toFixed(2)}:1 contrast; 4.5:1 required`);
+  results.push({route,text,background,minimum,ratio:Number(contrast.toFixed(2))});
+  assert.ok(contrast>=minimum,`${route}: ${text} on ${background} has ${contrast.toFixed(2)}:1 contrast; ${minimum}:1 required`);
  }
 }
-assert.equal(new Set(Object.values(palettes).map(x=>x['surface-muted'])).size,Object.keys(routes).length,'Every route has its own light surface color');
+assert.equal(new Set(Object.values(palettes).map(x=>JSON.stringify(x))).size,1,'Every route uses the approved shared warm academic palette');
 await fs.mkdir('output/portfolio-design-review',{recursive:true});
 await fs.writeFile('output/portfolio-design-review/palette-contrast.json',JSON.stringify(results,null,2));
-console.log(`${results.length}/${results.length} text/button contrast pairs passed at 4.5:1 or higher across ${Object.keys(palettes).length} light page palettes.`);
+console.log(`${results.length}/${results.length} text, dark-surface and control-border contrast pairs passed across ${Object.keys(palettes).length} routes with one warm academic palette.`);

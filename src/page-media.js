@@ -12,6 +12,19 @@ export function photoPlate(record,base,cls='',priority=false){
  return `<figure class="photo-plate ${cls}"><a href="${esc(imageUrl(record.image,base))}" data-viewer data-original-url="${esc(safeUrl(record.url||record.image))}" data-title="${esc(record.title)}" aria-label="View ${esc(record.title)}">${img(record.image,record.description||record.title,base,'plate-image',priority)}</a><figcaption><strong>${esc(record.title)}</strong>${record.context?`<span>${esc(record.context)}</span>`:''}</figcaption></figure>`;
 }
 
+export function heroGallery(c,base){
+ const practice=c.experiences.some(e=>e.id==='panchsheel'),community=c.experiences.some(e=>e.id==='pehchaan');
+ const ids=[...(practice?['school-house-placards','independence-day','sports-day-artwork']:[]),'tlm-exhibition',...(community?['pehchaan-collage']:[])];
+ const seen=new Set();
+ const records=ids.map(id=>galleryRecord(c,id)).filter(r=>r?.image&&(!r.publicationStatus||r.publicationStatus==='Approved')&&!seen.has(r.image)&&seen.add(r.image));
+ if(!records.length)return '';
+ const rotating=records.length>1;
+ // Before enhancement only the first published image appears. It retains a
+ // normal original-file link when JavaScript or the gallery module is absent.
+ const slides=records.map((r,i)=>`<div class="hero-gallery-slide" data-hero-slide role="group" aria-roledescription="slide" aria-label="${i+1} of ${records.length}" ${i?'hidden':''}>${photoPlate(r,base,'hero-practice-photo',i===0)}</div>`).join('');
+ return `<aside class="hero-visual hero-gallery" data-hero-gallery role="region" aria-roledescription="carousel" aria-label="Photographs from my teaching practice">${rotating?`<div class="hero-gallery-controls" data-gallery-controls inert aria-hidden="true"><button type="button" data-gallery-rotation aria-controls="hero-photo-slides">Pause photos</button><span class="hero-gallery-count" data-gallery-count aria-hidden="true">1 / ${records.length}</span><button type="button" data-gallery-previous aria-controls="hero-photo-slides" aria-label="Previous photograph"><span aria-hidden="true">←</span></button><button type="button" data-gallery-next aria-controls="hero-photo-slides" aria-label="Next photograph"><span aria-hidden="true">→</span></button></div>`:''}<div class="hero-gallery-window"><div id="hero-photo-slides" class="hero-gallery-track" data-gallery-track aria-live="off">${slides}</div></div><p class="sr-only" role="status" data-gallery-status></p></aside>`;
+}
+
 // Subject illustrations are design assets, not uploaded teaching evidence.
 const subjectFiles={history:'history-sources',economics:'economics-study',english:'english-pedagogy',teaching:'teaching-practice'};
 const subjectUrl=subject=>'assets/theme/subject-art/'+subjectFiles[subject]+'-small.webp';
@@ -58,6 +71,6 @@ export function pageAtmosphere(c,route,base){
  };
  const subjects=(orders[route]||orders['404']).map((subject,i)=>({url:subjectUrl(subject),kind:'subject',subject,edge:i%2?'left':'right'}));
  const photos=(media[route]||[]).filter(url=>imageUrl(url,base)).map((url,i)=>({url,kind:'photo',subject:'personal',edge:i%2?'right':'left'}));
- const scenes=[subjects[0],photos[0],subjects[1],subjects[2],photos[1],subjects[3]].filter(Boolean);
+ const scenes=[subjects[0],photos[0],subjects[1],subjects[2]].filter(Boolean);
  return `<div class="page-atmosphere atmosphere-${esc(route)}" aria-hidden="true">${scenes.map(x=>`<div class="atmosphere-scene scene-${x.kind} subject-${x.subject} scene-${x.edge}">${img(x.url,'',base,'atmosphere-image')}</div>`).join('')}</div>`;
 }

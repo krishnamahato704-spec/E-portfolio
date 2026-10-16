@@ -24,9 +24,9 @@ function wire(){
 if(route==='admin') import('./admin.js?v=editorial-20261004').then(x=>x.initStudio(base));
 else {
  wire();
- let opening;
- if(route==='home')import('./identity.js?v=editorial-20261004').then(module=>{opening=module;module.initOpening();});
+ let opening,gallery;
+ if(route==='home')Promise.all([import('./identity.js?v=editorial-20261004'),import('./hero-gallery.js?v=home-media-20261016')]).then(([media,photos])=>{opening=media;gallery=photos;opening.initOpening();gallery.initHeroGallery();});
  initMotion({initial:true});
- window.addEventListener('pagehide',()=>{opening?.cleanupOpening();cleanupMotion();});
- window.addEventListener('pageshow',e=>{if(e.persisted){initMotion();opening?.initOpening({auto:false});}});
+ window.addEventListener('pagehide',()=>{opening?.cleanupOpening();gallery?.cleanupHeroGallery();cleanupMotion();});
+ window.addEventListener('pageshow',e=>{if(e.persisted){initMotion();opening?.initOpening({auto:false});gallery?.initHeroGallery();}});
 }

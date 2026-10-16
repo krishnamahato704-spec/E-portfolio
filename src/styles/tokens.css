@@ -1,8 +1,8 @@
 :root {
  color-scheme:light;
- --paper:#f7faf9; --sheet:#ffffff; --ink:#123d49; --dark:#123d49;
- --muted:#52666f; --accent:#b57a55; --action:#9b5c38; --accent-hover:#854a2b; --accent-soft:#f3e7df;
- --gold:#b57a55; --line:#dce7e3; --line-strong:#a4b9b6; --surface-muted:#edf5f2;
+ --paper:#fbf7f0; --sheet:#fffdf9; --ink:#30251f; --dark:#3b2e26;
+ --muted:#6d5849; --accent:#965333; --action:#965333; --accent-hover:#754026; --accent-soft:#f2e7d9;
+ --gold:#965333; --line:#ded0c0; --line-strong:#8d7360; --surface-muted:#f2e7d9;
  --on-dark:#ffffff; --dark-line:#647e86; --success:#205b49; --success-bg:#d8eee8;
  --pending:#204e72; --pending-bg:#e5f2ff; --danger:#8c302b; --danger-soft:#faeeeb;
  --serif:'Source Serif 4',Georgia,serif; --sans:'Source Sans 3','Segoe UI',Arial,sans-serif;

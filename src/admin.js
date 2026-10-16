@@ -72,7 +72,7 @@ function editor(){
  document.querySelector('#close-preview').onclick=()=>document.querySelector('dialog').close();
  document.querySelector('#preview-content').onclick=e=>{if(e.target.closest('a,button,form'))e.preventDefault()};
  document.querySelector('#publish').onclick=async()=>{
-  try{validateContent(draft);if(!confirm('Publish this draft to your public portfolio?'))return;setBusy(true);status('Publishing…');draft.schemaVersion=CURRENT_SCHEMA_VERSION;const row=await saveContent(draft,session.access_token,version);version=row.updated_at;dirty=false;status('Published successfully. A consistent static release will be deployed after the next content check and CI validation (scheduled every 15 minutes; GitHub may delay scheduled runs).');}
+  try{validateContent(draft);if(!confirm('Publish this draft to your public portfolio?'))return;setBusy(true);status('Publishing…');draft.schemaVersion=CURRENT_SCHEMA_VERSION;const row=await saveContent(draft,session.access_token,version);version=row.updated_at;dirty=false;status('Saved to the published-content database. Static pages and the résumé update after a website rebuild. Scheduled checks refresh GitHub Pages; verify the Vercel release separately before sharing your primary address.');}
   catch(err){status(err.message)}finally{setBusy(false)}
  };
  document.querySelector('#logout').onclick=async()=>{if(dirty&&!confirm('Discard unpublished changes and sign out? Export first if you want to keep them.'))return;try{await signOut(session.access_token)}catch{}session=null;draft=null;dirty=false;location.reload()};

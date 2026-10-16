@@ -40,6 +40,10 @@ try{
     check(engine,`${route} ${width}: bottom bar leaves the last footer link accessible`,await page.evaluate(()=>document.activeElement.getBoundingClientRect().bottom<=document.querySelector('.mobile-shortcuts').getBoundingClientRect().top));
    }
    if(width===390){
+    await page.goto(base);
+    check(engine,'Joining availability appears within the first phone screen',await page.locator('.hero-joining').evaluate(el=>el.getBoundingClientRect().bottom<800));
+    await page.goto(base+'resources/');
+    check(engine,'First teaching file starts within one screen of the phone heading',await page.locator('#resource-list>.resource-row').first().evaluate(el=>el.getBoundingClientRect().top<850));
     await page.goto(base+'#teaching-evidence');
     await page.locator('#teaching-evidence').waitFor();
     await page.evaluate(()=>document.fonts.ready);
@@ -60,6 +64,16 @@ try{
    }
    await ctx.close();
   }
+  const delayed=await browser.newContext({viewport:{width:390,height:900},reducedMotion:'reduce'});
+  const delayedPage=await delayed.newPage();
+  await delayedPage.route('**/src/hero-gallery.js*',async route=>{await new Promise(resolve=>setTimeout(resolve,1500));await route.continue();});
+  await delayedPage.goto(base+'#teaching-evidence');
+  await delayedPage.evaluate(()=>document.fonts.ready);
+  const beforeEnhancement=await delayedPage.locator('#teaching-evidence').evaluate(el=>el.getBoundingClientRect().top);
+  await delayedPage.locator('[data-gallery-controls]').waitFor({state:'visible',timeout:10000});
+  const afterEnhancement=await delayedPage.locator('#teaching-evidence').evaluate(el=>el.getBoundingClientRect().top);
+  check(engine,'Slow media enhancement preserves the direct evidence landing position',Math.abs(afterEnhancement-beforeEnhancement)<2&&afterEnhancement>=0&&afterEnhancement<150,{beforeEnhancement,afterEnhancement});
+  await delayed.close();
   const fallback=await browser.newContext({viewport:{width:390,height:900},javaScriptEnabled:false});
   const page=await fallback.newPage();await page.goto(base);
   check(engine,'No-JavaScript visitors retain direct mobile résumé access',await page.locator('.mobile-shortcuts').isVisible());

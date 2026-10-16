@@ -1,6 +1,16 @@
 import {defaultContent} from './content.js?v=editorial-20261004';
 import {recruiterFacts} from './recruiter.js?v=editorial-20261004';
 import {imageDimensions} from './image-dimensions.js?v=editorial-20261004';
+import {documentBytes} from './asset-metadata.js?v=editorial-20261004';
+export function documentSize(url,base){
+ const src=imageUrl(url,base);
+ const local=src?.startsWith(base+'assets/')?src.slice(base.length):'';
+ const key=url==='https://oyqevsygintkjrkfbzpx.supabase.co/storage/v1/object/public/portfolio-media/redesign/24c7a756-be36-4fd8-9462-6ee980c54736.pdf'?'assets/democracy-lesson-plan.pdf':local;
+ const bytes=documentBytes[key];
+ if(!bytes)return '';
+ const label=bytes>=1000000?(bytes/1000000).toFixed(2)+' MB':Math.ceil(bytes/1000)+' KB';
+ return `<span class="file-size">(${label})</span>`;
+}
 export const routes={
  home:{path:'',title:'History & Social Science Educator',nav:'Home'},
  profile:{path:'profile/',title:'About & Education',nav:'About'},
@@ -36,7 +46,7 @@ export function img(url,alt,base,cls='',priority=false){
  const src=imageUrl(url,base);
  const local=src.startsWith(base+'assets/')?src.slice(base.length):'';
  const dimensions=imageDimensions[local];
- const responsive=local==='assets/portrait.webp'?`srcset="${esc(base)}assets/portrait-360.webp 360w, ${esc(base)}assets/portrait-720.webp 720w, ${esc(src)} 1154w" sizes="${cls==='hero-avatar'?'(max-width: 760px) 108px, 128px':cls==='contact-avatar'?'90px':cls==='profile-portrait-photo'?'(max-width: 760px) 70vw, 340px':'(max-width: 650px) 140px, 180px'}"`:'';
+ const responsive=local==='assets/portrait.webp'?`srcset="${esc(base)}assets/portrait-360.webp 360w, ${esc(base)}assets/portrait-720.webp 720w, ${esc(src)} 1154w" sizes="${cls==='hero-avatar'?'(max-width: 760px) 100px, 144px':cls==='contact-avatar'?'90px':cls==='profile-portrait-photo'?'(max-width: 760px) 70vw, 340px':'(max-width: 650px) 140px, 180px'}"`:local==='assets/evidence/mock-election-activity.webp'?`srcset="${esc(base)}assets/previews/mock-election-activity-360.webp 360w, ${esc(base)}assets/previews/mock-election-activity-720.webp 720w, ${esc(src)} 1024w" sizes="(max-width: 760px) 90vw, 450px"`:'';
  return src?`<img class="${cls}" src="${esc(src)}" ${responsive} alt="${esc(alt)}" ${dimensions?`width="${dimensions[0]}" height="${dimensions[1]}"`:''} ${priority?'fetchpriority="high"':'loading="lazy"'} decoding="async">`:'';
 }
 export function heading(label,title,desc=''){return `<header class="page-heading"><p class="eyebrow">${label}</p><h1>${title}</h1>${desc?`<p class="lead">${desc}</p>`:''}</header>`;}

@@ -1,0 +1,52 @@
+/* One muted background video, with a readable chocolate scrim and independent photo gallery. */
+.opening-hero>.hero-film {display:block;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;opacity:1;filter:saturate(.8);border-radius:0}
+.opening-hero[data-film-hidden=true]>.hero-film {display:none}
+.opening-hero::before {display:block;inset:0;background:linear-gradient(90deg,#30241df2 0%,#30241de6 48%,#30241dbf 100%);opacity:1}
+.hero-text-only {grid-template-columns:1fr}
+.hero-copy {position:relative;z-index:1}
+.hero-background-controls {position:static;margin-top:18px;padding-top:14px;border-top:1px solid #a88b74;gap:8px;flex-wrap:wrap;justify-content:flex-start}
+.hero-background-controls .film-caption {flex:1;margin:0;padding:0;background:none;border:0}
+.hero-background-controls .film-label {color:var(--accent-soft);font-size:.875rem;white-space:normal}
+.hero-background-controls button {min-height:44px;padding:7px 12px;border:1px solid #d5bba5;border-radius:6px;background:#30241de6;color:white;font-size:.875rem}
+.hero-background-controls button:hover {background:#3b2e26}
+/* Reserve the real control rows before enhancement so fragment links do not jump. */
+[data-film-controls][inert],[data-gallery-controls][inert] {visibility:hidden;pointer-events:none}
+
+.hero-gallery {min-width:0;position:relative;z-index:1;align-self:center;background:none;padding:0;border:0;border-radius:0;box-shadow:none}
+.hero-gallery-window {overflow:hidden;border-radius:8px;touch-action:pan-y}
+.hero-gallery-track {display:flex;align-items:flex-start;transition:transform 500ms var(--ease);will-change:transform}
+.hero-gallery-slide {flex:0 0 100%;min-width:0}
+.hero-gallery .hero-practice-photo {display:block;visibility:visible;padding:0;margin:0;background:none;border:0;border-radius:0;box-shadow:none}
+.hero-gallery .hero-practice-photo a {height:300px;background:var(--surface-muted);border:6px solid var(--sheet);border-radius:8px}
+.hero-gallery .plate-image {width:100%;height:100%;object-fit:contain}
+.hero-gallery .hero-practice-photo figcaption {min-height:90px;padding:14px 4px 8px;font-size:1rem;line-height:1.4;color:var(--on-dark);background:none}
+.hero-gallery .hero-practice-photo figcaption span {font-size:.875rem;color:var(--accent-soft)}
+.hero-gallery-controls {display:flex;align-items:center;gap:8px;margin:0 0 12px;padding:0 0 12px;border-bottom:1px solid #a88b74}
+.hero-gallery-controls button {min-height:44px;min-width:44px;border:1px solid var(--sheet);border-radius:6px;padding:8px 10px;color:var(--dark);background:var(--sheet);font-size:.875rem}
+.hero-gallery-controls button:hover {background:var(--surface-muted)}
+.hero-gallery-count {flex:1;text-align:center;white-space:nowrap;font-size:.875rem;color:var(--accent-soft)}
+.hero-gallery [data-gallery-previous],.hero-gallery [data-gallery-next] {font-size:1.2rem}
+.hero-gallery :focus-visible {outline-color:var(--accent-soft);outline-offset:5px}
+
+@media(max-width:1100px) and (min-width:761px) {
+ .hero-gallery .hero-practice-photo a {height:250px}
+}
+@media(max-width:760px) {
+ .opening-hero>.hero-film {height:100%;position:absolute}
+ .opening-hero::before {display:block;background:#30241de6}
+ .hero-background-controls .film-caption {flex-basis:100%}
+ .hero-gallery {margin:20px 0 0;padding:0;background:none;border:0;border-radius:0}
+ .hero-gallery .hero-practice-photo a {height:220px}
+ .hero-gallery .hero-practice-photo figcaption {min-height:84px}
+ .hero-gallery-controls {gap:6px}
+ .hero-gallery-controls :focus-visible {outline-color:var(--accent-soft)}
+}
+@media(prefers-reduced-motion:reduce) {.hero-gallery-track {transition:none;will-change:auto}}
+html.opening-pending:not(.opening-measure) .opening-hero>.hero-film {position:fixed;inset:0;width:100vw;height:100svh;z-index:1;opacity:1;filter:none}
+@media print {
+ .hero-gallery-controls,.hero-background-controls {display:none!important}
+ .hero-gallery-track {display:block;transform:none!important}
+ .hero-gallery-slide[aria-hidden=true] {display:none}
+ .hero-gallery .hero-practice-photo figcaption,.hero-gallery .hero-practice-photo figcaption span {color:#111}
+ .opening-hero::before {display:none}
+}

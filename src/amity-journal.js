@@ -1,11 +1,12 @@
-// Edited from the owner's 49-page observation journal; no year appears in the source.
+// Edited from the 49-page journal. The owner confirmed its year on 15 October 2026.
+export const observationPeriod='1–4 December 2025';
 export const amityJournalResource={
  id:'amity-observation-journal',experienceId:'observation',
  title:'Amity School Observation · Reflective Journal',category:'Reflective journal',
  subject:'Classroom observation and teacher education',grade:'Observed Classes VIII, IX, X and XII',
- date:'1–4 December',duration:'4 days',type:'PDF · 17 pages',
+ date:observationPeriod,duration:'4 days',type:'PDF · 17 pages',
  context:'Amity International School, Mayur Vihar',
- description:'Edited journal with four daily records, original photographs, reflections and self-reflection. Rebuilt from the supplied handwritten journal; the source does not state a year.',
+ description:'Edited journal with four daily records, original photographs, reflections and self-reflection. Rebuilt from the supplied handwritten journal; the owner confirmed the observation year as 2025.',
  evidenceStatus:'Reflective observation record',
  url:'https://krishnamahato704-spec.github.io/E-portfolio/assets/evidence/amity-observation-reflective-journal.pdf',
  thumbnail:'https://krishnamahato704-spec.github.io/E-portfolio/assets/evidence/amity-observation-reflective-journal.webp'

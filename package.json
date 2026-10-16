@@ -7,13 +7,14 @@
     "build": "node scripts/build.mjs",
     "dev": "node scripts/serve.mjs",
     "start": "node scripts/serve.mjs",
-    "lint": "node --test tests/*.test.mjs",
+    "lint": "node scripts/lint.mjs",
     "test": "node --test tests/*.test.mjs",
     "test:browser": "node scripts/check-browser.mjs",
     "test:identity": "node scripts/check-identity.mjs",
     "test:recruiters": "node scripts/check-recruiter-access.mjs",
     "test:palettes": "node scripts/check-palette-contrast.mjs",
-    "test:accessibility": "node scripts/check-accessibility.mjs"
+    "test:accessibility": "node scripts/check-accessibility.mjs",
+    "prebuild": "node scripts/generate-asset-metadata.mjs"
   },
   "engines": {
     "node": ">=22"

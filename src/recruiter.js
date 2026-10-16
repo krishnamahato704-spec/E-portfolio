@@ -1,4 +1,11 @@
+import {observationPeriod} from './amity-journal.js?v=editorial-20261004';
 // Shared facts for public pages and the owner preview. No inferred eligibility.
+export function experiencePeriod(experience) {
+  const period=String(experience.period||'');
+  return experience.id==='observation'&&['1–4 December','1-4 December','1–4 December · year not recorded'].includes(period)
+    ? observationPeriod : period;
+}
+
 export function studySummary(content) {
   const ongoing=content.qualifications.filter(q=>q.status==='In progress');
   return ongoing.length?ongoing.map(q=>q.title).join(' & ')+' in progress':'See the education record for qualification status.';
