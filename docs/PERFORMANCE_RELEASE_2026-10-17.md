@@ -12,6 +12,8 @@ The release check now resolves the deployment's actual site URL, and compares bo
 
 Two regression tests first reproduced the wrong destination and the missed stale source commit, then passed after correction. The new performance browser suite is included in CI: Chromium on Linux and WebKit on macOS.
 
+The first macOS run also exposed a test expectation left over from the old opening: its delayed application had exceeded the new startup budget, correctly showing Home, but the test waited for an introduction that should no longer start. The test now checks either visible opening controls on a prompt load or readable Home after an expired budget. A 2.2-second application delay exercises the fallback explicitly; the separate performance suite still rejects late introductions.
+
 ## Reviewed content and validation
 
 The build fetched the published content once, without editing it. Its normalized digest remains `276642bebf55c9edfa3715914a861ffe76f7d2b98639bb087816d08da8bd9b80`, with data timestamp `2026-10-04T16:30:13.693024+00:00`. The warm palette, original illustrations, muted background film, five-photo gallery and confirmed observation year are retained. Performance changes and the preceding full audits are recorded in `PERFORMANCE_2026-10-16.md`.

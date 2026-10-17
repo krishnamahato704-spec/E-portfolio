@@ -13,15 +13,19 @@ try{
   const browser=await {chromium,firefox,webkit}[engine].launch({headless:true});
   try{
    const firstPaint=await browser.newContext({viewport:{width:1440,height:1000}}),first=await firstPaint.newPage();
-   await first.route('**/src/app.js*',async route=>{await new Promise(r=>setTimeout(r,900));await route.continue();});
+   await first.route('**/src/app.js*',async route=>{await new Promise(r=>setTimeout(r,Number(process.env.FIRST_PAINT_DELAY_MS||900)));await route.continue();});
    const initialLoad=first.goto(base,{waitUntil:'domcontentloaded'});
    await first.waitForFunction(()=>document.documentElement.classList.contains('opening-pending')&&getComputedStyle(document.querySelector('.opening-hero'),'::after').position==='fixed');
    record(engine,'First paint shows the full-screen poster without a flash of Home',await first.evaluate(()=>{
     const cover=getComputedStyle(document.querySelector('.opening-hero'),'::after');
     return parseFloat(cover.width)>=innerWidth&&parseFloat(cover.height)>=innerHeight&&cover.backgroundImage.includes('hero-poster.webp')&&!document.querySelector('h1').checkVisibility({checkVisibilityCSS:true})&&!document.querySelector('.site-header').checkVisibility({checkVisibilityCSS:true});
    }));
-   await initialLoad;await first.locator('.intro-running').waitFor();
-   record(engine,'The opening has visible skip and explicit sound controls',await first.locator('[data-opening-skip]').isVisible()&&await first.locator('[data-opening-sound]').isVisible());
+   await initialLoad;
+   // The delay plus a cold native browser can exceed the startup budget.
+   // That is a valid readable fallback, not a reason to wait for a late intro.
+   await first.waitForFunction(()=>document.querySelector('.intro-running')||!window.portfolioOpeningBoot.pending);
+   if(await first.locator('.intro-running').count())record(engine,'The opening has visible skip and explicit sound controls',await first.locator('[data-opening-skip]').isVisible()&&await first.locator('[data-opening-sound]').isVisible());
+   else record(engine,'A slow initial application leaves Home readable without a late opening',await first.evaluate(()=>performance.now()>=window.portfolioOpeningBoot.expiresAt&&document.querySelector('h1').checkVisibility({checkVisibilityCSS:true})&&!document.querySelector('.identity-intro')));
    await firstPaint.close();
    const ctx=await browser.newContext({viewport:{width:1440,height:1000}}),page=await ctx.newPage();
    const errors=[];page.on('pageerror',error=>errors.push(error.message));
