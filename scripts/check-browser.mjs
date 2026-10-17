@@ -61,13 +61,13 @@ async function context(options={}){
 }
 
 async function imageFailures(page){
-  const imgs=page.locator('main img');
+  const imgs=page.locator('main img:not([data-src])');
   for(let i=0;i<await imgs.count();i++){
     const img=imgs.nth(i);
     if(await img.isVisible())await img.scrollIntoViewIfNeeded();
   }
-  await page.waitForFunction(()=>[...document.querySelectorAll('main img')].filter(i=>i.checkVisibility()).every(i=>i.complete),null,{timeout:10000}).catch(()=>{});
-  return page.evaluate(()=>[...document.querySelectorAll('main img')].filter(i=>i.checkVisibility()&&(!i.complete||!i.naturalWidth)).map(i=>({src:i.getAttribute('src'),alt:i.alt})));
+  await page.waitForFunction(()=>[...document.querySelectorAll('main img')].filter(i=>i.checkVisibility()&&!i.closest('[data-hero-slide][aria-hidden="true"]')).every(i=>i.complete),null,{timeout:10000}).catch(()=>{});
+  return page.evaluate(()=>[...document.querySelectorAll('main img')].filter(i=>i.checkVisibility()&&!i.closest('[data-hero-slide][aria-hidden="true"]')&&(!i.complete||!i.naturalWidth)).map(i=>({src:i.getAttribute('src'),alt:i.alt})));
 }
 
 async function inspectPage(page){
@@ -213,6 +213,7 @@ try{
   await moving.keyboard.press('Escape');
   record('opening: Escape reveals the portfolio and stops piano immediately',await moving.locator('.identity-intro').count()===0&&await moving.locator('h1').isVisible()&&await moving.locator('[data-opening-audio]').evaluate(a=>a.paused));
   await moving.emulateMedia({reducedMotion:'reduce'});
+  await moving.waitForFunction(()=>document.querySelector('.hero-film').paused,null,{timeout:1000});
   record('opening: live reduced motion pauses the film',await moving.locator('.hero-film').evaluate(video=>video.paused));
   await motion.close();
   const failed=results.filter(result=>!result.pass);

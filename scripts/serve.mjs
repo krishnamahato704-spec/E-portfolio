@@ -27,6 +27,9 @@ http.createServer(async(req,res)=>{
   // directive is present. Keep every other CSP restriction in local previews.
   const body=path.extname(target)==='.html'?data.toString().replace('; upgrade-insecure-requests',''):data;
   const headers={'Content-Type':types[path.extname(target)]||'application/octet-stream','Cache-Control':'no-cache'};
+  // Opt in when measuring production-style repeat visits. Everyday local
+  // previews retain no-cache so source edits are always visible.
+  if(process.argv.includes('--cache')&&((pathname.startsWith('/assets/')&&/^[a-f0-9]{12}$/.test(url.searchParams.get('v')||''))||(pathname.startsWith('/src/')&&/^[a-f0-9]{12}-[a-f0-9]{10}$/.test(url.searchParams.get('v')||''))))headers['Cache-Control']='public, max-age=31536000, immutable';
   // Native media engines use byte ranges to buffer and seek through the film.
   if(/\.(mp4|mp3)$/.test(target)){
    headers['Accept-Ranges']='bytes';

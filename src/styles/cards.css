@@ -14,6 +14,8 @@
 .tag {display:inline-block;padding:3px 9px;border-radius:20px;background:var(--surface-muted);font-size:.72rem;line-height:1.5;color:#42525a}
 .status {display:inline-flex;align-items:center;gap:6px;font-size:.72rem;padding:3px 9px;background:var(--success-bg);color:var(--success);border-radius:20px;font-weight:600}
 .status.progress {background:var(--pending-bg);color:var(--pending)}
+[data-enhancement][inert] {visibility:hidden;pointer-events:none}
+.collection-count[data-enhancement] {min-height:1.65em}
 .selected-evidence-grid,.evidence-library-grid {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
 .selected-evidence-card,.resource-row,.certificate-card {min-width:0;background:var(--sheet);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow)}
 .evidence-card-media {position:relative;height:clamp(180px,16vw,220px);flex:none;min-height:0;overflow:hidden;background:var(--surface-muted);padding:12px;border-bottom:1px solid var(--line)}

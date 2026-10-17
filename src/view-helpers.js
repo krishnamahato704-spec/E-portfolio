@@ -42,12 +42,12 @@ export function imageUrl(url,base){
  if(url.startsWith('./assets/')||url.startsWith('assets/'))return base+url.replace(/^\.?\//,'');
  return safeUrl(url);
 }
-export function img(url,alt,base,cls='',priority=false){
+export function img(url,alt,base,cls='',priority=false,deferred=false){
  const src=imageUrl(url,base);
  const local=src.startsWith(base+'assets/')?src.slice(base.length):'';
  const dimensions=imageDimensions[local];
  const responsive=local==='assets/portrait.webp'?`srcset="${esc(base)}assets/portrait-360.webp 360w, ${esc(base)}assets/portrait-720.webp 720w, ${esc(src)} 1154w" sizes="${cls==='hero-avatar'?'(max-width: 760px) 100px, 144px':cls==='contact-avatar'?'90px':cls==='profile-portrait-photo'?'(max-width: 760px) 70vw, 340px':'(max-width: 650px) 140px, 180px'}"`:local==='assets/evidence/mock-election-activity.webp'?`srcset="${esc(base)}assets/previews/mock-election-activity-360.webp 360w, ${esc(base)}assets/previews/mock-election-activity-720.webp 720w, ${esc(src)} 1024w" sizes="(max-width: 760px) 90vw, 450px"`:'';
- return src?`<img class="${cls}" src="${esc(src)}" ${responsive} alt="${esc(alt)}" ${dimensions?`width="${dimensions[0]}" height="${dimensions[1]}"`:''} ${priority?'fetchpriority="high"':'loading="lazy"'} decoding="async">`:'';
+ return src?`<img class="${cls}" ${deferred?'data-src':'src'}="${esc(src)}" ${deferred?responsive.replace('srcset=','data-srcset='):responsive} alt="${esc(alt)}" ${dimensions?`width="${dimensions[0]}" height="${dimensions[1]}"`:''} ${priority?'fetchpriority="high"':'loading="lazy"'} decoding="async">`:'';
 }
 export function heading(label,title,desc=''){return `<header class="page-heading"><p class="eyebrow">${label}</p><h1>${title}</h1>${desc?`<p class="lead">${desc}</p>`:''}</header>`;}
 export function sectionHead(label,title,aside=''){return `<div class="section-heading"><div>${label?`<p class="eyebrow">${label}</p>`:''}<h2>${title}</h2></div>${aside}</div>`;}

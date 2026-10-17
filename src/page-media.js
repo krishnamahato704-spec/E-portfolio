@@ -7,9 +7,9 @@ export const galleryRecord=(c,...ids)=>ids.map(id=>c.gallery.find(x=>x.id===id))
 export function photoBackdrop(record,base,cls=''){
  return record?.image?`<div class="page-photo-backdrop ${cls}" aria-hidden="true">${img(record.image,'',base)}</div>`:'';
 }
-export function photoPlate(record,base,cls='',priority=false){
+export function photoPlate(record,base,cls='',priority=false,deferred=false){
  if(!record?.image)return '';
- return `<figure class="photo-plate ${cls}"><a href="${esc(imageUrl(record.image,base))}" data-viewer data-original-url="${esc(safeUrl(record.url||record.image))}" data-title="${esc(record.title)}" aria-label="View ${esc(record.title)}">${img(record.image,record.description||record.title,base,'plate-image',priority)}</a><figcaption><strong>${esc(record.title)}</strong>${record.context?`<span>${esc(record.context)}</span>`:''}</figcaption></figure>`;
+ return `<figure class="photo-plate ${cls}"><a href="${esc(imageUrl(record.image,base))}" data-viewer data-original-url="${esc(safeUrl(record.url||record.image))}" data-title="${esc(record.title)}" aria-label="View ${esc(record.title)}">${img(record.image,record.description||record.title,base,'plate-image',priority,deferred)}</a><figcaption><strong>${esc(record.title)}</strong>${record.context?`<span>${esc(record.context)}</span>`:''}</figcaption></figure>`;
 }
 
 export function heroGallery(c,base){
@@ -21,7 +21,7 @@ export function heroGallery(c,base){
  const rotating=records.length>1;
  // Before enhancement only the first published image appears. It retains a
  // normal original-file link when JavaScript or the gallery module is absent.
- const slides=records.map((r,i)=>`<div class="hero-gallery-slide" data-hero-slide role="group" aria-roledescription="slide" aria-label="${i+1} of ${records.length}" ${i?'hidden':''}>${photoPlate(r,base,'hero-practice-photo',i===0)}</div>`).join('');
+ const slides=records.map((r,i)=>`<div class="hero-gallery-slide" data-hero-slide role="group" aria-roledescription="slide" aria-label="${i+1} of ${records.length}" ${i?'hidden':''}>${photoPlate(r,base,'hero-practice-photo',i===0,i>0)}</div>`).join('');
  return `<aside class="hero-visual hero-gallery" data-hero-gallery role="region" aria-roledescription="carousel" aria-label="Photographs from my teaching practice">${rotating?`<div class="hero-gallery-controls" data-gallery-controls inert aria-hidden="true"><button type="button" data-gallery-rotation aria-controls="hero-photo-slides">Pause photos</button><span class="hero-gallery-count" data-gallery-count aria-hidden="true">1 / ${records.length}</span><button type="button" data-gallery-previous aria-controls="hero-photo-slides" aria-label="Previous photograph"><span aria-hidden="true">←</span></button><button type="button" data-gallery-next aria-controls="hero-photo-slides" aria-label="Next photograph"><span aria-hidden="true">→</span></button></div>`:''}<div class="hero-gallery-window"><div id="hero-photo-slides" class="hero-gallery-track" data-gallery-track aria-live="off">${slides}</div></div><p class="sr-only" role="status" data-gallery-status></p></aside>`;
 }
 

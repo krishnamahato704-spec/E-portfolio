@@ -15,10 +15,10 @@ try{
    const firstPaint=await browser.newContext({viewport:{width:1440,height:1000}}),first=await firstPaint.newPage();
    await first.route('**/src/app.js*',async route=>{await new Promise(r=>setTimeout(r,900));await route.continue();});
    const initialLoad=first.goto(base,{waitUntil:'domcontentloaded'});
-   await first.waitForFunction(()=>document.documentElement.classList.contains('opening-pending')&&getComputedStyle(document.querySelector('.hero-film')).position==='fixed');
+   await first.waitForFunction(()=>document.documentElement.classList.contains('opening-pending')&&getComputedStyle(document.querySelector('.opening-hero'),'::after').position==='fixed');
    record(engine,'First paint shows the full-screen poster without a flash of Home',await first.evaluate(()=>{
-    const film=document.querySelector('.hero-film'),rect=film.getBoundingClientRect();
-    return rect.width>=innerWidth&&rect.height>=innerHeight&&!document.querySelector('h1').checkVisibility({checkVisibilityCSS:true})&&!document.querySelector('.site-header').checkVisibility({checkVisibilityCSS:true});
+    const cover=getComputedStyle(document.querySelector('.opening-hero'),'::after');
+    return parseFloat(cover.width)>=innerWidth&&parseFloat(cover.height)>=innerHeight&&cover.backgroundImage.includes('hero-poster.webp')&&!document.querySelector('h1').checkVisibility({checkVisibilityCSS:true})&&!document.querySelector('.site-header').checkVisibility({checkVisibilityCSS:true});
    }));
    await initialLoad;await first.locator('.intro-running').waitFor();
    record(engine,'The opening has visible skip and explicit sound controls',await first.locator('[data-opening-skip]').isVisible()&&await first.locator('[data-opening-sound]').isVisible());
@@ -166,7 +166,7 @@ try{
    await photos.mouse.move(10,70);await photos.waitForTimeout(6300);
    record(engine,'Keyboard focus stops rotation until explicitly restarted',await photos.locator('[data-hero-gallery]').getAttribute('data-rotation')==='paused');
    record(engine,'Focused gallery keeps the same photograph through a rotation interval',await photos.locator('[data-hero-gallery]').getAttribute('data-slide')==='1');
-   await nextPhoto.click();record(engine,'Next photograph changes the slide and stays paused',await photos.locator('[data-hero-gallery]').getAttribute('data-slide')==='2'&&await photos.locator('[data-hero-gallery]').getAttribute('data-rotation')==='paused');
+   await nextPhoto.click();await photos.waitForFunction(()=>document.querySelector('[data-hero-gallery]').dataset.slide==='2');record(engine,'Next photograph changes the slide and stays paused',await photos.locator('[data-hero-gallery]').getAttribute('data-slide')==='2'&&await photos.locator('[data-hero-gallery]').getAttribute('data-rotation')==='paused');
    await photos.locator('[data-gallery-previous]').click();record(engine,'Previous photograph returns to the prior slide',await photos.locator('[data-hero-gallery]').getAttribute('data-slide')==='1');
    const photoTrigger=photos.locator('[data-hero-slide]:not([inert]) a');await photoTrigger.click();
    record(engine,'The active photograph retains its original evidence viewer',await photos.locator('.evidence-viewer').isVisible());
@@ -181,11 +181,12 @@ try{
    const staticContext=await browser.newContext({viewport:{width:390,height:844},reducedMotion:'reduce'}),staticPhotos=await staticContext.newPage();
    await staticPhotos.goto(base);await staticPhotos.locator('[data-hero-gallery][data-enhanced]').waitFor();
    record(engine,'Reduced motion keeps the phone gallery static and leaves film unloaded',await staticPhotos.locator('[data-hero-gallery]').getAttribute('data-rotation')==='paused'&&await staticPhotos.locator('.hero-film').evaluate(v=>v.paused&&!v.getAttribute('src')));
-   await staticPhotos.locator('[data-gallery-next]').click();
+   await staticPhotos.locator('[data-gallery-next]').click();await staticPhotos.waitForFunction(()=>document.querySelector('[data-hero-gallery]').dataset.slide==='1');
    record(engine,'Phone gallery remains manually usable without overflow',await staticPhotos.locator('[data-hero-gallery]').getAttribute('data-slide')==='1'&&await staticPhotos.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
    await staticPhotos.locator('.hero-gallery-window').evaluate(element=>{
     for(const [type,x] of [['touchstart',240],['touchend',100]]){const event=new Event(type,{bubbles:true});Object.defineProperty(event,'changedTouches',{value:[{clientX:x,clientY:100}]});element.dispatchEvent(event);}
    });
+   await staticPhotos.waitForFunction(()=>document.querySelector('[data-hero-gallery]').dataset.slide==='2');
    record(engine,'Horizontal phone swipe selects the next photograph',await staticPhotos.locator('[data-hero-gallery]').getAttribute('data-slide')==='2');
    await staticContext.close();
    const gallery=await browser.newContext({reducedMotion:'reduce'}),g=await gallery.newPage();

@@ -13,7 +13,8 @@ permissions:
   contents: read
 concurrency:
   group: portfolio-${{ github.ref }}
-  cancel-in-progress: true
+  # A scheduled content check must not cancel a source release already running.
+  cancel-in-progress: ${{ github.event_name != 'schedule' }}
 jobs:
   content:
     runs-on: ubuntu-latest
@@ -57,6 +58,7 @@ jobs:
       - run: npx playwright install --with-deps chromium firefox webkit
       - run: npm run test:recruiters
       - run: npm run test:browser
+      - run: npm run test:performance
       - name: Provide an audio output for native Firefox audio checks
         run: |
           sudo apt-get update
@@ -106,6 +108,9 @@ jobs:
       - run: npm run build
       - run: npx playwright install webkit
       - run: npm run test:identity
+      - run: npm run test:performance
+        env:
+          PERFORMANCE_TEST_ENGINES: webkit
       - uses: actions/upload-artifact@v4
         if: always()
         with:

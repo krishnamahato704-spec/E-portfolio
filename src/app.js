@@ -25,7 +25,10 @@ if(route==='admin') import('./admin.js?v=editorial-20261004').then(x=>x.initStud
 else {
  wire();
  let opening,gallery;
- if(route==='home')Promise.all([import('./identity.js?v=editorial-20261004'),import('./hero-gallery.js?v=home-media-20261016')]).then(([media,photos])=>{opening=media;gallery=photos;opening.initOpening();gallery.initHeroGallery();});
+ if(route==='home'){
+  import('./identity.js?v=editorial-20261004').then(media=>{opening=media;opening.initOpening();});
+  import('./hero-gallery.js?v=editorial-20261004').then(photos=>{gallery=photos;gallery.initHeroGallery();});
+ }
  initMotion({initial:true});
  window.addEventListener('pagehide',()=>{opening?.cleanupOpening();gallery?.cleanupHeroGallery();cleanupMotion();});
  window.addEventListener('pageshow',e=>{if(e.persisted){initMotion();opening?.initOpening({auto:false});gallery?.initHeroGallery();}});

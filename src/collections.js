@@ -37,5 +37,5 @@ export function wireCollections(root=document, options={}) {
     },options);
     update();
   }
-  root.querySelectorAll('[data-enhancement]').forEach(el=>el.hidden=false);
+  root.querySelectorAll('[data-enhancement]').forEach(el=>{el.inert=false;el.removeAttribute('aria-hidden');});
 }

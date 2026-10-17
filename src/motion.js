@@ -1,30 +1,27 @@
-import {initTimeline, cleanupTimeline} from './timeline.js?v=editorial-20261004';
-import {initPhilosophy, cleanupPhilosophy} from './philosophy.js?v=editorial-20261004';
-import {initDemocracy, cleanupDemocracy} from './democracy.js?v=editorial-20261004';
-
 // Progressive enhancement: nothing is hidden while waiting for JavaScript or an observer.
 let dispose = () => {};
-let heroPlayed = false;
 
 export function cleanupMotion() {
-  cleanupTimeline();
-  cleanupPhilosophy();
-  cleanupDemocracy();
   dispose();
   dispose = () => {};
 }
 
-export function initMotion({ initial = false } = {}) {
+export function initMotion() {
   const previousVideo = document.querySelector('#main .hero-film');
   const resumeVideo = !!previousVideo && !previousVideo.paused;
   cleanupMotion();
   const root = document.querySelector('#main');
   if (!root || ['admin', 'resume', '404'].includes(document.body.dataset.route)) return;
-  initTimeline(root);
-  initPhilosophy(root);
-  initDemocracy(root);
   const preference = matchMedia('(prefers-reduced-motion: reduce)');
   const events = new AbortController();
+  const controllers=[];
+  const attach=(module,init,cleanup)=>{
+    if(events.signal.aborted)return;
+    module[init](root);controllers.push(module[cleanup]);
+  };
+  if(root.querySelector('.timeline-container'))import('./timeline.js?v=editorial-20261004').then(module=>attach(module,'initTimeline','cleanupTimeline'));
+  if(root.querySelector('.philosophy-sequence'))import('./philosophy.js?v=editorial-20261004').then(module=>attach(module,'initPhilosophy','cleanupPhilosophy'));
+  if(root.querySelector('.democracy-layout'))import('./democracy.js?v=editorial-20261004').then(module=>attach(module,'initDemocracy','cleanupDemocracy'));
   let observer;
   let resizeObserver;
   let frame = 0;
@@ -35,9 +32,7 @@ export function initMotion({ initial = false } = {}) {
   const stop = () => {
     video?.pause();
     events.abort();
-    cleanupTimeline();
-    cleanupPhilosophy();
-    cleanupDemocracy();
+    controllers.splice(0).forEach(cleanup=>cleanup());
     observer?.disconnect();
     resizeObserver?.disconnect();
     cancelAnimationFrame(frame);
@@ -69,17 +64,6 @@ export function initMotion({ initial = false } = {}) {
     for (let el = e.target; el && el !== root; el = el.parentElement) finish(el);
   }, { signal: events.signal });
 
-  const hero = root.querySelector('.hero');
-  if (hero && initial && !heroPlayed && scrollY < 24) {
-    heroPlayed = true;
-    const navigation = document.querySelector('.site-header .header-inner');
-    if (navigation) { navigation.dataset.motionIndex = '0'; enter(navigation, true); }
-    hero.querySelectorAll('[data-hero-step]:not(.portrait-frame)').forEach(el => {
-      el.dataset.motionIndex = el.dataset.heroStep;
-      enter(el, true);
-    });
-  }
-
   root.querySelectorAll('.snapshot-grid, .school-stages, .practice-grid, #resource-list, .certificate-grid, .gallery-grid').forEach(group => {
     [...group.children].forEach((el, i) => { el.dataset.motionIndex = String(i % 3); });
   });
@@ -107,7 +91,6 @@ export function initMotion({ initial = false } = {}) {
     const positions = targets.map(el => ({ el, top: el.getBoundingClientRect().top }));
     positions.forEach(({ el, top }) => {
       if (top >= innerHeight - 24) observer.observe(el);
-      else if (initial && scrollY < 24 && top >= 0) enter(el);
     });
   }
 

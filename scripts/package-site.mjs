@@ -4,6 +4,7 @@ import {createHash} from 'node:crypto';
 import {fileURLToPath} from 'node:url';
 import {routes} from '../src/views.js';
 import {contentSignature} from '../src/content.js';
+import {assetFingerprints,fingerprintUrls} from './fingerprint-assets.mjs';
 const root=path.resolve(import.meta.dirname,'..');
 export async function packageSite({siteUrl}={}){
  const output=path.resolve(root,'dist');
@@ -37,12 +38,14 @@ export async function packageSite({siteUrl}={}){
  await writeFile(path.join(output,'src/content.js'),`import {amityJournalResource} from './amity-journal.js?v=editorial-20261004';\nexport const CURRENT_SCHEMA_VERSION = ${release.content.schemaVersion};\nexport const defaultContent = ${JSON.stringify(release.content)};\n${helpers}`);
  const digest=createHash('sha256').update(contentSignature(release.content)).digest('hex');
  const version=(process.env.GITHUB_SHA||process.env.VERCEL_GIT_COMMIT_SHA||digest).slice(0,12)+'-'+digest.slice(0,10);
+ const assetHashes=await assetFingerprints(path.join(output,'assets'));
  async function stamp(dir){for(const entry of await readdir(dir,{withFileTypes:true})){
   const file=path.join(dir,entry.name);
   if(entry.isDirectory())await stamp(file);
   else if(/\.(html|js|css)$/.test(entry.name)){
    const text=await readFile(file,'utf8');
-   await writeFile(file,text.replace(/\?v=(?:build|editorial-20261004)\b/g,'?v='+version));
+   const stamped=text.replace(/\?v=(?:build|editorial-20261004)\b/g,'?v='+version);
+   await writeFile(file,/\.(html|css)$/.test(entry.name)?fingerprintUrls(stamped,assetHashes):stamped);
   }
  }}
  await stamp(output);

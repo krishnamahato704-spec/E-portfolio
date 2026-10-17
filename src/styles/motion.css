@@ -1,5 +1,7 @@
-@keyframes arrive {from {transform:translateY(7px)}to {transform:none}}
+@keyframes arrive {from {opacity:.72}to {opacity:1}}
 @media(prefers-reduced-motion:no-preference) {
+ @view-transition {navigation:auto}
+ ::view-transition-old(root),::view-transition-new(root) {animation-duration:160ms;animation-timing-function:ease-out}
  .motion-enter,.motion-hero {animation:arrive 300ms var(--ease) both}
  .reading-progress {position:fixed;top:0;left:0;height:2px;width:100%;background:var(--accent);transform-origin:left;z-index:60;pointer-events:none}
  .gallery-image {transition:filter var(--quick)}

@@ -15,7 +15,7 @@ export function initOpening({auto=true}={}){
  const closeFilm=hero.querySelector('[data-film-close]');
  const status=hero.querySelector('.film-status');
  const hold=2200,fade=1000;
- let intro=null,timer=0,generation=0,heroVisible=hero.getBoundingClientRect().bottom>0,filmSize=null;
+ let intro=null,timer=0,generation=0,heroVisible=hero.getBoundingClientRect().bottom>0,filmSize=null,cropFrame=0;
  let started=0,audioGeneration=0,audioPending=false,soundChosen=false;
  const entryControls=hero.querySelector('[data-opening-controls]');
  const sound=hero.querySelector('[data-opening-sound]');
@@ -45,22 +45,35 @@ export function initOpening({auto=true}={}){
    audioPending=false;
   }).catch(()=>{if(request===audioGeneration){audioPending=false;say('Music could not play. The portfolio is ready to read.');}});
  };
- const frameFilm=()=>{
-  if(innerWidth>760){film.style.objectPosition='76% top';return;}
-  if(!intro?.contains(film)){film.style.objectPosition='50% top';return;}
-  // Cache geometry and interpolate media updates so the phone crop follows
-  // the subject without the old stepwise jumps.
-  filmSize??={width:film.clientWidth,height:film.clientHeight};
+ const stopCrop=()=>{
+  if(film.cancelVideoFrameCallback)film.cancelVideoFrameCallback(cropFrame);
+  else cancelAnimationFrame(cropFrame);
+  cropFrame=0;
+ };
+ const frameFilm=(mediaTime=film.currentTime)=>{
+  if(innerWidth>760||!intro?.contains(film)){
+   film.style.removeProperty('width');film.style.removeProperty('translate');
+   film.style.objectPosition=innerWidth>760?'76% top':'50% top';return;
+  }
+  // Measure once. Move the wide video on the compositor for each decoded
+  // frame, instead of repainting object-position at timeupdate intervals.
+  filmSize??={width:intro.clientWidth,height:intro.clientHeight};
   const {width,height}=filmSize,ratio=film.videoWidth&&film.videoHeight?film.videoWidth/film.videoHeight:16/9;
   const renderedWidth=Math.max(width,height*ratio),overflow=renderedWidth-width;
-  const focalX=.677+(.49-.677)*Math.min(1,film.currentTime);
-  const position=overflow?Math.max(0,Math.min(1,(focalX*renderedWidth-width*.5)/overflow)):.5;
-  film.style.objectPosition=position*100+'% top';
+  const focalX=.677+(.49-.677)*Math.min(1,mediaTime);
+  const offset=Math.max(0,Math.min(overflow,focalX*renderedWidth-width*.5));
+  film.style.width=renderedWidth+'px';film.style.objectPosition='50% top';film.style.translate=`${-offset}px 0`;
+ };
+ const followCrop=()=>{
+  if(!intro?.contains(film)||events.signal.aborted||innerWidth>760)return;
+  if(film.requestVideoFrameCallback)cropFrame=film.requestVideoFrameCallback((_,frame)=>{frameFilm(frame.mediaTime);followCrop();});
+  else cropFrame=requestAnimationFrame(()=>{frameFilm();followCrop();});
  };
  const finish=({resume=true}={})=>{
-  generation++;clearTimeout(timer);timer=0;stopAudio();
+  generation++;clearTimeout(timer);timer=0;stopCrop();stopAudio();
   const restore=intro?.contains(document.activeElement)||entryControls?.contains(document.activeElement);
   if(intro){if(intro.contains(film))filmHome.prepend(film);intro.remove();intro=null;}
+  if(entryControls&&entryControls.parentElement!==hero)hero.append(entryControls);
   film.style.removeProperty('transition');filmSize=null;frameFilm();boot?.release();
   if(resume&&shouldPlay())play();else{film.pause();sync();}
   if(restore)document.querySelector('#main')?.focus({preventScroll:true});
@@ -80,15 +93,16 @@ export function initOpening({auto=true}={}){
   // This avoids a second decoder and a visible jump when the video changes size.
   if(film.readyState>=2){
    const frame=document.createElement('canvas');frame.className='intro-film-frame';
-   frame.width=film.videoWidth;frame.height=film.videoHeight;frame.setAttribute('aria-hidden','true');
+   frame.width=Math.min(640,film.videoWidth);frame.height=Math.round(frame.width*film.videoHeight/film.videoWidth);frame.setAttribute('aria-hidden','true');
    frame.style.objectPosition=getComputedStyle(film).objectPosition;
    frame.style.transform=getComputedStyle(film).transform;
+   frame.style.width=film.style.width;frame.style.translate=film.style.translate;
    try{
     const context=frame.getContext('2d');
-    if(context){context.drawImage(film,0,0);intro.prepend(frame);}
+    if(context){context.drawImage(film,0,0,frame.width,frame.height);intro.prepend(frame);}
    }catch{/* The page background still provides the dissolve. */}
   }
-  filmHome.prepend(film);frameFilm();
+  stopCrop();filmHome.prepend(film);frameFilm();
   intro.classList.add('intro-settling');timer=setTimeout(finish,fade);
  };
  const begin=()=>{
@@ -96,7 +110,10 @@ export function initOpening({auto=true}={}){
   intro.setAttribute('role','region');intro.setAttribute('aria-label','Portfolio introduction');
   film.style.transition='none';
   intro.prepend(film);document.body.append(intro);
-  boot?.release();frameFilm();
+  // The page main is an isolated stacking context. Put these fixed controls
+  // beside the cover so they remain visible above it, including on phones.
+  if(entryControls)document.body.append(entryControls);
+  boot?.release();frameFilm();followCrop();
   requestAnimationFrame(()=>{if(intro?.contains(film))film.style.removeProperty('transition');});
   // The sequence has a fixed deadline, including on slow media connections.
   started=performance.now();timer=setTimeout(settle,hold);
@@ -125,7 +142,6 @@ export function initOpening({auto=true}={}){
   pause?.focus({preventScroll:true});
  },options);
  film.addEventListener('play',sync,options);film.addEventListener('pause',sync,options);
- film.addEventListener('timeupdate',()=>{if(intro?.contains(film))frameFilm();},options);
  film.addEventListener('loadedmetadata',()=>{filmSize=null;frameFilm();},options);
  film.addEventListener('error',()=>{hero.dataset.filmFailed='true';finish({resume:false});sync();say('Film unavailable. Showing the portfolio poster.');},options);
  window.addEventListener('resize',()=>{if(intro)finish();else frameFilm();},options);
@@ -154,7 +170,7 @@ export function initOpening({auto=true}={}){
  dispose=()=>{events.abort();finish({resume:false});film.pause();};
  if(!auto||!eligible()||scrollY>24||location.hash){boot?.release();if(shouldPlay())play();return;}
  try{
-  if(!boot?.pending){if(shouldPlay())play();return;}
+  if(!boot?.pending||performance.now()>boot.expiresAt){boot?.release();if(shouldPlay())play();return;}
   sessionStorage.setItem('portfolio-identity-seen','1');
  }catch{/* The automatic opening also works when storage is unavailable. */}
  begin();

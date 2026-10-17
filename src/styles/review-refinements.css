@@ -48,7 +48,6 @@ body {--brand:#633f31}
 html.opening-pending .opening-entry-controls,body:has(.identity-intro) .opening-entry-controls {display:flex;position:fixed;right:24px;bottom:24px;z-index:1002;gap:10px;flex-wrap:wrap;padding:12px;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);visibility:visible;pointer-events:auto;box-shadow:var(--shadow)}
 .opening-entry-controls .button {min-height:48px}
 .identity-intro .hero-film {display:block;inset:0;width:100%;height:100svh;border-radius:0;filter:none}
-html.opening-pending .opening-hero>.hero-film {display:block;position:fixed;inset:0;width:100vw;height:100svh;border-radius:0;opacity:1;filter:none}
 .skip-link:focus {z-index:1003}
 
 /* Keep a few margin illustrations; remove the extra photo treatment. */
