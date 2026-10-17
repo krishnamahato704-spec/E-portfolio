@@ -7,3 +7,9 @@ export function resolveSiteUrl(env=process.env){
  if(url.protocol!=='https:'||url.username||url.password||url.search||url.hash)throw Error('SITE_URL must be an HTTPS site URL without credentials, a query or fragment.');
  return url.href.replace(/\/?$/,'/');
 }
+
+// Deployment checks and relative links use resolveSiteUrl. Search metadata
+// always prefers the primary portfolio, including on the backup host.
+export function resolveCanonicalUrl(env=process.env){
+ return resolveSiteUrl({SITE_URL:env.CANONICAL_SITE_URL||config.canonical});
+}
