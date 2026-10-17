@@ -50,14 +50,23 @@ try{
    record(engine,'Reading content has no late translation animation',await photos.locator('h1').evaluate(el=>getComputedStyle(el).transform==='none'));
    await context.close();
    const navigation=await browser.newContext(),nav=await navigation.newPage();
-   await nav.addInitScript(()=>{sessionStorage.setItem('portfolio-identity-seen','1');window.addEventListener('pagereveal',event=>{window.hasPageTransition=!!event.viewTransition;});});
+   await nav.addInitScript(()=>{
+    sessionStorage.setItem('portfolio-identity-seen','1');
+    window.addEventListener('pageswap',event=>sessionStorage.setItem('transition-outgoing',JSON.stringify({transition:!!event.viewTransition,visibility:document.visibilityState,motion:matchMedia('(prefers-reduced-motion: reduce)').matches})));
+    window.addEventListener('pagereveal',event=>{window.hasPageTransition=!!event.viewTransition;});
+   });
    await nav.goto(base);await nav.locator('.menu-toggle[data-ready]').waitFor({state:'attached'});
    const about=nav.locator('.navigation-links a[href$="profile/"]');
    await about.hover();await nav.waitForTimeout(200);
    record(engine,'Intent prefetch targets the public About document',await nav.locator('link[rel="prefetch"][href$="profile/"]').count()===1);
    await about.click();await nav.waitForURL('**/profile/');
    const supports=await nav.evaluate(()=>typeof CSSViewTransitionRule!=='undefined'&&'onpagereveal' in window);
-   if(supports){await nav.waitForFunction(()=>window.hasPageTransition!==undefined);record(engine,'Supported browsers use the native document transition',await nav.evaluate(()=>window.hasPageTransition));}
+   if(supports){
+    await nav.waitForFunction(()=>window.hasPageTransition!==undefined);
+    const transition=await nav.evaluate(()=>window.hasPageTransition);
+    if(!transition)console.log('Native transition diagnostics',JSON.stringify({browser:browser.version(),...await nav.evaluate(()=>({outgoing:JSON.parse(sessionStorage.getItem('transition-outgoing')||'null'),incoming:{visibility:document.visibilityState,motion:matchMedia('(prefers-reduced-motion: reduce)').matches,paint:performance.getEntriesByType('paint').map(entry=>entry.name),navigation:performance.getEntriesByType('navigation').map(entry=>({type:entry.type,duration:entry.duration})),url:location.href}}))}));
+    record(engine,'Supported browsers use the native document transition',transition);
+   }
    record(engine,'Normal page navigation leaves the destination readable',await nav.locator('h1').isVisible());
    await navigation.close();
    const saving=await browser.newContext(),save=await saving.newPage();
