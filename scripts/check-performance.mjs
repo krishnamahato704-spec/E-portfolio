@@ -8,7 +8,9 @@ const record=(engine,name,pass)=>{results.push({engine,name,pass:!!pass});consol
 try{
  for(let i=0;i<80;i++){try{if((await fetch(base)).ok)break;}catch{}await new Promise(r=>setTimeout(r,100));}
  for(const engine of (process.env.PERFORMANCE_TEST_ENGINES||'chromium').split(',')){
-  const browser=await {chromium,webkit}[engine].launch({headless:true});
+  // Exercise the full Chrome rendering pipeline for native animations on CI.
+  // Keep the existing native browser configurations on Windows and macOS.
+  const browser=await {chromium,webkit}[engine].launch({headless:true,...(engine==='chromium'&&process.platform==='linux'?{channel:'chromium'}:{})});
   try{
    const late=await browser.newContext(),page=await late.newPage();
    await page.route('**/src/app.js*',async route=>{await new Promise(r=>setTimeout(r,2200));await route.continue();});
