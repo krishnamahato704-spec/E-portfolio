@@ -1,3 +1,5 @@
+import {evidenceFileName} from './file-names.js?v=editorial-20261004';
+
 // Native dialog supplies keyboard isolation and Escape handling. Original-file
 // links remain usable without JavaScript or for unsupported document formats.
 export function wireViewer(root=document){
@@ -23,7 +25,19 @@ export function wireViewer(root=document){
    else media.alt=link.querySelector('img')?.alt||title.textContent;
    content.append(media);
    const footer=document.createElement('div');footer.className='viewer-footer';
-   const original=document.createElement('a');original.className='text-link';original.href=link.dataset.originalUrl||url.href;original.target='_blank';original.rel='noopener noreferrer';original.textContent='Open original file in a new tab →';footer.append(original);
+   const original=document.createElement('a');original.className='text-link';original.href=link.dataset.originalUrl||url.href;original.target='_blank';original.rel='noopener noreferrer';original.textContent='Open in new tab ↗';
+   const download=document.createElement('a');
+   download.className='text-link viewer-download';
+   download.textContent=pdf?'Download PDF ↓':'Download image ↓';
+   const setDownload=(asset,label)=>{
+    const target=new URL(asset,location.href);
+    const name=evidenceFileName(label,target.pathname);
+    download.hidden=target.origin!==location.origin||!name;
+    download.href=target.href;
+    download.download=name;
+   };
+   setDownload(url.href,title.textContent);
+   footer.append(original,download);
    dialog.append(toolbar,content,footer);document.body.append(dialog);
    const previousOverflow=document.body.style.overflow;document.body.style.overflow='hidden';
    // Gallery navigation is confined to the collection the visitor opened.
@@ -41,6 +55,7 @@ export function wireViewer(root=document){
      media.src=current.href;media.alt=current.querySelector('img')?.alt||current.dataset.title;
      title.textContent=current.dataset.title||'Gallery image';
      original.href=current.dataset.originalUrl||current.href;
+     setDownload(current.href,title.textContent);
      position.textContent=`${index+1} of ${links.length}`;
     };
     controls.append(previous,position,next);footer.prepend(controls);change(0);

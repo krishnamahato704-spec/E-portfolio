@@ -2,6 +2,8 @@
 export const documentBytes = {
   "assets/democracy-lesson-plan.pdf": 1369401,
   "assets/evidence/amity-observation-reflective-journal.pdf": 6165989,
+  "assets/evidence/classroom-discipline-action-research.pdf": 298051,
+  "assets/evidence/diagnostic-assessment-report-and-tests.pdf": 1224583,
   "assets/evidence/diksha-ai.pdf": 2051662,
   "assets/evidence/finland-education.pdf": 1158341,
   "assets/evidence/finland-education.pptx": 1342126,

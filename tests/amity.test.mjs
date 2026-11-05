@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
-import {defaultContent,mergeContent} from '../src/content.js';
+import {defaultContent,mergeContent,CURRENT_SCHEMA_VERSION} from '../src/content.js';
 import {view} from '../src/views.js';
 const legacyPoints=['Observed Social Science and History lessons in Classes 6–12.','Observed school assemblies, morning events and a student-organised PCOS/PCOD awareness programme.','Studied classroom questioning, student engagement and management practices.','Connected teacher-education theory with daily classroom practice.'];
 function previousPublishedRow(){
@@ -14,7 +14,7 @@ test('The supplied journal corrects the old Amity record and survives the cloud 
  assert.equal(e.period,'1–4 December 2025');assert.equal(e.duration,'4');assert.equal(e.type,'Four-day school observation');
  assert.deepEqual(e.points,defaultContent.experiences.find(e=>e.id==='observation').points);
  assert.equal(c.resources.filter(r=>r.id==='amity-observation-journal').length,1);
- assert.equal(c.schemaVersion,8);assert.deepEqual(mergeContent(c),c);
+ assert.equal(c.schemaVersion,CURRENT_SCHEMA_VERSION);assert.deepEqual(mergeContent(c),c);
 });
 test('Amity migration respects custom observations, empty libraries and later journal removal',()=>{
  const old=previousPublishedRow();old.experiences.find(e=>e.id==='observation').points=['Owner classroom observation'];

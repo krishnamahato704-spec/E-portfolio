@@ -1,5 +1,8 @@
 // Intrinsic sizes of the local evidence assets.
 export const imageDimensions = {
+  "assets/evidence/classroom-discipline-action-research.webp": [900,1273],
+  "assets/evidence/diagnostic-assessment-report-and-tests.webp": [935,1210],
+  "assets/evidence/panchsheel-internship-completion.jpg": [1004,1516],
   "assets/theme/subject-art/teaching-practice-small.webp": [640,640],
   "assets/theme/subject-art/english-pedagogy-small.webp": [640,640],
   "assets/theme/subject-art/economics-study-small.webp": [640,640],

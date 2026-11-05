@@ -14,7 +14,7 @@ const schemas={
 };
 const profileFields={directTeaching:'Documented direct teaching',additionalTeaching:'Additional teaching exposure',location:'Current city',workPreferences:'Work / relocation preferences',targetClasses:'Target classes (interest, not prior experience)',targetBoards:'Boards of interest (not a claim of experience)',availability:'Earliest joining availability',eligibility:'Eligibility exam status',name:'Full name',email:'Contact email',eyebrow:'Profile label',headline:'Main statement',summary:'Professional summary',roles:'Roles of interest (one per line)',subjects:'Subjects (one per line)',languages:'Languages (one per line)',portrait:'Portrait URL',cv:'CV PDF URL (optional)'};
 const multiline=new Set(['headline','summary','roles','subjects','languages','about','preparation','competencies','points','description','text']);
-const categories={experiences:['Teaching','Observation'],certificates:['Academic','Teaching','Professional learning','Presentation'],resources:['Lesson plan','Worksheet','Teaching material','Assessment','Presentation','Internship report','Reflective journal']};
+const categories={experiences:['Teaching','Observation'],certificates:['Academic','Teaching','Professional learning','Presentation'],resources:['Lesson plan','Worksheet','Teaching material','Assessment','Diagnostic assessment','Action research','Presentation','Internship report','Reflective journal']};
 function field(key,label,value,scope,index){
  const attrs=`data-field="${key}" data-scope="${scope}" ${index!==undefined?`data-index="${index}"`:''}`;
  const text=Array.isArray(value)?value.join('\n'):value||'';

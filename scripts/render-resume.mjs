@@ -2,7 +2,7 @@ import {experiencePeriod} from '../src/recruiter.js';
 import PDFDocument from 'pdfkit';
 import fs from 'node:fs';
 import path from 'node:path';
-import {defaultContent,publicContent} from '../src/content.js';
+import {defaultContent,internshipStudyIds,portfolioRole,publicContent} from '../src/content.js';
 import {resolveSiteUrl} from './site-origin.mjs';
 const root=path.resolve(import.meta.dirname,'..');
 // The PDF is a concise single page. The web résumé retains the complete record.
@@ -15,7 +15,7 @@ export async function generateResume(c=defaultContent,{siteUrl=resolveSiteUrl()}
  const ink='#30251f',muted='#6d5849';
  const draw=(value,x,y,width,size=9,face='Helvetica',color=ink)=>{doc.font(face).fontSize(size).fillColor(color).text(plain(value),x,y,{width,lineGap:1.5});return doc.y;};
  draw(c.profile.name,36,32,520,23,'Helvetica-Bold');
- draw('History & Social Science Educator',36,62,520,11);
+ draw(portfolioRole,36,62,520,11);
  draw(c.profile.location+' | '+c.profile.email,36,82,520,9,'Helvetica',muted);
  doc.fontSize(8.5).text(siteUrl.replace('https://',''),36,99,{link:siteUrl});
  doc.strokeColor('#965333').lineWidth(1).moveTo(36,120).lineTo(559,120).stroke();
@@ -36,7 +36,11 @@ export async function generateResume(c=defaultContent,{siteUrl=resolveSiteUrl()}
   for(const point of points)text(right,'• '+point,8.8);right.y+=6;
  }
  section(right,'Selected teaching evidence');
- for(const resource of c.resources.filter(x=>x.category==='Lesson plan'||x.id==='ntcc-community-report').slice(0,2)){
+ const selectedEvidence=[
+  c.resources.find(x=>x.category==='Lesson plan'),
+  c.resources.find(x=>internshipStudyIds.includes(x.id))||c.resources.find(x=>x.id==='ntcc-community-report')
+ ].filter(Boolean);
+ for(const resource of selectedEvidence){
   text(right,resource.title,9.1,'Helvetica-Bold');text(right,[resource.grade,resource.date,resource.evidenceStatus].filter(Boolean).join(' | '),8.2,'Helvetica',muted);
  }
  section(right,'Selected credentials');

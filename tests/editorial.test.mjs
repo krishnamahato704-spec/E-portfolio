@@ -47,12 +47,17 @@ test('Homepage previews existing published work and respects evidence removal',(
  const home=view('home',defaultContent);
  assert.match(home,/Selected Teaching Evidence/);
  assert.match(home,/href="\.\/teaching\/democracy\/"/);
- assert.match(home,/href="\.\/assets\/evidence\/mock-election-activity.webp" data-viewer/);
- assert.match(home,/href="\.\/assets\/evidence\/ntcc-community-report.pdf" data-viewer/);
+ assert.match(home,/href="\.\/assets\/evidence\/classroom-discipline-action-research\.pdf" data-viewer/);
+ assert.match(home,/href="\.\/assets\/evidence\/diagnostic-assessment-report-and-tests\.pdf" data-viewer/);
  assert.match(home,/Planning evidence/);
+ const withoutStudies=structuredClone(defaultContent);
+ withoutStudies.resources=withoutStudies.resources.filter(r=>!['Action research','Diagnostic assessment'].includes(r.category));
+ const previousSelection=view('home',withoutStudies);
+ assert.match(previousSelection,/href="\.\/assets\/evidence\/mock-election-activity\.webp" data-viewer/);
+ assert.match(previousSelection,/href="\.\/assets\/evidence\/ntcc-community-report\.pdf" data-viewer/);
  const cleared=structuredClone(defaultContent);cleared.resources=[];cleared.gallery=[];
  const withoutEvidence=view('home',cleared);
- assert.doesNotMatch(withoutEvidence,/Democracy · Lesson Plan|Mock election activity|Community Work and Adult Literacy/);
+ assert.doesNotMatch(withoutEvidence,/Democracy · Lesson Plan|Action Research on Classroom Discipline|Diagnostic Assessment Report and Tests|Mock election activity|Community Work and Adult Literacy/);
 });
 test('Navigation exposes Home and evidence while retaining project and detail URLs',()=>{
  const nav=header('democracy','../../',defaultContent);

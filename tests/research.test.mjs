@@ -1,6 +1,6 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
-import {defaultContent,publicContent,CURRENT_SCHEMA_VERSION} from '../src/content.js';
+import {defaultContent,internshipStudyIds,mergeContent,publicContent,CURRENT_SCHEMA_VERSION} from '../src/content.js';
 import {loadPublishedContent} from '../scripts/load-published-content.mjs';
 import {view,safeUrl} from '../src/views.js';
 import {uploadFile} from '../src/cloud.js';
@@ -15,6 +15,19 @@ test('A validated remote release retains its exact content and timestamp',async(
  const release=await loadPublishedContent({remote:true,fetcher:async()=>new Response(JSON.stringify([{content,updated_at:'2026-10-02T00:00:00Z'}]))});
  assert.equal(release.content.profile.availability,'August 2027');assert.equal(release.content.schemaVersion,CURRENT_SCHEMA_VERSION);
  assert.equal(release.updatedAt,'2026-10-02T00:00:00Z');
+});
+test('Earlier published libraries receive the new studies once and respect later removals',async()=>{
+ const content=structuredClone(defaultContent);
+ content.schemaVersion=9;
+ content.resources=content.resources.filter(r=>!internshipStudyIds.includes(r.id));
+ const release=await loadPublishedContent({remote:true,fetcher:async()=>new Response(JSON.stringify([{content,updated_at:'2026-11-01T00:00:00Z'}]))});
+ const migrated=release.content;
+ assert.deepEqual(migrated.resources.filter(r=>internshipStudyIds.includes(r.id)).map(r=>r.id),internshipStudyIds);
+ assert.equal(migrated.schemaVersion,CURRENT_SCHEMA_VERSION);
+ assert.deepEqual(mergeContent(migrated),migrated);
+ const removed={...migrated,resources:migrated.resources.filter(r=>!internshipStudyIds.includes(r.id))};
+ assert.deepEqual(mergeContent(removed).resources,removed.resources);
+ assert.deepEqual(mergeContent({...content,resources:[]}).resources,[]);
 });
 test('Pending credentials stay in Studio data and are hidden from all recruiter views',()=>{
  const pending=structuredClone(defaultContent);

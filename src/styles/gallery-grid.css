@@ -1,0 +1,114 @@
+/* Automatic columns keep the gallery consistent before and after filtering. */
+.gallery-page .gallery-grid {
+ display:grid;
+ grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));
+ grid-auto-flow:row;
+ align-items:stretch;
+ gap:24px;
+}
+
+/* Reset the earlier position-based spans and the eighth card's split layout. */
+.gallery-page .gallery-grid .gallery-card {
+ grid-column:auto;
+ grid-row:auto;
+ display:flex;
+ flex-direction:column;
+ grid-template-columns:none;
+ align-items:stretch;
+ min-width:0;
+ margin:0;
+ padding:0;
+ overflow:visible;
+ border:1px solid var(--line);
+ border-radius:8px;
+ background:var(--sheet);
+ box-shadow:none;
+}
+
+.gallery-page .gallery-card>a {
+ display:block;
+ flex:none;
+ min-width:0;
+ overflow:hidden;
+ border-radius:7px 7px 0 0;
+ background:var(--surface-muted);
+}
+
+.gallery-page .gallery-grid .gallery-image {
+ width:100%;
+ height:auto;
+ aspect-ratio:4/3;
+ padding:12px;
+ object-fit:contain;
+ object-position:center;
+ border:0;
+ border-radius:7px 7px 0 0;
+ background:var(--surface-muted);
+ filter:none;
+ transform:none;
+ transition:none;
+}
+
+.gallery-page .gallery-grid figcaption {
+ flex:1;
+ min-width:0;
+ padding:20px;
+ overflow-wrap:anywhere;
+ line-height:1.65;
+}
+
+.gallery-page .gallery-grid figcaption strong {
+ font-size:1.05rem;
+ line-height:1.4;
+ color:var(--dark);
+}
+
+.gallery-page .gallery-grid figcaption span {
+ margin-top:6px;
+ font-size:.875rem;
+ color:var(--muted);
+}
+
+.gallery-page .gallery-grid figcaption p {
+ margin-top:10px;
+ font-size:.9375rem;
+ line-height:1.65;
+ color:var(--ink);
+}
+
+.gallery-page .gallery-card:focus-within {
+ border-color:var(--accent-hover);
+ outline:3px solid var(--accent-hover);
+ outline-offset:4px;
+}
+
+.gallery-page .gallery-card>a:focus-visible {
+ outline:3px solid var(--accent-hover);
+ outline-offset:-5px;
+}
+
+@media screen and (hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference) {
+ .gallery-page .gallery-grid .gallery-card {
+  transition:transform var(--quick) var(--ease),border-color var(--quick) var(--ease),box-shadow var(--quick) var(--ease);
+ }
+ .gallery-page .gallery-grid .gallery-image {
+  transition:transform var(--quick) var(--ease);
+ }
+ .gallery-page .gallery-card:hover {
+  transform:translateY(-3px);
+  border-color:var(--line-strong);
+  box-shadow:var(--shadow);
+ }
+ .gallery-page .gallery-card>a:hover .gallery-image {
+  transform:scale(1.015);
+ }
+}
+
+@media print {
+ .gallery-page .gallery-card {
+  break-inside:avoid;
+  transform:none;
+  box-shadow:none;
+ }
+ .gallery-page .gallery-grid .gallery-image {transform:none}
+}

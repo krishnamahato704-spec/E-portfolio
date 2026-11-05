@@ -1,13 +1,13 @@
 import {amityJournalResource} from './amity-journal.js?v=editorial-20261004';
-export const CURRENT_SCHEMA_VERSION = 8;
+export const CURRENT_SCHEMA_VERSION = 10;
 export const defaultContent = {
   "schemaVersion": CURRENT_SCHEMA_VERSION,
   "profile": {
     "name": "Krishna Mahato",
     "email": "krishnamahato704@gmail.com",
-    "eyebrow": "History & Social Science Educator · B.Ed. Candidate",
-    "headline": "I help students read the past with curiosity, evidence and confidence.",
-    "summary": "Developing History, Social Science and English educator with academic foundations in History and Economics, formal teacher education and supervised classroom experience.",
+    "eyebrow": "Social Science Teacher · B.Ed. Candidate",
+    "headline": "I help students use evidence to understand people, places and how societies work.",
+    "summary": "Social Science teacher with a background in History and Economics, teacher education and classroom experience in Social Science and English.",
     "portrait": "https://oyqevsygintkjrkfbzpx.supabase.co/storage/v1/object/public/portfolio-media/evidence/images/1787826897958_3tk4ud_portrait.jpeg",
     "roles": [
       "TGT Social Science",
@@ -81,15 +81,15 @@ export const defaultContent = {
       "institution": "Panchsheel Balak Inter-College",
       "type": "Sixteen-week B.Ed. school internship",
       "period": "16 July–31 October 2026",
-      "status": "Ongoing",
+      "status": "Completed",
       "category": "Teaching",
       "duration": "16",
       "durationUnit": "Weeks",
-      "summary": "Supervised B.Ed. school internship with classroom teaching across Social Science, English and History.",
+      "summary": "Completed a supervised B.Ed. school internship with classroom teaching across Social Science, English and History.",
       "points": [
-        "Undertaking a 16-week school internship: teaching Social Science in Classes 6–9 and History in Class 11 on select occasions.",
-        "Teaching English in Classes 6 and 8 as an official B.Ed. pedagogy subject.",
-        "Assigned classes from Tuesday through Saturday; frequently handling substitution classes.",
+        "Completed a 16-week school internship: taught Social Science in Classes 6–9 and History in Class 11 on select occasions.",
+        "Taught English in Classes 6 and 8 as an official B.Ed. pedagogy subject.",
+        "Taught assigned classes from Tuesday through Saturday and frequently handled substitution classes.",
         "Delivered at least 15 lessons using self-prepared lesson plans.",
         "Assisted in organising school events, display boards, Independence Day, Janmashtami and Sports Day activities."
       ]
@@ -232,6 +232,17 @@ export const defaultContent = {
       "category": "Professional learning",
       "description": "Certificate awarded to Krishna Mahato for the knowledge, skills and basic competencies needed to use Google AI in education. Valid through 21 August 2029.",
       "publicationStatus": "Approved"
+    },
+    {
+      "id": "panchsheel-internship-completion",
+      "title": "School internship completion · Panchsheel",
+      "issuer": "Panchsheel Balak Inter-College",
+      "date": "31 October 2026",
+      "category": "Teaching",
+      "description": "Completion certificate for the B.Ed. school internship from 16 July to 31 October 2026, covering Social Science and English.",
+      "image": "https://krishnamahato704-spec.github.io/E-portfolio/assets/evidence/panchsheel-internship-completion.jpg",
+      "url": "https://krishnamahato704-spec.github.io/E-portfolio/assets/evidence/panchsheel-internship-completion.jpg",
+      "publicationStatus": "Approved"
     }
   ],
   "resources": [
@@ -249,6 +260,35 @@ export const defaultContent = {
       "duration": "40 minutes",
       "evidenceStatus": "Planning evidence",
       "context": "Amity University school practicum · Session 2026–27"
+    },
+    {
+      "id": "classroom-discipline-action-research",
+      "title": "Action Research on Classroom Discipline",
+      "category": "Action research",
+      "subject": "Classroom management",
+      "grade": "Class VIII-B",
+      "description": "A school internship study of classroom discipline. The report documents observations, collaborative classroom management, positive recognition and a reflection on the changes observed.",
+      "url": "https://krishnamahato704-spec.github.io/E-portfolio/assets/evidence/classroom-discipline-action-research.pdf",
+      "thumbnail": "assets/evidence/classroom-discipline-action-research.webp",
+      "type": "PDF · 15 pages",
+      "context": "School internship",
+      "evidenceStatus": "Classroom observations and reflection",
+      "publicationStatus": "Approved"
+    },
+    {
+      "id": "diagnostic-assessment-report-and-tests",
+      "title": "Diagnostic Assessment Report and Tests",
+      "category": "Diagnostic assessment",
+      "subject": "Social Science",
+      "grade": "Class IX-A",
+      "date": "August–September 2026",
+      "description": "A report on three diagnostic assessments and two phases of remedial teaching. The baseline, progress and post-remedial question papers are included after the report.",
+      "url": "https://krishnamahato704-spec.github.io/E-portfolio/assets/evidence/diagnostic-assessment-report-and-tests.pdf",
+      "thumbnail": "assets/evidence/diagnostic-assessment-report-and-tests.webp",
+      "type": "PDF · 33 pages",
+      "context": "School internship",
+      "evidenceStatus": "Assessment report with question papers",
+      "publicationStatus": "Approved"
     },
     {
       "id": "ntcc-community-report",
@@ -387,7 +427,20 @@ export const defaultContent = {
 export function mergeContent(live = {}) {
   const result={...structuredClone(defaultContent),...live,profile:{...defaultContent.profile,...live.profile}};
   const older=(live.schemaVersion||0)<6;
+  const beforeCompletion=(live.schemaVersion||0)<9;
+  const beforeInternshipStudies=(live.schemaVersion||0)<10;
   let correctedAmity=false;
+  let recordedPanchsheelCompletion=false;
+  if(beforeInternshipStudies) {
+    const previousProfile={
+      eyebrow:'History & Social Science Educator · B.Ed. Candidate',
+      headline:'I help students read the past with curiosity, evidence and confidence.',
+      summary:'Developing History, Social Science and English educator with academic foundations in History and Economics, formal teacher education and supervised classroom experience.'
+    };
+    for(const [key,previous] of Object.entries(previousProfile)) {
+      if(result.profile[key]===previous)result.profile[key]=defaultContent.profile[key];
+    }
+  }
   if(older) {
     const legacy={
       eyebrow:['History & Social Science · Emerging educator','History educator · Social Science · Emerging educator'],
@@ -418,6 +471,22 @@ export function mergeContent(live = {}) {
       Object.assign(merged,{period:original.period,type:original.type,summary:original.summary});
       if(e.points?.length===1 && e.points[0]==='Undertaking a 16-week school internship at Panchsheel Balak Inter-College.')merged.points=structuredClone(original.points);
     }
+    // The supplied completion certificate replaces only the known earlier
+    // record. Custom dates, institutions and activity text remain authoritative.
+    if(beforeCompletion && id==='panchsheel' && merged.period===original.period && merged.institution===original.institution) {
+      recordedPanchsheelCompletion=true;
+      if(merged.status==='Ongoing')merged.status='Completed';
+      if(merged.summary==='Supervised B.Ed. school internship with classroom teaching across Social Science, English and History.')merged.summary=original.summary;
+      const previousPoints=[
+        'Undertaking a 16-week school internship: teaching Social Science in Classes 6–9 and History in Class 11 on select occasions.',
+        'Teaching English in Classes 6 and 8 as an official B.Ed. pedagogy subject.',
+        'Assigned classes from Tuesday through Saturday; frequently handling substitution classes.'
+      ];
+      merged.points=merged.points.map(point=>{
+        const index=previousPoints.indexOf(point);
+        return index<0?point:original.points[index];
+      });
+    }
     return merged;
   });
   if(!live.schemaVersion && Array.isArray(live.experiences) && result.experiences.length===2 && ['pehchaan','observation'].every(id=>result.experiences.some(e=>e.id===id)))result.experiences.unshift(structuredClone(defaultContent.experiences[0]));
@@ -426,6 +495,8 @@ export function mergeContent(live = {}) {
     const legacy=['Graduation certificate','Pehchaan internship certificate','Webinar certificate','Seminar participation certificate'];
     return {...original,...c,...(original&&legacy.includes(c.title)?{title:original.title}:{}),...(older&&/Rusha Chaudhauri|in History and Economics/.test(c.description||'')?{description:original?.description||c.description}:{})};
   });
+  const completionCertificate=defaultContent.certificates.find(c=>c.id==='panchsheel-internship-completion');
+  if(recordedPanchsheelCompletion && Array.isArray(live.certificates) && live.certificates.some(c=>c.image===defaultContent.certificates[1].image) && !result.certificates.some(c=>c.id===completionCertificate.id || c.image===completionCertificate.image))result.certificates.push(structuredClone(completionCertificate));
   if(Array.isArray(live.resources))result.resources=live.resources.map(r=>{
     const original=defaultContent.resources.find(x=>x.url===r.url);
     if(!original)return r;
@@ -447,6 +518,13 @@ export function mergeContent(live = {}) {
   // Add the newly supplied journal to the known published library once. An empty
   // library or a later owner removal remains authoritative.
   if(correctedAmity && result.resources.some(r=>r.id==='ntcc-community-report') && !result.resources.some(r=>r.id===amityJournalResource.id))result.resources.push(structuredClone(amityJournalResource));
+  // Add the new studies to earlier portfolio snapshots without restoring an
+  // empty library or a study removed from a later snapshot.
+  if(beforeInternshipStudies && result.experiences.some(e=>e.id==='panchsheel') && result.resources.some(r=>defaultContent.resources.some(x=>x.url===r.url))) {
+    const studies=defaultContent.resources.filter(r=>internshipStudyIds.includes(r.id) &&
+      !result.resources.some(existing=>existing.id===r.id||existing.url===r.url));
+    result.resources.splice(1,0,...structuredClone(studies));
+  }
   if(correctedAmity)result.schemaVersion=8;
   if(Array.isArray(live.qualifications))result.qualifications=live.qualifications.map(q=>{
     const original=defaultContent.qualifications.find(x=>x.title===q.title);
@@ -457,8 +535,12 @@ export function mergeContent(live = {}) {
     const original=defaultContent.practice.find(x=>x.title===p.title);
     return original && /^(I begin with a question, source|Scaffolded prompts, visual sources|Short checks, source-based tasks)/.test(p.text)?{...p,text:original.text}:p;
   });
+  if(beforeInternshipStudies)result.schemaVersion=CURRENT_SCHEMA_VERSION;
   return result;
 }
+
+export const internshipStudyIds=['classroom-discipline-action-research','diagnostic-assessment-report-and-tests'];
+export const portfolioRole='Social Science Teacher';
 
 // Object key order from Postgres must not trigger an identical page replacement.
 export function contentSignature(content) {

@@ -2,7 +2,7 @@ import {chromium,webkit} from 'playwright';
 import {spawn} from 'node:child_process';
 import fs from 'node:fs/promises';
 const port=4188,base=`http://127.0.0.1:${port}/`;
-const server=spawn(process.execPath,['scripts/serve.mjs',...(process.argv.includes('--dist')?['--dist']:[])],{env:{...process.env,PORT:String(port)},windowsHide:true,stdio:'ignore'});
+const server=spawn(process.execPath,['scripts/serve.mjs',...(process.argv.includes('--dist')?['--dist','--cache']:[])],{env:{...process.env,PORT:String(port)},windowsHide:true,stdio:'ignore'});
 const results=[];
 const record=(engine,name,pass)=>{results.push({engine,name,pass:!!pass});console.log(`${pass?'PASS':'FAIL'} ${engine}: ${name}`);};
 try{

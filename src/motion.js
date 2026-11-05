@@ -48,7 +48,7 @@ export function initMotion() {
     if (video) video.pause();
     return;
   }
-  // Preserve playback during a content refresh; viewer.js handles the hero start.
+  // Preserve playback when the page restores its motion handlers.
   if(resumeVideo && video===previousVideo)video.play().catch(()=>{});
 
   const enter = (element, hero = false) => {
@@ -64,15 +64,12 @@ export function initMotion() {
     for (let el = e.target; el && el !== root; el = el.parentElement) finish(el);
   }, { signal: events.signal });
 
-  root.querySelectorAll('.snapshot-grid, .school-stages, .practice-grid, #resource-list, .certificate-grid, .gallery-grid').forEach(group => {
-    [...group.children].forEach((el, i) => { el.dataset.motionIndex = String(i % 3); });
-  });
   const selector = [
     '.section-heading', '.page-heading', '.snapshot-grid > div', '.school-stage',
     '.practice-grid > article', '.experience-row', '.qualification', '.education-card', '.resource-row',
     '.certificate-card', '.gallery-grid > figure', '.profile-facts', '.prose > h2',
     '.evidence-aside', '.note-panel', '.pull-quote', '.influence-row > div',
-    '.design-teaser', '.resource-feature', '.presentation-callout', '.closing-section',
+    '.design-teaser', '.presentation-callout', '.closing-section',
     '.contact-layout > section', '.contact-note', '[data-motion]'
   ].join(',');
   const targets = [...root.querySelectorAll(selector)].filter(el =>

@@ -1,7 +1,7 @@
 import {esc,link,sectionHead} from './view-helpers.js?v=editorial-20261004';
 import {icon} from './icons.js?v=editorial-20261004';
 
-export function educationGroups(content) {
+function educationGroups(content) {
   const completed = content.qualifications.filter(q => q.status === 'Completed')
     .sort((a,b) => Number.parseInt(a.period,10) - Number.parseInt(b.period,10));
   const current = content.qualifications.filter(q => q.status !== 'Completed');
@@ -12,7 +12,7 @@ function qualificationCard(q) {
   const current=q.status!=='Completed';
   const parts=q.place.split(' · ');
   const score=parts.find(p => /CGPA|\d.*%/.test(p));
-  return `<li class="education-record"><span class="education-node" aria-hidden="true"></span>
+  return `<li class="education-record${current?' is-in-progress':''}"><span class="education-node" aria-hidden="true"></span>
     <p class="education-period">${esc(q.period)}</p><article class="education-card">
       <span class="icon-disc">${icon(/Class X/.test(q.title)?'school':'cap')}</span>
       <div><h3>${esc(q.title)}</h3><p>${esc(parts.filter(p=>p!==score).join(' · '))}</p>
@@ -34,8 +34,8 @@ export function educationTimeline(content,base,{profile=false}={}) {
       ${link(base,'profile','Full academic timeline and school qualifications','education-details-link')}
     </section>`;
   }
-  return `<section class="${profile?'section':'container section home-education'}" aria-labelledby="education-title">
-    ${sectionHead(profile?'Qualifications and current study':'',`<span id="education-title">${profile?'Academic Preparation':'Education &amp; Credentials'}</span>`,profile?'':link(base,'credentials','View all credentials'))}
+  return `<section class="section" aria-labelledby="education-title">
+    ${sectionHead('Qualifications and current study','<span id="education-title">Academic Preparation</span>')}
     ${completed.length?`<ol class="education-completed">${completed.map(qualificationCard).join('')}</ol>`:''}
     ${current.length?`<div class="current-studies"><p class="current-studies-label">Current studies${current.length>1?' (Concurrent)':''}</p><ol class="education-current">${current.map(qualificationCard).join('')}</ol></div>`:''}
     ${!completed.length&&!current.length?'<p>No qualifications are currently published.</p>':''}

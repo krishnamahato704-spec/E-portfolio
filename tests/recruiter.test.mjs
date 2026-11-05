@@ -4,7 +4,7 @@ import {defaultContent,mergeContent,validateContent} from '../src/content.js';
 import {studySummary,recruiterFacts,recruitmentGaps} from '../src/recruiter.js';
 import {view} from '../src/views.js';
 
-test('Legacy pair gains the existing ongoing internship; saved removals stay removed',()=>{
+test('Legacy pair gains the existing internship; saved removals stay removed',()=>{
  const legacy={experiences:defaultContent.experiences.slice(1).map(({id,institution,category,status,duration,durationUnit,summary,...rest})=>rest)};
  const c=mergeContent(legacy);
  assert.equal(c.experiences.length,3);

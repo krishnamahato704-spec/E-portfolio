@@ -10,10 +10,6 @@ export function documentUrl(url,base) {
   if(typeof url==='string'&&url.startsWith(prefix+'assets/'))return base+url.slice(prefix.length);
   try {const parsed=new URL(url);return parsed.protocol==='https:'?parsed.href:'';}catch{return '';}
 }
-export function evidenceFeature(c,base,home=false) {
-  const resource=democracyResource(c);if(!resource)return '';
-  return `<section class="${home?'container section home-featured-artifact':'resource-feature'} evidence-feature" aria-labelledby="featured-design-title"><div class="feature-copy"><p class="eyebrow">Selected teaching evidence · Lesson plan</p><h2 id="featured-design-title">Democracy.<br><em>From questions to explanation.</em></h2><p class="lead">A dated Social Science plan for Class IX-B, with prior-knowledge questions, visual resources, discussion and assessment tasks.</p><p class="evidence-meta">25 July 2026 · 40 minutes · 6 pages</p><p>The plan records intended teaching and expected responses. Student work and completed reflection are not included.</p><div class="actions"><a class="button primary" href="${base}teaching/democracy/">Explore the lesson plan <span aria-hidden="true">↗</span></a><a class="text-link" href="${documentUrl(resource.url,base)}">Read the PDF <span aria-hidden="true">↗</span></a></div></div><figure class="evidence-preview"><a href="${base}teaching/democracy/"><img src="${base}assets/democracy-plan-preview.webp" width="900" height="636" loading="lazy" decoding="async" alt="First page of Democracy Lesson Plan No. 6, showing Class IX-B, date, duration and instructional approach"></a><figcaption>Original plan · page 1 of 6</figcaption></figure></section>`;
-}
 export function democracyView(c,base) {
   const resource=democracyResource(c);
   if(!resource)return `<div class="container page-heading"><h1>Democracy lesson plan</h1><p>This document is not currently published.</p><a class="text-link" href="${base}resources/">Browse teaching artifacts</a></div>`;

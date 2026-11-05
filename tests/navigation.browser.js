@@ -146,7 +146,10 @@ try{
   });
   await check('Live status follows existing internship and teacher-education evidence',()=>{
     const status=content=>fragment(view('home',content,'../')).querySelector('.current-card');
-    assert(status(defaultContent).textContent.includes('Panchsheel'),'Existing ongoing internship is not represented');
+    assert(!status(defaultContent),'Completed Panchsheel internship is presented as current');
+    const ongoingInternship=structuredClone(defaultContent);
+    ongoingInternship.experiences.find(experience=>experience.id==='panchsheel').status='Ongoing';
+    assert(status(ongoingInternship).textContent.includes('Panchsheel'),'An ongoing internship is not represented');
     const noInternship=structuredClone(defaultContent);
     noInternship.experiences=[];
     assert(!status(noInternship),'Removed internship still appears current');

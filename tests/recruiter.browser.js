@@ -1,4 +1,4 @@
-import {defaultContent,mergeContent} from '../src/content.js';
+import {defaultContent,mergeContent,CURRENT_SCHEMA_VERSION} from '../src/content.js';
 import {view} from '../src/views.js';
 import {wireCollections} from '../src/collections.js';
 import {config} from '../src/config.js';
@@ -61,10 +61,10 @@ try {
  const patch=calls.find(x=>x.method==='PATCH');
  assert(!!patch&&patch.url.includes('updated_at=eq.'),'Publish retains optimistic version check');
  const saved=JSON.parse(patch.body).content;
- assert(saved.schemaVersion===8&&saved.profile.location==='Local fixture city','Mocked publish preserves the current schema and edited field');
+ assert(saved.schemaVersion===CURRENT_SCHEMA_VERSION&&saved.profile.location==='Local fixture city','Mocked publish preserves the current schema and edited field');
  assert(saved.resources[resourceIndex].url.endsWith('.docx')&&saved.resources[resourceIndex].grade==='Class 8','Published payload preserves the uploaded lesson plan URL and class');
  assert(saved.resources[0].url===c.resources[0].url,'Adding a resource preserves the existing lesson');
- assert(saved.experiences.some(x=>x.id==='panchsheel'),'Ongoing internship survives mocked save');
+ assert(saved.experiences.some(x=>x.id==='panchsheel'&&x.status==='Completed'),'Completed internship survives mocked save');
  assert(calls.length===4,'Only mocked auth, read, upload and publish requests occurred');
 }catch(error){results.push({name:String(error),pass:false});}
 finally{window.fetch=nativeFetch;window.confirm=nativeConfirm;document.querySelector('#results').textContent=JSON.stringify(results,null,2);document.body.dataset.testResult=results.every(x=>x.pass)?'pass':'fail';}

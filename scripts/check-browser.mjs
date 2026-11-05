@@ -181,9 +181,14 @@ try{
   await page.waitForFunction(()=>!document.querySelector('.hero-film').paused);
   record('reduced motion: explicit film play is available and muted',await page.locator('.hero-film').evaluate(v=>!v.paused&&v.muted));
   await page.locator('[data-film-pause]').click();
-  for(const [suffix,kind,label] of [['.webp','img','classroom material'],['.pdf','iframe','community report']]){
-    const trigger=page.locator(`.selected-evidence-card a[data-viewer][href$="${suffix}"]`);await trigger.click();
-    record(`homepage: ${label} opens its original evidence viewer`,await page.evaluate(kind=>{const dialog=document.querySelector('.evidence-viewer');return dialog?.open&&!!dialog.querySelector(kind)&&dialog.querySelector('.viewer-footer a').href.startsWith('https://');},kind));
+  for(const [file,label] of [['classroom-discipline-action-research.pdf','action research'],['diagnostic-assessment-report-and-tests.pdf','diagnostic assessment']]){
+    const trigger=page.locator(`.selected-evidence-card a[data-viewer][href*="${file}"]`);await trigger.click();
+    record(`homepage: ${label} opens a local PDF preview and named download`,await page.evaluate(file=>{
+      const dialog=document.querySelector('.evidence-viewer');
+      const download=dialog?.querySelector('a[download]');
+      return dialog?.open&&dialog.querySelector('iframe[title]')?.src.includes(file)&&
+        download?.href.includes(file)&&download.download.endsWith('.pdf');
+    },file));
     await page.keyboard.press('Escape');await page.locator('.evidence-viewer').waitFor({state:'detached'});
     record(`homepage: closing ${label} restores its link`,await trigger.evaluate(el=>document.activeElement===el));
   }
@@ -197,7 +202,7 @@ try{
   record('viewer: Escape closes and restores the image link',await imageTrigger.evaluate(el=>document.activeElement===el&&!document.querySelector('.evidence-viewer')));
   await page.goto(base+'resources/',{waitUntil:'load'});
   const pdfTrigger=page.locator('#resource-list a[data-viewer]').first();await pdfTrigger.click();
-  record('viewer: PDF preview retains an accessible title and original link',await page.evaluate(()=>{const dialog=document.querySelector('.evidence-viewer');return dialog?.open&&!!dialog.querySelector('iframe[title]')&&dialog.querySelector('.viewer-footer a').href.startsWith('https://');}));
+  record('viewer: PDF preview retains an accessible title and original link',await page.evaluate(()=>{const dialog=document.querySelector('.evidence-viewer');return dialog?.open&&!!dialog.querySelector('iframe[title]')&&/^https?:$/.test(new URL(dialog.querySelector('.viewer-footer a').href).protocol);}));
   await page.keyboard.press('Escape');
   await page.locator('.evidence-viewer').waitFor({state:'detached'});
   record('viewer: PDF closes and restores trigger focus',await pdfTrigger.evaluate(el=>document.activeElement===el&&!document.querySelector('.evidence-viewer')));

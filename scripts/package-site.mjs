@@ -23,7 +23,12 @@ export async function packageSite({siteUrl}={}){
   const source=await readFile(configPath,'utf8');
   await writeFile(configPath,source.replace(/canonical: '[^']*'/,'canonical: '+JSON.stringify(siteUrl)));
  }
- await cp(path.join(root,'assets'),path.join(output,'assets'),{recursive:true});
+ const assets=path.join(root,'assets');
+ const sourceVideos=new Set(['hero-video-orig.mp4','hero-video-music.mp4']);
+ await cp(assets,path.join(output,'assets'),{
+  recursive:true,
+  filter:source=>!sourceVideos.has(path.relative(assets,source))
+ });
  for(const {path:route} of Object.values(routes)){
   const file=route.endsWith('/')||!route?route+'index.html':route;
   await mkdir(path.dirname(path.join(output,file)),{recursive:true});

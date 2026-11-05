@@ -1,4 +1,4 @@
-import {defaultContent} from './content.js?v=editorial-20261004';
+import {defaultContent,portfolioRole} from './content.js?v=editorial-20261004';
 import {recruiterFacts} from './recruiter.js?v=editorial-20261004';
 import {imageDimensions} from './image-dimensions.js?v=editorial-20261004';
 import {documentBytes} from './asset-metadata.js?v=editorial-20261004';
@@ -12,7 +12,7 @@ export function documentSize(url,base){
  return `<span class="file-size">(${label})</span>`;
 }
 export const routes={
- home:{path:'',title:'History & Social Science Educator',nav:'Home'},
+ home:{path:'',title:portfolioRole,nav:'Home'},
  profile:{path:'profile/',title:'About & Education',nav:'About'},
  teaching:{path:'teaching/',title:'Teaching Experience',nav:'Experience'},
  resources:{path:'resources/',title:'Teaching Evidence',nav:'Teaching Evidence'},
@@ -32,11 +32,19 @@ export const arrow='<span aria-hidden="true">→</span>';
 export const link=(base,route,label,cls='text-link')=>`<a class="${cls}" href="${base}${routes[route].path}">${label} ${arrow}</a>`;
 export const tag=s=>`<span class="tag">${esc(s)}</span>`;
 export const list=items=>`<ul class="plain-list">${items.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`;
-const knownImages=Object.fromEntries(defaultContent.certificates.slice(0,4).map((x,i)=>[x.image,`certificate-${i+1}.webp`]));
-knownImages[defaultContent.profile.portrait]='portrait.webp';
+// Only these exact uploads have bundled copies. Owner replacements keep their
+// own URLs even when the published collection changes order.
+const originalImages='https://oyqevsygintkjrkfbzpx.supabase.co/storage/v1/object/public/portfolio-media/evidence/images/';
+const knownImages=new Map([
+ [originalImages+'1787898353874_955zgr_certWall1_0.jpeg','certificate-1.webp'],
+ [originalImages+'1787898375320_kx4r62_certWall2_0.jpeg','certificate-2.webp'],
+ [originalImages+'1787898492438_n15fxx_certWall3_0.jpeg','certificate-3.webp'],
+ [originalImages+'1787898560665_nhlr6b_certWall4_0.jpeg','certificate-4.webp'],
+ [originalImages+'1787826897958_3tk4ud_portrait.jpeg','portrait.webp']
+]);
 export function imageUrl(url,base){
  if(!url)return '';
- if(knownImages[url])return base+'assets/'+knownImages[url];
+ if(knownImages.has(url))return base+'assets/'+knownImages.get(url);
  const prefix='https://krishnamahato704-spec.github.io/E-portfolio/';
  if(url.startsWith(prefix+'assets/'))return base+url.slice(prefix.length);
  if(url.startsWith('./assets/')||url.startsWith('assets/'))return base+url.replace(/^\.?\//,'');
