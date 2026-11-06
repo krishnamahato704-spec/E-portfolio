@@ -68,15 +68,16 @@ test('Navigation exposes Home and evidence while retaining project and detail UR
  assert.doesNotMatch(header('admin','../',defaultContent),/mobile-shortcuts/);
 });
 
-test('Film hero has a static fallback, user controls and original evidence links',()=>{
+test('Home has a text-led hero with a static film fallback, controls and original evidence links',()=>{
  const home=view('home',defaultContent);
  assert.doesNotMatch(home,/<video[^>]*(?:\sautoplay| src=)/);
  assert.match(home,/preload="none"/);
  assert.match(home,/class="hero-avatar"/);
  assert.equal((home.match(/<video\s/g)||[]).length,1);
  assert.match(home,/hero-video-opt\.mp4/);
- assert.match(home,/<audio data-opening-audio preload="none" data-src="\.\/assets\/opening-piano\.mp3" aria-hidden="true"><\/audio>/);
- assert.doesNotMatch(home,/opening-soundtrack|portfolio-sound|data-film-replay|film-progress/);
+ assert.match(home,/<p class="hero-greeting hero-intro-line">[^<]+<\/p>/);
+ assert.match(home,/<h1 id="opening-name" class="hero-intro-line">Krishna Mahato<\/h1>/);
+ assert.doesNotMatch(home,/<audio\b|identity-intro|data-opening-controls|data-film-replay|film-progress/);
  assert.match(home,/data-film-pause/);
  assert.match(view('credentials',defaultContent),/data-original-url="https:/);
  assert.match(view('resources',defaultContent),/data-viewer/);
@@ -92,5 +93,5 @@ test('Automatically generated résumé stays on one PDF page',async()=>{
 test('GitHub Pages package includes deep routes and public assets while excluding development files',async()=>{
  for(const file of ['index.html','src/styles.css','src/editorial.js','assets/portfolio-film.vtt','assets/krishna-mahato-resume.pdf','teaching/democracy/index.html','admin/index.html','sitemap.xml'])await fs.access(new URL('../dist/'+file,import.meta.url));
  for(const file of ['.env','node_modules','outputs','tests','.git','scripts'])await assert.rejects(fs.access(new URL('../dist/'+file,import.meta.url)));
- for(const file of ['assets/opening-soundtrack.mp3','src/sound.js'])await assert.rejects(fs.access(new URL('../dist/'+file,import.meta.url)));
+ for(const file of ['assets/opening-soundtrack.mp3','src/sound.js','src/opening-boot.js'])await assert.rejects(fs.access(new URL('../dist/'+file,import.meta.url)));
 });

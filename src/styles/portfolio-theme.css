@@ -27,7 +27,7 @@ body {--brand:var(--dark)}
 .hero-contact-link:hover {color:var(--accent-soft)}
 .hero-visual {box-shadow:none}
 .opening-hero :focus-visible,.site-footer :focus-visible {outline-color:var(--accent-soft)}
-.hero-visual :focus-visible,.opening-entry-controls :focus-visible {outline-color:var(--accent-hover)}
+.hero-visual :focus-visible {outline-color:var(--accent-hover)}
 
 /* Retain selected original backgrounds; clear reading surfaces sit above them. */
 .page-atmosphere {display:grid;--art-opacity:.22;background:none}

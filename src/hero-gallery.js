@@ -31,8 +31,8 @@ export function initHeroGallery(){
  const sync=()=>{rotation.textContent=userPaused?'Play photos':'Pause photos';root.dataset.rotation=userPaused?'paused':'playing';};
  const schedule=()=>{
   stop();if(!canRotate())return;
-  preloadTimer=setTimeout(()=>{if(canRotate()&&!document.querySelector('.identity-intro'))prepare(slides[(index+1)%slides.length]);},4800);
-  timer=setTimeout(async()=>{if(canRotate()&&!document.querySelector('.identity-intro'))await change(1,false);schedule();},6000);
+  preloadTimer=setTimeout(()=>{if(canRotate())prepare(slides[(index+1)%slides.length]);},4800);
+  timer=setTimeout(async()=>{if(canRotate())await change(1,false);schedule();},6000);
  };
  const paint=(animate=false)=>{
   slides.forEach((slide,i)=>{slide.inert=i!==index;slide.setAttribute('aria-hidden',String(i!==index));});

@@ -13,12 +13,24 @@ try{
   const browser=await {chromium,webkit}[engine].launch({headless:true,...(engine==='chromium'&&process.platform==='linux'?{channel:'chromium'}:{})});
   try{
    const late=await browser.newContext(),page=await late.newPage();
-   await page.route('**/src/app.js*',async route=>{await new Promise(r=>setTimeout(r,2200));await route.continue();});
-   await page.goto(base,{waitUntil:'domcontentloaded'});
-   await page.waitForTimeout(250);
-   record(engine,'A late application never starts another full-screen opening',await page.evaluate(()=>!document.documentElement.classList.contains('opening-pending')&&!document.querySelector('.identity-intro')&&document.querySelector('h1').checkVisibility({checkVisibilityCSS:true})));
-   await page.unroute('**/src/app.js*');await page.goto(base,{waitUntil:'domcontentloaded'});await page.waitForTimeout(150);
-   record(engine,'Returning after a skipped slow opening does not replay the cover',await page.evaluate(()=>!document.documentElement.classList.contains('opening-pending')&&!document.querySelector('.identity-intro')));
+   let releaseApp;
+   const appGate=new Promise(resolve=>{releaseApp=resolve;});
+   await page.route('**/src/app.js*',async route=>{await appGate;await route.continue();});
+   await page.addInitScript(()=>{
+    const play=HTMLMediaElement.prototype.play;
+    HTMLMediaElement.prototype.play=function(){
+     if(!(this instanceof HTMLVideoElement))return play.call(this);
+     return new Promise(resolve=>{window.releaseTestFilm=()=>resolve(play.call(this));});
+    };
+   });
+   const pageLoading=page.goto(base,{waitUntil:'domcontentloaded'});
+   const heading=page.locator('.opening-hero h1');
+   await heading.waitFor();
+   record(engine,'Home is readable before a delayed application loads',await heading.evaluate(el=>Number(getComputedStyle(el).opacity)>=.85)&&await page.locator('.site-header').isVisible()&&!await page.locator('.hero-film').getAttribute('src'));
+   await page.locator('.opening-hero').evaluate(hero=>Promise.allSettled(hero.getAnimations({subtree:true}).filter(animation=>animation.animationName==='hero-intro-reveal').map(animation=>animation.finished)));
+   releaseApp();await pageLoading;await page.waitForFunction(()=>typeof window.releaseTestFilm==='function');
+   record(engine,'A delayed film cannot cover the heading or restart its reveal',await heading.isVisible()&&await page.locator('.opening-hero>.hero-film').count()===1&&await page.locator('.identity-intro').count()===0&&await heading.evaluate(el=>el.getAnimations().every(animation=>animation.animationName!=='hero-intro-reveal'||animation.playState==='finished')));
+   await page.evaluate(()=>{window.releaseTestFilm();});
    await late.close();
    const context=await browser.newContext({viewport:{width:1440,height:1000},reducedMotion:'reduce'}),photos=await context.newPage();
    const scripts=[];photos.on('request',r=>{if(r.resourceType()==='script')scripts.push(r.url());});
@@ -52,7 +64,6 @@ try{
    record(engine,'Reading content has no late translation animation',await photos.locator('h1').evaluate(el=>getComputedStyle(el).transform==='none'));
    await context.close();
    const movingPhotos=await browser.newPage({reducedMotion:'no-preference'});
-   await movingPhotos.addInitScript(()=>sessionStorage.setItem('portfolio-identity-seen','1'));
    await movingPhotos.goto(base);
    const movingGallery=movingPhotos.locator('[data-hero-gallery][data-enhanced]');
    await movingGallery.waitFor();
@@ -68,7 +79,6 @@ try{
    await movingPhotos.close();
    const navigation=await browser.newContext(),nav=await navigation.newPage();
    await nav.addInitScript(()=>{
-    sessionStorage.setItem('portfolio-identity-seen','1');
     window.addEventListener('pageswap',event=>sessionStorage.setItem('transition-outgoing',JSON.stringify({transition:!!event.viewTransition,visibility:document.visibilityState,motion:matchMedia('(prefers-reduced-motion: reduce)').matches})));
     window.addEventListener('pagereveal',event=>{window.hasPageTransition=!!event.viewTransition;});
    });

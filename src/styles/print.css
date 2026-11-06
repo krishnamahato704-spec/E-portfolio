@@ -5,7 +5,7 @@
  .page-photo-backdrop,.resume-title,.journey-cover,.journey-index,.desk-documents,.certificate-fan,.gallery-opening,.profile-photo-collage,.journal-photo-strip {display:none!important}
  :root {--gutter:0;--section-space:20px}
  body {font:10pt/1.45 Arial,sans-serif;background:white;color:#111}
- body::before,main::before,main::after,.site-header,.site-footer,.skip-link,.reading-progress,.print-actions,.resume-overview,.page-heading,.recruiter-details,.hero-video-panel,.connect-strip,.collection-tools,.hero-contact,.video-play,.hero-film,.hero-controls,.identity-intro,.evidence-viewer {display:none!important}
+ body::before,main::before,main::after,.site-header,.site-footer,.skip-link,.reading-progress,.print-actions,.resume-overview,.page-heading,.recruiter-details,.hero-video-panel,.connect-strip,.collection-tools,.hero-contact,.video-play,.hero-film,.hero-controls,.evidence-viewer {display:none!important}
  h1,h2,h3,h4,.lead,.small {color:#111}
  .container {width:100%;max-width:none}
  .resume-web-summary {border:0;padding:0;max-width:none}

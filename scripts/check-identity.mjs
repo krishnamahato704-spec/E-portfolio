@@ -5,175 +5,97 @@ const port=4175,base=`http://127.0.0.1:${port}/`;
 const server=spawn(process.execPath,['scripts/serve.mjs'],{env:{...process.env,PORT:String(port)},windowsHide:true,stdio:'ignore'});
 const results=[];
 const record=(engine,name,pass,details)=>{results.push({engine,name,pass:!!pass,...(details?{details}:{})});if(!pass)console.error('FAIL',engine,name,details||'');};
-async function openFilm(page,url=base){
- // Freeze the startup deadline while native media buffers. The separate
- // slow-start tests use a real clock to verify the fallback.
- if(page.url()==='about:blank')await page.clock.install();
- const now=await page.evaluate(()=>Date.now());
- await page.clock.pauseAt(now+500);
- try{
-  await page.goto(url,{waitUntil:'domcontentloaded'});
-  await page.locator('.intro-running').waitFor({state:'attached',timeout:10000});
- }finally{await page.clock.resume();}
-}
 await fs.mkdir('outputs/redesign',{recursive:true});
 try{
  for(let i=0;i<80;i++){try{if((await fetch(base)).ok)break;}catch{}await new Promise(r=>setTimeout(r,100));}
  for(const engine of (process.env.IDENTITY_TEST_ENGINES||'chromium').split(',')){
-  console.log('Checking film introduction and gallery in',engine);
+  console.log('Checking headline reveal, background film and gallery in',engine);
   const browser=await {chromium,firefox,webkit}[engine].launch({headless:true});
   try{
-   const firstPaint=await browser.newContext({viewport:{width:1440,height:1000}}),first=await firstPaint.newPage();
-   await first.route('**/src/app.js*',async route=>{await new Promise(r=>setTimeout(r,Number(process.env.FIRST_PAINT_DELAY_MS||900)));await route.continue();});
-   const initialLoad=first.goto(base,{waitUntil:'domcontentloaded'});
-   await first.waitForFunction(()=>document.documentElement.classList.contains('opening-pending')&&getComputedStyle(document.querySelector('.opening-hero'),'::after').position==='fixed');
-   record(engine,'First paint shows the full-screen poster without a flash of Home',await first.evaluate(()=>{
-    const cover=getComputedStyle(document.querySelector('.opening-hero'),'::after');
-    return parseFloat(cover.width)>=innerWidth&&parseFloat(cover.height)>=innerHeight&&cover.backgroundImage.includes('hero-poster.webp')&&!document.querySelector('h1').checkVisibility({checkVisibilityCSS:true})&&!document.querySelector('.site-header').checkVisibility({checkVisibilityCSS:true});
-   }));
-   await initialLoad;
-   // The delay plus a cold native browser can exceed the startup budget.
-   // That is a valid readable fallback, not a reason to wait for a late intro.
-   await first.waitForFunction(()=>document.querySelector('.intro-running')||!window.portfolioOpeningBoot.pending);
-   if(await first.locator('.intro-running').count())record(engine,'The opening has visible skip and explicit sound controls',await first.locator('[data-opening-skip]').isVisible()&&await first.locator('[data-opening-sound]').isVisible());
-   else record(engine,'Slow startup leaves Home readable without a late opening',await first.evaluate(()=>!window.portfolioOpeningBoot.pending&&document.querySelector('h1').checkVisibility({checkVisibilityCSS:true})&&!document.querySelector('.identity-intro')));
-   await firstPaint.close();
    const ctx=await browser.newContext({viewport:{width:1440,height:1000}}),page=await ctx.newPage();
    const errors=[];page.on('pageerror',error=>errors.push(error.message));
    await page.addInitScript(()=>{
-    const timing=window.introSequenceTiming={};let sequence;
-    new MutationObserver(()=>{
-     if(!sequence){sequence=document.querySelector('.identity-intro.intro-running');if(sequence)timing.started=performance.now();}
-     else if(!sequence.isConnected&&!timing.finished)timing.finished=performance.now();
-    }).observe(document,{subtree:true,childList:true,attributes:true,attributeFilter:['class']});
+    const reveal=window.heroReveal={};
+    const running=hero=>hero.getAnimations({subtree:true}).filter(animation=>animation.animationName==='hero-intro-reveal'&&(animation.playState==='running'||animation.pending));
+    document.addEventListener('animationstart',event=>{
+     if(event.animationName!=='hero-intro-reveal'||reveal.started)return;
+     const hero=document.querySelector('.opening-hero'),heading=hero.querySelector('h1');
+     reveal.started=true;
+     reveal.readable=heading.checkVisibility({checkVisibilityCSS:true})&&Number(getComputedStyle(heading).opacity)>=.85;
+     reveal.focusKept=document.activeElement===document.body&&!document.querySelector('main').inert;
+     reveal.delays=running(hero).map(animation=>animation.effect.getTiming().delay);
+     reveal.filmUnloaded=!hero.querySelector('.hero-film').getAttribute('src');
+    });
+    new MutationObserver(changes=>{
+     if(changes.some(change=>change.target.matches('.hero-film')&&change.target.getAttribute('src'))&&reveal.startedWithFilm===undefined){
+      reveal.startedWithFilm=running(document.querySelector('.opening-hero')).length>0;
+     }
+    }).observe(document,{subtree:true,attributes:true,attributeFilter:['src']});
    });
-   await openFilm(page);
-   await page.waitForFunction(()=>!document.querySelector('.hero-film').paused);
-   record(engine,'One muted video fills the opening without locking the page',await page.evaluate(()=>document.querySelectorAll('video').length===1&&document.querySelector('.identity-intro .hero-film').getBoundingClientRect().width>=innerWidth&&!document.querySelector('main').inert&&document.querySelector('.hero-film').muted));
-   record(engine,'Automatic entry preserves keyboard focus',await page.evaluate(()=>document.activeElement===document.body));
-   await page.waitForFunction(()=>performance.now()-introSequenceTiming.started>=950);
-   record(engine,'The unobstructed film keeps the earlier gentle zoom',await page.evaluate(()=>document.querySelector('.identity-intro').children.length===1&&new DOMMatrix(getComputedStyle(document.querySelector('.hero-film')).transform).a>1&&new DOMMatrix(getComputedStyle(document.querySelector('.hero-film')).transform).a<1.05));
-   await page.screenshot({path:`outputs/redesign/opening-${engine}-desktop.png`});
-   await page.waitForFunction(()=>{const intro=document.querySelector('.intro-settling');return intro&&Number(getComputedStyle(intro).opacity)<.8&&Number(getComputedStyle(intro).opacity)>.1;});
-   record(engine,'The dissolve goes directly into the Home background without a separate paper fade',await page.evaluate(()=>document.querySelectorAll('video').length===1&&!!document.querySelector('.opening-hero>.hero-film')&&document.querySelector('.intro-film-frame').getBoundingClientRect().width>=innerWidth&&getComputedStyle(document.querySelector('.intro-film-frame')).opacity==='1'&&getComputedStyle(document.querySelector('.hero-film')).opacity==='1'));
-   await page.screenshot({path:`outputs/redesign/opening-${engine}-transition.png`});
-   await page.locator('.identity-intro').waitFor({state:'detached',timeout:4500});
-   const elapsed=await page.evaluate(()=>introSequenceTiming.finished-introSequenceTiming.started);
-   record(engine,'The opening finishes in about 3.2 seconds',elapsed>=3100&&elapsed<4200,{elapsedMs:Math.round(elapsed)});
-   record(engine,'Home keeps the muted background film playing alongside the photograph gallery',await page.locator('h1').isVisible()&&await page.locator('[data-hero-gallery]').isVisible()&&await page.locator('.hero-film').evaluate(v=>!v.paused&&v.muted));
-   record(engine,'The opening frame and cover are removed',await page.locator('.intro-film-frame,.intro-active').count()===0);
-   record(engine,'Piano stops when the portfolio opens',await page.locator('[data-opening-audio]').evaluate(a=>a.paused));
-   await page.screenshot({path:`outputs/redesign/opening-${engine}-settled.png`});
+   await page.goto(base,{waitUntil:'domcontentloaded'});
+   await page.waitForFunction(()=>window.heroReveal.started);
+   const reveal=await page.evaluate(()=>window.heroReveal);
+   record(engine,'Headline reveal uses staggered timing and keeps the name readable',reveal.readable&&new Set(reveal.delays).size>1);
+   record(engine,'Automatic entry keeps keyboard focus and leaves main interactive',reveal.focusKept);
+   record(engine,'Headline reveal starts with the background film unloaded',reveal.filmUnloaded);
+   await page.waitForFunction(()=>{const film=document.querySelector('.hero-film');return !film.paused&&film.readyState>=2;});
+   record(engine,'The single muted film starts in the hero after the headline reveal',await page.evaluate(()=>window.heroReveal.startedWithFilm===false&&document.querySelectorAll('video').length===1&&document.querySelector('.opening-hero>.hero-film')?.muted&&document.querySelectorAll('audio,.identity-intro').length===0));
+   record(engine,'Home stays readable beside the photograph gallery and playing film',await page.locator('h1').isVisible()&&await page.locator('[data-hero-gallery]').isVisible());
+   await page.screenshot({path:'outputs/redesign/opening-'+engine+'-settled.png'});
    await page.locator('[data-film-pause]').click();await page.waitForFunction(()=>document.querySelector('.hero-film').paused);
    record(engine,'The visitor can pause the background film',await page.locator('[data-film-close]').isVisible());
    await page.locator('[data-film-pause]').click();await page.waitForFunction(()=>!document.querySelector('.hero-film').paused);
    await page.locator('#home-contact-title').scrollIntoViewIfNeeded();await page.waitForFunction(()=>document.querySelector('.hero-film').paused);
    record(engine,'Film decoding pauses off screen',await page.locator('.hero-film').evaluate(v=>v.paused));
    await page.evaluate(()=>scrollTo({top:0,behavior:'instant'}));await page.waitForFunction(()=>!document.querySelector('.hero-film').paused);
+   await page.evaluate(()=>{
+    let hidden=false;
+    Object.defineProperty(document,'hidden',{configurable:true,get:()=>hidden});
+    window.setTestTabHidden=value=>{hidden=value;document.dispatchEvent(new Event('visibilitychange'));};
+    window.setTestTabHidden(true);
+   });
+   await page.waitForFunction(()=>document.querySelector('.hero-film').paused);
+   record(engine,'A hidden tab pauses the film',await page.locator('.hero-film').evaluate(v=>v.paused));
+   await page.evaluate(()=>window.setTestTabHidden(false));await page.waitForFunction(()=>!document.querySelector('.hero-film').paused);
    await page.locator('[data-film-pause]').click();
    await page.locator('#home-contact-title').scrollIntoViewIfNeeded();await page.evaluate(()=>scrollTo({top:0,behavior:'instant'}));await page.waitForTimeout(150);
-   record(engine,'Returning to Home preserves a visitor pause',await page.locator('.hero-film').evaluate(v=>v.paused));
+   record(engine,'Returning to the hero preserves a visitor pause',await page.locator('.hero-film').evaluate(v=>v.paused));
    await page.locator('[data-film-close]').click();
-   record(engine,'Hiding the background leaves the gallery visible and restores control focus',await page.locator('[data-hero-gallery]').isVisible()&&!await page.locator('.hero-film').isVisible()&&await page.locator('.hero-film').evaluate(v=>v.paused&&!v.dataset.manualPlay)&&await page.locator('[data-film-pause]').evaluate(el=>document.activeElement===el));
-   // Exercise refresh with neutral focus, independently of the manual pause
-   // above. Safari restores that old control and correctly dismisses an intro.
-   const refresh=await browser.newContext({viewport:{width:1440,height:1000}}),refreshed=await refresh.newPage();
-   await openFilm(refreshed);await refreshed.keyboard.press('Escape');
-   await refreshed.reload({waitUntil:'domcontentloaded'});
-   await refreshed.waitForFunction(()=>!document.querySelector('.hero-film').paused);
-   record(engine,'A refresh keeps the background film without replaying the full-screen opening',await refreshed.locator('.identity-intro').count()===0&&await refreshed.locator('.hero-film').evaluate(v=>v.muted));
-   await openFilm(refreshed,base+'?intro=1');
-   await refreshed.locator('.skip-link').focus();await refreshed.keyboard.press('Enter');
-   record(engine,'The page skip link dismisses the opening and moves focus to main',await refreshed.evaluate(()=>document.activeElement.id==='main'&&!document.querySelector('.identity-intro')));await refresh.close();
-   await page.goto(base+'resources/');record(engine,'Inner pages have no opening media',await page.locator('video,audio,.identity-intro').count()===0);
+   record(engine,'Hiding the background leaves the gallery visible and restores control focus',await page.locator('[data-hero-gallery]').isVisible()&&!await page.locator('.hero-film').isVisible()&&await page.locator('.hero-film').evaluate(v=>v.paused)&&await page.locator('[data-film-pause]').evaluate(el=>document.activeElement===el));
+   await page.evaluate(()=>{window.dispatchEvent(new PageTransitionEvent('pagehide',{persisted:true}));window.dispatchEvent(new PageTransitionEvent('pageshow',{persisted:true}));});
+   record(engine,'Cached-page restoration preserves the hidden film',!await page.locator('.hero-film').isVisible()&&await page.locator('.hero-film').evaluate(v=>v.paused));
+   await page.goto(base+'resources/');record(engine,'Inner pages have no opening media',await page.locator('video,audio,.hero-intro-line').count()===0);
    await page.locator('.site-header .brand').click();await page.waitForURL(base);
-   record(engine,'Internal Home links keep the page ready to read',await page.locator('.identity-intro').count()===0);
+   record(engine,'Internal Home links keep the page ready to read',await page.locator('h1').isVisible());
    record(engine,'No browser exceptions',errors.length===0,errors);await ctx.close();
    const firstPhone=await browser.newContext({viewport:{width:320,height:844}}),phone=await firstPhone.newPage();
-   await openFilm(phone);
-   record(engine,'The narrow phone opening has visible controls and no overflow',await phone.evaluate(()=>{
-    const film=document.querySelector('.identity-intro .hero-film').getBoundingClientRect();
-    return film.width>=innerWidth&&film.height>=innerHeight-1&&document.querySelector('[data-opening-skip]').checkVisibility()&&document.querySelector('[data-opening-sound]').checkVisibility()&&document.documentElement.scrollWidth<=innerWidth+1;
-   }));
-   await phone.waitForTimeout(950);await phone.screenshot({path:`outputs/redesign/opening-${engine}-phone.png`});
+   await phone.goto(base,{waitUntil:'domcontentloaded'});
+   record(engine,'The narrow phone heading and shortcuts are visible without overflow',await phone.locator('h1').isVisible()&&await phone.locator('.mobile-shortcuts').isVisible()&&await phone.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
+   await phone.screenshot({path:'outputs/redesign/opening-'+engine+'-phone.png'});
+   await phone.locator('.skip-link').focus();await phone.keyboard.press('Enter');
+   record(engine,'The page skip link moves focus to main',await phone.evaluate(()=>document.activeElement.id==='main'));
    await firstPhone.close();
-   for(const action of ['escape','scroll','preference','resize','tab']){
-    const context=await browser.newContext({viewport:{width:390,height:844}}),p=await context.newPage();
-    await openFilm(p);
-    if(action==='escape')await p.keyboard.press('Escape');
-    if(action==='scroll')await p.mouse.wheel(0,400);
-    if(action==='preference')await p.emulateMedia({reducedMotion:'reduce'});
-    if(action==='resize')await p.setViewportSize({width:430,height:844});
-    if(action==='tab')await p.keyboard.press('Tab');
-    await p.locator('.identity-intro').waitFor({state:'detached',timeout:1000});
-    record(engine,`${action} immediately dismisses the opening and leaves a usable page`,await p.evaluate(()=>!document.querySelector('main').inert&&document.documentElement.scrollWidth<=innerWidth+1));
-    if(action==='preference')record(engine,'Live reduced motion pauses the film',await p.locator('.hero-film').evaluate(v=>v.paused));
-    record(engine,`${action} stops opening audio`,await p.locator('[data-opening-audio]').evaluate(a=>a.paused));
-    await context.close();
-   }
-   const delayed=await browser.newContext(),reading=await delayed.newPage();
-   await reading.addInitScript(()=>{const play=HTMLMediaElement.prototype.play;HTMLMediaElement.prototype.play=function(){return this instanceof HTMLVideoElement?new Promise(resolve=>setTimeout(resolve,700)).then(()=>play.call(this)):play.call(this);};});
-   await reading.goto(base,{waitUntil:'domcontentloaded'});await reading.evaluate(()=>scrollTo(0,400));await reading.waitForTimeout(1200);
-   record(engine,'Late media never interrupts a visitor who has started reading',await reading.locator('.identity-intro').count()===0&&await reading.evaluate(()=>scrollY>24));await delayed.close();
-   const stalled=await browser.newContext(),waiting=await stalled.newPage();
-   await waiting.addInitScript(()=>{
-    HTMLMediaElement.prototype.play=function(){window.videoPlayRequestedAt=performance.now();return new Promise(()=>{});};
-    window.coverStarted=false;
-    new MutationObserver(()=>{if(document.querySelector('.identity-intro'))window.coverStarted=true;}).observe(document,{childList:true,subtree:true});
-   });
-   await waiting.goto(base,{waitUntil:'domcontentloaded'});await waiting.waitForFunction(()=>performance.now()>=window.videoPlayRequestedAt+950);
-   record(engine,'Stalled film leaves Home readable within its playback budget without starting a second cover',await waiting.evaluate(()=>!window.coverStarted&&document.querySelector('h1').checkVisibility({checkVisibilityCSS:true})));await stalled.close();
-   for(const mode of ['reduced','fragment','blocked-storage','no-js','media-failure','autoplay-blocked','app-failure']){
+   for(const mode of ['reduced','fragment','no-js','media-failure','autoplay-blocked','app-failure']){
     const context=await browser.newContext({reducedMotion:mode==='reduced'?'reduce':'no-preference',javaScriptEnabled:mode!=='no-js'}),p=await context.newPage();
-    if(mode==='blocked-storage')await p.addInitScript(()=>Object.defineProperty(window,'sessionStorage',{get(){throw new DOMException('Unavailable','SecurityError');}}));
-    if(mode==='media-failure')await p.addInitScript(()=>{const src=Object.getOwnPropertyDescriptor(HTMLMediaElement.prototype,'src');Object.defineProperty(HTMLMediaElement.prototype,'src',{...src,set(value){src.set.call(this,this instanceof HTMLVideoElement?value+'.unavailable':value);}});});
+    if(mode==='media-failure')await p.addInitScript(()=>{
+     const src=Object.getOwnPropertyDescriptor(HTMLMediaElement.prototype,'src');
+     Object.defineProperty(HTMLMediaElement.prototype,'src',{...src,set(value){src.set.call(this,this instanceof HTMLVideoElement?value+'.unavailable':value);}});
+    });
     if(mode==='autoplay-blocked')await p.addInitScript(()=>{HTMLMediaElement.prototype.play=function(){return Promise.reject(new DOMException('Blocked','NotAllowedError'));};});
     if(mode==='app-failure')await p.route('**/src/app.js*',r=>r.abort());
-    await p.goto(base+(mode==='fragment'?'#teaching-evidence':mode==='reduced'?'?intro=1':''),{waitUntil:'domcontentloaded'});
-    await p.waitForFunction(()=>!document.documentElement.classList.contains('opening-pending')&&!document.querySelector('.identity-intro'),null,{timeout:5000});
-    record(engine,`${mode} leaves content readable without a gate`,await p.locator('h1').isVisible());
-    if(mode==='reduced')record(engine,'Reduced motion loads neither film nor piano',await p.locator('.hero-film,[data-opening-audio]').evaluateAll(media=>media.every(m=>m.paused&&!m.getAttribute('src'))));
+    await p.goto(base+(mode==='fragment'?'#teaching-evidence':''),{waitUntil:'domcontentloaded'});
+    if(mode==='media-failure')await p.locator('[data-film-failed=true]').waitFor({state:'attached'});
+    if(mode==='reduced'||mode==='fragment')await p.locator('[data-film-controls]:not([inert])').waitFor({state:'attached'});
+    record(engine,mode+' leaves the heading visible without a gate',await p.locator('h1').isVisible());
+    if(mode==='reduced'||mode==='fragment')record(engine,mode+' skips the headline animation and automatic film',await p.evaluate(()=>!document.querySelector('.opening-hero').getAnimations({subtree:true}).some(animation=>animation.animationName==='hero-intro-reveal')&&!document.querySelector('.hero-film').getAttribute('src')));
     await context.close();
    }
-   const sound=await browser.newContext(),audible=await sound.newPage();
-   await audible.addInitScript(()=>{
-    const play=HTMLMediaElement.prototype.play;
-    let gesture=false;
-    document.addEventListener('click',event=>{if(event.isTrusted&&event.target.closest('[data-opening-sound]'))gesture=true;},{capture:true});
-    HTMLMediaElement.prototype.play=function(){
-     if(this instanceof HTMLAudioElement&&!gesture)return Promise.reject(new DOMException('Gesture required','NotAllowedError'));
-     return play.call(this);
-    };
-   });
-   await openFilm(audible);
-   record(engine,'Audio stays unloaded before an explicit sound choice',await audible.locator('[data-opening-audio]').evaluate(a=>a.paused)&&await audible.locator('[data-opening-audio]').evaluate(a=>!a.getAttribute('src')));
-   await audible.keyboard.press('s');
-   record(engine,'An unrelated key does not load or start music',await audible.locator('[data-opening-audio]').evaluate(a=>a.paused&&!a.getAttribute('src')));
-   await audible.locator('[data-opening-sound]').click();await audible.waitForFunction(()=>{const a=document.querySelector('[data-opening-audio]');return !a.paused&&a.readyState>=2;});
-   record(engine,'Only the explicit music button starts the quiet local piano',await audible.locator('[data-opening-audio]').evaluate(a=>a.currentSrc.endsWith('/assets/opening-piano.mp3')&&!a.loop&&a.duration<3.4));
-   await audible.locator('.identity-intro').waitFor({state:'detached',timeout:4200});
-   await audible.waitForFunction(()=>{const a=document.querySelector('[data-opening-audio]');return a.paused&&a.currentTime===0;},{},{timeout:1000});
-   record(engine,'No piano continues behind the portfolio',await audible.locator('[data-opening-audio]').evaluate(a=>a.paused&&a.currentTime===0));await sound.close();
-   const lateSound=await browser.newContext(),late=await lateSound.newPage();
-   await late.addInitScript(()=>{
-    const play=HTMLMediaElement.prototype.play;
-    HTMLMediaElement.prototype.play=function(){return this instanceof HTMLAudioElement?new Promise(resolve=>setTimeout(resolve,700)).then(()=>play.call(this)):play.call(this);};
-   });
-   await openFilm(late);await late.locator('[data-opening-sound]').click();await late.keyboard.press('Escape');await late.waitForTimeout(1100);
-   record(engine,'Late audio playback is stopped after an early dismissal',await late.locator('[data-opening-audio]').evaluate(a=>a.paused));await lateSound.close();
-   const pendingSkip=await browser.newContext(),early=await pendingSkip.newPage();
-   await early.route('**/src/app.js*',r=>r.abort());
-   await early.goto(base,{waitUntil:'domcontentloaded'});
-   await early.locator('[data-opening-skip]').click();
-   record(engine,'Visible skip works even when the app module fails',await early.locator('h1').isVisible()&&await early.evaluate(()=>document.activeElement.id==='main'));
-   await pendingSkip.close();
    const dataSaver=await browser.newContext(),saving=await dataSaver.newPage();
    await saving.addInitScript(()=>Object.defineProperty(navigator,'connection',{value:{saveData:true,effectiveType:'4g'},configurable:true}));
-   await saving.goto(base,{waitUntil:'load'});
-   record(engine,'Data saving mode loads no film or piano and keeps photos static',await saving.locator('h1').isVisible()&&await saving.locator('.hero-film,[data-opening-audio]').evaluateAll(media=>media.every(m=>!m.getAttribute('src')))&&await saving.locator('[data-hero-gallery]').getAttribute('data-rotation')==='paused');
+   await saving.goto(base);await saving.locator('[data-hero-gallery][data-enhanced]').waitFor();
+   record(engine,'Data saving mode leaves the film unloaded and keeps photos static',await saving.locator('h1').isVisible()&&await saving.locator('.hero-film').evaluate(video=>!video.getAttribute('src'))&&await saving.locator('[data-hero-gallery]').getAttribute('data-rotation')==='paused');
    await dataSaver.close();
    const photosContext=await browser.newContext({viewport:{width:1440,height:1000}}),photos=await photosContext.newPage();
-   await photos.addInitScript(()=>sessionStorage.setItem('portfolio-identity-seen','1'));
    await photos.goto(base);await photos.locator('[data-hero-gallery][data-enhanced]').waitFor();
    record(engine,'Home gallery uses five current photographs with one focusable slide',await photos.locator('[data-hero-slide]').count()===5&&await photos.locator('[data-hero-slide]:not([inert]) a').count()===1);
    await photos.mouse.move(10,70);
@@ -217,5 +139,5 @@ try{
   }finally{await browser.close();}
  }
 }finally{server.kill();await fs.writeFile('outputs/redesign/identity-results.json',JSON.stringify({checks:results.length,failed:results.filter(r=>!r.pass).length,results},null,2));}
-console.log(`${results.filter(r=>r.pass).length}/${results.length} film introduction and gallery checks passed.`);
+console.log(`${results.filter(r=>r.pass).length}/${results.length} headline reveal, background film and gallery checks passed.`);
 if(results.some(r=>!r.pass))process.exitCode=1;

@@ -240,13 +240,11 @@ try{
 
   const motion=await context({reducedMotion:'no-preference'});const moving=await motion.newPage();
   await moving.goto(base,{waitUntil:'domcontentloaded'});
-  await moving.locator('.intro-running').waitFor();
-  record('opening: first visit starts automatically without overlay buttons',await moving.locator('.identity-intro button,[data-intro-enter],.intro-sound,[data-film-replay]').count()===0&&await moving.locator('.identity-intro').count()===1);
-  await moving.keyboard.press('Escape');
-  record('opening: Escape reveals the portfolio and stops piano immediately',await moving.locator('.identity-intro').count()===0&&await moving.locator('h1').isVisible()&&await moving.locator('[data-opening-audio]').evaluate(a=>a.paused));
+  record('opening: the headline is visible without an overlay or opening audio',await moving.locator('h1.hero-intro-line').isVisible()&&await moving.locator('.identity-intro,audio').count()===0);
+  await moving.waitForFunction(()=>!document.querySelector('.hero-film').paused);
   await moving.emulateMedia({reducedMotion:'reduce'});
   await moving.waitForFunction(()=>document.querySelector('.hero-film').paused,null,{timeout:1000});
-  record('opening: live reduced motion pauses the film',await moving.locator('.hero-film').evaluate(video=>video.paused));
+  record('home: live reduced motion pauses the film',await moving.locator('.hero-film').evaluate(video=>video.paused));
   await motion.close();
   const failed=results.filter(result=>!result.pass);
   await fs.writeFile(path.join(output,'results.json'),JSON.stringify({base,checkedAt:new Date().toISOString(),checks:results.length,failed:failed.length,limitations:'Semantic and interaction checks are not a full WCAG conformance audit. No field Core Web Vitals measurement.',results},null,2));

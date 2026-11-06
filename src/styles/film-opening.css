@@ -1,4 +1,4 @@
-/* A brief Home film opening with one soft dissolve. */
+/* Home hero layout refinements. */
 .opening-hero {background:var(--surface-muted)}
 .hero-film {left:35%;width:65%;opacity:.8;filter:saturate(.9)}
 .opening-hero::before {background:none}
@@ -8,31 +8,13 @@
 .opening-hero h1 {font-size:clamp(2.35rem,4.2vw,4rem)}
 .current-card {justify-self:end;align-self:end;width:min(100%,285px)}
 .film-caption {flex:none;background:var(--paper);padding:8px 12px;border:1px solid var(--line);border-radius:24px}
-/* Applied by the blocking Home bootstrap before any page content is painted. */
-html.opening-pending .site-header,html.opening-pending .site-footer,
-html.opening-pending #main>:not(.opening-hero),
-html.opening-pending .opening-hero>:not(.hero-film) {visibility:hidden}
-html.opening-pending .opening-hero {z-index:1000}
-html.opening-pending .opening-hero::after {content:'';position:fixed;inset:0;width:100vw;height:100svh;z-index:1;background:var(--paper) url('../../assets/hero-poster.webp') 76% top/cover no-repeat;pointer-events:none}
-.identity-intro {position:fixed;inset:0;z-index:1000;display:block;isolation:isolate;overflow:hidden;pointer-events:none;opacity:1;transition:opacity 1000ms cubic-bezier(.3,.6,.2,1)}
-.identity-intro::before {content:'';position:absolute;inset:0;z-index:-2;background:var(--paper)}
-.identity-intro.intro-settling {opacity:0}
-.identity-intro .hero-film,.intro-film-frame {position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:76% top;z-index:-1;opacity:1;filter:none;transform:none}
-.intro-running .hero-film {animation:opening-film 3200ms cubic-bezier(.3,.6,.2,1) both}
-@keyframes opening-film {
- 0% {transform:scale(1)}
- 25%,72% {transform:scale(1.035)}
- 100% {transform:scale(1.045)}
-}
 @media(max-width:1000px) and (min-width:761px) {
  .hero-content {grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:24px}
  .hero-copy {padding:20px}.hero-identity {gap:16px}.hero-avatar {width:80px;height:80px}
 }
 @media(max-width:760px) {
- html.opening-pending .opening-hero::after {background-position:73% top}
  .hero-film {left:0;width:100%;height:300px;object-position:50% top;opacity:.8}
  .hero-content {grid-template-columns:1fr;padding-block:260px 144px;gap:18px}
  .hero-copy {padding:20px}.current-card {justify-self:stretch;width:100%;background:var(--paper)}
  .hero-controls {gap:8px}.film-caption {width:100%;margin-bottom:0;justify-content:space-between;gap:12px;padding:7px 12px}
 }
-@media(prefers-reduced-motion:reduce) {.identity-intro * {animation:none!important}}

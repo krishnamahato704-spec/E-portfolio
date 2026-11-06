@@ -24,12 +24,12 @@ function wire(){
 if(route==='admin') import('./admin.js?v=editorial-20261004').then(x=>x.initStudio(base));
 else {
  wire();
- let opening,gallery;
+ let film,gallery,active=true;
  if(route==='home'){
-  import('./identity.js?v=editorial-20261004').then(media=>{opening=media;opening.initOpening();});
-  import('./hero-gallery.js?v=editorial-20261004').then(photos=>{gallery=photos;gallery.initHeroGallery();});
+  import('./identity.js?v=editorial-20261004').then(media=>{film=media;if(active)film.initBackgroundFilm();});
+  import('./hero-gallery.js?v=editorial-20261004').then(photos=>{gallery=photos;if(active)gallery.initHeroGallery();});
  }
  initMotion({initial:true});
- window.addEventListener('pagehide',()=>{opening?.cleanupOpening();gallery?.cleanupHeroGallery();cleanupMotion();});
- window.addEventListener('pageshow',e=>{if(e.persisted){initMotion();opening?.initOpening({auto:false});gallery?.initHeroGallery();}});
+ window.addEventListener('pagehide',()=>{active=false;film?.cleanupBackgroundFilm();gallery?.cleanupHeroGallery();cleanupMotion();});
+ window.addEventListener('pageshow',e=>{if(e.persisted){active=true;initMotion();film?.initBackgroundFilm();gallery?.initHeroGallery();}});
 }

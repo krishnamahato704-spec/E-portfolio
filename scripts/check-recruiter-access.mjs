@@ -47,7 +47,7 @@ try{
     await page.goto(base+'#teaching-evidence');
     await page.locator('#teaching-evidence').waitFor();
     await page.evaluate(()=>document.fonts.ready);
-    check(engine,'Direct evidence link bypasses the film and lands at the selected work',await page.evaluate(()=>!document.querySelector('.identity-intro')&&!document.documentElement.classList.contains('opening-pending')&&document.querySelector('#teaching-evidence').getBoundingClientRect().top>=0&&document.querySelector('#teaching-evidence').getBoundingClientRect().top<150));
+    check(engine,'Direct evidence link lands at the selected work without playing the film',await page.evaluate(()=>!document.querySelector('.hero-film').getAttribute('src')&&document.querySelector('#teaching-evidence').getBoundingClientRect().top>=0&&document.querySelector('#teaching-evidence').getBoundingClientRect().top<150));
     const order=await page.locator('main>section').evaluateAll(sections=>sections.map(s=>s.className));
     check(engine,'Evidence and experience precede detailed education',order.findIndex(s=>s.includes('selected-evidence'))<order.findIndex(s=>s.includes('home-journey'))&&order.findIndex(s=>s.includes('home-journey'))<order.findIndex(s=>s.includes('home-education')),order);
     for(const target of ['resume/','resources/','contact/']){
@@ -81,11 +81,11 @@ try{
   check(engine,'No-JavaScript résumé link reaches the complete record',page.url()===new URL('resume/',base).href&&await page.locator('.resume-web-summary').isVisible());
   await fallback.close();
   const moving=await browser.newContext({viewport:{width:390,height:900}});
-  const intro=await moving.newPage();await intro.goto(base+'?intro=1',{waitUntil:'domcontentloaded'});await intro.locator('.intro-running').waitFor();
-  check(engine,'Film opening hides shortcuts and has no overlay buttons',!await intro.locator('.mobile-shortcuts').isVisible()&&await intro.locator('.identity-intro button').count()===0);
+  const intro=await moving.newPage();await intro.goto(base,{waitUntil:'domcontentloaded'});
+  check(engine,'Phone shortcuts are available with the visible Home headline',await intro.locator('.mobile-shortcuts').isVisible()&&await intro.locator('h1.hero-intro-line').isVisible());
   await intro.locator('.skip-link').focus();
   await intro.keyboard.press('Enter');
-  check(engine,'Keyboard navigation restores quick access and main focus',await intro.locator('.mobile-shortcuts').isVisible()&&await intro.evaluate(()=>document.activeElement.id==='main'));
+  check(engine,'The skip link moves focus to main with quick access still visible',await intro.locator('.mobile-shortcuts').isVisible()&&await intro.evaluate(()=>document.activeElement.id==='main'));
   await moving.close();
  }finally{await browser.close();}
 }

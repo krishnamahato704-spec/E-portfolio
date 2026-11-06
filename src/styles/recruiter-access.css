@@ -64,8 +64,6 @@
 .home-education .education-details-link {min-height:44px;align-items:center;font-size:1rem}
 
 /* The opening fills the viewport without visible controls. */
-.identity-intro .hero-film {height:100svh}
-html.opening-pending .mobile-shortcuts,body:has(.identity-intro) .mobile-shortcuts {visibility:hidden}
 
 @media(max-width:1000px) {
  .hero-copy .actions .button {font-size:1rem}

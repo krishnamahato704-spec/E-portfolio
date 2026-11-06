@@ -944,7 +944,7 @@ dialog::backdrop {background:color-mix(in srgb,var(--ink) 45%,transparent)}
 
 }
 @layer film-opening {
-/* A brief Home film opening with one soft dissolve. */
+/* Home hero layout refinements. */
 .opening-hero {background:var(--surface-muted)}
 .hero-film {left:35%;width:65%;opacity:.8;filter:saturate(.9)}
 .opening-hero::before {background:none}
@@ -954,34 +954,16 @@ dialog::backdrop {background:color-mix(in srgb,var(--ink) 45%,transparent)}
 .opening-hero h1 {font-size:clamp(2.35rem,4.2vw,4rem)}
 .current-card {justify-self:end;align-self:end;width:min(100%,285px)}
 .film-caption {flex:none;background:var(--paper);padding:8px 12px;border:1px solid var(--line);border-radius:24px}
-/* Applied by the blocking Home bootstrap before any page content is painted. */
-html.opening-pending .site-header,html.opening-pending .site-footer,
-html.opening-pending #main>:not(.opening-hero),
-html.opening-pending .opening-hero>:not(.hero-film) {visibility:hidden}
-html.opening-pending .opening-hero {z-index:1000}
-html.opening-pending .opening-hero::after {content:'';position:fixed;inset:0;width:100vw;height:100svh;z-index:1;background:var(--paper) url('../assets/hero-poster.webp') 76% top/cover no-repeat;pointer-events:none}
-.identity-intro {position:fixed;inset:0;z-index:1000;display:block;isolation:isolate;overflow:hidden;pointer-events:none;opacity:1;transition:opacity 1000ms cubic-bezier(.3,.6,.2,1)}
-.identity-intro::before {content:'';position:absolute;inset:0;z-index:-2;background:var(--paper)}
-.identity-intro.intro-settling {opacity:0}
-.identity-intro .hero-film,.intro-film-frame {position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:76% top;z-index:-1;opacity:1;filter:none;transform:none}
-.intro-running .hero-film {animation:opening-film 3200ms cubic-bezier(.3,.6,.2,1) both}
-@keyframes opening-film {
- 0% {transform:scale(1)}
- 25%,72% {transform:scale(1.035)}
- 100% {transform:scale(1.045)}
-}
 @media(max-width:1000px) and (min-width:761px) {
  .hero-content {grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:24px}
  .hero-copy {padding:20px}.hero-identity {gap:16px}.hero-avatar {width:80px;height:80px}
 }
 @media(max-width:760px) {
- html.opening-pending .opening-hero::after {background-position:73% top}
  .hero-film {left:0;width:100%;height:300px;object-position:50% top;opacity:.8}
  .hero-content {grid-template-columns:1fr;padding-block:260px 144px;gap:18px}
  .hero-copy {padding:20px}.current-card {justify-self:stretch;width:100%;background:var(--paper)}
  .hero-controls {gap:8px}.film-caption {width:100%;margin-bottom:0;justify-content:space-between;gap:12px;padding:7px 12px}
 }
-@media(prefers-reduced-motion:reduce) {.identity-intro * {animation:none!important}}
 
 }
 @layer recruiter-access {
@@ -1051,8 +1033,6 @@ html.opening-pending .opening-hero::after {content:'';position:fixed;inset:0;wid
 .home-education .education-details-link {min-height:44px;align-items:center;font-size:1rem}
 
 /* The opening fills the viewport without visible controls. */
-.identity-intro .hero-film {height:100svh}
-html.opening-pending .mobile-shortcuts,body:has(.identity-intro) .mobile-shortcuts {visibility:hidden}
 
 @media(max-width:1000px) {
  .hero-copy .actions .button {font-size:1rem}
@@ -1274,10 +1254,6 @@ body {--brand:#633f31}
 .hero-teaching-scope {font-size:1rem;line-height:1.5;color:var(--muted);margin-top:6px;max-width:56ch}
 .hero-recruiter-brief {max-width:60ch;margin-top:12px}
 .hiring-essentials .current-card {background:transparent}
-.opening-entry-controls {display:none}
-html.opening-pending .opening-entry-controls,body:has(.identity-intro) .opening-entry-controls {display:flex;position:fixed;right:24px;bottom:24px;z-index:1002;gap:10px;flex-wrap:wrap;padding:12px;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);visibility:visible;pointer-events:auto;box-shadow:var(--shadow)}
-.opening-entry-controls .button {min-height:48px}
-.identity-intro .hero-film {display:block;inset:0;width:100%;height:100svh;border-radius:0;filter:none}
 .skip-link:focus {z-index:1003}
 
 /* Keep a few margin illustrations; remove the extra photo treatment. */
@@ -1343,9 +1319,6 @@ html.opening-pending .opening-entry-controls,body:has(.identity-intro) .opening-
  .hero-controls {gap:12px;width:auto;flex-wrap:wrap;padding-top:0;margin:0;border:0}
  .hero-controls button {font-size:.875rem;padding:4px 10px;min-height:36px}
  .film-caption {width:auto}
- .opening-entry-controls {max-width:calc(100vw - 24px)}
- html.opening-pending .opening-entry-controls,body:has(.identity-intro) .opening-entry-controls {right:12px;bottom:12px;padding:10px;gap:8px}
- .opening-entry-controls .button {padding-inline:12px;font-size:.95rem}
  .hiring-essentials-grid {grid-template-columns:1fr;padding-block:18px;gap:12px}
  .hiring-fact {display:grid;grid-template-columns:115px 1fr;gap:12px}
  .hiring-fact dt {margin:0}
@@ -1397,7 +1370,7 @@ html.opening-pending .opening-entry-controls,body:has(.identity-intro) .opening-
  .hiring-fact {grid-template-columns:105px 1fr;gap:8px}
 }
 @media print {
- .opening-entry-controls,.hero-controls {display:none!important}
+ .hero-controls {display:none!important}
  .page-atmosphere,.study-interval {display:none}
  .catalogue-layout {display:block}
 }
@@ -1433,7 +1406,7 @@ body {--brand:var(--dark)}
 .hero-contact-link:hover {color:var(--accent-soft)}
 .hero-visual {box-shadow:none}
 .opening-hero :focus-visible,.site-footer :focus-visible {outline-color:var(--accent-soft)}
-.hero-visual :focus-visible,.opening-entry-controls :focus-visible {outline-color:var(--accent-hover)}
+.hero-visual :focus-visible {outline-color:var(--accent-hover)}
 
 /* Retain selected original backgrounds; clear reading surfaces sit above them. */
 .page-atmosphere {display:grid;--art-opacity:.22;background:none}
@@ -1512,12 +1485,31 @@ body {--brand:var(--dark)}
 
 }
 @layer home-media {
-/* One muted background video, with a readable chocolate scrim and independent photo gallery. */
-.opening-hero>.hero-film {display:block;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;opacity:1;filter:none;border-radius:0}
+/* Keep the poster under the film so playback can fade in over a stable surface. */
+.opening-hero {background-image:url('../assets/hero-poster.webp');background-position:76% top;background-size:cover}
+.opening-hero[data-film-hidden=true] {background-image:none}
+.opening-hero>.hero-film {display:block;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:76% top;z-index:-2;opacity:0;filter:none;border-radius:0}
+.opening-hero[data-film-started=true]>.hero-film {opacity:1}
 .opening-hero[data-film-hidden=true]>.hero-film {display:none}
 .opening-hero::before {display:block;inset:0;background:linear-gradient(90deg,#30241df2 0%,#30241de6 48%,#30241dbf 100%);opacity:1}
 .hero-text-only {grid-template-columns:1fr}
 .hero-copy {position:relative;z-index:1}
+.hero-identity {gap:16px;margin-bottom:14px}
+.hero-identity .hero-avatar {width:68px;height:68px;object-position:50% 30%;border-radius:50%}
+.hero-greeting {color:var(--accent-soft);font-weight:600;letter-spacing:.045em}
+.opening-hero h1 {font:400 clamp(2.75rem,5.4vw,5.25rem)/1.02 Georgia,'Times New Roman',serif;letter-spacing:-.045em;margin-bottom:10px;overflow-wrap:anywhere}
+.hero-study {color:var(--accent-soft);font-size:.875rem;margin:0 0 16px}
+@media screen and (prefers-reduced-motion:no-preference) {
+ body[data-route=home]:not(:has(:target)) .hero-intro-line {animation:hero-intro-reveal 500ms var(--ease) backwards}
+ body[data-route=home]:not(:has(:target)) h1.hero-intro-line {animation-delay:90ms}
+ body[data-route=home]:not(:has(:target)) .hero-role.hero-intro-line {animation-delay:180ms}
+ body[data-route=home]:not(:has(:target)) .hero-statement.hero-intro-line {animation-delay:270ms}
+ .opening-hero>.hero-film {transition:opacity 400ms var(--ease)}
+}
+@keyframes hero-intro-reveal {
+ from {opacity:.86;transform:translateY(.5rem)}
+ to {opacity:1;transform:none}
+}
 .hero-background-controls {position:static;margin-top:18px;padding-top:14px;border-top:1px solid #a88b74;gap:8px;flex-wrap:wrap;justify-content:flex-start}
 .hero-background-controls .film-caption {flex:1;margin:0;padding:0;background:none;border:0}
 .hero-background-controls .film-label {color:var(--accent-soft);font-size:.875rem;white-space:normal}
@@ -1551,8 +1543,11 @@ body {--brand:var(--dark)}
  .hero-gallery .hero-practice-photo a {height:250px}
 }
 @media(max-width:760px) {
- .opening-hero>.hero-film {height:100%;position:absolute}
+ .opening-hero {background-position:50% top}
+ .opening-hero>.hero-film {object-position:50% top}
  .opening-hero::before {display:block;background:#30241de6}
+ .opening-hero h1 {font-size:clamp(2.45rem,10vw,3.5rem)}
+ .hero-identity .hero-avatar {width:58px;height:58px}
  .hero-background-controls .film-caption {flex-basis:100%}
  .hero-gallery {margin:20px 0 0;padding:0;background:none;border:0;border-radius:0}
  .hero-gallery .hero-practice-photo a {height:220px}
@@ -1565,6 +1560,8 @@ body {--brand:var(--dark)}
  .hero-gallery-track {display:block;transform:none!important}
  .hero-gallery-slide[aria-hidden=true] {display:none}
  .hero-gallery .hero-practice-photo figcaption,.hero-gallery .hero-practice-photo figcaption span {color:#111}
+ .opening-hero {background-image:none}
+ .hero-greeting,.hero-study {color:#111}
  .opening-hero::before {display:none}
 }
 
@@ -1572,8 +1569,8 @@ body {--brand:var(--dark)}
 @layer recruiter-design {
 /* Recruiter-facing type, evidence cards and timelines. Loaded before print. */
 body {font-family:var(--sans);font-size:var(--body);line-height:1.65}
-main h1,main h2,main h3 {font-family:var(--sans);font-weight:650;text-wrap:balance;overflow-wrap:anywhere}
-main h1 {font-size:var(--h1);line-height:1.12;letter-spacing:-.035em}
+main h1:not(.hero-intro-line),main h2,main h3 {font-family:var(--sans);font-weight:650;text-wrap:balance;overflow-wrap:anywhere}
+main h1:not(.hero-intro-line) {font-size:var(--h1);line-height:1.12;letter-spacing:-.035em}
 main h2 {font-size:var(--h2);line-height:1.2;letter-spacing:-.025em}
 main h3 {font-size:var(--h3);line-height:1.3;letter-spacing:-.015em}
 .hero-role {font-weight:500;letter-spacing:-.015em}
@@ -1799,7 +1796,7 @@ main h3 {font-size:var(--h3);line-height:1.3;letter-spacing:-.015em}
  .page-photo-backdrop,.resume-title,.journey-cover,.journey-index,.desk-documents,.certificate-fan,.gallery-opening,.profile-photo-collage,.journal-photo-strip {display:none!important}
  :root {--gutter:0;--section-space:20px}
  body {font:10pt/1.45 Arial,sans-serif;background:white;color:#111}
- body::before,main::before,main::after,.site-header,.site-footer,.skip-link,.reading-progress,.print-actions,.resume-overview,.page-heading,.recruiter-details,.hero-video-panel,.connect-strip,.collection-tools,.hero-contact,.video-play,.hero-film,.hero-controls,.identity-intro,.evidence-viewer {display:none!important}
+ body::before,main::before,main::after,.site-header,.site-footer,.skip-link,.reading-progress,.print-actions,.resume-overview,.page-heading,.recruiter-details,.hero-video-panel,.connect-strip,.collection-tools,.hero-contact,.video-play,.hero-film,.hero-controls,.evidence-viewer {display:none!important}
  h1,h2,h3,h4,.lead,.small {color:#111}
  .container {width:100%;max-width:none}
  .resume-web-summary {border:0;padding:0;max-width:none}

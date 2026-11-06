@@ -153,9 +153,9 @@ try{
     const noInternship=structuredClone(defaultContent);
     noInternship.experiences=[];
     assert(!status(noInternship),'Removed internship still appears current');
-    assert(fragment(view('home',noInternship,'../')).querySelector('.opening-label').textContent.includes('B.Ed. & M.A. History in progress'),'Current study evidence is missing');
+    assert(fragment(view('home',noInternship,'../')).querySelector('.hero-study').textContent.includes('B.Ed. & M.A. History in progress'),'Current study evidence is missing');
     noInternship.qualifications.forEach(qualification=>{qualification.status='Completed'});
-    assert(!status(noInternship)&&!fragment(view('home',noInternship,'../')).querySelector('.opening-label').textContent.includes('in progress'),'Completed studies remain presented as current');
+    assert(!status(noInternship)&&!fragment(view('home',noInternship,'../')).querySelector('.hero-study').textContent.includes('in progress'),'Completed studies remain presented as current');
     const completedInternship=structuredClone(defaultContent);
     completedInternship.experiences.forEach(experience=>{experience.status='Completed'});
     assert(!status(completedInternship),'Completed internship is presented as current');

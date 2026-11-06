@@ -33,11 +33,12 @@ try {
   main.innerHTML = view('home',defaultContent,'../');
   await check('Initial hero sequence is finite and completes visibly',async () => {
     initMotion({initial:true});
-    assert(main.querySelectorAll('.motion-hero').length === 0,'Film introduction owns its sequence; generic motion must not add a second hero sequence');
+    assert(main.querySelectorAll('.motion-hero').length === 0,'Generic motion added a second hero sequence');
     assert(!main.querySelector('.hero-avatar').classList.contains('motion-hero'),'Portrait must never enter the fade sequence');
-    for(let i=0;i<40&&main.querySelector('.motion-hero');i++)await wait(50);
-    assert(!main.querySelector('.motion-hero'),'Hero classes must clear');
-    assert(getComputedStyle(main.querySelector('h1')).opacity === '1','Headline must remain visible');
+    const headline=main.querySelector('h1');
+    assert(Number(getComputedStyle(headline).opacity)>=.85,'Headline must stay readable during the reveal');
+    await Promise.allSettled(headline.getAnimations().map(animation=>animation.finished));
+    assert(getComputedStyle(headline).opacity==='1','Headline must settle at full opacity');
   });
   await check('Repeated initialization retains one observer set and progress bar',() => {
     for (let i=0; i<8; i++) initMotion();
@@ -57,7 +58,7 @@ try {
     await wait(50);
     assert(video.paused,'Refresh overrode the visitor pause');
   });
-  await check('Cloud-style replacement does not replay the hero',() => {
+  await check('Cloud-style replacement does not add generic hero motion',() => {
     cleanupMotion();
     main.innerHTML=view('home',defaultContent,'../');
     initMotion();
@@ -83,7 +84,7 @@ try {
     media.matches=false;
     delete window.IntersectionObserver;
     initMotion();
-    assert([...main.querySelectorAll('h1,h2,h3')].every(el=>getComputedStyle(el).opacity==='1'),'Hidden content without observer');
+    assert([...main.querySelectorAll('h1,h2,h3')].every(el=>el.checkVisibility({checkVisibilityCSS:true})&&Number(getComputedStyle(el).opacity)>=.85),'Hidden content without observer');
   });
   await check('Reduced-motion CSS removes delayed opacity and translation',() => {
     // Apply the actual reduced-motion declarations as a forced CSS fixture;
