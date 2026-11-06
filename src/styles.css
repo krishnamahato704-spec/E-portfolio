@@ -357,11 +357,14 @@ figcaption span {display:block;color:var(--muted);font-size:.78rem;margin-top:4p
 @media(max-width:1000px) {
  :root {--header-height:68px}
  .header-inner {justify-content:space-between;gap:16px}
+ .brand {min-width:0;flex-shrink:1}
+ .brand>.monogram {flex:none}
+ .brand-name {min-width:0;overflow-wrap:anywhere}
  .brand-caption {display:block}
  .navigation-panel,.header-cta {display:none}
- .menu-toggle[data-ready] {display:flex;align-items:center;gap:12px;min-height:44px;padding:8px 14px;border:1px solid var(--line-strong);border-radius:5px;background:transparent}
+ .menu-toggle[data-ready] {display:flex;align-items:center;gap:12px;min-height:44px;padding:8px 14px;border:1px solid var(--line-strong);border-radius:5px;background:transparent;flex:none}
  .menu-lines {width:18px;height:9px;border-block:1px solid currentColor}
- .fallback-navigation {display:block;position:relative}
+ .fallback-navigation {display:block;position:relative;flex:none}
  .site-header:has(.menu-toggle[data-ready]) .fallback-navigation {display:none}
  .fallback-navigation summary {padding:8px 14px;border:1px solid var(--line-strong);border-radius:5px;list-style:none}
  .fallback-navigation[open] nav {position:absolute;right:0;top:100%;width:240px;max-width:calc(100vw - 40px);padding:12px;background:var(--sheet);border:1px solid var(--line);box-shadow:var(--shadow);border-radius:5px}
@@ -1518,6 +1521,8 @@ body {--brand:var(--dark)}
 .hero-gallery-track {display:flex;align-items:flex-start;transition:transform 500ms var(--ease);will-change:transform}
 .hero-gallery-slide {flex:0 0 100%;min-width:0}
 .hero-gallery .hero-practice-photo {display:block;visibility:visible;padding:0;margin:0;background:none;border:0;border-radius:0;box-shadow:none}
+/* Reserve the longest caption even before the gallery is enhanced. */
+.hero-gallery:not([data-enhanced]) .hero-gallery-slide[inert] .hero-practice-photo {visibility:hidden}
 .hero-gallery .hero-practice-photo a {height:300px;background:var(--surface-muted);border:6px solid var(--sheet);border-radius:8px}
 .hero-gallery .plate-image {width:100%;height:100%;object-fit:contain}
 .hero-gallery .hero-practice-photo figcaption {min-height:90px;padding:14px 4px 8px;font-size:1rem;line-height:1.4;color:var(--on-dark);background:none}

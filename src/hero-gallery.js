@@ -86,7 +86,6 @@ export function initHeroGallery(){
   const observer=new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;schedule();},{threshold:.1});
   observer.observe(root);events.signal.addEventListener('abort',()=>observer.disconnect(),{once:true});
  }
- slides.forEach(slide=>{slide.hidden=false;});
  root.dataset.enhanced='true';const controls=root.querySelector('[data-gallery-controls]');controls.inert=false;controls.removeAttribute('aria-hidden');
  paint();sync();schedule();
  dispose=()=>{generation++;stop();events.abort();root.removeAttribute('aria-busy');};

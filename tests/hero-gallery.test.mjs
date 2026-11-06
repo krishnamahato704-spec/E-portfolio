@@ -7,6 +7,7 @@ test('Home compiles existing teaching photographs into a labelled gallery with r
  const html=view('home',defaultContent);
  assert.match(html,/aria-roledescription="carousel"/);
  assert.equal((html.match(/data-hero-slide\b/g)||[]).length,5);
+ assert.equal((html.match(/data-hero-slide[^>]* inert aria-hidden="true"/g)||[]).length,4);
  for(const label of ['School house placards','Independence Day display','Student artwork for Major Dhyan Chand','Teaching-learning materials exhibition','Learning at Pehchaan'])assert.ok(html.includes(label),label);
  for(const control of ['data-gallery-rotation','data-gallery-previous','data-gallery-next'])assert.ok(html.includes(control),control);
  assert.match(html,/Illustrative background film/);

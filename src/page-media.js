@@ -19,9 +19,9 @@ export function heroGallery(c,base){
  const records=ids.map(id=>galleryRecord(c,id)).filter(r=>r?.image&&(!r.publicationStatus||r.publicationStatus==='Approved')&&!seen.has(r.image)&&seen.add(r.image));
  if(!records.length)return '';
  const rotating=records.length>1;
- // Before enhancement only the first published image appears. It retains a
- // normal original-file link when JavaScript or the gallery module is absent.
- const slides=records.map((r,i)=>`<div class="hero-gallery-slide" data-hero-slide role="group" aria-roledescription="slide" aria-label="${i+1} of ${records.length}" ${i?'hidden':''}>${photoPlate(r,base,'hero-practice-photo',i===0,i>0)}</div>`).join('');
+ // Inactive slides reserve caption space without fetching images or exposing
+ // their links to keyboard and assistive technology users.
+ const slides=records.map((r,i)=>`<div class="hero-gallery-slide" data-hero-slide role="group" aria-roledescription="slide" aria-label="${i+1} of ${records.length}"${i?' inert aria-hidden="true"':''}>${photoPlate(r,base,'hero-practice-photo',i===0,i>0)}</div>`).join('');
  return `<aside class="hero-visual hero-gallery" data-hero-gallery role="region" aria-roledescription="carousel" aria-label="Photographs from my teaching practice">${rotating?`<div class="hero-gallery-controls" data-gallery-controls inert aria-hidden="true"><button type="button" data-gallery-rotation aria-controls="hero-photo-slides">Pause photos</button><span class="hero-gallery-count" data-gallery-count aria-hidden="true">1 / ${records.length}</span><button type="button" data-gallery-previous aria-controls="hero-photo-slides" aria-label="Previous photograph"><span aria-hidden="true">←</span></button><button type="button" data-gallery-next aria-controls="hero-photo-slides" aria-label="Next photograph"><span aria-hidden="true">→</span></button></div>`:''}<div class="hero-gallery-window"><div id="hero-photo-slides" class="hero-gallery-track" data-gallery-track aria-live="off">${slides}</div></div><p class="sr-only" role="status" data-gallery-status></p></aside>`;
 }
 
