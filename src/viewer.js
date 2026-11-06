@@ -20,7 +20,9 @@ export function wireViewer(root=document){
    const close=document.createElement('button');close.type='button';close.className='button secondary';close.textContent='Close';close.setAttribute('aria-label','Close evidence preview');
    toolbar.append(title,close);
    const content=document.createElement('div');content.className='viewer-content';
-   const media=document.createElement(pdf?'iframe':'img');media.src=url.href;
+   const media=document.createElement(pdf?'iframe':'img');
+   const fitCertificate=pdf&&link.closest('.certificate-card')&&!url.hash;
+   media.src=fitCertificate?url.href+'#view=Fit&zoom=page-fit':url.href;
    if(pdf){media.title=title.textContent+' — PDF preview';}
    else media.alt=link.querySelector('img')?.alt||title.textContent;
    content.append(media);

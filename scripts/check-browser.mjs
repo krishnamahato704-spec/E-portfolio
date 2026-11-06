@@ -206,6 +206,33 @@ try{
   await page.keyboard.press('Escape');
   await page.locator('.evidence-viewer').waitFor({state:'detached'});
   record('viewer: PDF closes and restores trigger focus',await pdfTrigger.evaluate(el=>document.activeElement===el&&!document.querySelector('.evidence-viewer')));
+  await page.setViewportSize({width:1366,height:768});
+  for(const [route,selector] of [
+    ['teaching/','a[data-viewer][href*="panchsheel-internship-completion"]'],
+    ['credentials/','a.certificate-image[href*="panchsheel-internship-completion"]']
+  ]){
+    await page.goto(base+route,{waitUntil:'load'});
+    await page.locator(selector).click();
+    const certificate=page.locator('.evidence-viewer[open] .viewer-content img');
+    await certificate.evaluate(img=>img.decode());
+    record(`viewer: ${route} fits the full certificate on a laptop without scrolling`,await certificate.evaluate(img=>{
+      const viewport=img.parentElement;
+      const bounds=viewport.getBoundingClientRect(),image=img.getBoundingClientRect();
+      return viewport.scrollHeight<=viewport.clientHeight+1&&viewport.scrollWidth<=viewport.clientWidth+1&&
+        image.top>=bounds.top&&image.bottom<=bounds.bottom&&image.left>=bounds.left&&image.right<=bounds.right&&
+        image.height>0&&Math.abs(image.width/image.height-img.naturalWidth/img.naturalHeight)<.01;
+    }));
+    await page.getByRole('button',{name:'Close evidence preview'}).click();
+    await page.locator('.evidence-viewer').waitFor({state:'detached'});
+  }
+  await page.locator('.certificate-image[href*="gemini-certified-educator.pdf"]').click();
+  record('viewer: PDF certificates request a full-page preview and retain the original download',await page.locator('.evidence-viewer[open]').evaluate(dialog=>{
+    const preview=new URL(dialog.querySelector('iframe').src);
+    const download=new URL(dialog.querySelector('a[download]').href);
+    return preview.hash==='#view=Fit&zoom=page-fit'&&preview.pathname===download.pathname&&!download.hash;
+  }));
+  await page.getByRole('button',{name:'Close evidence preview'}).click();
+  await page.setViewportSize({width:390,height:844});
   await page.goto(base+'resume/',{waitUntil:'load'});await page.emulateMedia({media:'print'});
   record('print: web résumé remains readable without preview or controls',await page.evaluate(()=>document.querySelector('.resume-web-summary').checkVisibility()&&!document.querySelector('.resume-overview').checkVisibility()&&document.querySelector('.resume-web-summary').innerText.includes('Education')));
   await keys.close();
