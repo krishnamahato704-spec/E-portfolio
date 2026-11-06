@@ -15,7 +15,7 @@ export function initOpening({auto=true}={}){
  const closeFilm=hero.querySelector('[data-film-close]');
  const status=hero.querySelector('.film-status');
  const hold=2200,fade=1000;
- let intro=null,timer=0,generation=0,heroVisible=hero.getBoundingClientRect().bottom>0,filmSize=null,cropFrame=0;
+ let intro=null,timer=0,heroVisible=hero.getBoundingClientRect().bottom>0,filmSize=null,cropFrame=0;
  let started=0,audioGeneration=0,audioPending=false,soundChosen=false;
  const entryControls=hero.querySelector('[data-opening-controls]');
  const sound=hero.querySelector('[data-opening-sound]');
@@ -64,13 +64,19 @@ export function initOpening({auto=true}={}){
   const offset=Math.max(0,Math.min(overflow,focalX*renderedWidth-width*.5));
   film.style.width=renderedWidth+'px';film.style.objectPosition='50% top';film.style.translate=`${-offset}px 0`;
  };
+ const updateCrop=mediaTime=>{
+  cropFrame=0;
+  frameFilm(mediaTime);
+  // The focal point stops moving after the first second of film.
+  if(mediaTime<1)followCrop();
+ };
  const followCrop=()=>{
   if(!intro?.contains(film)||events.signal.aborted||innerWidth>760)return;
-  if(film.requestVideoFrameCallback)cropFrame=film.requestVideoFrameCallback((_,frame)=>{frameFilm(frame.mediaTime);followCrop();});
-  else cropFrame=requestAnimationFrame(()=>{frameFilm();followCrop();});
+  if(film.requestVideoFrameCallback)cropFrame=film.requestVideoFrameCallback((_,frame)=>updateCrop(frame.mediaTime));
+  else cropFrame=requestAnimationFrame(()=>updateCrop(film.currentTime));
  };
  const finish=({resume=true}={})=>{
-  generation++;clearTimeout(timer);timer=0;stopCrop();stopAudio();
+  clearTimeout(timer);timer=0;stopCrop();stopAudio();
   const restore=intro?.contains(document.activeElement)||entryControls?.contains(document.activeElement);
   if(intro){if(intro.contains(film))filmHome.prepend(film);intro.remove();intro=null;}
   if(entryControls&&entryControls.parentElement!==hero)hero.append(entryControls);
@@ -83,9 +89,13 @@ export function initOpening({auto=true}={}){
   load();
   try{
    await film.play();
+   if(events.signal.aborted)return false;
    if(!shouldPlay()){film.pause();sync();return false;}
    sync();return true;
-  }catch{film.pause();sync();say('Film playback is unavailable. The portfolio remains ready to read.');return false;}
+  }catch{
+   if(!shouldPlay())return false;
+   film.pause();sync();say('Film playback is unavailable. The portfolio remains ready to read.');return false;
+  }
  };
  const settle=()=>{
   if(!intro)return;
@@ -109,16 +119,15 @@ export function initOpening({auto=true}={}){
   intro=document.createElement('div');intro.className='identity-intro intro-running';
   intro.setAttribute('role','region');intro.setAttribute('aria-label','Portfolio introduction');
   film.style.transition='none';
-  intro.prepend(film);document.body.append(intro);
+  document.body.append(intro);intro.prepend(film);
   // The page main is an isolated stacking context. Put these fixed controls
   // beside the cover so they remain visible above it, including on phones.
   if(entryControls)document.body.append(entryControls);
+  if(sound)sound.disabled=false;
   boot?.release();frameFilm();followCrop();
   requestAnimationFrame(()=>{if(intro?.contains(film))film.style.removeProperty('transition');});
   // The sequence has a fixed deadline, including on slow media connections.
   started=performance.now();timer=setTimeout(settle,hold);
-  const pending=generation;
-  play().then(playing=>{if(!playing&&pending===generation)finish();});
  };
  // Safari can focus the tabindex=-1 main ancestor when a pointer presses a
  // button. Keep focus on this control so that does not dismiss the opening
@@ -159,7 +168,7 @@ export function initOpening({auto=true}={}){
    heroVisible=entries[0].isIntersecting;
    if(intro)return;
    if(!heroVisible)film.pause();
-   else if(shouldPlay())play();
+   else if(film.paused&&shouldPlay())play();
   });
   observer.observe(hero);events.signal.addEventListener('abort',()=>observer.disconnect(),{once:true});
  }
@@ -168,10 +177,18 @@ export function initOpening({auto=true}={}){
  navigator.connection?.addEventListener?.('change',preferencesChanged,options);
  if(controls){controls.inert=false;controls.removeAttribute('aria-hidden');}filmHome.prepend(film);sync();frameFilm();
  dispose=()=>{events.abort();finish({resume:false});film.pause();};
- if(!auto||!eligible()||scrollY>24||location.hash){boot?.release();if(shouldPlay())play();return;}
- try{
-  if(!boot?.pending||performance.now()>boot.expiresAt){boot?.release();if(shouldPlay())play();return;}
-  sessionStorage.setItem('portfolio-identity-seen','1');
- }catch{/* The automatic opening also works when storage is unavailable. */}
- begin();
+ if(!auto||!boot?.pending||!eligible()||scrollY>24||location.hash||performance.now()>=boot.expiresAt||!shouldPlay()){
+  boot?.release();if(shouldPlay())play();return;
+ }
+ if(sound)sound.disabled=true;
+ // Keep the poster until playback is ready. The boot deadline can reveal
+ // Home first, and a late film then plays only in the hero.
+ const readyBy=Math.min(boot.expiresAt,performance.now()+800);
+ timer=setTimeout(boot.release,Math.max(0,readyBy-performance.now()));
+ play().then(playing=>{
+  clearTimeout(timer);timer=0;
+  if(!boot.pending)return;
+  if(playing&&film.readyState>=2&&shouldPlay()&&scrollY<=24&&performance.now()<readyBy)begin();
+  else boot.release();
+ });
 }

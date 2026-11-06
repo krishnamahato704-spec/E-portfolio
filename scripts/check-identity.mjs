@@ -25,7 +25,7 @@ try{
    // That is a valid readable fallback, not a reason to wait for a late intro.
    await first.waitForFunction(()=>document.querySelector('.intro-running')||!window.portfolioOpeningBoot.pending);
    if(await first.locator('.intro-running').count())record(engine,'The opening has visible skip and explicit sound controls',await first.locator('[data-opening-skip]').isVisible()&&await first.locator('[data-opening-sound]').isVisible());
-   else record(engine,'A slow initial application leaves Home readable without a late opening',await first.evaluate(()=>performance.now()>=window.portfolioOpeningBoot.expiresAt&&document.querySelector('h1').checkVisibility({checkVisibilityCSS:true})&&!document.querySelector('.identity-intro')));
+   else record(engine,'Slow startup leaves Home readable without a late opening',await first.evaluate(()=>!window.portfolioOpeningBoot.pending&&document.querySelector('h1').checkVisibility({checkVisibilityCSS:true})&&!document.querySelector('.identity-intro')));
    await firstPaint.close();
    const ctx=await browser.newContext({viewport:{width:1440,height:1000}}),page=await ctx.newPage();
    const errors=[];page.on('pageerror',error=>errors.push(error.message));
@@ -102,12 +102,16 @@ try{
    }
    const delayed=await browser.newContext(),reading=await delayed.newPage();
    await reading.addInitScript(()=>{const play=HTMLMediaElement.prototype.play;HTMLMediaElement.prototype.play=function(){return this instanceof HTMLVideoElement?new Promise(resolve=>setTimeout(resolve,700)).then(()=>play.call(this)):play.call(this);};});
-   await reading.goto(base,{waitUntil:'domcontentloaded'});await reading.locator('.intro-running').waitFor();await reading.evaluate(()=>scrollTo(0,400));await reading.waitForTimeout(1200);
+   await reading.goto(base,{waitUntil:'domcontentloaded'});await reading.evaluate(()=>scrollTo(0,400));await reading.waitForTimeout(1200);
    record(engine,'Late media never interrupts a visitor who has started reading',await reading.locator('.identity-intro').count()===0&&await reading.evaluate(()=>scrollY>24));await delayed.close();
    const stalled=await browser.newContext(),waiting=await stalled.newPage();
-   await waiting.addInitScript(()=>{HTMLMediaElement.prototype.play=function(){return new Promise(()=>{});};});
-   await waiting.goto(base,{waitUntil:'domcontentloaded'});await waiting.locator('.intro-running').waitFor();await waiting.locator('.identity-intro').waitFor({state:'detached',timeout:4200});
-   record(engine,'Stalled playback does not extend the opening',await waiting.locator('h1').isVisible());await stalled.close();
+   await waiting.addInitScript(()=>{
+    HTMLMediaElement.prototype.play=function(){window.videoPlayRequestedAt=performance.now();return new Promise(()=>{});};
+    window.coverStarted=false;
+    new MutationObserver(()=>{if(document.querySelector('.identity-intro'))window.coverStarted=true;}).observe(document,{childList:true,subtree:true});
+   });
+   await waiting.goto(base,{waitUntil:'domcontentloaded'});await waiting.waitForFunction(()=>performance.now()>=window.videoPlayRequestedAt+950);
+   record(engine,'Stalled film leaves Home readable within its playback budget without starting a second cover',await waiting.evaluate(()=>!window.coverStarted&&document.querySelector('h1').checkVisibility({checkVisibilityCSS:true})));await stalled.close();
    for(const mode of ['reduced','fragment','blocked-storage','no-js','media-failure','autoplay-blocked','app-failure']){
     const context=await browser.newContext({reducedMotion:mode==='reduced'?'reduce':'no-preference',javaScriptEnabled:mode!=='no-js'}),p=await context.newPage();
     if(mode==='blocked-storage')await p.addInitScript(()=>Object.defineProperty(window,'sessionStorage',{get(){throw new DOMException('Unavailable','SecurityError');}}));

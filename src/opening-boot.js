@@ -30,6 +30,7 @@
   window.addEventListener('scroll',()=>{if(scrollY>24)boot.release();},{passive:true,signal:events.signal});
   window.addEventListener('pagehide',boot.release,{signal:events.signal});
   document.addEventListener('keydown',e=>{if(e.key==='Escape')boot.release();},{signal:events.signal});
+  document.addEventListener('focusin',e=>{if(!e.target.closest('[data-opening-controls]'))boot.release();},{signal:events.signal});
   document.addEventListener('click',e=>{if(e.target.closest('[data-opening-skip]')){boot.release();document.querySelector('#main')?.focus({preventScroll:true});}},{signal:events.signal});
  }catch{boot.release();}
 })();

@@ -51,6 +51,21 @@ try{
    record(engine,'About loads no specialist teaching controllers',!scripts.some(url=>/\/(timeline|philosophy|democracy)\.js/.test(url)));
    record(engine,'Reading content has no late translation animation',await photos.locator('h1').evaluate(el=>getComputedStyle(el).transform==='none'));
    await context.close();
+   const movingPhotos=await browser.newPage({reducedMotion:'no-preference'});
+   await movingPhotos.addInitScript(()=>sessionStorage.setItem('portfolio-identity-seen','1'));
+   await movingPhotos.goto(base);
+   const movingGallery=movingPhotos.locator('[data-hero-gallery][data-enhanced]');
+   await movingGallery.waitFor();
+   const previousPhoto=movingGallery.locator('[data-gallery-previous]');
+   const slideCount=await movingGallery.locator('[data-hero-slide]').count();
+   const hasSlideTransition=()=>movingGallery.locator('[data-gallery-track]').evaluate(track=>track.getAnimations().some(animation=>animation.transitionProperty==='transform'));
+   await previousPhoto.click();
+   await movingGallery.and(movingPhotos.locator(`[data-slide="${slideCount-1}"]`)).waitFor();
+   record(engine,'Gallery wrap skips unloaded intermediate photographs',!await hasSlideTransition());
+   await previousPhoto.click();
+   await movingGallery.and(movingPhotos.locator(`[data-slide="${slideCount-2}"]`)).waitFor();
+   record(engine,'Neighboring gallery photographs still slide',await hasSlideTransition());
+   await movingPhotos.close();
    const navigation=await browser.newContext(),nav=await navigation.newPage();
    await nav.addInitScript(()=>{
     sessionStorage.setItem('portfolio-identity-seen','1');

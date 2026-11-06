@@ -34,8 +34,9 @@ export function initHeroGallery(){
   preloadTimer=setTimeout(()=>{if(canRotate()&&!document.querySelector('.identity-intro'))prepare(slides[(index+1)%slides.length]);},4800);
   timer=setTimeout(async()=>{if(canRotate()&&!document.querySelector('.identity-intro'))await change(1,false);schedule();},6000);
  };
- const paint=()=>{
+ const paint=(animate=false)=>{
   slides.forEach((slide,i)=>{slide.inert=i!==index;slide.setAttribute('aria-hidden',String(i!==index));});
+  track.toggleAttribute('data-slide-transition',animate);
   track.style.transform=`translateX(${-100*index}%)`;
   root.dataset.slide=String(index);count.textContent=`${index+1} / ${slides.length}`;
  };
@@ -52,7 +53,9 @@ export function initHeroGallery(){
   root.removeAttribute('aria-busy');
   if(!ready){requestedIndex=index;userPaused=true;sync();status.textContent='This photograph is unavailable. The current photograph remains open.';return;}
   if(!manual&&!canRotate()){requestedIndex=index;return;}
-  index=target;paint();
+  // Wrapping or skipping slides can cross photographs that have not loaded.
+  const neighboring=Math.abs(target-index)===1;
+  index=target;paint(neighboring);
   if(manual){
    status.textContent=`Photograph ${index+1} of ${slides.length}: ${slides[index].querySelector('figcaption strong')?.textContent||''}`;
    if(focusWasInSlide&&previous.contains(document.activeElement))slides[index].querySelector('a')?.focus({preventScroll:true});
