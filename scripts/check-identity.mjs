@@ -5,6 +5,17 @@ const port=4175,base=`http://127.0.0.1:${port}/`;
 const server=spawn(process.execPath,['scripts/serve.mjs'],{env:{...process.env,PORT:String(port)},windowsHide:true,stdio:'ignore'});
 const results=[];
 const record=(engine,name,pass,details)=>{results.push({engine,name,pass:!!pass,...(details?{details}:{})});if(!pass)console.error('FAIL',engine,name,details||'');};
+async function openFilm(page,url=base){
+ // Freeze the startup deadline while native media buffers. The separate
+ // slow-start tests use a real clock to verify the fallback.
+ if(page.url()==='about:blank')await page.clock.install();
+ const now=await page.evaluate(()=>Date.now());
+ await page.clock.pauseAt(now+500);
+ try{
+  await page.goto(url,{waitUntil:'domcontentloaded'});
+  await page.locator('.intro-running').waitFor({state:'attached',timeout:10000});
+ }finally{await page.clock.resume();}
+}
 await fs.mkdir('outputs/redesign',{recursive:true});
 try{
  for(let i=0;i<80;i++){try{if((await fetch(base)).ok)break;}catch{}await new Promise(r=>setTimeout(r,100));}
@@ -36,7 +47,7 @@ try{
      else if(!sequence.isConnected&&!timing.finished)timing.finished=performance.now();
     }).observe(document,{subtree:true,childList:true,attributes:true,attributeFilter:['class']});
    });
-   await page.goto(base,{waitUntil:'domcontentloaded'});await page.locator('.intro-running').waitFor();
+   await openFilm(page);
    await page.waitForFunction(()=>!document.querySelector('.hero-film').paused);
    record(engine,'One muted video fills the opening without locking the page',await page.evaluate(()=>document.querySelectorAll('video').length===1&&document.querySelector('.identity-intro .hero-film').getBoundingClientRect().width>=innerWidth&&!document.querySelector('main').inert&&document.querySelector('.hero-film').muted));
    record(engine,'Automatic entry preserves keyboard focus',await page.evaluate(()=>document.activeElement===document.body));
@@ -67,11 +78,11 @@ try{
    // Exercise refresh with neutral focus, independently of the manual pause
    // above. Safari restores that old control and correctly dismisses an intro.
    const refresh=await browser.newContext({viewport:{width:1440,height:1000}}),refreshed=await refresh.newPage();
-   await refreshed.goto(base,{waitUntil:'domcontentloaded'});await refreshed.locator('.intro-running').waitFor();await refreshed.keyboard.press('Escape');
+   await openFilm(refreshed);await refreshed.keyboard.press('Escape');
    await refreshed.reload({waitUntil:'domcontentloaded'});
    await refreshed.waitForFunction(()=>!document.querySelector('.hero-film').paused);
    record(engine,'A refresh keeps the background film without replaying the full-screen opening',await refreshed.locator('.identity-intro').count()===0&&await refreshed.locator('.hero-film').evaluate(v=>v.muted));
-   await refreshed.goto(base+'?intro=1',{waitUntil:'domcontentloaded'});await refreshed.locator('.intro-running').waitFor();
+   await openFilm(refreshed,base+'?intro=1');
    await refreshed.locator('.skip-link').focus();await refreshed.keyboard.press('Enter');
    record(engine,'The page skip link dismisses the opening and moves focus to main',await refreshed.evaluate(()=>document.activeElement.id==='main'&&!document.querySelector('.identity-intro')));await refresh.close();
    await page.goto(base+'resources/');record(engine,'Inner pages have no opening media',await page.locator('video,audio,.identity-intro').count()===0);
@@ -79,7 +90,7 @@ try{
    record(engine,'Internal Home links keep the page ready to read',await page.locator('.identity-intro').count()===0);
    record(engine,'No browser exceptions',errors.length===0,errors);await ctx.close();
    const firstPhone=await browser.newContext({viewport:{width:320,height:844}}),phone=await firstPhone.newPage();
-   await phone.goto(base,{waitUntil:'domcontentloaded'});await phone.locator('.intro-running').waitFor();
+   await openFilm(phone);
    record(engine,'The narrow phone opening has visible controls and no overflow',await phone.evaluate(()=>{
     const film=document.querySelector('.identity-intro .hero-film').getBoundingClientRect();
     return film.width>=innerWidth&&film.height>=innerHeight-1&&document.querySelector('[data-opening-skip]').checkVisibility()&&document.querySelector('[data-opening-sound]').checkVisibility()&&document.documentElement.scrollWidth<=innerWidth+1;
@@ -88,7 +99,7 @@ try{
    await firstPhone.close();
    for(const action of ['escape','scroll','preference','resize','tab']){
     const context=await browser.newContext({viewport:{width:390,height:844}}),p=await context.newPage();
-    await p.goto(base,{waitUntil:'domcontentloaded'});await p.locator('.intro-running').waitFor();
+    await openFilm(p);
     if(action==='escape')await p.keyboard.press('Escape');
     if(action==='scroll')await p.mouse.wheel(0,400);
     if(action==='preference')await p.emulateMedia({reducedMotion:'reduce'});
@@ -134,7 +145,7 @@ try{
      return play.call(this);
     };
    });
-   await audible.goto(base,{waitUntil:'domcontentloaded'});await audible.locator('.intro-running').waitFor();
+   await openFilm(audible);
    record(engine,'Audio stays unloaded before an explicit sound choice',await audible.locator('[data-opening-audio]').evaluate(a=>a.paused)&&await audible.locator('[data-opening-audio]').evaluate(a=>!a.getAttribute('src')));
    await audible.keyboard.press('s');
    record(engine,'An unrelated key does not load or start music',await audible.locator('[data-opening-audio]').evaluate(a=>a.paused&&!a.getAttribute('src')));
@@ -148,7 +159,7 @@ try{
     const play=HTMLMediaElement.prototype.play;
     HTMLMediaElement.prototype.play=function(){return this instanceof HTMLAudioElement?new Promise(resolve=>setTimeout(resolve,700)).then(()=>play.call(this)):play.call(this);};
    });
-   await late.goto(base,{waitUntil:'domcontentloaded'});await late.locator('.intro-running').waitFor();await late.locator('[data-opening-sound]').click();await late.keyboard.press('Escape');await late.waitForTimeout(1100);
+   await openFilm(late);await late.locator('[data-opening-sound]').click();await late.keyboard.press('Escape');await late.waitForTimeout(1100);
    record(engine,'Late audio playback is stopped after an early dismissal',await late.locator('[data-opening-audio]').evaluate(a=>a.paused));await lateSound.close();
    const pendingSkip=await browser.newContext(),early=await pendingSkip.newPage();
    await early.route('**/src/app.js*',r=>r.abort());
