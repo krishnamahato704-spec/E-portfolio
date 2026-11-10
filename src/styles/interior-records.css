@@ -1,0 +1,347 @@
+/* The teaching record uses the same warm paper and type as the opening.
+   Screen-only compositions leave the existing printable records intact. */
+@media screen {
+ body:is([data-route=profile],[data-route=teaching],[data-route=democracy],[data-route=pehchaan],[data-route=observation]) main {
+  --record-ink:#38281f;--record-terra:#9e3d2d;--record-oat:#f5e5cd;--record-apricot:#e4c5af;--record-cream:#fff5e7;--record-line:#cfbba8;
+ }
+ body:is([data-route=profile],[data-route=teaching],[data-route=democracy],[data-route=pehchaan],[data-route=observation]) .distinctive-page :is(.small,.eyebrow,.status,.card-meta,.stage-period,figcaption,.cover-photo-credit,.education-period,.current-studies-label,.portrait-source) {font-size:.875rem;line-height:1.55}
+ body:is([data-route=profile],[data-route=teaching],[data-route=democracy],[data-route=pehchaan],[data-route=observation]) .distinctive-page :is(.prose,.plain-list,.experience-details,.milestone-summary,.resource-desc,.story-columns) {font-size:1.0625rem;line-height:1.7}
+ body:is([data-route=profile],[data-route=teaching],[data-route=democracy],[data-route=pehchaan],[data-route=observation]) .distinctive-page :is(.photo-plate,figure,.evidence-aside,.case-record,.milestone-card) {min-width:0}
+ body:is([data-route=profile],[data-route=teaching],[data-route=democracy],[data-route=pehchaan],[data-route=observation]) .distinctive-page :is(h1,h2,h3) {overflow-wrap:normal;word-break:normal;text-wrap:balance}
+ body:is([data-route=profile],[data-route=teaching],[data-route=democracy],[data-route=pehchaan],[data-route=observation]) .distinctive-page .photo-plate {box-shadow:none;border-radius:0}
+ body:is([data-route=profile],[data-route=teaching],[data-route=democracy],[data-route=pehchaan],[data-route=observation]) .distinctive-page .photo-plate figcaption {font-size:.875rem;line-height:1.55;background:none;padding:12px 0 0}
+ body:is([data-route=profile],[data-route=teaching],[data-route=democracy],[data-route=pehchaan],[data-route=observation]) .distinctive-page .photo-plate figcaption span {font-size:.875rem;line-height:1.55}
+
+ /* About: an open portrait spread followed by a readable academic ledger. */
+ body[data-route=profile] .profile-page .profile-hero {grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr);gap:clamp(30px,5vw,76px);padding:0 0 64px;margin:0;align-items:center;background:none;border:0;border-radius:0}
+ body[data-route=profile] .profile-introduction {max-width:none;min-width:0}
+ body[data-route=profile] .profile-introduction h1 {font-size:clamp(2.75rem,7.2vw,6rem);font-weight:500;line-height:1;letter-spacing:-.06em;margin:18px 0 0}
+ body[data-route=profile] .profile-name {font-size:clamp(1.5rem,2.8vw,2.25rem);line-height:1.2;font-weight:500;letter-spacing:-.035em;color:var(--record-terra);margin:24px 0 0}
+ body[data-route=profile] .profile-introduction .lead {font-size:clamp(1.125rem,1.65vw,1.375rem);line-height:1.55;max-width:42ch;margin-top:22px}
+ body[data-route=profile] .profile-introduction .hero-meta {display:flex;flex-direction:column;gap:10px;align-items:flex-start;margin:24px 0 14px;color:var(--record-ink)}
+ body[data-route=profile] .profile-introduction .hero-meta li {display:flex;align-items:center;gap:10px;font-size:1rem;background:none;border:0;border-radius:0;padding:0;line-height:1.55}
+ body[data-route=profile] .profile-introduction .hero-meta .icon {color:var(--record-terra);flex:none}
+ body[data-route=profile] .profile-study {font-size:1rem;color:var(--record-ink);background:none;margin:0 0 24px}
+ body[data-route=profile] .profile-photo-collage {height:540px;max-width:520px;width:100%;margin:0;isolation:isolate;background:linear-gradient(90deg,transparent 24%,var(--record-apricot) 24%);border:0}
+ body[data-route=profile] .profile-photo-collage::before {content:'';position:absolute;inset:24px 24px 24px 0;border:1px solid var(--record-terra);z-index:-1}
+ body[data-route=profile] .profile-page .profile-portrait {left:12%;top:0;width:66%;max-width:none;padding:0;border:0;background:var(--record-oat);transform:none;box-shadow:none;margin:0}
+ body[data-route=profile] .profile-portrait-photo {display:block;width:100%;aspect-ratio:4/5;object-fit:cover;object-position:50% 25%}
+ body[data-route=profile] .photo-pin {display:none}
+ body[data-route=profile] .profile-school-photo {right:0;bottom:0;width:76%;max-width:none;transform:none;margin:0;padding:8px 8px 12px;border:0;background:var(--record-cream);box-shadow:none}
+ body[data-route=profile] .profile-school-photo>a {height:190px;overflow:hidden}
+ body[data-route=profile] .profile-school-photo figcaption {padding-inline:4px}
+ body[data-route=profile] .profile-page .profile-story {grid-template-columns:minmax(220px,.65fr) minmax(0,1.35fr);gap:clamp(28px,5vw,70px);padding:48px 0;margin:0;background:none;border:0;border-block:1px solid var(--record-line)}
+ body[data-route=profile] .story-title h2 {font-size:clamp(2rem,3.5vw,3.25rem);font-weight:500;line-height:1.08;letter-spacing:-.045em;margin:16px 0 24px}
+ body[data-route=profile] .story-columns {display:grid;grid-template-columns:1fr 1fr;gap:32px}
+ body[data-route=profile] .story-columns p {font-size:1.0625rem;line-height:1.75;margin:0;max-width:44ch}
+ body[data-route=profile] .profile-page>.section {padding-block:56px}
+ body[data-route=profile] .profile-page .section-heading h2 {font-size:clamp(2rem,3.6vw,3.25rem);line-height:1.1;letter-spacing:-.045em;font-weight:500}
+ body[data-route=profile] :is(.education-completed,.education-current) {display:grid;grid-template-columns:1fr;gap:0;padding:0;margin:28px 0 0;list-style:none;border-top:1px solid var(--record-line)}
+ body[data-route=profile] :is(.education-completed,.education-current)::before,body[data-route=profile] .education-node {display:none}
+ body[data-route=profile] .education-record {display:grid;grid-template-columns:155px minmax(0,1fr);gap:24px;padding:28px 0;border-bottom:1px solid var(--record-line);background:none;margin:0}
+ body[data-route=profile] .education-record:nth-child(n) .education-period {grid-column:1;grid-row:1;text-align:left;align-self:start;margin:0;padding:5px 0;color:var(--record-terra);font-weight:600}
+ body[data-route=profile] .education-record:nth-child(n) .education-card {display:grid;grid-template-columns:32px minmax(0,1fr);grid-column:2;grid-row:1;gap:18px;background:none;border:0;box-shadow:none;border-radius:0;padding:0}
+ body[data-route=profile] .education-card>.icon-disc {width:30px;height:30px;background:none;color:var(--record-terra);border:0}
+ body[data-route=profile] .education-card h3 {font-size:1.5rem;font-weight:550;letter-spacing:-.025em;line-height:1.25;margin:0 0 8px}
+ body[data-route=profile] .education-card p {font-size:1rem;line-height:1.65;color:var(--record-ink)}
+ body[data-route=profile] .education-card .education-note {font-size:.9375rem;line-height:1.65;margin-top:12px}
+ body[data-route=profile] .education-score {font-size:1.375rem;letter-spacing:-.025em;color:var(--record-terra);margin-top:10px}
+ body[data-route=profile] .education-card .status {margin-top:16px;background:none;border:1px solid var(--record-line);color:var(--record-ink);font-size:.875rem}
+ body[data-route=profile] .current-studies {background:var(--record-oat);border-top:3px solid var(--record-terra);padding:30px;margin-top:40px}
+ body[data-route=profile] .current-studies-label {font-size:1.125rem;font-weight:600;color:var(--record-terra)}
+ body[data-route=profile] .current-studies .education-current {margin-top:22px}
+ body[data-route=profile] .current-studies .education-record:last-child {padding-bottom:0;border-bottom:0}
+ body[data-route=profile] .profile-interests .beyond-grid {grid-template-columns:1fr 1fr;gap:0 48px;background:none;border:0}
+ body[data-route=profile] .profile-interests .beyond-grid article {padding:28px 0;border:0;border-top:1px solid var(--record-line);background:none;border-radius:0}
+ body[data-route=profile] .profile-interests .beyond-grid article+article {border-left:0}
+ body[data-route=profile] .beyond-grid .icon-disc {background:none;padding:0;color:var(--record-terra);justify-content:flex-start}
+ body[data-route=profile] .profile-interests .beyond-grid h3 {font-size:1.5rem;line-height:1.25;letter-spacing:-.03em;margin-block:12px}
+ body[data-route=profile] .profile-interests .beyond-grid p {font-size:1.0625rem;line-height:1.7;max-width:48ch}
+ body[data-route=profile] .profile-page .classroom-feature {grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:48px;padding:40px;background:var(--record-terra);color:var(--record-cream);border:0;border-radius:0;margin:12px 0 48px}
+ body[data-route=profile] .classroom-feature h2 {font-size:clamp(2rem,3.5vw,3rem);letter-spacing:-.04em;line-height:1.08;font-weight:500;color:var(--record-cream)}
+ body[data-route=profile] .classroom-feature :is(p,.eyebrow,.text-link) {color:var(--record-cream)}
+ body[data-route=profile] .classroom-feature .photo-plate {background:none;border:0;padding:0}
+ body[data-route=profile] .classroom-feature .photo-plate>a {height:340px}
+ body[data-route=profile] .classroom-feature .photo-plate figcaption,body[data-route=profile] .classroom-feature .photo-plate figcaption span {color:var(--record-cream)}
+ body[data-route=profile] .recruiter-details {border:0;border-block:1px solid var(--record-line);padding:16px 0;margin-bottom:30px}
+ body[data-route=profile] .recruiter-details summary {font-size:1.25rem;line-height:1.4;padding:12px 0;font-weight:550}
+ body[data-route=profile] .concise-facts {grid-template-columns:1fr 1fr;gap:28px 40px;padding-block:24px}
+ body[data-route=profile] .concise-facts dt {font-size:.875rem;color:var(--record-terra);margin-bottom:6px}
+ body[data-route=profile] .concise-facts dd {font-size:1.0625rem;line-height:1.6}
+
+ /* Experience: a chapter banner and three open field records. */
+ body[data-route=teaching] .journey-cover {min-height:560px;display:flex;align-items:center;padding:56px;margin-top:0;border:0;border-radius:0;background:var(--record-terra);color:var(--record-cream);overflow:hidden}
+ body[data-route=teaching] .journey-cover>.page-photo-backdrop {display:block;left:54%;opacity:.72;z-index:0;mask-image:none}
+ body[data-route=teaching] .journey-cover .page-photo-backdrop img {object-fit:cover;object-position:50% 38%;filter:none}
+ body[data-route=teaching] .journey-cover::after {content:'';position:absolute;inset:0;z-index:0;background:linear-gradient(90deg,#9e3d2d 0 48%,#9e3d2da8 73%,#9e3d2d45)}
+ body[data-route=teaching] .journey-cover-copy {position:relative;z-index:1;width:75%;max-width:790px;min-width:0}
+ body[data-route=teaching] .journey-cover h1 {font-size:clamp(2.75rem,7.2vw,6rem);font-weight:500;line-height:1;letter-spacing:-.06em;color:var(--record-cream);max-width:10ch;margin:18px 0 24px}
+ body[data-route=teaching] .journey-cover :is(.eyebrow,.lead,.text-link) {color:var(--record-cream)}
+ body[data-route=teaching] .journey-cover .lead {font-size:1.25rem;line-height:1.55;max-width:47ch;margin:0 0 22px}
+ body[data-route=teaching] .journey-cover .cover-photo-credit {right:24px;bottom:18px;max-width:42%;background:#6d271e;color:var(--record-cream);border-radius:0;font-size:.875rem;line-height:1.5}
+ body[data-route=teaching] .journey-index {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;margin:0 0 44px;padding:0;list-style:none;background:var(--record-oat);border:0;border-bottom:1px solid var(--record-line)}
+ body[data-route=teaching] .journey-index li {display:grid;grid-template-columns:38px minmax(0,1fr);gap:20px;padding:28px 24px;background:none;min-width:0}
+ body[data-route=teaching] .journey-index li+li {border:0;border-left:1px solid var(--record-line)}
+ body[data-route=teaching] .journal-number {font:500 2.25rem/1 var(--sans);color:var(--record-terra);letter-spacing:-.045em}
+ body[data-route=teaching] .journey-index strong {font-size:1.125rem;line-height:1.4;font-weight:600}
+ body[data-route=teaching] .journey-index div>span {font-size:.9375rem;line-height:1.5;margin-top:10px}
+ body[data-route=teaching] .journey-index small {font-size:.875rem;line-height:1.5;margin-top:10px;color:#64503e}
+ body[data-route=teaching] .timeline-container {margin-top:44px}
+ body[data-route=teaching] :is(.timeline-track,.milestone-rail) {display:none}
+ body[data-route=teaching] .experience-row {display:block;border:0;border-top:1px solid var(--record-terra);padding:44px 0 56px;margin:0;background:none}
+ body[data-route=teaching] .teaching-page .milestone-card,body[data-route=teaching] .teaching-page .experience-row:nth-child(even) .milestone-card {display:grid;grid-template-columns:minmax(0,1.18fr) minmax(0,.82fr);gap:clamp(28px,4vw,64px);padding:0;background:none;border:0;border-radius:0;box-shadow:none;overflow:visible}
+ body[data-route=teaching] .teaching-page .experience-main {grid-column:1;grid-row:1;padding:0;min-width:0}
+ body[data-route=teaching] .milestone-header .status {float:none;display:inline-flex;margin:0 0 16px;background:var(--record-oat);color:var(--record-ink);border-color:var(--record-line);font-size:.875rem}
+ body[data-route=teaching] .milestone-header .stage-period {color:var(--record-terra);font-size:.875rem;font-weight:600;letter-spacing:.025em;margin:0 0 16px}
+ body[data-route=teaching] .milestone-title {font-size:clamp(1.75rem,3.1vw,2.8rem);line-height:1.12;letter-spacing:-.045em;font-weight:500;margin:0 0 14px}
+ body[data-route=teaching] .milestone-header .card-meta {font-size:1rem;color:#64503e;margin:0 0 20px}
+ body[data-route=teaching] .milestone-summary {font-size:1.1875rem;line-height:1.6;color:var(--record-ink);margin:0 0 24px}
+ body[data-route=teaching] .experience-details {border-top:1px solid var(--record-line);padding:0;margin:24px 0}
+ body[data-route=teaching] .experience-details summary {font-size:1rem;line-height:1.5;min-height:52px;padding:14px 0;font-weight:600;color:var(--record-terra)}
+ body[data-route=teaching] .experience-details .plain-list {padding-left:22px;margin-top:10px;font-size:1.0625rem;line-height:1.7}
+ body[data-route=teaching] .experience-details .plain-list li {padding-left:3px;margin-bottom:12px}
+ body[data-route=teaching] .experience-reflection {padding:24px;background:var(--record-oat);border:0;border-left:3px solid var(--record-terra);border-radius:0;margin:24px 0}
+ body[data-route=teaching] .experience-reflection p {font-size:1.0625rem;line-height:1.7}
+ body[data-route=teaching] .experience-actions {display:flex;flex-direction:column;align-items:flex-start;gap:10px;margin-top:24px}
+ body[data-route=teaching] .experience-actions .text-link {font-size:1rem;line-height:1.5;min-height:44px}
+ body[data-route=teaching] .teaching-page .milestone-card figure,body[data-route=teaching] .teaching-page .experience-row:nth-child(even) figure {position:sticky;top:130px;grid-column:2;grid-row:1;align-self:start;display:block;max-width:none;padding:0;background:none;margin:0;border:0;box-shadow:none}
+ body[data-route=teaching] .teaching-page .milestone-card figure>a {display:block;min-height:0;max-height:none;height:420px;background:var(--record-apricot);border:0}
+ body[data-route=teaching] .teaching-page .milestone-card .gallery-image {width:100%;height:100%;object-fit:contain;object-position:center;border:0;border-radius:0}
+ body[data-route=teaching] .teaching-page .milestone-card figcaption {padding:16px 0;font-size:.875rem;line-height:1.6}
+ body[data-route=teaching] .teaching-page .milestone-card figcaption p {font-size:.875rem;line-height:1.6}
+ body[data-route=teaching] .teaching-page .learning-section {padding:40px 0;background:none;border:0;border-top:1px solid var(--record-line);border-radius:0}
+ body[data-route=teaching] .learning-section .section-heading h2 {font-size:clamp(2rem,3.6vw,3rem);line-height:1.1;letter-spacing:-.045em;font-weight:500}
+ body[data-route=teaching] .teaching-page .learning-grid {grid-template-columns:1fr 1fr;gap:0 48px}
+ body[data-route=teaching] .learning-grid>div {display:grid;grid-template-columns:30px minmax(0,1fr);gap:18px;align-items:start;text-align:left;padding:26px 0;border:0;border-top:1px solid var(--record-line);background:none;border-radius:0}
+ body[data-route=teaching] .learning-grid .icon-disc {width:30px;height:30px;border:0;border-radius:0;padding:0;margin:0;background:none;color:var(--record-terra)}
+ body[data-route=teaching] .learning-grid h3 {font-size:1.375rem;line-height:1.25;letter-spacing:-.025em;margin:0}
+ body[data-route=teaching] .learning-grid p {font-size:1.0625rem;line-height:1.7}
+ body[data-route=teaching] .teaching-approach {border:0;border-block:1px solid var(--record-line);border-radius:0;padding:20px 0;background:none}
+ body[data-route=teaching] .teaching-approach>summary {font-size:1.375rem;line-height:1.4;padding:12px 0}
+
+ /* Detail records: the narrative and the original document sit side by side. */
+ body:is([data-route=democracy],[data-route=pehchaan],[data-route=observation]) :is(.case-layout,.democracy-page .democracy-layout) {display:grid;grid-template-columns:minmax(0,1.5fr) minmax(280px,.7fr);gap:clamp(32px,4.5vw,72px);align-items:start;margin-top:48px}
+ body:is([data-route=democracy],[data-route=pehchaan],[data-route=observation]) :is(.case-layout,.democracy-layout)>.case-record {padding:0;background:none;border:0;border-radius:0;max-width:none;min-width:0}
+ body:is([data-route=democracy],[data-route=pehchaan],[data-route=observation]) .case-record :is(p,li,dd) {font-size:1.0625rem;line-height:1.75;background:none}
+ body:is([data-route=democracy],[data-route=pehchaan],[data-route=observation]) .case-record h2 {font-size:clamp(1.875rem,2.7vw,2.5rem);font-weight:500;line-height:1.12;letter-spacing:-.04em;margin:44px 0 20px;background:none}
+ body:is([data-route=democracy],[data-route=pehchaan],[data-route=observation]) .case-record>h2:first-child {margin-top:0}
+ body:is([data-route=democracy],[data-route=pehchaan],[data-route=observation]) .case-record h3 {font-size:1.5rem;line-height:1.25;letter-spacing:-.025em;background:none}
+ body:is([data-route=democracy],[data-route=pehchaan],[data-route=observation]) .evidence-aside {position:sticky;top:130px;background:var(--record-oat);border:0;border-top:3px solid var(--record-terra);border-radius:0;padding:28px;box-shadow:none;color:var(--record-ink)}
+ body:is([data-route=democracy],[data-route=pehchaan],[data-route=observation]) .evidence-aside h2 {font-size:1.75rem;line-height:1.15;font-weight:500;letter-spacing:-.035em;margin:16px 0 22px}
+ body:is([data-route=democracy],[data-route=pehchaan],[data-route=observation]) .evidence-aside img {width:100%;max-height:500px;object-fit:contain;background:#fffdf8;border:1px solid var(--record-line);border-radius:0;margin:0}
+ body:is([data-route=democracy],[data-route=pehchaan],[data-route=observation]) .evidence-aside :is(.actions,.card-actions) {display:flex;flex-direction:column;align-items:stretch;gap:12px;margin-top:22px}
+ body:is([data-route=democracy],[data-route=pehchaan],[data-route=observation]) .evidence-aside .text-link {font-size:.9375rem;line-height:1.5;min-height:44px}
+ body:is([data-route=democracy],[data-route=pehchaan],[data-route=observation]) .evidence-aside .button {font-size:1rem;line-height:1.45;text-align:center;white-space:normal;padding-inline:16px}
+ body:is([data-route=pehchaan],[data-route=observation]) .case-meta {margin:28px 0 0;padding:0 0 24px;border-bottom:1px solid var(--record-line);gap:12px 20px;line-height:1.6}
+ body:is([data-route=pehchaan],[data-route=observation]) .case-meta>span:not(.status) {font-size:1rem;line-height:1.6;border:0;padding:0}
+
+ body[data-route=democracy] .lesson-cover {grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);gap:40px;padding:44px;background:var(--record-oat);border:0;border-top:3px solid var(--record-terra);margin-top:0}
+ body[data-route=democracy] .lesson-cover h1 {font-size:clamp(2.75rem,7.2vw,6rem);font-weight:500;line-height:1;letter-spacing:-.06em;color:var(--record-ink);margin:20px 0 24px}
+ body[data-route=democracy] .lesson-cover .lead {font-size:1.25rem;line-height:1.55;color:var(--record-ink);margin:0}
+ body[data-route=democracy] .lesson-cover .status {margin:20px 0 0;background:var(--record-cream);color:var(--record-terra);border:1px solid var(--record-terra);font-size:.875rem}
+ body[data-route=democracy] .lesson-cover .lesson-disclosure {border-left:2px solid var(--record-terra);padding-left:16px;margin-top:22px;font-size:1rem;line-height:1.65;color:var(--record-ink);max-width:48ch}
+ body[data-route=democracy] .lesson-cover .photo-plate {transform:none;padding:12px;border:0;background:#fffdf8;margin:0}
+ body[data-route=democracy] .lesson-cover .photo-plate>a {height:300px}
+ body[data-route=democracy] .lesson-cover .plate-image {object-fit:contain}
+ body[data-route=democracy] .lesson-glance {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;margin:24px 0 30px;border-block:1px solid var(--record-line)}
+ body[data-route=democracy] .lesson-glance>div {padding:20px 0;background:none;border-radius:0}
+ body[data-route=democracy] .lesson-glance dt {font-size:.875rem;line-height:1.5;color:#64503e;margin:0 0 8px}
+ body[data-route=democracy] .lesson-glance dd {font-size:1rem;line-height:1.5;font-weight:550;margin:0}
+ body[data-route=democracy] .lesson-sequence {display:block;padding:0;margin:24px 0 40px;border:0;counter-reset:lesson;list-style:none}
+ body[data-route=democracy] .lesson-sequence li {display:grid;grid-template-columns:44px minmax(0,1fr);gap:12px 20px;position:relative;padding:24px 0;background:none;border:0;border-top:1px solid var(--record-line);border-radius:0;counter-increment:lesson}
+ body[data-route=democracy] .lesson-sequence li::before {content:counter(lesson,decimal-leading-zero);grid-column:1;grid-row:1 / span 2;position:static;display:block;width:auto;height:auto;margin:0;padding:0;border:0;border-radius:0;background:none;color:var(--record-terra);font:500 1.75rem/1.15 var(--sans);letter-spacing:-.04em}
+ body[data-route=democracy] .lesson-sequence li h3 {grid-column:2;grid-row:1;font-size:1.5rem;line-height:1.25;margin:0}
+ body[data-route=democracy] .lesson-sequence li p {grid-column:2;grid-row:2;font-size:1.0625rem;line-height:1.7;margin:0}
+ body[data-route=democracy] .evidence-details {padding:0;border:0;border-block:1px solid var(--record-line);background:none;border-radius:0;margin:32px 0}
+ body[data-route=democracy] .evidence-details>summary {padding:20px;background:var(--record-apricot);font-size:1.125rem;line-height:1.5;font-weight:550;color:var(--record-ink)}
+ body[data-route=democracy] .democracy-stage {padding:32px 0;background:none;border:0;border-bottom:1px solid var(--record-line);border-radius:0}
+ body[data-route=democracy] .democracy-stage:last-child {border-bottom:0}
+ body[data-route=democracy] .democracy-stage h2 {margin-top:16px}
+ body[data-route=democracy] .democracy-stage .stage-header {gap:14px}
+ body[data-route=democracy] .democracy-stage .stage-badge {font-size:1rem;background:none;color:var(--record-terra);border:1px solid var(--record-line)}
+ body[data-route=democracy] .democracy-stage .eyebrow {font-size:.875rem}
+ body[data-route=democracy] .evidence-checks {display:grid;grid-template-columns:1fr 1fr;gap:20px;padding:0}
+ body[data-route=democracy] .evidence-checks>div {padding:16px 0;border:0;border-top:1px solid var(--record-line);background:none}
+ body[data-route=democracy] .evidence-checks dt {font-size:1rem;font-weight:600;margin-bottom:8px;color:var(--record-terra)}
+ body[data-route=democracy] .evidence-checks dd {margin:0}
+ body[data-route=democracy] .case-record .archive-note {background:var(--record-oat);padding:24px;border:0;border-radius:0}
+ body[data-route=democracy] .case-record .archive-note h2 {margin-top:0}
+ body[data-route=democracy] .democracy-continuation-bridge {padding:36px 40px;background:var(--record-terra);color:var(--record-cream);border:0;border-radius:0;margin:56px 0 0;gap:28px}
+ body[data-route=democracy] .democracy-continuation-bridge :is(h2,p) {color:var(--record-cream)}
+ body[data-route=democracy] .democracy-continuation-bridge h2 {font-size:clamp(1.75rem,3.2vw,2.75rem);font-weight:500;line-height:1.12;letter-spacing:-.04em}
+ body[data-route=democracy] .democracy-continuation-bridge .button {background:#ff5738;color:#24221f;border-color:#ff5738;white-space:normal}
+
+ body[data-route=pehchaan] .community-cover {grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px;padding:44px;background:var(--record-apricot);border:0;border-radius:0;align-items:center;margin-top:0}
+ body[data-route=pehchaan] .community-cover h1 {font-size:clamp(2.75rem,6.7vw,6rem);font-weight:500;line-height:1.01;letter-spacing:-.06em;margin:20px 0 24px;color:var(--record-ink)}
+ body[data-route=pehchaan] .community-cover .lead {font-size:1.25rem;line-height:1.55;margin:0 0 24px;color:var(--record-ink)}
+ body[data-route=pehchaan] .community-cover .photo-plate {padding:0;border:0;background:none;margin:0}
+ body[data-route=pehchaan] .community-cover .photo-plate>a {height:430px;background:var(--record-cream)}
+ body[data-route=pehchaan] .community-cover .plate-image {object-fit:contain}
+ body[data-route=pehchaan] .community-cover .photo-plate figcaption,body[data-route=pehchaan] .community-cover .photo-plate figcaption span {color:var(--record-ink)}
+ body[data-route=pehchaan] .community-activities {display:grid;grid-template-columns:1fr;gap:0;margin-block:24px}
+ body[data-route=pehchaan] .community-activities>section {display:flex;align-items:flex-start;gap:24px;padding:24px 0;border:0;border-top:1px solid var(--record-line);border-radius:0;background:none}
+ body[data-route=pehchaan] .community-activities .icon-disc {width:32px;height:36px;flex:none;margin:0;background:none;color:var(--record-terra);border:0;font-size:1.75rem;line-height:1;letter-spacing:-.035em}
+ body[data-route=pehchaan] .community-activities p {margin:0;font-size:1.0625rem;line-height:1.7}
+
+ body[data-route=observation] .observation-cover {min-height:550px;padding:48px;align-items:center;border:0;border-radius:0;background:var(--record-terra);color:var(--record-cream);margin-top:0}
+ body[data-route=observation] .observation-cover>.page-photo-backdrop {display:block;left:48%;opacity:.9;z-index:0;mask-image:none}
+ body[data-route=observation] .observation-cover .page-photo-backdrop img {object-fit:cover;object-position:50% 38%;filter:none}
+ body[data-route=observation] .observation-cover::after {content:'';position:absolute;inset:0;z-index:0;background:linear-gradient(90deg,#9e3d2d 0 44%,#9e3d2dc7 65%,#9e3d2d38)}
+ body[data-route=observation] .observation-cover>div:not(.page-photo-backdrop) {max-width:74%;min-width:0}
+ body[data-route=observation] .observation-cover h1 {font-size:clamp(2.75rem,6.6vw,6rem);font-weight:500;line-height:1.01;letter-spacing:-.06em;color:var(--record-cream);margin:20px 0 24px;max-width:11ch}
+ body[data-route=observation] .observation-cover :is(.lead,.eyebrow) {color:var(--record-cream)}
+ body[data-route=observation] .observation-cover .lead {font-size:1.25rem;line-height:1.55;margin:0;max-width:42ch}
+ body[data-route=observation] .journal-photo-strip {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;margin:32px 0 0;padding-bottom:32px;border-bottom:1px solid var(--record-line)}
+ body[data-route=observation] .journal-photo-strip .photo-plate {padding:0;margin:0;background:none;border:0}
+ body[data-route=observation] .journal-photo-strip .photo-plate>a {height:230px}
+ body[data-route=observation] .journal-photo-strip .plate-image {object-fit:cover}
+ body[data-route=observation] .observation-days {display:block;margin-top:24px}
+ body[data-route=observation] .observation-day {display:grid;grid-template-columns:110px minmax(0,1fr);gap:12px 24px;padding:28px 0;background:none;border:0;border-top:1px solid var(--record-line);border-radius:0}
+ body[data-route=observation] .observation-day .eyebrow {grid-column:1;grid-row:1 / span 5;font-size:.875rem;line-height:1.6;color:var(--record-terra);margin:0}
+ body[data-route=observation] .observation-day>:not(.eyebrow) {grid-column:2;margin:0}
+ body[data-route=observation] .observation-day h3 {font-size:1.5rem;line-height:1.25;letter-spacing:-.03em}
+ body[data-route=observation] .journal-preview {display:block;background:#fffdf8;margin:20px 0;border:0;border-radius:0}
+}
+
+@media screen and (max-width:1100px) {
+ body[data-route=profile] .profile-page .profile-hero {gap:32px}
+ body[data-route=profile] .profile-photo-collage {height:480px}
+ body[data-route=profile] .profile-page .profile-story {grid-template-columns:1fr;gap:28px}
+ body[data-route=profile] .story-title {max-width:600px}
+ body[data-route=profile] .profile-page .classroom-feature {gap:28px;padding:30px}
+ body[data-route=teaching] .journey-cover {padding:40px;min-height:540px}
+ body[data-route=teaching] .journey-index li {grid-template-columns:1fr;gap:16px;padding:24px 20px}
+ body[data-route=teaching] .teaching-page .milestone-card figure>a {height:340px}
+ body:is([data-route=democracy],[data-route=pehchaan],[data-route=observation]) :is(.case-layout,.democracy-page .democracy-layout) {grid-template-columns:minmax(0,1.25fr) minmax(260px,.75fr);gap:32px}
+ body:is([data-route=democracy],[data-route=pehchaan],[data-route=observation]) .evidence-aside {padding:22px}
+ body[data-route=democracy] .lesson-cover {padding:32px;gap:28px}
+ body[data-route=democracy] .lesson-cover .photo-plate>a {height:260px}
+ body[data-route=pehchaan] .community-cover {padding:32px;gap:28px}
+ body[data-route=pehchaan] .community-cover .photo-plate>a {height:350px}
+ body[data-route=observation] .observation-cover {padding:40px}
+}
+
+@media screen and (max-width:900px) {
+ body[data-route=profile] .profile-page .profile-hero {grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr)}
+ body[data-route=profile] .profile-photo-collage {height:450px}
+ body[data-route=profile] .profile-school-photo>a {height:160px}
+ body[data-route=profile] .education-record {grid-template-columns:120px minmax(0,1fr)}
+ body[data-route=teaching] .journey-cover-copy {width:85%}
+ body[data-route=teaching] .teaching-page .milestone-card,body[data-route=teaching] .teaching-page .experience-row:nth-child(even) .milestone-card {grid-template-columns:minmax(0,1fr) 260px;gap:28px}
+ body:is([data-route=democracy],[data-route=pehchaan],[data-route=observation]) :is(.case-layout,.democracy-page .democracy-layout) {grid-template-columns:1fr;gap:36px}
+ body:is([data-route=democracy],[data-route=pehchaan],[data-route=observation]) .evidence-aside {position:static;max-width:650px;width:100%;padding:28px}
+ body:is([data-route=democracy],[data-route=pehchaan],[data-route=observation]) .evidence-aside img {max-height:430px}
+ body[data-route=observation] .journal-photo-strip {gap:16px}
+ body[data-route=observation] .journal-photo-strip .photo-plate>a {height:180px}
+}
+
+@media screen and (max-width:760px) {
+ body:is([data-route=profile],[data-route=teaching],[data-route=democracy],[data-route=pehchaan],[data-route=observation]) .distinctive-page :is(.prose,.plain-list,.experience-details,.milestone-summary,.resource-desc,.story-columns) {font-size:1rem;line-height:1.7}
+ body[data-route=profile] .profile-page .profile-hero {grid-template-columns:1fr;gap:30px;padding:0 0 40px}
+ body[data-route=profile] .profile-introduction h1 {font-size:clamp(2.75rem,11vw,4.5rem)}
+ body[data-route=profile] .profile-name {font-size:1.5rem;margin-top:20px}
+ body[data-route=profile] .profile-introduction .lead {font-size:1.125rem;line-height:1.6;margin-top:18px;max-width:48ch}
+ body[data-route=profile] .profile-introduction .hero-meta {margin-top:22px}
+ body[data-route=profile] .profile-photo-collage {height:460px;max-width:430px;margin:0 auto}
+ body[data-route=profile] .profile-page .profile-portrait {width:64%;left:12%}
+ body[data-route=profile] .profile-school-photo {width:76%;padding:7px}
+ body[data-route=profile] .profile-school-photo>a {height:180px}
+ body[data-route=profile] .profile-page .profile-story {grid-template-columns:1fr;gap:28px;padding:36px 0}
+ body[data-route=profile] .story-columns {grid-template-columns:1fr;gap:20px}
+ body[data-route=profile] .story-columns p {font-size:1rem;max-width:none}
+ body[data-route=profile] .profile-page>.section {padding-block:40px}
+ body[data-route=profile] .education-record {grid-template-columns:1fr;gap:14px;padding-block:24px}
+ body[data-route=profile] .education-record:nth-child(n) .education-period {grid-column:1;grid-row:1;padding:0}
+ body[data-route=profile] .education-record:nth-child(n) .education-card {grid-column:1;grid-row:2;grid-template-columns:26px minmax(0,1fr);gap:12px}
+ body[data-route=profile] .education-card h3 {font-size:1.375rem}
+ body[data-route=profile] .education-card>.icon-disc {width:26px;height:26px}
+ body[data-route=profile] .current-studies {padding:22px;margin-top:28px}
+ body[data-route=profile] .profile-interests .beyond-grid {grid-template-columns:1fr;gap:0}
+ body[data-route=profile] .profile-interests .beyond-grid p {font-size:1rem}
+ body[data-route=profile] .profile-page .classroom-feature {grid-template-columns:1fr;padding:24px;gap:28px;margin-bottom:36px}
+ body[data-route=profile] .classroom-feature .photo-plate>a {height:290px}
+ body[data-route=profile] .concise-facts {grid-template-columns:1fr;gap:24px}
+ body[data-route=profile] .concise-facts dd {font-size:1rem}
+ body[data-route=teaching] .journey-cover {padding:30px 24px 88px;min-height:520px;align-items:flex-start}
+ body[data-route=teaching] .journey-cover-copy {width:100%}
+ body[data-route=teaching] .journey-cover h1 {font-size:clamp(2.75rem,10.8vw,4.5rem);max-width:10ch;margin-top:16px}
+ body[data-route=teaching] .journey-cover>.page-photo-backdrop {left:32%;opacity:.28}
+ body[data-route=teaching] .journey-cover::after {background:linear-gradient(90deg,#9e3d2d 0%,#9e3d2ddb 70%,#9e3d2dc7)}
+ body[data-route=teaching] .journey-cover .lead {font-size:1.125rem;line-height:1.6}
+ body[data-route=teaching] .journey-cover .cover-photo-credit {left:24px;right:24px;bottom:20px;max-width:none;padding:0;background:none;font-size:.875rem}
+ body[data-route=teaching] .journey-index {grid-template-columns:1fr;margin-bottom:30px}
+ body[data-route=teaching] .journey-index li {grid-template-columns:36px minmax(0,1fr);gap:18px;padding:24px}
+ body[data-route=teaching] .journey-index li+li {border-left:0;border-top:1px solid var(--record-line)}
+ body[data-route=teaching] .journal-number {font-size:2rem}
+ body[data-route=teaching] .experience-row {padding:32px 0 40px}
+ body[data-route=teaching] .teaching-page .milestone-card,body[data-route=teaching] .teaching-page .experience-row:nth-child(even) .milestone-card {grid-template-columns:1fr;gap:28px}
+ body[data-route=teaching] .teaching-page .experience-main {grid-column:1;grid-row:1;padding:0}
+ body[data-route=teaching] .teaching-page .milestone-card figure,body[data-route=teaching] .teaching-page .experience-row:nth-child(even) figure {position:static;grid-column:1;grid-row:2;max-width:none;margin:0}
+ body[data-route=teaching] .teaching-page .milestone-card figure>a {height:300px}
+ body[data-route=teaching] .milestone-title {font-size:1.875rem;line-height:1.15}
+ body[data-route=teaching] .milestone-summary {font-size:1.125rem}
+ body[data-route=teaching] .experience-details .plain-list {font-size:1rem}
+ body[data-route=teaching] .experience-reflection {padding:20px}
+ body[data-route=teaching] .experience-reflection p {font-size:1rem}
+ body[data-route=teaching] .teaching-page .learning-grid {grid-template-columns:1fr;gap:0}
+ body[data-route=teaching] .learning-grid p {font-size:1rem}
+ body:is([data-route=democracy],[data-route=pehchaan],[data-route=observation]) :is(.case-layout,.democracy-page .democracy-layout) {grid-template-columns:1fr;gap:32px;margin-top:32px}
+ body:is([data-route=democracy],[data-route=pehchaan],[data-route=observation]) .case-record :is(p,li,dd) {font-size:1rem;line-height:1.75}
+ body:is([data-route=democracy],[data-route=pehchaan],[data-route=observation]) .case-record h2 {font-size:1.875rem;line-height:1.15;margin:36px 0 18px}
+ body:is([data-route=democracy],[data-route=pehchaan],[data-route=observation]) .evidence-aside {padding:24px;max-width:none}
+ body:is([data-route=democracy],[data-route=pehchaan],[data-route=observation]) .evidence-aside h2 {font-size:1.625rem}
+ body:is([data-route=democracy],[data-route=pehchaan],[data-route=observation]) .evidence-aside img {max-height:450px}
+ body[data-route=democracy] .lesson-cover {grid-template-columns:1fr;padding:28px 22px;gap:28px}
+ body[data-route=democracy] .lesson-cover h1 {font-size:clamp(2.75rem,10.8vw,4.5rem);margin-top:16px}
+ body[data-route=democracy] .lesson-cover .lead {font-size:1.125rem}
+ body[data-route=democracy] .lesson-cover .lesson-disclosure {font-size:1rem;padding-left:12px}
+ body[data-route=democracy] .lesson-cover .photo-plate {padding:8px}
+ body[data-route=democracy] .lesson-cover .photo-plate>a {height:240px}
+ body[data-route=democracy] .lesson-glance {grid-template-columns:1fr;gap:0;margin-top:22px}
+ body[data-route=democracy] .lesson-glance>div {display:grid;grid-template-columns:100px minmax(0,1fr);gap:18px;padding:18px 0}
+ body[data-route=democracy] .lesson-glance>div+div {border-top:1px solid var(--record-line)}
+ body[data-route=democracy] .lesson-glance dt {margin:0}
+ body[data-route=democracy] .lesson-sequence li {grid-template-columns:32px minmax(0,1fr);gap:12px 16px}
+ body[data-route=democracy] .lesson-sequence li::before {font-size:1.5rem}
+ body[data-route=democracy] .lesson-sequence li h3 {font-size:1.375rem}
+ body[data-route=democracy] .lesson-sequence li p {font-size:1rem}
+ body[data-route=democracy] .evidence-details>summary {padding:18px;font-size:1rem}
+ body[data-route=democracy] .evidence-checks {grid-template-columns:1fr;gap:0}
+ body[data-route=democracy] .democracy-continuation-bridge {padding:28px 24px;margin-top:40px;flex-direction:column;align-items:flex-start}
+ body[data-route=pehchaan] .community-cover {grid-template-columns:1fr;padding:28px 22px;gap:30px}
+ body[data-route=pehchaan] .community-cover h1 {font-size:clamp(2.75rem,10.8vw,4.5rem);margin-top:16px}
+ body[data-route=pehchaan] .community-cover .lead {font-size:1.125rem}
+ body[data-route=pehchaan] .community-cover .photo-plate>a {height:auto}
+ body[data-route=pehchaan] .community-cover .plate-image {height:auto;aspect-ratio:auto}
+ body[data-route=pehchaan] .community-activities>section {gap:18px;padding:22px 0}
+ body[data-route=pehchaan] .community-activities p {font-size:1rem}
+ body[data-route=observation] .observation-cover {min-height:520px;padding:30px 24px}
+ body[data-route=observation] .observation-cover>div:not(.page-photo-backdrop) {max-width:100%}
+ body[data-route=observation] .observation-cover>.page-photo-backdrop {left:20%;opacity:.35}
+ body[data-route=observation] .observation-cover::after {background:linear-gradient(90deg,#9e3d2df2,#9e3d2de6 65%,#9e3d2dbf)}
+ body[data-route=observation] .observation-cover h1 {font-size:clamp(2.75rem,10.8vw,4.5rem);max-width:10ch;margin-top:16px}
+ body[data-route=observation] .observation-cover .lead {font-size:1.125rem;line-height:1.6}
+ body[data-route=observation] .journal-photo-strip {gap:12px;margin-top:24px;padding-bottom:24px;grid-template-columns:1fr}
+ body[data-route=observation] .journal-photo-strip .photo-plate {display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:18px}
+ body[data-route=observation] .journal-photo-strip .photo-plate>a {height:130px}
+ body[data-route=observation] .journal-photo-strip .photo-plate figcaption {padding:0}
+ body[data-route=observation] .observation-day {grid-template-columns:1fr;gap:14px;padding:24px 0}
+ body[data-route=observation] .observation-day .eyebrow {grid-column:1;grid-row:auto;font-size:.875rem}
+ body[data-route=observation] .observation-day>:not(.eyebrow) {grid-column:1}
+}
+
+@media screen and (max-width:380px) {
+ body[data-route=profile] .profile-photo-collage {height:400px}
+ body[data-route=profile] .profile-school-photo>a {height:150px}
+ body[data-route=profile] .current-studies {padding:20px 16px}
+ body[data-route=profile] .profile-page .classroom-feature {padding:24px 20px}
+ body[data-route=teaching] .journey-cover {padding-inline:20px;min-height:560px}
+ body[data-route=teaching] .journey-cover .cover-photo-credit {left:20px;right:20px}
+ body[data-route=teaching] .journey-index li {padding-inline:20px}
+ body[data-route=teaching] .teaching-page .milestone-card figure>a {height:260px}
+ body[data-route=democracy] .lesson-cover,body[data-route=pehchaan] .community-cover {padding-inline:20px}
+ body[data-route=pehchaan] .community-cover {padding-inline:12px}
+ body[data-route=pehchaan] .community-cover h1 {font-size:2.75rem;letter-spacing:-.065em}
+ body[data-route=observation] .observation-cover {padding-inline:20px;min-height:560px}
+ body[data-route=observation] .journal-photo-strip .photo-plate {grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px}
+}

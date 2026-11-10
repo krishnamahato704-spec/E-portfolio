@@ -1,3 +1,6 @@
+import {initReadingRoom,cleanupReadingRoom} from './reading-room.js?v=editorial-20261004';
+import {initAtlasField,cleanupAtlasField} from './atlas-field.js?v=editorial-20261004';
+import {initPortfolioOpening,cleanupPortfolioOpening} from './opening-sequence.js?v=editorial-20261004';
 // Progressive enhancement: nothing is hidden while waiting for JavaScript or an observer.
 let dispose = () => {};
 
@@ -6,12 +9,13 @@ export function cleanupMotion() {
   dispose = () => {};
 }
 
-export function initMotion() {
+export function initMotion({initial=false}={}) {
   const previousVideo = document.querySelector('#main .hero-film');
   const resumeVideo = !!previousVideo && !previousVideo.paused;
   cleanupMotion();
   const root = document.querySelector('#main');
   if (!root || ['admin', 'resume', '404'].includes(document.body.dataset.route)) return;
+  if(document.body.dataset.route==='home'){initReadingRoom(root);initAtlasField(root);initPortfolioOpening(root,{initial});}
   const preference = matchMedia('(prefers-reduced-motion: reduce)');
   const events = new AbortController();
   const controllers=[];
@@ -40,7 +44,7 @@ export function initMotion() {
     marked.forEach(finish);
     progress?.remove();
   };
-  dispose = () => { stop(); events.abort(); };
+  dispose = () => { stop(); cleanupReadingRoom(); cleanupAtlasField(); cleanupPortfolioOpening(); events.abort(); };
   // Changing the OS preference immediately stops active motion. Re-enabling
   // does not replay already-read content or add a second listener set.
   preference.addEventListener('change', stop, { signal: events.signal });

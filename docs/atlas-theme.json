@@ -1,0 +1,25 @@
+{
+ "name":"Teacher portfolio interactive atlas",
+ "scope":"project",
+ "project":"teacher-portfolio",
+ "origin":"project-reference",
+ "source_project":"https://github.com/krishnamahato704-spec/E-portfolio",
+ "mode":"light",
+ "tokens":{
+  "background":"#F1F4FB","surface":"#FFFFFF","text":"#15244B","muted":"#4E5C7B",
+  "accent":"#2648BE","accentHover":"#142D90","onAccent":"#F5F7FF",
+  "border":"#7685A6","focus":"#2648BE","soft":"#E2E9F8"
+ },
+ "typography":{"heading_family":"Source Serif 4","body_family":"Source Sans 3"},
+ "style_rules":{
+  "opening":"Full-screen cobalt #1538B8, text #F5F7FF, muted #D4E2FF, accent #E6F69A. No large portrait column.",
+  "student_scene":"Pale lime #DCECA3, ink #14264F and muted #344B63. Large teacher line uses 65 percent opacity; student line gains emphasis.",
+  "type":"Centered Source Serif 4 title with italic second line; desktop 6rem to 10.5rem, phone 3.5rem to 6.8rem.",
+  "graphics":"Original cached contour islands and atlas points drawn on Canvas2D; pointer parallax, 24fps cap, DPR cap 1.5. No imported reference-site graphics.",
+  "navigation":"Separate floating masthead pills and a sticky contents dock. The identity selector is directly under the title.",
+  "motion":"Scene and typography transitions between 650ms and 800ms. Reduced motion and data saving render a static field; animation stops off screen.",
+  "photography":"Existing approved photographs follow the opening as a layered documentary spread; original links, captions and viewer controls retained.",
+  "layout":"1296px content maximum, desktop gutters up to72px, phone gutters22px. Large serif section headings and a dark navy manifesto."
+ },
+ "tags":["editorial","interactive","atlas","cobalt","portfolio"]
+}

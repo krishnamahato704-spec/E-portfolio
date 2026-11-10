@@ -4,7 +4,7 @@ import {studySummary,recruiterFacts,experiencePeriod} from './recruiter.js?v=edi
 import {democracyResource,democracySource,documentUrl} from './evidence.js?v=editorial-20261004';
 import {internshipStudyIds,portfolioRole} from './content.js?v=editorial-20261004';
 import {evidenceFileName} from './file-names.js?v=editorial-20261004';
-import {observationJournal} from './amity-journal.js?v=editorial-20261004';
+import {observationJournal,amityJournalResource} from './amity-journal.js?v=editorial-20261004';
 import {galleryRecord,photoBackdrop,photoPlate,studyInterval,heroGallery} from './page-media.js?v=editorial-20261004';
 import {educationTimeline} from './education.js?v=editorial-20261004';
 import {homePhilosophySection} from './teaching-philosophy.js?v=editorial-20261004';
@@ -44,14 +44,61 @@ function hiringEssentials(c){
  return current||facts.length?`<section class="hiring-essentials" aria-label="Teaching and availability at a glance"><div class="container hiring-essentials-grid">${current}${facts.map(([label,value,...notes])=>`<dl class="hiring-fact"><dt>${esc(label)}</dt><dd>${esc(value||'')}${notes.filter(Boolean).map(note=>`<span>${esc(note)}</span>`).join('')}</dd></dl>`).join('')}</div></section>`:'';
 }
 
+function heroLearningRecords(c,base){
+ const ongoing=c.qualifications.filter(q=>q.status==='In progress');
+ const degree=c.qualifications.find(q=>/^B\.?A\.?(?:\s|$)/i.test(q.title)&&q.status==='Completed');
+ const records=[...ongoing,...(degree?[degree]:[])];
+ return `<div class="atlas-student-statement atlas-mode-copy" data-atlas-copy="student" hidden>${records.length?`<ul class="hero-learning-records" aria-label="Current study and completed degree" role="list">${records.map(q=>{
+  const expected=q.note?.match(/(?:examinations?|completion) expected(?: in)?\s+([^·;]+)/i)?.[1]?.trim().replace(/[.\s]+$/,'')||q.expected;
+  const result=[q.place,q.note].filter(Boolean).join(' · ').match(/CGPA\s+[\d.]+/i)?.[0];
+  const detail=q.status==='In progress'&&expected?'Expected '+expected:result||q.status;
+  return `<li><strong>${esc(q.title)}</strong><span>${esc(detail)}</span></li>`;
+ }).join('')}</ul>`:'<p>See the education record for qualification status.</p>'}${link(base,'profile','Academic record','text-link hero-learning-link')}</div>`;
+}
+
+function heroFeaturedEvidence(c,base){
+ const resource=democracyResource(c);
+ if(!resource)return '';
+ const thumbnail=resource.thumbnail||resource.image;
+ return `<article class="hero-featured-evidence" aria-labelledby="hero-featured-title">${thumbnail?`<a class="hero-featured-image" href="${base}teaching/democracy/" aria-label="Explore lesson design: ${esc(resource.title)}">${img(thumbnail,'Preview of '+resource.title,base,'hero-featured-preview')}</a>`:''}<div class="hero-featured-body"><p class="eyebrow">Featured lesson · ${esc(resource.evidenceStatus||resource.category)}</p><h2 id="hero-featured-title">${esc(resource.title)}</h2><p class="hero-featured-meta">${[resource.subject,resource.grade,resource.duration].filter(Boolean).map(esc).join(' · ')}</p>${link(base,'democracy','Explore lesson design','text-link hero-featured-link')}</div></article>`;
+}
+
 function opening(c,base){
  const p=c.profile,download=resumeUrl(c,base);
  const schoolPractice=c.experiences.find(e=>e.id==='panchsheel');
  const teachingLabel=/ongoing|current|in[ -]progress/i.test(schoolPractice?.status||'')?'Currently teaching':'Teaching experience';
- const photographs=heroGallery(c,base);
- const introduction=`<div class="hero-identity">${img(p.portrait,'Portrait of '+p.name,base,'hero-avatar',true)}<p class="hero-greeting hero-intro-line">Hello, I’m</p></div><h1 id="opening-name" class="hero-intro-line">${esc(p.name)}</h1><p class="hero-role hero-intro-line">${esc(portfolioRole)}</p><p class="hero-statement hero-intro-line">${esc(p.headline)}</p><p class="hero-study">${esc(studySummary(c))}</p>`;
  const filmControls=`<div class="hero-controls hero-background-controls" data-film-controls inert aria-hidden="true"><div class="film-caption"><span class="film-label">Illustrative background film</span></div><button type="button" data-film-pause aria-controls="hero-film">Play film</button><button type="button" data-film-close hidden>Hide film</button><span class="film-status sr-only" role="status"></span></div>`;
- return `<section class="hero opening-hero" aria-labelledby="opening-name"><video id="hero-film" class="hero-film" muted playsinline loop preload="none" poster="${esc(base)}assets/hero-poster.webp" data-src="${esc(base)}assets/hero-video-opt.mp4" aria-hidden="true"></video><div class="container hero-content ${photographs?'':'hero-text-only'}"><div class="hero-copy">${introduction}<div class="actions">${link(base,'resources','View evidence','button primary')}<a class="button secondary" aria-label="${download?'Download résumé PDF':'View résumé'}" href="${esc(download||base+'resume/')}" ${download?'download="krishna-mahato-resume.pdf"':''}>${download?'Résumé PDF':'View Résumé'} ${icon('download')}</a>${link(base,'contact','Contact','text-link hero-contact-link')}</div><p class="hero-joining">${p.availability?`<strong>Available ${esc(p.availability)}</strong>`:''}${p.location?`<span>${esc(p.location)}</span>`:''}</p>${p.directTeaching&&c.experiences.some(e=>e.id==='panchsheel')?`<p class="hero-teaching-scope">${teachingLabel}: ${esc(p.directTeaching)}</p>`:''}${heroRecruiterBrief(c)}${filmControls}</div>${photographs}</div></section>`;
+ return `<section class="hero opening-hero" aria-labelledby="opening-name" data-atlas-mode="teacher"><video id="hero-film" class="hero-film" muted playsinline loop preload="none" poster="${esc(base)}assets/hero-poster.webp" data-src="${esc(base)}assets/hero-video-opt.mp4" aria-hidden="true"></video>
+  <div class="atlas-stage">
+   <svg class="atlas-fallback" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1"><ellipse cx="50" cy="380" rx="310" ry="410"/><ellipse cx="50" cy="380" rx="270" ry="370"/><ellipse cx="50" cy="380" rx="230" ry="330"/><ellipse cx="50" cy="380" rx="190" ry="290"/><ellipse cx="1390" cy="540" rx="350" ry="430"/><ellipse cx="1390" cy="540" rx="310" ry="390"/><ellipse cx="1390" cy="540" rx="270" ry="350"/><ellipse cx="1390" cy="540" rx="230" ry="310"/><path d="M0 810Q350 650 720 810T1440 810M0 840Q350 680 720 840T1440 840M0 870Q350 710 720 870T1440 870"/></g></svg>
+   <canvas data-atlas-field class="atlas-field" aria-hidden="true" inert></canvas>
+   <div class="atlas-edge-label atlas-edge-left" aria-hidden="true">People / Places / Perspectives</div><div class="atlas-edge-label atlas-edge-right" aria-hidden="true">An open mind. An ongoing journey.</div>
+   <div class="container hero-content hero-text-only"><div class="hero-copy">
+    <div class="atlas-person"><div class="hero-identity">${img(p.portrait,'Portrait of '+p.name,base,'hero-avatar',true)}<p class="hero-greeting hero-intro-line">A practice in curiosity</p></div><h1 id="opening-name" class="hero-intro-line">${esc(p.name)}</h1><p class="hero-role hero-intro-line">${esc(portfolioRole)}</p></div>
+    <p class="atlas-title"><span class="atlas-title-teacher">Teacher.</span><em class="atlas-title-student">Forever student.</em></p>
+    <div class="atlas-controls" data-atlas-controls hidden role="group" aria-label="Change the visual perspective"><button type="button" data-atlas-mode="teacher" aria-pressed="true"><span aria-hidden="true">01</span> The teacher</button><button type="button" data-atlas-mode="student" aria-pressed="false"><span aria-hidden="true">02</span> Forever student</button></div><p class="sr-only" data-atlas-status role="status"></p>
+    <div class="atlas-mode-copy" data-atlas-copy="teacher"><p class="hero-statement hero-intro-line">${esc(p.headline)}</p>${schoolPractice&&p.directTeaching?`<p class="hero-teaching-scope"><span>${teachingLabel}:</span> ${esc(p.directTeaching)}</p>`:''}${schoolPractice&&p.additionalTeaching?`<p class="hero-teaching-scope hero-additional-teaching"><span>Additional teaching:</span> ${esc(p.additionalTeaching)}</p>`:''}<p class="hero-study">${esc(studySummary(c))}</p></div>${heroLearningRecords(c,base)}
+    <p class="hero-joining">${p.availability?`<strong>Available ${esc(p.availability)}</strong>`:''}${p.location?`<span>${esc(p.location)}</span>`:''}${p.workPreferences?`<span>${esc(p.workPreferences)}</span>`:''}</p>
+    <div class="actions">${link(base,'resources','View evidence','button primary')}<a class="button secondary" aria-label="${download?'Download résumé PDF':'View résumé'}" href="${esc(download||base+'resume/')}" ${download?'download="krishna-mahato-resume.pdf"':''}>${download?'Résumé PDF':'View Résumé'} ${icon('download')}</a>${link(base,'contact','Contact','text-link hero-contact-link')}</div>
+   </div>${heroFeaturedEvidence(c,base)}</div>
+   <div class="container atlas-stage-footer"><div class="atlas-scene-meta"><span aria-hidden="true">Two perspectives. One person.</span><button type="button" data-atlas-pause hidden aria-label="Pause atlas motion">Pause motion</button><button type="button" class="opening-replay" data-opening-replay hidden>Replay intro ↗</button></div><a href="#teaching-evidence" aria-label="Explore the portfolio">Explore <span aria-hidden="true">↓</span></a></div>
+  </div>
+  <div class="container hero-film-controls-wrap">${filmControls}</div>
+ </section>`;
+}
+
+function contentsIndex(c){
+ return `<nav class="container editorial-index" aria-label="On this page"><span class="index-label">A field notebook</span><a href="#teaching-evidence"><span>01</span> Evidence</a><a href="#teacher-student"><span>02</span> Two perspectives</a>${c.experiences.length?'<a href="#teaching-journey"><span>03</span> Journey</a>':''}<a href="#teaching-philosophy"><span>04</span> Principles</a></nav>`;
+}
+
+function gallerySpread(c,base){
+ const sidePhotos=['tlm-exhibition','independence-day'].map(id=>galleryRecord(c,id)).filter(Boolean);
+ return `<section class="atlas-gallery-section" aria-label="Photographs from teaching practice"><div class="container atlas-gallery-spread"><div class="atlas-gallery-heading"><p class="eyebrow">A few moments, beyond the introduction</p><h2>In the<br><em>classroom.</em></h2><a class="text-link" href="${base}gallery/">The photograph index ${arrow}</a>${heroRecruiterBrief(c)}</div><div class="atlas-photo-stack" aria-hidden="true">${sidePhotos.map(photo=>img(photo.image,'',base,'atlas-side-photo')).join('')}</div>${heroGallery(c,base)}</div><div class="container opening-colophon"><span>People, places &amp; the questions between them.</span><a href="#teaching-evidence">Read the evidence <span aria-hidden="true">↓</span></a></div></section>`;
+}
+
+function identityPair(c,base){
+ const school=c.experiences.find(e=>e.id==='panchsheel');
+ return `<section id="teacher-student" class="container identity-room" aria-labelledby="identity-room-title"><div class="identity-room-heading"><p class="eyebrow">02 / Two perspectives, one practice</p><h2 id="identity-room-title">What I teach.<br><em>What keeps me learning.</em></h2><div class="identity-lens" data-identity-lens hidden role="group" aria-label="Emphasize a perspective"><button type="button" data-lens="both" aria-pressed="true">Both</button><button type="button" data-lens="teacher" aria-pressed="false">The teacher</button><button type="button" data-lens="student" aria-pressed="false">The student</button></div></div><div class="identity-pair" data-identity-pair data-lens="both"><article class="identity-perspective" data-perspective="teacher"><span class="perspective-label">The educator <span aria-hidden="true">↗</span></span><h3>Making room<br>for a better question.</h3><p>${esc(c.about)}</p>${school&&c.profile.directTeaching?`<p class="identity-scope">${esc(c.profile.directTeaching)}</p>`:''}${school&&c.profile.additionalTeaching?`<p class="identity-scope">${esc(c.profile.additionalTeaching)}</p>`:''}${link(base,'teaching','Inside my teaching practice')}</article><article class="identity-perspective" data-perspective="student"><span class="perspective-label">The forever student <span aria-hidden="true">↗</span></span><h3>Still reading.<br>Still reconsidering.</h3><p>${esc(c.preparation)}</p><p class="identity-scope">${esc(studySummary(c))}</p>${link(base,'profile','Follow my academic journey')}</article></div></section>`;
 }
 
 function originalFileUrl(url,base){
@@ -70,7 +117,12 @@ function evidenceCard(r,base,i,curated=false){
  if(curated){
   const viewer=lesson?'':`data-viewer data-original-url="${esc(originalFileUrl(r.url||thumb,base))}" data-title="${esc(r.title)}"`;
   const action=lesson?'Explore lesson design':r.url?'Read report':'View classroom material';
-  return `<article class="selected-evidence-card ${lesson?'flagship-evidence':''}"><div class="evidence-card-media">${thumb?img(thumb,'Preview of '+r.title,base,'resource-thumb'):`<div class="document-placeholder">${icon('file')}<span>${esc(r.category||'Teaching evidence')}</span></div>`}</div><div class="evidence-card-body"><p class="eyebrow">${lesson?'Featured lesson · Planning evidence':esc(r.category||'Teaching evidence')}</p><h3>${esc(r.title)}</h3>${metadata}${r.duration?`<p class="card-meta">${esc(r.duration)}</p>`:''}${r.description?`<p class="resource-desc">${esc(r.description)}</p>`:''}<div class="card-actions"><a class="text-link" href="${esc(href)}" ${viewer}>${action} ${arrow}<span class="sr-only">: ${esc(r.title)}</span></a></div></div></article>`;
+  const narratives={
+   'classroom-discipline-action-research':'When the classroom needs a different approach.',
+   'diagnostic-assessment-report-and-tests':'Before the next lesson, understand the starting point.'
+  };
+  const sentence=lesson?'Democracy begins with a question, before a definition.':narratives[r.id]||r.title;
+  return `<article class="selected-evidence-card ${lesson?'flagship-evidence':''}"${thumb?` data-preview-src="${esc(imageUrl(thumb,base))}" data-preview-caption="${esc(r.title)}"`:''}><span class="editorial-row-number" aria-hidden="true">${String(i+1).padStart(2,'0')}</span><div class="evidence-card-media">${thumb?img(thumb,'Preview of '+r.title,base,'resource-thumb'):`<div class="document-placeholder">${icon('file')}<span>${esc(r.category||'Teaching evidence')}</span></div>`}</div><div class="evidence-card-body"><p class="eyebrow">${lesson?'Featured lesson · Planning evidence':esc(r.category||'Teaching evidence')}</p><p class="evidence-sentence">${esc(sentence)}</p><h3>${esc(r.title)}</h3>${metadata}${r.duration?`<p class="card-meta">${esc(r.duration)}</p>`:''}${r.description?`<p class="resource-desc">${esc(r.description)}</p>`:''}<div class="card-actions"><a class="text-link" href="${esc(href)}" ${viewer}>${action} ${arrow}<span class="sr-only">: ${esc(r.title)}</span></a></div></div></article>`;
  }
  const lens=lesson?[['Planned approach','Questioning, visuals and discussion'],['Assessment design','Diagnostic questions and written practice']]:[[r.context?'Context':'Record',r.context||r.type||r.category],...(r.evidenceStatus?[['Evidence',r.evidenceStatus]]:[])];
  const preview=r.url?documentUrl(r.url,base):'';
@@ -106,15 +158,17 @@ function selectedEvidence(c,base){
 }
 function journey(c,base){
  if(!c.experiences.length)return '';
- return `<section class="container section home-journey">${sectionHead('','My Teaching Journey',link(base,'teaching','View full experience'))}<ol class="school-stages" role="list">${[...c.experiences].reverse().map(e=>{
+ return `<section class="container section home-journey" id="teaching-journey">${sectionHead('','My Teaching Journey',link(base,'teaching','View full experience'))}<ol class="school-stages" role="list">${[...c.experiences].reverse().map(e=>{
   const current=/ongoing|in[ -]progress/i.test(e.status||'');
-  return `<li class="school-stage ${current?'current-stage':''}"><span class="stage-node" aria-hidden="true"></span><article class="journey-card"><span class="icon-disc">${icon(e.category==='Observation'?'book':e.id==='pehchaan'?'people':'school')}</span><div><h3>${esc(e.institution||e.title)}</h3><p>${esc(e.type)} · ${esc(e.duration||'')} ${esc(e.durationUnit||'')}</p><p class="stage-period">${esc(experiencePeriod(e))}</p>${e.status?`<span class="status ${current?'progress':''}">${esc(e.status)}</span>`:''}${link(base,['pehchaan','observation'].includes(e.id)?e.id:'teaching','Explore experience')}</div></article></li>`;
+  const originalObservation=e.id==='observation'&&observationJournal(c)?.url===amityJournalResource.url&&e.institution===amityJournalResource.context;
+  const photo=e.id==='panchsheel'?galleryRecord(c,'school-house-placards'):e.id==='pehchaan'?galleryRecord(c,'pehchaan-collage'):originalObservation?{image:'assets/evidence/amity-journal/campus.webp',title:e.institution||e.title}:null;
+  return `<li class="school-stage ${current?'current-stage':''}"${photo?` data-preview-src="${esc(imageUrl(photo.image,base))}" data-preview-caption="${esc(photo.title)}"`:''}><span class="stage-node" aria-hidden="true"></span><article class="journey-card"><span class="icon-disc">${icon(e.category==='Observation'?'book':e.id==='pehchaan'?'people':'school')}</span><div><p class="stage-period">${esc(experiencePeriod(e))}</p><h3>${esc(e.institution||e.title)}</h3><p>${esc(e.type)} · ${esc(e.duration||'')} ${esc(e.durationUnit||'')}</p>${e.summary?`<p class="journey-sentence">${esc(e.summary)}</p>`:''}${e.status?`<span class="status ${current?'progress':''}">${esc(e.status)}</span>`:''}${link(base,['pehchaan','observation'].includes(e.id)?e.id:'teaching','Explore experience')}</div></article></li>`;
  }).join('')}</ol></section>`;
 }
 
 function galleryFigure(x,base){return `<figure><a href="${esc(imageUrl(x.image,base))}" data-viewer data-original-url="${esc(safeUrl(x.url||x.image))}" data-title="${esc(x.title)}" aria-label="View ${esc(x.title)}">${img(x.image,x.description||x.title,base,'gallery-image')}</a><figcaption><strong>${esc(x.title)}</strong>${x.context?`<span>${esc(x.context)}</span>`:''}${x.description?`<p>${esc(x.description)}</p>`:''}</figcaption></figure>`;}
 function closing(c,base){return `<section class="container connect-strip home-contact" aria-labelledby="home-contact-title"><div><p class="eyebrow">${c.profile.availability?'Available from '+esc(c.profile.availability):'Teaching opportunities'}</p><h2 id="home-contact-title">Let’s Connect</h2><p>Open to teaching opportunities and conversations about education.</p>${c.profile.workPreferences?`<p class="small">${esc(c.profile.workPreferences)}</p>`:''}</div><div class="home-contact-actions">${link(base,'contact','Get in Touch','button primary')}${c.profile.email?`<a class="email-link" href="mailto:${esc(c.profile.email)}">${icon('mail')}${esc(c.profile.email)}</a>`:''}${link(base,'resume','View Résumé')}</div></section>`;}
-export function homeView(c,base){return opening(c,base)+hiringEssentials(c)+selectedEvidence(c,base)+studyInterval(base,'teaching','history','shelf')+journey(c,base)+educationTimeline(c,base)+studyInterval(base,'economics','english','arc')+professionalLearning(c,base)+homePhilosophySection(c,base)+closing(c,base);}
+export function homeView(c,base){return opening(c,base)+hiringEssentials(c)+contentsIndex(c)+selectedEvidence(c,base)+gallerySpread(c,base)+identityPair(c,base)+studyInterval(base,'teaching','history','shelf')+journey(c,base)+educationTimeline(c,base)+studyInterval(base,'economics','english','arc')+professionalLearning(c,base)+homePhilosophySection(c,base)+closing(c,base);}
 
 function professionalLearning(c,base){
  const selected=[c.certificates.find(x=>x.id==='gemini-badge'),c.certificates.find(x=>x.id==='nptel-writing'),c.certificates.find(x=>x.category==='Teaching'&&/pehchaan/i.test(x.issuer||''))].filter(Boolean);

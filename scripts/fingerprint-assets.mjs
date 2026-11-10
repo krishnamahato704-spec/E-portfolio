@@ -3,7 +3,7 @@ import path from 'node:path';
 import {createHash} from 'node:crypto';
 // Only public media/font URLs are versioned. Content records, original PDFs,
 // remote uploads and metadata keep their existing identities.
-const media=/\.(?:avif|webp|png|jpe?g|svg|woff2|mp4|mp3)$/i;
+const media=/\.(?:avif|webp|png|jpe?g|svg|woff2|ttf|mp4|mp3)$/i;
 export async function assetFingerprints(directory){
  const hashes=new Map();
  async function scan(folder){for(const entry of await readdir(folder,{withFileTypes:true})){

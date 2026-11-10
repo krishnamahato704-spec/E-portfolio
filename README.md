@@ -2,7 +2,11 @@
 
 An editorial teaching portfolio for Krishna Mahato, a developing History and Social Science educator. English remains a documented B.Ed. pedagogy subject. The public repository and published Supabase content supply the facts and authentic evidence.
 
+The current version leads with Krishna Mahato, Social Science Teacher, the real teaching range and a linked lesson preview. Selected Teaching Evidence comes before the gallery and longer identity narrative. Student mode shows current academic details from the content record. Manrope and the two complete opening scenes remain: terracotta with cream text for Teacher, and light oat with dark text for Forever Student. Coral marks selected controls and primary actions. A masked name reveal opens through a layered circular iris into the contour field. The pointer-following curiosity lens cycles through approved gallery photographs with their own captions; deliberate movement, re-entry or a phone tap brings the next image. Reduced motion, data saving and the visitor's pause control remain. Replay intro repeats the short opening; `?intro=replay` requests a preview on reload. Photographs, documents and contact routes retain ordinary links. See [the current hierarchy refinement](docs/RECRUITER_HIERARCHY.md), [warm scene notes](docs/DUAL_SCENE_REFINEMENT.md), [motion notes](docs/SIGNATURE_MOTION.md) and [photo variation](docs/VARIED_PHOTO_LENS.md). The visual treatments described later in this README remain as historical context; the final layers are `src/styles/atlas-portfolio.css` and `src/styles/opening-sequence.css`.
+
 ## Run and verify
+
+The public inner pages now follow the accepted warm homepage design, with separate portrait, teaching-journal, document-catalogue, certificate, gallery, résumé and contact layouts. The implementation and verification are recorded in [INTERIOR_PAGES.md](docs/INTERIOR_PAGES.md). The new layers are screen-only; existing print, filters, viewers and handlers remain.
 
 Use Node.js 22 or later.
 

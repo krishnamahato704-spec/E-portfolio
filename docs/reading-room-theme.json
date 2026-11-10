@@ -1,0 +1,34 @@
+{
+  "name": "Teacher portfolio reading room",
+  "scope": "project",
+  "project": "teacher-portfolio",
+  "origin": "project-reference",
+  "source_project": "https://github.com/krishnamahato704-spec/E-portfolio",
+  "mode": "light",
+  "tokens": {
+    "background": "#F4F3ED",
+    "surface": "#FAF9F5",
+    "text": "#242721",
+    "muted": "#555B50",
+    "accent": "#354B31",
+    "accentHover": "#243921",
+    "onAccent": "#FAF9F5",
+    "border": "#7B8172",
+    "focus": "#354B31",
+    "soft": "#E9E9DF"
+  },
+  "typography": {
+    "heading_family": "Source Sans 3",
+    "body_family": "Source Sans 3"
+  },
+  "style_rules": {
+    "typography": "Original sentence-led editorial layout; Source Serif 4 italic supports the identity line.",
+    "highlight": "Yellow-green emphasis #D9ED76 on dark ink or behind dark availability text.",
+    "manifesto": "Dark #242721 with paper headings and muted text #C4CBB8.",
+    "spacing": "1280px content maximum; desktop gutter 4.5vw capped at 80px; phone gutter 22px.",
+    "composition": "Sticky numbered section margins and index; thin rules, flat surfaces and no repeated framed card grid on home.",
+    "previews": "160ms fade, below navigation, no pointer hit targets. Reduced-motion users retain static inline evidence.",
+    "motion": "Existing 500ms hero reveal and 300ms entrance fades retained; all information stays visible without JavaScript."
+  },
+  "tags": ["editorial", "portfolio", "teaching", "paper", "dark-manifesto"]
+}

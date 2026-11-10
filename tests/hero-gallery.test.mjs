@@ -19,7 +19,7 @@ test('Home gallery preserves owner replacements and omits removed or unpublished
  content.gallery=content.gallery.filter(r=>['school-house-placards','independence-day'].includes(r.id));
  content.gallery.find(r=>r.id==='school-house-placards').title='Owner <revised> photograph';
  content.gallery.find(r=>r.id==='independence-day').publicationStatus='Pending';
- const html=view('home',content).match(/<section class="hero opening-hero"[\s\S]*?<\/section>/)[0];
+ const html=view('home',content).match(/<section class="atlas-gallery-section"[\s\S]*?<\/section>/)[0];
  assert.match(html,/Owner &lt;revised&gt; photograph/);
  assert.doesNotMatch(html,/Independence Day display|data-gallery-next/);
  content.gallery=[];

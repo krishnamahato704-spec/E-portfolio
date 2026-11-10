@@ -11,8 +11,11 @@ test('Media cache keys follow file contents while documents and remote URLs reta
   await fs.mkdir(path.join(folder,'fonts'));
   await fs.writeFile(path.join(folder,'photo.webp'),'first image');
   await fs.writeFile(path.join(folder,'fonts/body.woff2'),'font');
+  await fs.writeFile(path.join(folder,'fonts/display.ttf'),'display font');
   await fs.writeFile(path.join(folder,'lesson.pdf'),'document');
   const first=await assetFingerprints(folder);
+  assert.match(first.get('fonts/display.ttf')||'',/^[a-f0-9]{12}$/);
+  assert.ok(fingerprintUrls('<link href="assets/fonts/display.ttf">',first).includes(`assets/fonts/display.ttf?v=${first.get('fonts/display.ttf')}`));
   const source='<img src="../../assets/photo.webp"><img data-src="./assets/photo.webp"><img srcset="assets/photo.webp 720w"><link href="../assets/fonts/body.woff2"><a href="assets/lesson.pdf">PDF</a><img src="https://example.com/assets/photo.webp">';
   const result=fingerprintUrls(source,first);
   assert.ok(result.includes(`../../assets/photo.webp?v=${first.get('photo.webp')}`));

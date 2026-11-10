@@ -1,10 +1,19 @@
 // A compact disclosure keeps the page interactive while navigation is open.
+// The outgoing document's ready promise can reject after it becomes hidden.
+// Navigation still succeeds; only expected transition cancellations are handled.
+export function settlePageSwap(event) {
+ const ready=event.viewTransition?.ready;
+ return ready?.catch(error=>{
+  if(!['AbortError','InvalidStateError','TimeoutError'].includes(error.name))throw error;
+ });
+}
 export function initNavigation() {
  const toggle=document.querySelector('.menu-toggle');
  const panel=document.querySelector('#navigation');
  const header=document.querySelector('.site-header');
  if(!toggle || !panel || toggle.dataset.ready) return;
  toggle.dataset.ready='true';
+ window.addEventListener('pageswap',settlePageSwap);
  const closeButton=panel.querySelector('.menu-close');
  let open=false;
  const close=(restore=true)=>{

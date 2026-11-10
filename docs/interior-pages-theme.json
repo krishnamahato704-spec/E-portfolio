@@ -1,0 +1,26 @@
+{
+  "name": "Teacher portfolio warm editorial interiors",
+  "scope": "project",
+  "project": "teacher-portfolio",
+  "origin": "project-reference",
+  "source_project": "https://github.com/krishnamahato704-spec/E-portfolio",
+  "mode": "light",
+  "tokens": {
+    "background": "#F5F1E7", "surface": "#FFFDF8", "text": "#24221F",
+    "muted": "#584D43", "accent": "#8F2D1B", "accentHover": "#6F2418",
+    "onAccent": "#FFFFFF", "border": "#7B6353", "focus": "#8F2D1B", "soft": "#E4C5AF"
+  },
+  "typography": {"heading_family": "Manrope", "body_family": "Manrope"},
+  "style_rules": {
+    "palette": "Oat #F5F1E7 reading canvas, cream #FFF5E7 and light oat #F5E5CD document panels, apricot #E4C5AF photo grounds and footer, terracotta #9E3D2D with cream #FFF5E7 for chapter banners, ink #38281F and #24221F. Coral #FF5738 primary actions use dark text. Photograph name labels use opaque #6D271E with #FFF5E7 text.",
+    "type": "Existing local Manrope variable font. Main titles approximately96px desktop and44px phone, line-height near1.02 and negative tracking around-.05em. Body17px desktop16px phone, lead20px/18px, metadata and labels at least14px. Hierarchy comes from scale, rules and spacing.",
+    "shared": "Floating cream navigation pills with current-page dot, coral contact action,1296px content width and22–72px fluid gutters. Interior content starts148px from top on desktop and108px on phones to clear the masthead. Apricot footer with larger identity and44px link targets. Existing fixed phone shortcuts remain.",
+    "profile": "Asymmetric portrait and school-photo spread, open story columns, flat date/qualification ledger, ruled interests and photo-led classroom section. No new imagery.",
+    "experience": "Terracotta photo chapter cover, three-column chronology index, open text/photo experience records and left-aligned learning rows. Observation uses a school-photo strip and open day-by-day journal. Community detail uses an apricot photo/story spread and native-height phone collage. Lesson detail uses numbered lesson rows and a sticky original-document aside.",
+    "collections": "Evidence catalogue uses a292px-class sticky left note and wide document list, full uncropped paper thumbnails and native file actions. Credentials use a large certificate fan and two-column exhibition with a wide leading record. Gallery uses a12-column contact sheet with8/4 then6/6 spans, full original images and outside captions; filtered results reset to regular columns and phones use one column below520px.",
+    "resume_contact": "Resume pairs a clear action column with a cream document sheet on a terracotta ground, then an open web summary. Contact pairs large direct details with an apricot form, clear native labels and white writing fields; photo/name panel follows contact details on phones. Both preserve original print and handlers.",
+    "behavior": "Three screen-only route-scoped CSS layers after the existing atlas/opening and before print. Accepted Home geometry/type/colors are unchanged. Existing filters, native details, photo/PDF viewers, keyboard focus and reduced-motion behaviors remain. No additional animation loop or opening sequence on inner pages.",
+    "rights": "Original project CSS using existing portfolio media and verified locally packaged Manrope with its complete SIL OFL notice. No new font, media, framework or copied third-party code. Snapshot contains style information only, without personal content or media."
+  },
+  "tags": ["warm", "editorial", "interiors", "terracotta", "oat", "manrope", "document-catalogue"]
+}

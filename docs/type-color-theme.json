@@ -1,0 +1,26 @@
+{
+ "name":"Teacher portfolio indigo and paper",
+ "scope":"project",
+ "project":"teacher-portfolio",
+ "origin":"project-reference",
+ "source_project":"https://github.com/krishnamahato704-spec/E-portfolio",
+ "mode":"light",
+ "tokens":{
+  "background":"#F4F1E8","surface":"#FCFAF4","text":"#22283F","muted":"#596172",
+  "accent":"#2946A8","accentHover":"#1D347E","onAccent":"#FAF7EE",
+  "border":"#81867B","focus":"#2946A8","soft":"#E9E7DD"
+ },
+ "typography":{"heading_family":"Instrument Serif","body_family":"Source Sans 3"},
+ "style_rules":{
+  "display":"Locally packaged Instrument Serif 400 upright and italic, at minus .025em tracking. Source Sans 3 for UI/body; existing Source Serif 4 retained for reading prose. No synthesized Instrument weights.",
+  "hero":"Indigo #243BA5; warm-white text #FAF7EE, secondary #D9DEF2 and quiet citron #DBE6AE. Display title6.5rem to12rem, phone4rem to7.8rem with responsive320px adjustment.",
+  "student":"Pale sage #E6E8D4 with #242B45 text and #4F5A63 secondary text. Dark slate-blue and olive contour lines replace bright green/cyan strokes.",
+  "reading":"Warm paper #F4F1E8 with off-white #FCFAF4 surfaces and neutral #E9E7DD accents; main ink #22283F and secondary #596172.",
+  "manifesto":"Dark navy #1E263F, warm-white headings #FAF7EE, secondary #D7DBEE and italic accent #DBE6AE.",
+  "opening":"Same warm paper as reading sections; first name Source Sans 3 550 with minus .055em tracking, surname Instrument Serif italic400 at minus .025em tracking. Existing2.6second masked/shutter sequence preserved.",
+  "details":"Hero role, availability, study and control text enlarged; desktop labels .875rem to.9rem, phone .8rem to.82rem. Decorative footer sentence hidden on phones; interactive controls retained.",
+  "graphics":"Existing original atlas geometry at72percent CSS opacity, pointer response and motion preferences unchanged.",
+  "font_source":"Instrument Serif library entry google-instrumentserif; verified unmodified TTFs, pinned Google Fonts commit67bc647ce1910e92f461bcc82aae30f21d21a9cc, full OFL notice retained. Fonts are project-packaged; no global path or runtime external request."
+ },
+ "tags":["editorial","instrument-serif","indigo","warm-paper","portfolio"]
+}

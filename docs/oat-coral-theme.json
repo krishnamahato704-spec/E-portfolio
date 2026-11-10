@@ -1,0 +1,25 @@
+{
+ "name":"Teacher portfolio oat apricot coral",
+ "scope":"project",
+ "project":"teacher-portfolio",
+ "origin":"project-reference",
+ "source_project":"https://github.com/krishnamahato704-spec/E-portfolio",
+ "mode":"light",
+ "tokens":{
+  "background":"#F5F1E7","surface":"#FFFDF8","text":"#24221F","muted":"#584D43",
+  "accent":"#8F2D1B","accentHover":"#6F2418","onAccent":"#FFFFFF",
+  "border":"#7B6353","focus":"#8F2D1B","soft":"#E4C5AF"
+ },
+ "typography":{"heading_family":"Manrope","body_family":"Manrope"},
+ "style_rules":{
+  "color_balance":"Approximate60/30/10 visual hierarchy: oat #F5F1E7 dominant, apricot #E4C5AF secondary, loud coral #FF5738 selectively emphasized. This is a design allocation, not a measured whole-page pixel statistic.",
+  "hero":"Light oat scene with an apricot field exactly30percent of the stage width. Dark Manrope Teacher title and a slightly tilted coral Forever-student strip; dark ink on coral. Selected identity and primary actions use coral.",
+  "secondary_areas":"Apricot photographic spread, manifesto and footer surfaces support the predominantly oat reading page. Quiet brown/rust contour strokes replace blue lines. Student mode moves the apricot field to the left on a cream #F3E9DC ground.",
+  "type":"One locally packaged Manrope variable font, weight200–800. Reading400, labels500, large headings600–650. No serif or faux italic on major headings. Legacy CSS font tokens point to Manrope to preserve architecture.",
+  "contrast":"Normal text #24221F, secondary #584D43, text links and focus #8F2D1B. Loud coral surfaces #FF5738 use dark #24221F text. White is retained only on dark hover surfaces. Primary button file-size labels inherit their dark parent text.",
+  "opening":"Existing finite2.6second name/iris sequence retained. Manrope upright first name550, surname600; warm paper mask, coral ring and skip control.",
+  "photo_lens":"Existing pointer/tap curiosity lens retained. Oat or cream image scrims protect dark foreground text; the actual approved gallery image is unchanged. Same loop, lifecycle and motion preference controls.",
+  "font_source":"Verified shared-library google-manrope entry; unmodified164700byte variable TTF SHA256 3ae11c49db0455a3cc33e37d380f20fdb8c7f8b41dc07625c177e3d87a9d6ae6. Full copyright/OFL notice packaged. No remote font request or system installation."
+ },
+ "tags":["warm","oat","apricot","coral","manrope","60-30-10","portfolio"]
+}

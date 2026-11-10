@@ -1,0 +1,18 @@
+{
+  "name": "Teacher portfolio varied photo lens",
+  "scope": "project", "project": "teacher-portfolio", "origin": "project-reference",
+  "source_project": "https://github.com/krishnamahato704-spec/E-portfolio", "mode": "light",
+  "tokens": {
+    "background": "#F5F1E7", "surface": "#FFFDF8", "text": "#24221F", "muted": "#584D43",
+    "accent": "#8F2D1B", "accentHover": "#6F2418", "onAccent": "#FFFFFF", "border": "#7B6353", "focus": "#8F2D1B", "soft": "#E4C5AF"
+  },
+  "typography": {"heading_family": "Manrope", "body_family": "Manrope"},
+  "style_rules": {
+    "appearance": "Existing terracotta/oat atlas scenes, native circular photo lens, inert ring/crosshair and mode-specific scrims remain. Teacher image scrim #6D271EC7; Student #F5E5CDC7. No layout or typography change.",
+    "selection": "Approved homepage gallery sources only, deduplicated with matched source captions. Deliberate pointer travel threshold clamp(180px, scene width * .16, 320px), 900ms cooldown, re-entry and qualified touch taps advance to the next valid photo. No adjacent repeats when more than one valid source exists. No idle photo timer.",
+    "handoff": "Decode the next photo off the page; retain the current photo during loading. Fade photograph and caption out over140ms, commit both together, fade in over220ms in the existing24fps atlas loop. Failed sources are skipped and stale completions ignored. No extra frame loop, observer or dependency.",
+    "preferences": "New requests remain gated by visible/active/unpaused state, reduced motion and data saving. Existing control hit targets, native cursor, short tap response, scroll gesture rejection and disposal lifecycle remain.",
+    "rights": "Existing approved project media and locally licensed Manrope are reused. No media, personal captions or other private content stored in this style snapshot; no third-party code or asset imported."
+  },
+  "tags": ["photo-lens", "warm", "hover", "motion", "vanilla-js"]
+}

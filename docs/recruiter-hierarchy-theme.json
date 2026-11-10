@@ -1,0 +1,24 @@
+{
+  "name": "Teacher portfolio warm atlas identity and evidence",
+  "scope": "project",
+  "project": "teacher-portfolio",
+  "origin": "project-reference",
+  "source_project": "https://github.com/krishnamahato704-spec/E-portfolio",
+  "mode": "light",
+  "tokens": {
+    "background": "#F5F1E7", "surface": "#FFFDF8", "text": "#24221F",
+    "muted": "#584D43", "accent": "#8F2D1B", "accentHover": "#6F2418",
+    "onAccent": "#FFFFFF", "border": "#7B6353", "focus": "#8F2D1B", "soft": "#E4C5AF"
+  },
+  "typography": {"heading_family": "Manrope", "body_family": "Manrope"},
+  "style_rules": {
+    "scenes": "Retain full terracotta #9E3D2D with cream #FFF5E7 and muted #F2DDC6 for Teacher; full oat #F5E5CD with ink #38281F and muted #64503E for Student. Coral #FF5738 actions use dark text. Reading areas retain oat/apricot.",
+    "hierarchy": "Primary identity is 86.4px at 1440px viewport, subject 24px, secondary identity slogan 43.2px. Statement approximately23px, scope/degree rows16px. Local Manrope variable font; reading body17px. Portrait72x88px. The primary identity, subject and real evidence precede the longer narrative.",
+    "desktop": "1296px content width. Opening grid has a flexible copy column and340px authentic document preview,64px gap. White preview sheet with18px padding, fine border,12px offset shadow and2degree rotation. Linked actual image plus title, class/duration metadata and native detail link. Evidence follows contents navigation, ahead of gallery and paired identity sections.",
+    "phone": "Primary identity41.6px at390/320,40px at375, subject19px (17px at320), secondary slogan20–23px. Narrow351–389px size interpolation avoids an unnecessary name wrap. Copy, motion controls and compact document preview form separate rows. Full-width48px actions; at least16px separation before motion controls and8px clearance from fixed shortcuts. Preview uses a96px image column (76px at320).",
+    "academic_mode": "Mode changes replace the teaching-copy group with three compact data-driven academic rows and a native record link. Rows show label plus current detail; owner updates and removals follow the existing content record. Content remains accessible in the ordinary profile routes.",
+    "motion": "Unchanged finite2.6second name masks, layered circular iris, thin rings and contour focus settle. Existing session, replay, Skip, keyboard/focus/scroll exits, resize, reduced-motion and data-saving behavior retained. Atlas remains capped at24fps and pauses hidden/offscreen. Lens reads the relocated approved gallery in the same main element and hides over real controls.",
+    "rights": "Original project CSS and native motion, reused verified local Manrope with full SIL OFL notice and existing portfolio assets. No new font, media, framework or copied third-party motion code. Snapshot stores reusable style information only."
+  },
+  "tags": ["warm", "terracotta", "oat", "manrope", "editorial", "identity-first", "evidence"]
+}

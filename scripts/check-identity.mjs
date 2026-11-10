@@ -98,6 +98,7 @@ try{
    const photosContext=await browser.newContext({viewport:{width:1440,height:1000}}),photos=await photosContext.newPage();
    await photos.goto(base);await photos.locator('[data-hero-gallery][data-enhanced]').waitFor();
    record(engine,'Home gallery uses five current photographs with one focusable slide',await photos.locator('[data-hero-slide]').count()===5&&await photos.locator('[data-hero-slide]:not([inert]) a').count()===1);
+   await photos.locator('[data-hero-gallery]').scrollIntoViewIfNeeded();
    await photos.mouse.move(10,70);
    await photos.waitForFunction(()=>document.querySelector('[data-hero-gallery]').dataset.slide==='1',null,{timeout:8000});
    record(engine,'Photographs advance automatically after a reading interval',true);

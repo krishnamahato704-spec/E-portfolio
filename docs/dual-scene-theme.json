@@ -1,0 +1,32 @@
+{
+  "name": "Teacher portfolio terracotta and oat scenes",
+  "scope": "project",
+  "project": "teacher-portfolio",
+  "origin": "project-reference",
+  "source_project": "https://github.com/krishnamahato704-spec/E-portfolio",
+  "mode": "light",
+  "tokens": {
+    "background": "#F5F1E7",
+    "surface": "#FFFDF8",
+    "text": "#24221F",
+    "muted": "#584D43",
+    "accent": "#8F2D1B",
+    "accentHover": "#6F2418",
+    "onAccent": "#FFFFFF",
+    "border": "#7B6353",
+    "focus": "#8F2D1B",
+    "soft": "#E4C5AF"
+  },
+  "typography": {"heading_family": "Manrope", "body_family": "Manrope"},
+  "style_rules": {
+    "teacher_scene": "Full terracotta #9E3D2D background, cream #FFF5E7 text and #F2DDC6 secondary text. Pale cream/clay contours. No split background panel or headline badge.",
+    "student_scene": "Full light oat #F5E5CD background, dark #38281F text and #64503E secondary text. Brown/rust contours. Switching identity changes the full ground, artwork and headline emphasis.",
+    "accent": "Coral #FF5738 is reserved for selected controls and primary actions with dark text. Warm oat reading areas, apricot #E4C5AF photographic spread, manifesto and footer remain.",
+    "type": "Locally packaged Manrope variable font. Body 17px. At 1440px desktop: first display line 187.2px, second 129.6px; statement 22px, study/metadata/actions 16px. Short laptop composition reduces display scale to preserve controls. At 390px: display approximately 70px and 43px, statement 17.5px, supporting text 14–15px, full-width actions at least48px high.",
+    "mobile": "Two-row name/role lockup, vertically stacked full-width actions, at least900px scene height. Compact contents navigation hides decorative section numbers on phones while retaining14px link labels.",
+    "opening": "Finite2.6second native name-mask and circular-iris sequence. 740ms name entrance, 110ms stagger, 1150ms iris delay and1050ms reveal. Apricot lining between paper and scene, a20px nominal rim and two thin rings. Contour opacity/focus settles without changing canvas bounds. Session replay, Skip, Escape, scroll/focus exit, resize cleanup and unsupported-clipping fade remain.",
+    "photo_lens": "Existing approved gallery photograph and native cursor retained. Terracotta #6D271EC7 and oat #F5E5CDC7 photo scrims keep foreground text readable. Decorative lens uses the existing atlas loop, pointer inertia and short phone-tap response. Pauses offscreen/hidden or at visitor request; disabled for reduced motion/data saving.",
+    "rights": "Original project CSS, native animations and generated contour geometry. No third-party motion code or media imported. Existing verified Manrope font and its complete SIL OFL notice retained. This snapshot contains reusable style data only, without personal content or media."
+  },
+  "tags": ["terracotta", "oat", "dual-scene", "manrope", "iris", "portfolio"]
+}

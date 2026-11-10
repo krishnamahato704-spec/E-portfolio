@@ -1,0 +1,192 @@
+/* The accepted warm identity continues through the reading pages. */
+@media screen {
+ body[data-route]:not([data-route=home]) {--gutter:clamp(22px,4.5vw,72px);--content-width:1296px;--section-space:90px;--header-height:82px;background:#f5f1e7;color:#24221f}
+ body[data-route]:not([data-route=home]) .site-header {position:fixed;top:24px;left:0;right:0;width:100%;background:none;border:0;box-shadow:none;pointer-events:none}
+ body[data-route]:not([data-route=home]) .header-inner {min-height:60px;gap:14px;pointer-events:none}
+ body[data-route]:not([data-route=home]) .brand {background:#fffdf8;color:#24221f;border-radius:99px;padding:13px 20px;min-height:58px;pointer-events:auto;gap:10px}
+ body[data-route]:not([data-route=home]) .brand .monogram {font:650 1.55rem/1 var(--sans);letter-spacing:-.08em;color:#24221f}
+ body[data-route]:not([data-route=home]) .brand .monogram>span {color:#8f2d1b}
+ body[data-route]:not([data-route=home]) .brand-name {font-size:.9375rem;line-height:1.25;font-weight:600;max-width:none}
+ body[data-route]:not([data-route=home]) .navigation-panel {background:#fffdf8;border-radius:99px;padding-inline:18px;pointer-events:auto}
+ body[data-route]:not([data-route=home]) .navigation-links {gap:20px}
+ body[data-route]:not([data-route=home]) .navigation-links a {min-height:58px;padding-top:0;border:0;font-size:.9375rem;color:#24221f;position:relative}
+ body[data-route]:not([data-route=home]) .navigation-links a::after {content:'';position:absolute;width:4px;height:4px;border-radius:50%;background:currentColor;bottom:10px;left:calc(50% - 2px);opacity:0}
+ body[data-route]:not([data-route=home]) .navigation-links a[aria-current]::after,body[data-route]:not([data-route=home]) .navigation-links a:hover::after {opacity:1}
+ body[data-route]:not([data-route=home]) .header-cta {pointer-events:auto;min-height:58px;background:#ff5738;border:1px solid #ff5738;color:#24221f;padding-inline:24px;font-size:1rem;font-weight:600}
+ body[data-route]:not([data-route=home]) .header-cta:hover {background:#fffdf8;color:#24221f;border-color:#7b6353}
+ body[data-route]:not([data-route=home]) :is(.menu-toggle,.fallback-navigation) {pointer-events:auto;background:#fffdf8;color:#24221f;border-radius:99px;border:0}
+ body[data-route]:not([data-route=home]) .site-header .is-open {border-radius:18px}
+ body[data-route]:not([data-route=home]) .distinctive-page {padding-top:148px;padding-bottom:90px;position:relative;isolation:isolate}
+ body[data-route]:not([data-route=home]):not([data-route=admin]) main {overflow:visible}
+ body[data-route]:not([data-route=home]) main [id] {scroll-margin-top:128px}
+ body[data-route]:not([data-route=home]) :is(.study-interval,.distinctive-page>.page-photo-backdrop) {display:none}
+ body[data-route]:not([data-route=home]):not([data-route=admin]) main h1 {font:500 clamp(3rem,7vw,6rem)/.98 var(--sans);letter-spacing:-.06em;color:#24221f;text-wrap:balance;overflow-wrap:normal;margin:12px 0 24px}
+ body[data-route]:not([data-route=home]):not([data-route=admin]) main h2 {font:500 clamp(2rem,3.2vw,3.3rem)/1.12 var(--sans);letter-spacing:-.045em;color:#24221f}
+ body[data-route]:not([data-route=home]):not([data-route=admin]) main h3 {font:550 clamp(1.25rem,2vw,1.8rem)/1.22 var(--sans);letter-spacing:-.025em;color:#24221f}
+ body[data-route]:not([data-route=home]):not([data-route=admin]) main p {font-size:1.0625rem;line-height:1.65}
+ body[data-route]:not([data-route=home]):not([data-route=admin]) .distinctive-page .lead {font-size:1.25rem;line-height:1.55;max-width:48ch;margin-top:20px;color:#584d43}
+ body[data-route]:not([data-route=home]) .distinctive-page :is(.eyebrow,.small,.card-meta,.record-meta dt,.cover-photo-credit,.breadcrumb,.collection-count,.status) {font-size:.875rem;line-height:1.5}
+ body[data-route]:not([data-route=home]) .distinctive-page .eyebrow {font-weight:500;letter-spacing:.07em;color:#584d43}
+ body[data-route]:not([data-route=home]) .distinctive-page :is(.text-link,.button) {font-size:1rem;min-height:48px}
+ body[data-route]:not([data-route=home]) .distinctive-page :is(.record-meta dd,figcaption,.plate-caption span) {font-size:.9375rem;line-height:1.5}
+ body[data-route]:not([data-route=home]) .distinctive-page .plain-list {font-size:1.0625rem;line-height:1.75}
+ body[data-route]:not([data-route=home]) .distinctive-page .plain-list li+li {margin-top:10px}
+ body[data-route]:not([data-route=home]) .distinctive-page .section {padding-block:70px;margin-block:0}
+ body[data-route]:not([data-route=home]) .distinctive-page .section-heading {align-items:flex-end;margin-bottom:34px;gap:24px}
+ body[data-route]:not([data-route=home]) .distinctive-page .section-heading h2 {max-width:21ch}
+ body[data-route]:not([data-route=home]) .distinctive-page .collection-tools {display:grid;grid-template-columns:minmax(230px,.65fr) minmax(0,1.35fr);align-items:end;gap:24px;background:none;border:0;border-block:1px solid #7b6353;border-radius:0;padding:24px 0;margin:35px 0 0}
+ body[data-route]:not([data-route=home]) .collection-tools label {font-size:.9375rem;line-height:1.5;color:#24221f}
+ body[data-route]:not([data-route=home]) .collection-tools input {margin-top:10px;min-height:52px;background:#fffdf8;border:1px solid #7b6353;border-radius:6px;padding:12px 15px;font:400 1rem/1.5 var(--sans);color:#24221f}
+ body[data-route]:not([data-route=home]) .collection-tools .filters {justify-content:flex-start;gap:8px;margin:0;align-items:center}
+ body[data-route]:not([data-route=home]) .filters .filter {min-height:44px;font:500 .875rem/1.4 var(--sans);background:transparent;border:1px solid #7b6353;color:#24221f;border-radius:99px;padding:9px 16px}
+ body[data-route]:not([data-route=home]) .filters .filter[aria-pressed=true] {background:#ff5738;border-color:#24221f;color:#24221f}
+ body[data-route]:not([data-route=home]) .filters .filter:hover {background:#e4c5af}
+ body[data-route]:not([data-route=home]) .collection-count {margin:16px 0 28px;color:#584d43}
+ body[data-route]:not([data-route=home]) .archive-note {background:#e4c5af;border:0;border-top:1px solid #7b6353;border-radius:0;padding:35px;margin-top:55px;color:#24221f}
+ body[data-route]:not([data-route=home]) .archive-note h2 {font-size:2rem}
+ body[data-route]:not([data-route=home]) .archive-note p {max-width:65ch}
+ body[data-route]:not([data-route=home]) .photo-plate {border-radius:0;box-shadow:none}
+ body[data-route]:not([data-route=home]) .site-footer {margin-top:0;background:#e4c5af;border-top:1px solid #7b6353;padding-block:42px 28px;color:#24221f}
+ body[data-route]:not([data-route=home]) .site-footer :is(a,p,span) {color:#584d43}
+ body[data-route]:not([data-route=home]) .site-footer .monogram {font-size:3rem;color:#24221f}
+ body[data-route]:not([data-route=home]) .site-footer .footer-name {font-size:1.25rem;color:#24221f}
+ body[data-route]:not([data-route=home]) .footer-top nav {gap:12px 24px;font-size:1rem}
+ body[data-route]:not([data-route=home]) .footer-top nav a {min-height:44px;display:inline-flex;align-items:center}
+ body[data-route]:not([data-route=home]) .footer-bottom {border-color:#7b6353;font-size:.875rem;line-height:1.6}
+ body[data-route]:not([data-route=home]) .site-footer a:hover {color:#8f2d1b}
+
+ /* A readable dossier and its original printable document. */
+ body[data-route=resume] .resume-title {padding:0 0 42px;gap:35px;border-bottom:1px solid #7b6353;align-items:flex-end}
+ body[data-route=resume] .resume-title>.contact-avatar {width:112px;height:136px;border:2px solid #7b6353;border-radius:60px;object-fit:cover;object-position:center 25%;box-shadow:none}
+ body[data-route=resume] .resume-title .eyebrow::before {content:'05 / ';color:#8f2d1b}
+ body[data-route=resume] .resume-overview {grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr);gap:72px;padding:54px 0 70px;margin:0;align-items:start}
+ body[data-route=resume] .resume-actions {grid-column:1;grid-row:1;background:none;border:0;border-radius:0;padding:0;position:sticky;top:128px}
+ body[data-route=resume] .resume-actions h2 {font-size:clamp(2.25rem,3.5vw,3.5rem);margin:14px 0 20px}
+ body[data-route=resume] .resume-actions>p {max-width:36ch;color:#584d43}
+ body[data-route=resume] .print-actions {display:flex;flex-direction:column;gap:12px;margin:28px 0;align-items:stretch}
+ body[data-route=resume] .print-actions .button {justify-content:space-between;padding-inline:20px;min-height:54px}
+ body[data-route=resume] .resume-preview {grid-column:2;grid-row:1;background:#9e3d2d;border:0;border-radius:4px;padding:32px;box-shadow:12px 12px 0 #e4c5af;position:relative}
+ body[data-route=resume] .resume-preview-label {font-size:.875rem;color:#fff5e7;margin-bottom:24px;border:0;line-height:1.5;gap:20px}
+ body[data-route=resume] .resume-paper {padding:36px;background:#fffdf8;border:0;border-top:4px solid #ff5738;max-width:620px;min-height:660px;box-shadow:0 10px 40px #38281f40;transform:none}
+ body[data-route=resume] .resume-paper>span {font-size:.875rem;line-height:1.5;color:#584d43}
+ body[data-route=resume] .resume-paper :is(small,b) {font-size:.875rem;line-height:1.5}
+ body[data-route=resume] .resume-paper .resume-paper-name {font-size:1.7rem;line-height:1.15;color:#24221f;letter-spacing:-.04em}
+ body[data-route=resume] .resume-paper>strong {font-size:1rem;margin-top:20px}
+ body[data-route=resume] .resume-paper .paper-preview-hint {font-size:.875rem;color:#8f2d1b}
+ body[data-route=resume] .resume-web-summary {max-width:none;padding:60px 0 0;margin:24px 0 0;border:0;border-top:1px solid #7b6353;background:none;box-shadow:none}
+ body[data-route=resume] .resume-web-summary>h2 {font-size:clamp(2rem,4vw,4rem);margin:0 0 16px;max-width:24ch}
+ body[data-route=resume] .resume-contact-bar {display:flex;flex-wrap:wrap;gap:10px 20px;font-size:1rem;color:#584d43;overflow-wrap:anywhere}
+ body[data-route=resume] .resume-section {border-top:1px solid #7b6353;padding:32px 0;margin-top:34px}
+ body[data-route=resume] .resume-section>h3 {font-size:1.8rem;margin:0 0 24px}
+ body[data-route=resume] .resume-section .qualification {padding:24px 0;border-color:#cfbba8;grid-template-columns:140px minmax(0,1fr) auto}
+ body[data-route=resume] .resume-section .qualification h3 {font-size:1.4rem}
+ body[data-route=resume] .resume-exp-entry {padding:20px 0;margin:0;border-bottom:1px solid #cfbba8}
+ body[data-route=resume] .resume-exp-entry h4 {font:550 1.3rem/1.3 var(--sans);letter-spacing:-.02em;margin:0 0 12px}
+
+ /* A direct contact page with a warm writing surface. */
+ body[data-route=contact] .contact-layout {grid-template-columns:minmax(0,1.12fr) minmax(0,.88fr);gap:90px;align-items:start;margin:0}
+ body[data-route=contact] .contact-dossier {display:flex;flex-direction:column;background:none;border:0;border-radius:0;padding:0;overflow:visible;min-width:0}
+ body[data-route=contact] .postcard-details {order:1;padding:0}
+ body[data-route=contact] .postcard-details>.eyebrow::before {content:'06 / ';color:#8f2d1b}
+ body[data-route=contact] .postcard-details h1 {max-width:10ch;font-size:clamp(4rem,7vw,6.5rem);margin:18px 0 22px}
+ body[data-route=contact] .postcard-details .lead {font-size:1.25rem;max-width:38ch;margin-bottom:30px}
+ body[data-route=contact] .contact-detail {padding:22px 0;border-color:#7b6353;gap:18px;min-width:0}
+ body[data-route=contact] .contact-detail>.icon {width:22px;height:22px;color:#8f2d1b;flex:none}
+ body[data-route=contact] .contact-detail>div {min-width:0}
+ body[data-route=contact] .contact-detail .eyebrow {margin-bottom:8px}
+ body[data-route=contact] .contact-detail p {margin:0 0 6px}
+ body[data-route=contact] .contact-email {display:inline-block;font-size:clamp(1.125rem,1.8vw,1.5rem);line-height:1.5;overflow-wrap:anywhere;color:#8f2d1b;letter-spacing:-.02em}
+ body[data-route=contact] .copy-email {font-size:.875rem;min-height:44px;margin-top:4px}
+ body[data-route=contact] .postcard-photo {order:2;margin-top:32px;height:220px;padding:22px;background:#9e3d2d;border-radius:4px;color:#fff5e7}
+ body[data-route=contact] .postcard-photo .page-photo-backdrop {display:block;opacity:.35;z-index:0}
+ body[data-route=contact] .postcard-photo::after {background:linear-gradient(0deg,#6d271ee6,transparent);z-index:1}
+ body[data-route=contact] .postcard-photo .contact-avatar {width:66px;height:78px;border-radius:40px;border:2px solid #fff5e7}
+ body[data-route=contact] .postcard-name {font:500 1.5rem/1.2 var(--sans);color:#fff5e7;background:#6d271e;padding:8px 12px;border-radius:0}
+ body[data-route=contact] .postcard-photo .cover-photo-credit {font-size:.875rem;line-height:1.5;background:#6d271e;color:#fff5e7;border-radius:0;max-width:60%}
+ body[data-route=contact] .contact-form-section {position:sticky;top:124px;background:#e4c5af;border:1px solid #7b6353;border-radius:6px;padding:32px;display:block}
+ body[data-route=contact] .contact-form {padding:0;background:none;border:0;display:grid;gap:20px}
+ body[data-route=contact] .contact-form h2 {font-size:clamp(2rem,3vw,2.8rem);line-height:1.08;margin:0;max-width:12ch}
+ body[data-route=contact] .contact-form>.eyebrow {margin:0}
+ body[data-route=contact] .contact-form>p {margin:0;color:#584d43;font-size:1rem}
+ body[data-route=contact] .contact-form label {font-size:.9375rem;line-height:1.5;color:#24221f;min-width:0}
+ body[data-route=contact] .contact-form :is(input:not(.sr-only),textarea) {font:400 1rem/1.5 var(--sans);margin-top:8px;min-height:50px;width:100%;background:#fffdf8;border:1px solid #7b6353;border-radius:4px;padding:12px;color:#24221f}
+ body[data-route=contact] .contact-form textarea {min-height:150px;resize:vertical}
+ body[data-route=contact] .contact-fields {grid-template-columns:1fr;gap:18px}
+ body[data-route=contact] .contact-form button[type=submit] {min-height:54px;justify-content:space-between;padding-inline:20px}
+ body[data-route=contact] .contact-note {margin-top:30px;border:0;border-top:1px solid #7b6353;border-radius:0;padding:24px 0 0;background:none}
+ body[data-route=contact] .contact-note h3 {font-size:1.25rem}
+ body[data-route=contact] .contact-note p {font-size:.9375rem;color:#584d43}
+ body[data-route=contact] .contact-note .small {font-size:.875rem}
+}
+@media screen and (max-width:1100px) {
+ body[data-route]:not([data-route=home]) .navigation-links {gap:13px}
+ body[data-route]:not([data-route=home]) .navigation-links a {font-size:.875rem}
+ body[data-route]:not([data-route=home]) .header-inner {gap:9px}
+ body[data-route]:not([data-route=home]) .brand {padding-inline:16px}
+ body[data-route=resume] .resume-overview {gap:40px}
+ body[data-route=resume] .resume-preview {padding:24px}
+ body[data-route=contact] .contact-layout {gap:45px}
+ body[data-route=contact] .contact-form-section {padding:24px}
+}
+@media screen and (max-width:1000px) {
+ body[data-route]:not([data-route=home]) .site-header {top:18px}
+ body[data-route]:not([data-route=home]) .menu-toggle[data-ready] {min-height:54px;padding:10px 20px;color:#24221f;background:#fffdf8;border:0;border-radius:99px}
+ body[data-route]:not([data-route=home]) .navigation-panel.is-open {top:68px;right:0;background:#fffdf8;padding:15px 20px;border:1px solid #7b6353;max-height:calc(100dvh - 120px)}
+ body[data-route]:not([data-route=home]) .navigation-panel .navigation-links a {min-height:46px;font:400 1.05rem/1.3 var(--sans);padding-block:10px;border-bottom:1px solid #cfbba8}
+ body[data-route]:not([data-route=home]) .navigation-links a::after {display:none}
+ body[data-route]:not([data-route=home]) .navigation-panel .eyebrow {color:#584d43}
+ body[data-route]:not([data-route=home]) .fallback-navigation summary {padding:12px 20px;border:0;border-radius:99px}
+ body[data-route=contact] .contact-layout {grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:30px}
+}
+@media screen and (max-width:760px) {
+ body[data-route]:not([data-route=home]) .site-header {top:15px}
+ body[data-route]:not([data-route=home]) .brand {min-height:50px;padding:10px 16px}
+ body[data-route]:not([data-route=home]) .brand-name {max-width:88px;font-size:.875rem}
+ body[data-route]:not([data-route=home]) .menu-toggle[data-ready] {min-height:50px;padding:10px 17px}
+ body[data-route]:not([data-route=home]) .header-inner {min-height:50px}
+ body[data-route]:not([data-route=home]) .distinctive-page {padding-top:108px;padding-bottom:60px}
+ body[data-route]:not([data-route=home]):not([data-route=admin]) main h1 {font-size:2.75rem;line-height:1.03;letter-spacing:-.05em;margin:12px 0 20px;overflow-wrap:normal}
+ body[data-route]:not([data-route=home]):not([data-route=admin]) main h2 {font-size:2rem}
+ body[data-route]:not([data-route=home]):not([data-route=admin]) main h3 {font-size:1.35rem}
+ body[data-route]:not([data-route=home]):not([data-route=admin]) main p,body[data-route]:not([data-route=home]) .distinctive-page .plain-list {font-size:1rem;line-height:1.65}
+ body[data-route]:not([data-route=home]):not([data-route=admin]) .distinctive-page .lead {font-size:1.125rem;line-height:1.5;margin-top:16px}
+ body[data-route]:not([data-route=home]) .distinctive-page .section {padding-block:45px}
+ body[data-route]:not([data-route=home]) .distinctive-page .section-heading {display:block;margin-bottom:26px}
+ body[data-route]:not([data-route=home]) .distinctive-page .collection-tools {grid-template-columns:1fr;gap:18px;padding-block:20px;margin-top:30px}
+ body[data-route]:not([data-route=home]) .collection-tools input {font-size:1rem}
+ body[data-route]:not([data-route=home]) .filters .filter {font-size:.875rem;padding-inline:13px}
+ body[data-route]:not([data-route=home]) .archive-note {margin-top:40px;padding:24px 20px}
+ body[data-route]:not([data-route=home]) .site-footer {padding-block:30px 24px}
+ body[data-route]:not([data-route=home]) .footer-top nav {gap:5px 20px}
+ body[data-route=resume] .resume-title {gap:20px;padding-bottom:28px;align-items:center}
+ body[data-route=resume] .resume-title>.contact-avatar {width:62px;height:78px;border-width:1px}
+ body[data-route=resume] .resume-overview {grid-template-columns:1fr;gap:36px;padding:34px 0 50px}
+ body[data-route=resume] .resume-actions,body[data-route=resume] .resume-preview {grid-column:auto;grid-row:auto;position:static;order:initial}
+ body[data-route=resume] .resume-actions {order:-1;padding:0}
+ body[data-route=resume] .resume-preview {padding:18px;box-shadow:6px 6px 0 #e4c5af}
+ body[data-route=resume] .resume-preview-label {font-size:.875rem;gap:14px;margin-bottom:20px}
+ body[data-route=resume] .resume-paper {padding:22px 18px;min-height:0}
+ body[data-route=resume] .resume-paper .resume-paper-name {font-size:1.5rem}
+ body[data-route=resume] .resume-actions h2 {font-size:2.25rem}
+ body[data-route=resume] .resume-web-summary {padding-top:35px}
+ body[data-route=resume] .resume-contact-bar {display:block;line-height:1.8}
+ body[data-route=resume] .resume-section {padding-block:26px;margin-top:26px}
+ body[data-route=resume] .resume-section .qualification {grid-template-columns:1fr;gap:8px;padding-block:22px}
+ body[data-route=contact] .contact-layout {grid-template-columns:1fr;gap:45px}
+ body[data-route=contact] .postcard-details h1 {font-size:clamp(3.5rem,14vw,5rem)}
+ body[data-route=contact] .postcard-details .lead {font-size:1.125rem}
+ body[data-route=contact] .contact-detail {padding-block:20px;gap:14px}
+ body[data-route=contact] .contact-email {font-size:1.125rem}
+ body[data-route=contact] .postcard-photo {height:200px;margin-top:26px;padding:18px}
+ body[data-route=contact] .postcard-name {font-size:1.25rem}
+ body[data-route=contact] .postcard-photo .cover-photo-credit {font-size:.875rem}
+ body[data-route=contact] .contact-form-section {position:static;padding:25px 20px}
+ body[data-route=contact] .contact-form h2 {font-size:2.25rem}
+ body[data-route=contact] .contact-fields {grid-template-columns:1fr}
+ body[data-route=contact] .contact-note {margin-top:25px}
+}
+@media screen and (prefers-reduced-motion:no-preference) and (hover:hover) {
+ body[data-route]:not([data-route=home]) .distinctive-page .button {transition:background-color 180ms ease,border-color 180ms ease}
+ body[data-route=resume] .resume-paper {transition:translate 250ms ease}
+ body[data-route=resume] .resume-paper:hover {translate:0 -5px}
+}

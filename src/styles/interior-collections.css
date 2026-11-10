@@ -1,0 +1,199 @@
+/* Public collections: document catalogue, credential exhibition and contact sheet.
+   Only these three routes are styled; original records and controls stay native. */
+@media screen {
+body:is([data-route=resources],[data-route=credentials],[data-route=gallery]) {
+ --collection-paper:#fff5e7;--collection-panel:#f5e5cd;--collection-apricot:#e4c5af;
+ --collection-ink:#24221f;--collection-muted:#584d43;--collection-brand:#9e3d2d;
+ --collection-line:#c8ac93;
+}
+body:is([data-route=resources],[data-route=credentials],[data-route=gallery]) :is(.evidence-desk,.credential-folio,.gallery-opening) {margin-top:0}
+body:is([data-route=resources],[data-route=credentials],[data-route=gallery]) :is(.evidence-desk,.credential-folio,.gallery-opening) h1 {font:600 clamp(2.75rem,6.65vw,6rem)/1.02 var(--sans);letter-spacing:-.055em;color:var(--collection-ink);margin:18px 0 24px}
+body:is([data-route=resources],[data-route=credentials],[data-route=gallery]) :is(.evidence-desk,.credential-folio,.gallery-opening) .lead {font-size:1.25rem;line-height:1.65;color:var(--collection-muted);max-width:52ch}
+body:is([data-route=resources],[data-route=credentials],[data-route=gallery]) :is(.eyebrow,.desk-label,.folio-index,.collection-count,.certificate-category,.record-meta dt) {font-size:.875rem;line-height:1.6}
+body:is([data-route=resources],[data-route=credentials],[data-route=gallery]) .collection-tools {display:grid;grid-template-columns:minmax(0,1fr);gap:22px;padding:26px 0;border:0;border-block:1px solid var(--collection-line);border-radius:0;background:transparent;box-shadow:none;margin:0 0 18px}
+body:is([data-route=resources],[data-route=credentials],[data-route=gallery]) .collection-tools label {width:100%;max-width:640px;font-size:.875rem;line-height:1.6;font-weight:600;color:var(--collection-ink)}
+body:is([data-route=resources],[data-route=credentials],[data-route=gallery]) .collection-tools input {display:block;width:100%;min-height:54px;margin-top:8px;padding:12px 16px;border:1px solid #987b65;border-radius:3px;background:var(--collection-paper);font-size:1rem;color:var(--collection-ink)}
+body:is([data-route=resources],[data-route=credentials],[data-route=gallery]) .collection-tools input::placeholder {color:var(--collection-muted);opacity:1}
+body:is([data-route=resources],[data-route=credentials],[data-route=gallery]) .collection-tools .filters {display:flex;flex-wrap:wrap;gap:8px;margin:0;justify-content:flex-start}
+body:is([data-route=resources],[data-route=credentials],[data-route=gallery]) .filter {min-height:44px;padding:10px 16px;border:1px solid #987b65;border-radius:3px;background:transparent;color:var(--collection-ink);font-size:.875rem;line-height:1.5}
+body:is([data-route=resources],[data-route=credentials],[data-route=gallery]) .filter[aria-pressed=true] {background:var(--collection-brand);border-color:var(--collection-brand);color:var(--collection-paper)}
+body:is([data-route=resources],[data-route=credentials],[data-route=gallery]) .filter:hover {border-color:var(--collection-brand)}
+body:is([data-route=resources],[data-route=credentials],[data-route=gallery]) .collection-count {margin:0 0 28px;color:var(--collection-muted)}
+body:is([data-route=resources],[data-route=credentials],[data-route=gallery]) .archive-note {padding:32px 0 0;margin-top:72px;border:0;border-top:2px solid var(--collection-brand);border-radius:0;background:transparent;box-shadow:none}
+body:is([data-route=resources],[data-route=credentials],[data-route=gallery]) .archive-note h2 {font-size:clamp(1.75rem,3vw,2.5rem);line-height:1.2;letter-spacing:-.035em}
+body:is([data-route=resources],[data-route=credentials],[data-route=gallery]) .archive-note p {font-size:1.0625rem;line-height:1.75;max-width:66ch}
+
+/* Evidence is an indexed document library, with the actual files in the foreground. */
+body[data-route=resources] .evidence-desk {display:grid;grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr);gap:64px;align-items:center;min-height:440px;padding:0 0 64px;background:transparent;border:0;border-bottom:1px solid var(--collection-line)}
+body[data-route=resources] .evidence-desk h1 {max-width:11ch}
+body[data-route=resources] .desk-label {display:flex;align-items:center;gap:10px;color:var(--collection-muted);margin-top:24px}
+body[data-route=resources] .desk-documents {display:block;position:relative;isolation:isolate;height:390px;width:100%;margin:0}
+body[data-route=resources] .desk-documents::before {content:'';position:absolute;inset:22px 0 0 9%;background:var(--collection-apricot);transform:rotate(-2deg);z-index:-1}
+body[data-route=resources] .desk-documents img {position:absolute;width:55%;max-width:64%;height:330px;object-fit:contain;padding:12px;background:var(--collection-paper);border:1px solid var(--collection-line);box-shadow:0 16px 30px #6f3d2220;border-radius:0}
+body[data-route=resources] .desk-documents .desk-material {right:0;top:5px;transform:rotate(7deg)}
+body[data-route=resources] .desk-documents .desk-plan {left:2%;top:38px;transform:rotate(-7deg)}
+body[data-route=resources] .catalogue-layout {display:grid;grid-template-columns:minmax(220px,.31fr) minmax(0,1fr);gap:64px;align-items:start;margin-top:58px}
+body[data-route=resources] .catalogue-note {position:sticky;top:128px;order:0;grid-column:1;grid-row:1;padding:25px 0 0;border:0;border-top:2px solid var(--collection-brand);border-radius:0;background:transparent;box-shadow:none}
+body[data-route=resources] .catalogue-files {order:0;grid-column:2;grid-row:1;min-width:0}
+body[data-route=resources] .catalogue-note h2 br {display:initial}
+body[data-route=resources] .catalogue-note h2 {font:600 clamp(1.65rem,2.6vw,2.2rem)/1.2 var(--sans);letter-spacing:-.035em;margin:14px 0 18px}
+body[data-route=resources] .catalogue-note p:not(.eyebrow) {font-size:1.0625rem;line-height:1.7;color:var(--collection-muted)}
+body[data-route=resources] .catalogue-photo {display:block;margin:28px 0 20px;padding:0;border:0;border-radius:0;background:none;box-shadow:none;transform:none}
+body[data-route=resources] .catalogue-photo>a {display:block;padding:8px;border:1px solid var(--collection-line);background:var(--collection-panel);border-radius:0}
+body[data-route=resources] .catalogue-photo .plate-image {width:100%;height:auto;max-height:250px;object-fit:contain;background:var(--collection-paper);border-radius:0}
+body[data-route=resources] .catalogue-photo figcaption {padding:14px 0 0;background:none;color:var(--collection-ink);font-size:.875rem}
+body[data-route=resources] .catalogue-photo figcaption span {font-size:.875rem;color:var(--collection-muted)}
+body[data-route=resources] .catalogue-note>.text-link {font-size:.875rem;min-height:44px}
+body[data-route=resources] .evidence-library-grid {display:grid;grid-template-columns:minmax(0,1fr);gap:0}
+body[data-route=resources] .resource-row {display:grid;grid-template-columns:minmax(170px,.4fr) minmax(0,1fr);gap:32px;align-items:start;padding:36px 0;border:0;border-top:1px solid var(--collection-line);border-radius:0;background:transparent;box-shadow:none;overflow:visible}
+body[data-route=resources] .resource-row.flagship-evidence {grid-template-columns:minmax(170px,.44fr) minmax(0,1fr);padding:32px 26px;background:var(--collection-panel);border-top:2px solid var(--collection-brand)}
+body[data-route=resources] .resource-row::after {content:none;display:none}
+body[data-route=resources] .resource-row .evidence-card-media {position:relative;align-self:start;float:none;margin:0;width:100%;height:280px;min-height:0;padding:12px;border:1px solid var(--collection-line);background:var(--collection-paper);border-radius:0;overflow:visible}
+body[data-route=resources] .resource-row .resource-thumb {display:block;width:100%;height:100%;max-height:none;object-fit:contain;position:static;border-radius:0}
+body[data-route=resources] .resource-row .evidence-number {display:grid;position:absolute;top:10px;left:10px;width:30px;height:30px;padding:0;border:0;border-radius:0;background:#ff5738;color:var(--collection-ink);font:600 .875rem/1 var(--sans);box-shadow:none}
+body[data-route=resources] .resource-row .evidence-card-body {min-width:0;padding:0;display:flex;flex-direction:column}
+body[data-route=resources] .evidence-card-body h3 {font:600 clamp(1.375rem,2vw,1.9rem)/1.22 var(--sans);letter-spacing:-.035em;margin:10px 0 14px;color:var(--collection-ink);overflow-wrap:anywhere}
+body[data-route=resources] .evidence-card-body .eyebrow {font-size:.875rem;letter-spacing:.025em;color:var(--collection-brand)}
+body[data-route=resources] .resource-row :is(.resource-desc,.evidence-status) {font-size:1.0625rem;line-height:1.75;color:var(--collection-muted)}
+body[data-route=resources] .resource-row :is(.evidence-badge,.card-meta,.evidence-status,.file-size) {font-size:.875rem}
+body[data-route=resources] .evidence-card-body .small {font-size:.875rem;color:var(--collection-muted)}
+body[data-route=resources] .evidence-lens {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin:20px 0 0;padding:16px 0 0;border-top:1px solid var(--collection-line)}
+body[data-route=resources] .evidence-lens dt {font-size:.875rem;line-height:1.5;letter-spacing:.025em;color:var(--collection-brand)}
+body[data-route=resources] .evidence-lens dd {font-size:1rem;line-height:1.65;margin:6px 0 0;color:var(--collection-muted)}
+body[data-route=resources] .resource-row .card-actions {display:flex;flex-wrap:wrap;gap:10px 16px;padding-top:24px;margin-top:auto}
+body[data-route=resources] .resource-row .card-actions :is(.button,.text-link) {min-height:44px;font-size:.875rem}
+
+/* Credentials are exhibited as original documents with an uncluttered record below. */
+body[data-route=credentials] .credential-folio {display:grid;grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr);gap:64px;align-items:center;min-height:410px;padding:0 0 64px;text-align:left;border:0;border-bottom:1px solid var(--collection-line);background:transparent}
+body[data-route=credentials] .folio-copy {max-width:none;margin:0}
+body[data-route=credentials] .folio-copy .lead {margin-inline:0}
+body[data-route=credentials] .folio-index {display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin:24px 0 6px;color:var(--collection-muted)}
+body[data-route=credentials] .folio-index span {padding:0;color:var(--collection-brand)}
+body[data-route=credentials] .folio-copy .text-link {min-height:44px;font-size:.875rem}
+body[data-route=credentials] .certificate-fan {display:block;position:relative;isolation:isolate;width:100%;height:350px;margin:0}
+body[data-route=credentials] .certificate-fan::before {content:'';position:absolute;inset:20px 8% 0;background:var(--collection-apricot);z-index:-1;transform:rotate(2deg)}
+body[data-route=credentials] .folio-certificate {position:absolute;top:20px;left:0;width:55%;height:295px;padding:10px;background:var(--collection-paper);border:1px solid var(--collection-line);border-radius:0;object-fit:contain;box-shadow:0 15px 25px #6f3d221a;transform:rotate(-9deg)}
+body[data-route=credentials] .folio-certificate:nth-child(2) {left:23%;top:0;transform:rotate(0deg)}
+body[data-route=credentials] .folio-certificate:nth-child(3) {left:auto;right:0;top:35px;transform:rotate(9deg)}
+body[data-route=credentials] .collection-tools {margin-top:44px}
+body[data-route=credentials] .certificate-grid {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:48px 56px;align-items:start}
+body[data-route=credentials] .certificate-card {display:block;min-width:0;padding:0 0 32px;border:0;border-top:1px solid var(--collection-line);border-radius:0;background:transparent;box-shadow:none;overflow:visible}
+body[data-route=credentials] .certificate-card:first-child {grid-column:1/-1;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:48px;align-items:center;padding:0 0 44px;border-top:0}
+body[data-route=credentials] .certificate-image,body[data-route=credentials] .certificate-card:first-child .certificate-image {display:block;width:100%;height:auto;padding:22px;background:var(--collection-panel);border:1px solid var(--collection-line);border-radius:0}
+body[data-route=credentials] .archive-cert-img {display:block;width:100%;height:280px;aspect-ratio:auto;object-fit:contain;padding:0;border:0;border-radius:0;background:var(--collection-paper)}
+body[data-route=credentials] .certificate-card:first-child .archive-cert-img {height:330px}
+body[data-route=credentials] .certificate-category {display:block;position:static;width:auto;margin-top:14px;padding:0;background:none;color:var(--collection-brand);font-size:.875rem;text-transform:uppercase;letter-spacing:.025em}
+body[data-route=credentials] .certificate-body,body[data-route=credentials] .certificate-card:first-child .certificate-body {padding:26px 0 0}
+body[data-route=credentials] .certificate-card:first-child .certificate-body {padding-top:0}
+body[data-route=credentials] .certificate-body h3 {font:600 clamp(1.375rem,2vw,1.9rem)/1.25 var(--sans);letter-spacing:-.035em;color:var(--collection-ink);margin:12px 0 20px;overflow-wrap:anywhere}
+body[data-route=credentials] .certificate-card:first-child h3 {font-size:clamp(1.75rem,3.4vw,2.8rem)}
+body[data-route=credentials] .certificate-body>p:not(.eyebrow) {font-size:1.0625rem;line-height:1.75;color:var(--collection-muted);margin:20px 0}
+body[data-route=credentials] .record-meta {display:grid;grid-template-columns:minmax(0,1fr) minmax(100px,.45fr);gap:20px;font-size:1rem;line-height:1.6;margin:0}
+body[data-route=credentials] .record-meta>div+div {margin:0}
+body[data-route=credentials] .record-meta dt {font-size:.875rem;letter-spacing:.035em;color:var(--collection-muted);margin:0 0 6px}
+body[data-route=credentials] .record-meta dd {font-size:1rem;color:var(--collection-ink);overflow-wrap:anywhere}
+body[data-route=credentials] .certificate-body>.text-link {min-height:44px;font-size:.875rem}
+
+/* Gallery uses photo scale and spacing instead of a wall of matching rounded cards. */
+body[data-route=gallery] .gallery-opening {display:grid;grid-template-columns:minmax(0,1.03fr) minmax(0,.97fr);gap:72px;align-items:center;padding:0 0 64px;border:0;border-bottom:1px solid var(--collection-line);background:transparent}
+body[data-route=gallery] .gallery-opening>div {padding:0;background:transparent;border:0}
+body[data-route=gallery] .gallery-opening h1 {max-width:10ch}
+body[data-route=gallery] .gallery-opening .text-link {min-height:44px;font-size:.875rem;margin-top:24px}
+body[data-route=gallery] .gallery-cover {margin:0;padding:10px;background:var(--collection-panel);border:1px solid var(--collection-line);border-radius:0;box-shadow:10px 12px 0 var(--collection-apricot);transform:rotate(1.5deg)}
+body[data-route=gallery] .gallery-cover>a {display:block;height:410px;border:0;border-radius:0;background:var(--collection-paper)}
+body[data-route=gallery] .gallery-cover .plate-image {display:block;width:100%;height:100%;object-fit:contain;object-position:center;border:0;border-radius:0}
+body[data-route=gallery] .gallery-cover figcaption {padding:16px 6px 8px;background:none;color:var(--collection-ink);font-size:1rem}
+body[data-route=gallery] .gallery-cover figcaption span {font-size:.875rem;color:var(--collection-muted)}
+body[data-route=gallery] .collection-tools {margin-top:54px}
+body[data-route=gallery] .gallery-grid {display:grid;columns:initial;grid-template-columns:repeat(12,minmax(0,1fr));grid-auto-flow:row;gap:54px 32px;align-items:start;counter-reset:collection-photo}
+body[data-route=gallery] .gallery-grid .gallery-card {display:block;grid-column:span 6;grid-row:auto;grid-template-columns:none;align-items:initial;min-width:0;margin:0;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none;overflow:visible;counter-increment:collection-photo;transform:none}
+body[data-route=gallery] .gallery-grid .gallery-card:nth-child(4n+1) {grid-column:span 8}
+body[data-route=gallery] .gallery-grid .gallery-card:nth-child(4n+2) {grid-column:span 4}
+body[data-route=gallery] .gallery-grid .gallery-card>a {display:block;min-width:0;height:clamp(330px,34vw,480px);border:1px solid var(--collection-line);border-radius:0;background:var(--collection-panel);overflow:hidden}
+body[data-route=gallery] .gallery-grid .gallery-card .gallery-image {display:block;width:100%;height:100%;aspect-ratio:auto;padding:12px;object-fit:contain;object-position:center;border:0;border-radius:0;background:var(--collection-panel);filter:none;transform:none;transition:none}
+body[data-route=gallery] .gallery-grid .gallery-card>a:hover .gallery-image {transform:none}
+body[data-route=gallery] .gallery-grid figcaption {display:grid;grid-template-columns:28px minmax(0,1fr);gap:5px 14px;padding:18px 0 0;line-height:1.6;background:none;overflow-wrap:anywhere}
+body[data-route=gallery] .gallery-grid figcaption::before {content:counter(collection-photo,decimal-leading-zero);grid-row:1/4;font:600 .875rem/1.6 var(--sans);color:var(--collection-brand);padding-top:3px}
+body[data-route=gallery] .gallery-grid figcaption :is(strong,span,p) {grid-column:2}
+body[data-route=gallery] .gallery-grid figcaption strong {font-size:clamp(1.125rem,1.6vw,1.5rem);line-height:1.4;font-weight:600;color:var(--collection-ink)}
+body[data-route=gallery] .gallery-grid figcaption span {font-size:.875rem;color:var(--collection-muted);margin:0}
+body[data-route=gallery] .gallery-grid figcaption p {font-size:1.0625rem;line-height:1.7;color:var(--collection-muted);margin:5px 0 0;max-width:62ch}
+body[data-route=gallery] .gallery-grid:has(.gallery-card[hidden]) {grid-template-columns:repeat(2,minmax(0,1fr))}
+body[data-route=gallery] .gallery-grid:has(.gallery-card[hidden]) .gallery-card {display:block;grid-column:auto;grid-row:auto}
+body[data-route=gallery] .gallery-card:focus-within {outline:3px solid var(--collection-brand);outline-offset:6px}
+
+@media(max-width:1050px) {
+ body:is([data-route=resources],[data-route=credentials],[data-route=gallery]) :is(.evidence-desk,.credential-folio,.gallery-opening) {gap:36px}
+ body[data-route=resources] .catalogue-layout {grid-template-columns:210px minmax(0,1fr);gap:34px}
+ body[data-route=resources] .resource-row,body[data-route=resources] .resource-row.flagship-evidence {grid-template-columns:150px minmax(0,1fr);gap:24px}
+ body[data-route=resources] .resource-row.flagship-evidence {padding:26px 20px}
+ body[data-route=resources] .resource-row .evidence-card-media {height:230px}
+ body[data-route=credentials] .certificate-grid {gap:36px}
+ body[data-route=credentials] .certificate-card:first-child {gap:30px}
+ body[data-route=gallery] .gallery-grid {gap:40px 24px}
+}
+@media(max-width:760px) {
+ body:is([data-route=resources],[data-route=credentials],[data-route=gallery]) :is(.evidence-desk,.credential-folio,.gallery-opening) {display:grid;grid-template-columns:minmax(0,1fr);gap:30px;padding:0 0 40px;min-height:0}
+ body:is([data-route=resources],[data-route=credentials],[data-route=gallery]) :is(.evidence-desk,.credential-folio,.gallery-opening) h1 {font-size:2.75rem;line-height:1.04;letter-spacing:-.05em;max-width:13ch;margin:16px 0 20px}
+ body:is([data-route=resources],[data-route=credentials],[data-route=gallery]) :is(.evidence-desk,.credential-folio,.gallery-opening) .lead {font-size:1.125rem;line-height:1.65}
+ body:is([data-route=resources],[data-route=credentials],[data-route=gallery]) .collection-tools {padding:22px 0;gap:18px}
+ body:is([data-route=resources],[data-route=credentials],[data-route=gallery]) .filter {font-size:.875rem;padding:10px 13px}
+ body:is([data-route=resources],[data-route=credentials],[data-route=gallery]) .archive-note {margin-top:44px;padding-top:26px}
+ body:is([data-route=resources],[data-route=credentials],[data-route=gallery]) .archive-note p {font-size:1rem}
+ /* Real file previews lead on phones; the decorative duplicate fan stays on desktop. */
+ body[data-route=resources] .desk-documents {display:none;height:260px;max-width:460px;margin:0 auto}
+ body[data-route=resources] .desk-documents img {height:220px;padding:8px}
+ body[data-route=resources] .desk-documents .desk-plan {top:25px}
+ body[data-route=resources] .evidence-desk {padding-bottom:24px}
+ body[data-route=resources] .catalogue-layout {display:flex;flex-direction:column;gap:0;margin-top:22px}
+ body[data-route=resources] .catalogue-files {order:0;width:100%}
+ body[data-route=resources] .catalogue-files .collection-tools {margin-top:0;padding-block:16px;gap:12px}
+ body[data-route=resources] .catalogue-note {position:static;order:1;display:grid;grid-template-columns:minmax(0,1fr) minmax(82px,.42fr);gap:0 20px;margin-top:42px;margin-bottom:26px;padding:22px 0 0;width:100%}
+ body[data-route=resources] .catalogue-note>.eyebrow,body[data-route=resources] .catalogue-note>h2,body[data-route=resources] .catalogue-note>p {grid-column:1}
+ body[data-route=resources] .catalogue-note h2 {font-size:1.5rem;margin:12px 0}
+ body[data-route=resources] .catalogue-note p:not(.eyebrow) {font-size:1rem}
+ body[data-route=resources] .catalogue-photo {grid-column:2;grid-row:2/5;align-self:center;margin:0}
+ body[data-route=resources] .catalogue-photo>a {padding:5px}
+ body[data-route=resources] .catalogue-photo .plate-image {max-height:150px}
+ body[data-route=resources] .catalogue-photo figcaption {padding-top:9px;font-size:.875rem}
+ body[data-route=resources] .catalogue-note>.text-link {grid-column:1/-1;justify-self:start;margin-top:14px}
+ body[data-route=resources] .resource-row,body[data-route=resources] .resource-row.flagship-evidence {grid-template-columns:140px minmax(0,1fr);gap:22px;padding:28px 0}
+ body[data-route=resources] .resource-row.flagship-evidence {padding:24px 16px}
+ body[data-route=resources] .resource-row .evidence-card-media {height:220px;padding:8px}
+ body[data-route=resources] .evidence-card-body h3 {font-size:1.375rem}
+ body[data-route=resources] .resource-row .resource-desc {font-size:1rem;line-height:1.7}
+ body[data-route=resources] .evidence-lens {grid-template-columns:minmax(0,1fr);gap:14px}
+ body[data-route=resources] .resource-row .card-actions {padding-top:18px}
+ body[data-route=credentials] .certificate-fan {height:235px;max-width:460px;margin:0 auto}
+ body[data-route=credentials] .folio-certificate {height:190px;padding:7px}
+ body[data-route=credentials] .folio-certificate:nth-child(3) {top:28px}
+ body[data-route=credentials] .collection-tools {margin-top:34px}
+ body[data-route=credentials] .certificate-grid {grid-template-columns:minmax(0,1fr);gap:32px}
+ body[data-route=credentials] .certificate-card:first-child {display:block;grid-column:auto;padding-bottom:28px}
+ body[data-route=credentials] .certificate-image,body[data-route=credentials] .certificate-card:first-child .certificate-image {padding:16px}
+ body[data-route=credentials] .archive-cert-img,body[data-route=credentials] .certificate-card:first-child .archive-cert-img {height:250px}
+ body[data-route=credentials] .certificate-body,body[data-route=credentials] .certificate-card:first-child .certificate-body {padding-top:22px}
+ body[data-route=credentials] .certificate-body h3,body[data-route=credentials] .certificate-card:first-child h3 {font-size:1.5rem}
+ body[data-route=credentials] .certificate-body>p:not(.eyebrow) {font-size:1rem}
+ body[data-route=credentials] .record-meta {grid-template-columns:minmax(0,1fr) minmax(80px,.45fr);gap:16px}
+ body[data-route=gallery] .gallery-cover {max-width:560px;width:calc(100% - 10px);margin:0 auto;padding:8px;box-shadow:7px 8px 0 var(--collection-apricot);transform:rotate(1deg)}
+ body[data-route=gallery] .gallery-cover>a {height:300px}
+ body[data-route=gallery] .gallery-cover figcaption {font-size:1rem;padding:13px 4px 6px}
+ body[data-route=gallery] .collection-tools {margin-top:38px}
+ body[data-route=gallery] .gallery-grid,body[data-route=gallery] .gallery-grid:has(.gallery-card[hidden]) {grid-template-columns:repeat(2,minmax(0,1fr));gap:34px 20px}
+ body[data-route=gallery] .gallery-grid .gallery-card,body[data-route=gallery] .gallery-grid .gallery-card:nth-child(n) {grid-column:auto;grid-row:auto}
+ body[data-route=gallery] .gallery-grid .gallery-card>a {height:280px}
+ body[data-route=gallery] .gallery-grid figcaption {grid-template-columns:22px minmax(0,1fr);gap:4px 10px;padding-top:14px}
+ body[data-route=gallery] .gallery-grid figcaption strong {font-size:1.125rem}
+ body[data-route=gallery] .gallery-grid figcaption p {font-size:1rem}
+}
+@media(max-width:520px) {
+ body[data-route=resources] .resource-row,body[data-route=resources] .resource-row.flagship-evidence {grid-template-columns:minmax(0,1fr);gap:22px}
+ body[data-route=resources] .resource-row .evidence-card-media {width:min(100%,290px);height:315px;justify-self:start;padding:12px}
+ body[data-route=resources] .resource-row .card-actions {gap:10px}
+ body[data-route=credentials] .record-meta {grid-template-columns:minmax(0,1fr);gap:16px}
+ body[data-route=gallery] .gallery-grid,body[data-route=gallery] .gallery-grid:has(.gallery-card[hidden]) {grid-template-columns:minmax(0,1fr);gap:38px}
+ body[data-route=gallery] .gallery-grid .gallery-card>a {height:320px}
+ body[data-route=gallery] .gallery-grid figcaption {grid-template-columns:25px minmax(0,1fr);gap:5px 12px}
+}
+}

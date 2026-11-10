@@ -1,0 +1,22 @@
+{
+ "name":"Teacher portfolio shutter opening",
+ "scope":"project",
+ "project":"teacher-portfolio",
+ "origin":"project-reference",
+ "source_project":"https://github.com/krishnamahato704-spec/E-portfolio",
+ "mode":"light",
+ "tokens":{
+  "background":"#EDF2FF","text":"#15244B","muted":"#4E5C7B",
+  "accent":"#2648BE","onAccent":"#F5F7FF","border":"#7685A6","focus":"#2648BE"
+ },
+ "typography":{"heading_family":"Source Sans 3","body_family":"Source Sans 3"},
+ "style_rules":{
+  "type":"Two masked name lines. First line uppercase Source Sans 3 600; second line right-aligned italic Source Serif 4 400. Tracking minus .075em. Existing local OFL fonts.",
+  "layout":"Full-scene decorative layer; eight equal vertical columns with #D7E0F4 hairlines. Actual navigation remains above the layer. No body scroll lock.",
+  "entrance":"Name masks translate from 112 percent to zero over850ms, staggered120ms, cubic-bezier(.16,1,.3,1). Kicker enters over500ms; supporting note over450ms.",
+  "handoff":"Identity fades and moves upward after1130ms. Shutters scaleY from1 to0 over900ms beginning1050ms with58ms column stagger, cubic-bezier(.76,0,.24,1). Hero lines settle over1000ms after1250ms,120ms apart.",
+  "lifecycle":"Bounded by2600ms. First eligible session visit only; explicit replay available. Immediate dismissal by Skip, Escape, scrolling, focus, control interaction or page hiding. Bypass for reduced motion, data saving, slow connections and fragment destinations.",
+  "implementation":"Original CSS and native Web Animations API; no copied source, extra animation library, imported artwork, new font or audio. Project-specific style reference only."
+ },
+ "tags":["portfolio","masked-type","shutter-reveal","opening-motion"]
+}

@@ -1,0 +1,46 @@
+{
+  "name": "Teacher portfolio iris and curiosity lens",
+  "scope": "project",
+  "project": "teacher-portfolio",
+  "origin": "project-reference",
+  "source_project": "https://github.com/krishnamahato704-spec/E-portfolio",
+  "mode": "light",
+  "tokens": {
+    "background": "#F4F1E8",
+    "surface": "#FCFAF4",
+    "text": "#22283F",
+    "muted": "#596172",
+    "accent": "#2946A8",
+    "accentHover": "#1D347E",
+    "onAccent": "#FAF7EE",
+    "border": "#81867B",
+    "focus": "#2946A8",
+    "soft": "#E9E7DD"
+  },
+  "typography": {
+    "heading_family": "Instrument Serif",
+    "body_family": "Source Sans 3"
+  },
+  "style_rules": {
+    "display": "Locally packaged Instrument Serif 400 upright and italic, at minus .025em tracking. Source Sans 3 for UI/body; existing Source Serif 4 retained for reading prose. No synthesized Instrument weights.",
+    "hero": "Indigo #243BA5; warm-white text #FAF7EE, secondary #D9DEF2 and quiet citron #DBE6AE. Display title6.5rem to12rem, phone4rem to7.8rem with responsive320px adjustment.",
+    "student": "Pale sage #E6E8D4 with #242B45 text and #4F5A63 secondary text. Dark slate-blue and olive contour lines replace bright green/cyan strokes.",
+    "reading": "Warm paper #F4F1E8 with off-white #FCFAF4 surfaces and neutral #E9E7DD accents; main ink #22283F and secondary #596172.",
+    "manifesto": "Dark navy #1E263F, warm-white headings #FAF7EE, secondary #D7DBEE and italic accent #DBE6AE.",
+    "opening": "Masked two-line name followed by a circular native even-odd clip-path aperture. Sixty-four circle points interpolate from half a pixel to half the stage diagonal plus two pixels over1150ms after1050ms. Thin matching ring. Total opening bounded by2600ms; fade fallback, resize dismissal and existing Skip/Escape/focus/scroll exits.",
+    "details": "Hero role, availability, study and control text enlarged; desktop labels .875rem to.9rem, phone .8rem to.82rem. Decorative footer sentence hidden on phones; interactive controls retained.",
+    "graphics": "Existing original atlas geometry at72percent CSS opacity, pointer response and motion preferences unchanged.",
+    "font_source": "Instrument Serif library entry google-instrumentserif; verified unmodified TTFs, pinned Google Fonts commit67bc647ce1910e92f461bcc82aae30f21d21a9cc, full OFL notice retained. Fonts are project-packaged; no global path or runtime external request.",
+    "curiosity_lens": "Decorative240px to340px circular approved-gallery photo window with18px inset, thin orbit and crosshair. Pointer position eases with240ms exponential inertia; opacity uses110ms entry and70ms exit easing, normalized to elapsed time inside the existing24fps atlas render loop. First eligible desktop demonstration lasts2300ms. Normal cursor remains; effect fades at interactive controls.",
+    "lens_contrast": "Teacher photo uses #142047 at72percent scrim opacity; Student photo uses #E6E8D4 at74percent scrim opacity, protecting hero text over either photograph extreme. Captions inherit scene text and muted tokens.",
+    "touch": "180px lens on phones. A short background tap produces a1050ms ring/photo response that fades out. Pointer movement beyond9px or longer than450ms does not trigger a tap; no default scrolling behavior is prevented.",
+    "lifecycle": "Uses the existing atlas requestAnimationFrame loop,24fps/DPR1.5caps and visibility checks. Reduced motion, data saving, visitor pause and document hiding settle effects. No extra continuous loop, observer, animation library, media file or remote dependency."
+  },
+  "tags": [
+    "editorial",
+    "aperture",
+    "iris-transition",
+    "curiosity-lens",
+    "portfolio"
+  ]
+}

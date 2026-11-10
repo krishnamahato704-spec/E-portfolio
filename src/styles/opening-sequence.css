@@ -1,0 +1,45 @@
+/* Original name masks and circular aperture. The page never becomes inert. */
+@media screen {
+ html[data-opening-pending=true] .atlas-stage::before {content:'';display:block;position:absolute;inset:0;z-index:24;pointer-events:none;background-color:#f5f1e7;background-image:linear-gradient(to right,#d5c6b4 1px,transparent 1px);background-size:12.5% 100%;transform:none;transition:none}
+}
+.portfolio-opening {position:absolute;inset:0;z-index:24;pointer-events:none;overflow:hidden;contain:paint;isolation:isolate}
+.opening-iris-paper,.opening-iris-lining {position:absolute;inset:0;will-change:clip-path,opacity}
+.opening-iris-paper {background-color:#f5f1e7;background-image:linear-gradient(to right,#d5c6b4 1px,transparent 1px);background-size:12.5% 100%}
+.opening-iris-lining {background:#e4c5af}
+.opening-iris-ring {position:absolute;left:50%;top:50%;z-index:1;width:1px;height:1px;border:1px solid currentColor;border-radius:50%;color:#ff5738;transform:translate(-50%,-50%);opacity:0;will-change:width,height,opacity}
+.opening-iris-ring::before,.opening-iris-ring::after {content:'';position:absolute;background:currentColor}
+.opening-iris-ring::before {width:1px;height:13px;left:50%;top:-7px}
+.opening-iris-ring::after {height:1px;width:13px;top:50%;left:-7px}
+.opening-iris-ring-inner {color:#fff5e7}
+.opening-iris-ring-inner::before,.opening-iris-ring-inner::after {display:none}
+.opening-identity {position:absolute;top:50%;left:var(--gutter);right:var(--gutter);z-index:2;transform:translateY(-50%);color:#24221f;--opening-size:18vw;font-family:var(--sans)}
+.opening-kicker {font:500 .78rem/1.5 var(--sans);letter-spacing:.12em;text-transform:uppercase;margin:0 0 25px;color:#584d43}
+.opening-name-line {overflow:hidden;font-size:clamp(4rem,var(--opening-size),17rem);font-weight:550;line-height:.96;letter-spacing:-.055em;text-transform:uppercase;padding-bottom:.12em;margin-bottom:-.12em;white-space:nowrap}
+.opening-name-line-last {font-family:var(--display-serif);font-weight:600;font-style:normal;line-height:1.04;letter-spacing:-.065em;text-align:right;text-transform:none;margin-top:-.03em}
+.opening-word {display:block;transform:translateY(112%);will-change:transform}
+.opening-note {display:flex;justify-content:space-between;align-items:center;gap:25px;border-top:1px solid #7b6353;padding-top:20px;margin-top:35px;font:400 .95rem/1.5 var(--sans);color:#584d43}
+.opening-note>span:last-child {font-family:var(--display-serif);font-style:normal;font-weight:600;font-size:1rem}
+.opening-skip {position:absolute;top:108px;right:var(--gutter);z-index:30;min-height:44px;border:0;border-radius:99px;padding:8px 18px;background:#ff5738;color:#24221f;font:600 .875rem/1.4 var(--sans);cursor:pointer;pointer-events:auto}
+.opening-skip:hover {background:#8f2d1b;color:#fff}
+.opening-skip:focus-visible {outline:3px solid #8f2d1b;outline-offset:4px}
+body[data-route=home] .opening-replay {min-height:44px;background:transparent;color:var(--scene-ink);border:0;border-bottom:1px solid currentColor;padding:6px 2px;font:inherit;cursor:pointer}
+.opening-replay:hover {opacity:.8}
+.atlas-stage-footer {z-index:2}
+.opening-hero[data-opening-played=true] .atlas-title-teacher,.opening-hero[data-opening-played=true] .atlas-title-student {animation:none}
+@media(max-width:760px) {
+ .opening-identity {left:22px;right:22px}
+ .opening-kicker {font-size:.65rem;max-width:28ch;line-height:1.65;margin-bottom:30px}
+ .opening-name-line {font-size:clamp(3.6rem,20vw,9rem);line-height:1;letter-spacing:-.055em}
+ .opening-name-line-last {font-size:clamp(4.3rem,24vw,10rem);line-height:1.05;letter-spacing:-.065em;margin-top:7px}
+ .opening-note {font-size:.78rem;padding-top:16px;margin-top:30px;gap:18px}
+ .opening-note>span:last-child {font-size:.9rem;white-space:nowrap}
+ .opening-skip {top:82px;right:22px;min-height:44px;font-size:.8rem;padding:8px 15px}
+ body:has(.opening-replay:not([hidden])) .atlas-scene-meta>span {display:none}
+ .atlas-scene-meta {gap:16px}
+}
+@media(prefers-reduced-motion:reduce) {
+ .portfolio-opening,.opening-skip,.opening-replay {display:none!important}
+}
+@media print {
+ .portfolio-opening,.opening-skip,.opening-replay {display:none!important}
+}

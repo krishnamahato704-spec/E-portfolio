@@ -1,0 +1,17 @@
+# Identity and teaching evidence first
+
+10 November 2026. This applies the approved comparison recommendations to the warm atlas portfolio. The name and subject lead the opening. Teacher / Forever Student is secondary. The opening includes the actual teaching range and a linked Democracy lesson-plan preview. Student mode shows the current qualification dates and completed degree result from the content record, with a link to the academic record.
+
+At a 1440px desktop width, the name is 86.4px, the subject 24px and the secondary identity line 43.2px. The body remains 17px. On 390px phones the name is 41.6px and the subject 19px. The 351–389px range uses a small type-size adjustment to avoid a needless line break. Buttons keep 48px phone touch targets. Motion controls occupy their own row before the compact lesson preview; both remain reachable through ordinary scrolling.
+
+Selected Teaching Evidence now precedes the photographic spread and the longer paired identity section. In the inspected 1440×1000 layout it starts around 1224px down the page, compared with 3040px before this pass. In the 390×900 layout it starts around 1346px, compared with 3770px before. The authentic linked lesson preview is also visible in the first desktop viewport. These are local layout measurements, not recruitment or conversion results.
+
+The warm full-scene backgrounds, local Manrope font, short layered iris and contour/lens mechanics remain. Gallery extraction preserves the existing carousel and viewers. Film controls stay inside their handler's opening scope. The lens reads the approved image from the relocated gallery in the same main element, and hides when the pointer reaches the lesson link or another real control.
+
+New content tests cover owner-edited qualification dates/results, removed qualifications, edited or removed lesson resources, escaping and section order. Browser coverage checks actual identity scale, a loaded lesson preview, a working native lesson destination, academic mode, section position, text bounds and phone controls. Existing lifecycle, keyboard, no-JavaScript and infrastructure checks remain in the verification workflow.
+
+Verification: build 13 static pages and the résumé; 105/105 unit tests; static checks across 118 source/script/test files; 311/311 existing browser checks; 38/38 atlas checks; 66/66 opening checks; 42/42 reading-room checks; 36/36 curiosity-lens checks; 112/112 hierarchy checks. The targeted effects and hierarchy suites ran in Chromium and WebKit. The original 12 homepage IDs, 34 href destinations and 18 hook names remain. At 375px in normal motion, the visible motion/replay controls clear the fixed shortcuts by about 45px. Screenshots and reports are local output artifacts, separate from production source.
+
+No Supabase configuration, Owner Studio logic, contact handler, Vercel routing, dependency or GitHub workflow was changed. Original homepage IDs, destinations and hooks remain. No database write, commit, push or deployment was performed. Existing font notices remain; no new media or external dependency was imported.
+
+The actual project-only style settings are in [recruiter-hierarchy-theme.json](recruiter-hierarchy-theme.json), saved as `captured-teacher-portfolio-warm-atlas-identity-and-eviden-8b3c147e6004`, with supplied semantic contrast checks passed. Automated checks do not constitute a complete accessibility conformance audit or field performance measurement.
