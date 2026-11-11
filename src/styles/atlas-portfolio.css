@@ -37,6 +37,8 @@ body[data-route=home] .site-header .header-cta {pointer-events:auto;min-height:5
 body[data-route=home] .site-header .header-cta:hover {background:#fffdf8;color:#24221f}
 body[data-route=home] .menu-toggle,body[data-route=home] .fallback-navigation {pointer-events:auto;background:#fffdf8;color:#24221f;border-radius:99px;border:0}
 body[data-route=home] .site-header .is-open {border-radius:18px}
+/* Display words keep their spelling; responsive columns provide their space. */
+body[data-route=home] main :is(h2,h3) {overflow-wrap:normal;word-break:normal;hyphens:manual}
 
 /* The first viewport is a complete graphic scene rather than a column layout. */
 body[data-route=home] .opening-hero {background:#e4c5af;color:#24221f;overflow:hidden;border:0;position:relative}
@@ -164,7 +166,8 @@ body[data-route=home] .hero-gallery {grid-column:2;margin:0;align-self:center;wi
 body[data-route=home] .hero-gallery-controls {transform:rotate(-3deg);border-color:#7b6353;color:#fffdf8}
 body[data-route=home] .hero-gallery-controls button,body[data-route=home] .hero-gallery-count {color:#fffdf8}
 body[data-route=home] .hero-gallery-controls button:hover {background:#d9b39a}
-body[data-route=home] .hero-gallery-window {border-radius:4px;box-shadow:14px 14px 0 #cda88a;background:#fffdf8;padding:9px}
+body[data-route=home] .hero-gallery-window {border-radius:4px;box-shadow:14px 14px 0 #cda88a;background:#fffdf8;padding:0;border:9px solid #fffdf8}
+body[data-route=home] .hero-gallery img[data-src]:not([src]) {visibility:hidden}
 body[data-route=home] .hero-gallery .hero-practice-photo a {height:400px;border:0;background:#e4c5af}
 body[data-route=home] .hero-gallery .hero-practice-photo figcaption {background:#fffdf8;color:#24221f;padding:18px 15px;min-height:90px;font-size:1rem}
 body[data-route=home] .hero-gallery .hero-practice-photo figcaption span {color:#584d43;font-size:.8rem}
@@ -195,7 +198,7 @@ body[data-route=home] .selected-evidence-card .evidence-card-media {background:#
 body[data-route=home] .home-journey {grid-template-columns:minmax(0,.43fr) minmax(0,1fr);column-gap:80px}
 body[data-route=home] .home-journey>.section-heading h2 {font:600 clamp(2.8rem,4.5vw,4.5rem)/1.03 var(--display-serif);letter-spacing:-.025em}
 body[data-route=home] .journey-card>.icon-disc {background:#e4c5af;border-radius:50%}
-body[data-route=home] .home-education {padding-block:100px;grid-template-columns:minmax(0,.43fr) minmax(0,1fr);column-gap:80px}
+body[data-route=home] .home-education {padding-block:100px;grid-template-columns:minmax(17rem,.43fr) minmax(0,1fr);column-gap:80px}
 body[data-route=home] .home-education>.section-heading h2 {font:600 clamp(2.8rem,4.5vw,4.3rem)/1.03 var(--display-serif);letter-spacing:-.025em}
 body[data-route=home] .education-focus .education-record {padding-block:30px}
 body[data-route=home] .education-focus .education-card h3 {font-size:1.5rem}
@@ -342,7 +345,7 @@ body[data-route=home] .editorial-index a {font-size:.875rem}
  body[data-route=home] .hero-film-controls-wrap {padding-bottom:20px}
  .atlas-gallery-spread {display:flex;flex-direction:column;align-items:stretch;gap:30px;padding-block:60px 45px;min-height:0}
  .atlas-gallery-heading {padding-top:0}
- body[data-route=home] .atlas-gallery-heading h2 {font-size:3.8rem;margin:22px 0}
+ body[data-route=home] .atlas-gallery-heading h2 {font-size:clamp(3rem,15vw,3.8rem);margin:22px 0}
  .atlas-photo-stack {left:auto;right:25px;top:95px;width:100px;height:130px}
  .atlas-side-photo {width:100px;height:130px;border-width:4px;opacity:.6}
  .atlas-side-photo:nth-child(2) {transform:translate(-25px,100px) rotate(8deg)}
@@ -366,6 +369,8 @@ body[data-route=home] .editorial-index a {font-size:.875rem}
  body[data-route=home] .identity-perspective h3 {font-size:1.9rem}
  .identity-perspective p {font-size:1.0625rem}
  body[data-route=home] :is(.selected-evidence,.home-journey,.home-education) {display:block;padding-block:65px}
+ body[data-route=home] :is(.selected-evidence,.home-journey,.home-education)>.section-heading {grid-template-columns:minmax(0,1fr);align-items:start;justify-items:start}
+ body[data-route=home] :is(.selected-evidence,.home-journey,.home-education)>.section-heading>.text-link {max-width:100%;font-size:.875rem;line-height:1.5}
  body[data-route=home] :is(.selected-evidence,.home-journey,.home-education)>.section-heading h2 {font-size:2.9rem;line-height:1.05}
  body[data-route=home] .selected-evidence-card {grid-template-columns:24px minmax(0,1fr);gap:16px}
  body[data-route=home] .selected-evidence-card .evidence-card-media {grid-column:2;width:140px;height:178px}
@@ -377,8 +382,8 @@ body[data-route=home] .editorial-index a {font-size:.875rem}
  body[data-route=home] .home-influence-portrait .thinker-portrait {height:105px}
  body[data-route=home] .home-influence-thesis {font-size:1.75rem}
  body[data-route=home] .home-philosophy-principles h3 {font-size:2rem}
- body[data-route=home] .home-contact {padding-block:70px}
- body[data-route=home] .home-contact h2 {font-size:4.4rem}
+ body[data-route=home] .home-contact {padding-block:70px;padding-inline:0}
+ body[data-route=home] .home-contact h2 {font-size:clamp(4rem,21.5vw,4.4rem)}
  body[data-route=home] .home-contact-actions {flex-direction:column;gap:22px}
  body[data-route=home] .home-contact-actions .email-link {font-size:1rem}
 }

@@ -13,7 +13,7 @@ const check=(engine,size,name,pass,details)=>{
  results.push({engine,size,name,pass:!!pass,...(details===undefined?{}:{details})});
  if(!pass)console.error('FAIL',engine,size,name,details??'');
 };
-const destination=(replay=false,fragment='')=>{const url=new URL(base);if(replay)url.searchParams.set('intro','replay');url.hash=fragment;return url.href;};
+const destination=(replay=false,fragment='')=>{const url=new URL(base);if(replay)url.searchParams.set('intro','replay');else url.searchParams.delete('intro');url.hash=fragment;return url.href;};
 const bootRoute='**/src/opening-entry.js*',appRoute='**/src/app.js*';
 
 async function instrument(context){
@@ -105,8 +105,9 @@ try{
     await handoff(page,engine,size,'First visit');
 
     const repeat=await gateApp(page,destination(),{reload:true});
-    await ordinary(page,engine,size,'Same-session repeat');await repeat.finish();await page.waitForTimeout(180);
-    check(engine,size,'A same-session repeat does not introduce a late opening',!await page.locator('.portfolio-opening').count()&&!await page.evaluate(()=>window.__openingFirstPaint.handoff));
+    const returning=await snapshot(page);
+    check(engine,size,'A same-session ordinary reload starts under its cover without a replay query',returning.semanticHeading&&(returning.cover||returning.nativePainted),returning);
+    await repeat.finish();await handoff(page,engine,size,'Ordinary reload');
     const replay=await gateApp(page,destination(true));
     const forced=await snapshot(page);
     check(engine,size,'An explicit replay request starts before deferred app code',forced.semanticHeading&&(forced.cover||forced.nativePainted),forced);

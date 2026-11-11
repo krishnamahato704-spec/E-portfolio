@@ -68,8 +68,10 @@ try{
    await page.locator('.site-header .brand').click();await page.waitForURL(base);
    record(engine,'Internal Home links keep the page ready to read',await page.locator('h1').isVisible());
    record(engine,'No browser exceptions',errors.length===0,errors);await ctx.close();
-   const firstPhone=await browser.newContext({viewport:{width:320,height:844}}),phone=await firstPhone.newPage();
+   const firstPhone=await browser.newContext({viewport:{width:320,height:844},hasTouch:true,...(engine==='firefox'?{}:{isMobile:true})}),phone=await firstPhone.newPage();
    await phone.goto(base,{waitUntil:'domcontentloaded'});
+   await phone.waitForFunction(()=>document.querySelector('.opening-hero')?.dataset.openingState==='completed',null,{timeout:5000});
+   record(engine,'A phone first visit completes its opening through initial viewport setup',await phone.locator('.portfolio-opening').count()===0&&await phone.locator('[data-opening-replay]').isVisible());
    record(engine,'The narrow phone heading and shortcuts are visible without overflow',await phone.locator('h1').isVisible()&&await phone.locator('.mobile-shortcuts').isVisible()&&await phone.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
    await phone.screenshot({path:'outputs/redesign/opening-'+engine+'-phone.png'});
    await phone.locator('.skip-link').focus();await phone.keyboard.press('Enter');

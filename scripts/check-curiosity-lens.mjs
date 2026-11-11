@@ -121,14 +121,13 @@ try{
    // stale completion must not overwrite the newer photo the visitor selected.
    for(const scenario of ['failed','late']){
     const ctx=await browser.newContext({viewport:{width:1440,height:1000}}),q=await ctx.newPage();
-    await q.addInitScript(()=>sessionStorage.setItem('portfolio-atlas-opening-v2','seen'));
     let release,requested;
     const pendingRequest=new Promise(resolve=>{requested=resolve;});
     const gate=new Promise(resolve=>{release=resolve;});
     const deferred=deferredBefore[2].deferred||deferredBefore[2].src;
     await q.route(new URL(deferred,base).href,async route=>{requested();if(scenario==='failed')await route.abort();else{await gate;await route.continue();}});
     try{
-     await q.goto(base);await exposed(q);await q.mouse.move(400,330);
+     await q.goto(base);await q.waitForFunction(()=>document.querySelector('.opening-hero')?.dataset.openingState==='completed');await exposed(q);await q.mouse.move(400,330);
      await q.waitForTimeout(1000);await q.mouse.move(900,350);await photoChanged(q,0);
      const beforePending=await photoDetails(q);
      await q.waitForTimeout(1000);await q.mouse.move(400,330);

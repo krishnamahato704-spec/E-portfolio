@@ -54,15 +54,20 @@ test('A first visible home visit can play the optional opening',()=>{
  assert.equal(canPlayOpening({initial:true,animated:true,top:0}),true);
 });
 
-test('Reading preferences, history destinations and existing sessions bypass automatic opening',()=>{
+test('Reading preferences and history destinations bypass automatic opening',()=>{
  const first={initial:true,animated:true,top:0};
- for(const blocked of [{reduced:true},{saveData:true},{slow:true},{fragment:'#teaching-evidence'},{seen:true},{hidden:true},{top:80},{initial:false},{animated:false}]){
+ for(const blocked of [{reduced:true},{saveData:true},{slow:true},{fragment:'#teaching-evidence'},{hidden:true},{top:80},{initial:false},{animated:false}]){
   assert.equal(canPlayOpening({...first,...blocked}),false,JSON.stringify(blocked));
  }
 });
 
-test('Explicit replay may bypass a previous viewing while retaining motion and destination preferences',()=>{
- const replay={initial:true,animated:true,seen:true,force:true,top:0};
+test('Opening a new home document still plays after an earlier viewing in the same session',()=>{
+ assert.equal(canPlayOpening({initial:true,animated:true,top:0,seen:true}),true);
+ assert.equal(canPlayOpening({initial:false,animated:true,top:0,seen:true}),false);
+});
+
+test('Manual replay retains motion and destination preferences',()=>{
+ const replay={initial:true,animated:true,top:0};
  assert.equal(canPlayOpening(replay),true);
  assert.equal(canPlayOpening({...replay,reduced:true}),false);
  assert.equal(canPlayOpening({...replay,fragment:'#main'}),false);

@@ -1,4 +1,3 @@
-const sessionKey='portfolio-atlas-opening-v2';
 let dispose=()=>{};
 
 // Matching polygon points let native animations interpolate a real even-odd hole.
@@ -20,8 +19,8 @@ export function irisLayerPaths(width,height){
  return {closed:irisClipPath(w,h,.5),lining:irisClipPath(w,h,radius),paper:irisClipPath(w,h,paperRadius),radius,paperRadius};
 }
 
-export function canPlayOpening({initial=false,animated=false,top=0,reduced=false,saveData=false,slow=false,fragment='',seen=false,hidden=false,force=false}={}){
- return Boolean(initial&&animated&&!reduced&&!saveData&&!slow&&!fragment&&!hidden&&top<25&&(!seen||force));
+export function canPlayOpening({initial=false,animated=false,top=0,reduced=false,saveData=false,slow=false,fragment='',hidden=false}={}){
+ return Boolean(initial&&animated&&!reduced&&!saveData&&!slow&&!fragment&&!hidden&&top<25);
 }
 
 export function cleanupPortfolioOpening(){dispose();dispose=()=>{};}
@@ -36,16 +35,15 @@ export function initPortfolioOpening(root=globalThis.document?.querySelector('#m
  if(!stage||!win||!replay||!doc.querySelector('.site-header')||doc.body.dataset.route!=='home'){win?.__portfolioOpeningBoot?.release('unavailable');return;}
  const events=new win.AbortController(),options={signal:events.signal};
  const preference=win.matchMedia('(prefers-reduced-motion: reduce)'),connection=win.navigator.connection;
- let overlay,skip,timer=0,launch=0,active=false,manual=false,generation=0;
+ let overlay,skip,openingSize,timer=0,launch=0,active=false,manual=false,generation=0;
  const animations=new Set();
  const limited=()=>preference.matches||connection?.saveData||/^(slow-2g|2g)$/.test(connection?.effectiveType||'');
- const seen=()=>{try{return win.sessionStorage.getItem(sessionKey)==='seen';}catch{return hero.dataset.openingPlayed==='true';}};
- const markSeen=()=>{hero.dataset.openingPlayed='true';try{win.sessionStorage.setItem(sessionKey,'seen');}catch{}};
+ const markPlayed=()=>{hero.dataset.openingPlayed='true';};
  const syncReplay=()=>{replay.hidden=limited()||typeof stage.animate!=='function'||active;};
  const finish=reason=>{
   if(timer)win.clearTimeout(timer);timer=0;
   const restore=skip&&(doc.activeElement===skip||reason==='skipped');
-  active=false;
+  active=false;openingSize=null;
   delete hero.dataset.openingActive;
   hero.dataset.openingState=reason;
   animations.forEach(animation=>animation.cancel());animations.clear();
@@ -63,12 +61,12 @@ export function initPortfolioOpening(root=globalThis.document?.querySelector('#m
  };
  const start=(explicit=false)=>{
   if(active||events.signal.aborted)return;
-  if(!canPlayOpening({initial:explicit||initial,animated:typeof stage.animate==='function',top:win.scrollY,reduced:preference.matches,saveData:connection?.saveData,slow:/^(slow-2g|2g)$/.test(connection?.effectiveType||''),fragment:win.location.hash,seen:seen(),hidden:doc.hidden,force:explicit||new URLSearchParams(win.location.search).get('intro')==='replay'})){win.__portfolioOpeningBoot?.release('bypassed');syncReplay();return;}
+  if(!canPlayOpening({initial:explicit||initial,animated:typeof stage.animate==='function',top:win.scrollY,reduced:preference.matches,saveData:connection?.saveData,slow:/^(slow-2g|2g)$/.test(connection?.effectiveType||''),fragment:win.location.hash,hidden:doc.hidden})){win.__portfolioOpeningBoot?.release('bypassed');syncReplay();return;}
   // Without an unbroken prepaint cover, an automatic late intro would recreate
   // the flash. Explicit Replay remains available after a failed/slow startup.
   if(!explicit&&!win.__portfolioOpeningBoot?.claim()){syncReplay();return;}
   const id=++generation;
-  active=true;manual=explicit;markSeen();syncReplay();
+  active=true;manual=explicit;markPlayed();syncReplay();
   hero.dataset.openingActive='true';hero.dataset.openingState='playing';
   overlay=doc.createElement('div');overlay.className='portfolio-opening';overlay.setAttribute('aria-hidden','true');overlay.inert=true;
   const lining=doc.createElement('div');lining.className='opening-iris-lining';lining.dataset.openingLining='';
@@ -76,6 +74,7 @@ export function initPortfolioOpening(root=globalThis.document?.querySelector('#m
   const ring=doc.createElement('div');ring.className='opening-iris-ring';
   const innerRing=doc.createElement('div');innerRing.className='opening-iris-ring opening-iris-ring-inner';
   const bounds=stage.getBoundingClientRect(),width=Math.max(1,bounds.width),height=Math.max(1,bounds.height);
+  openingSize={width,height};
   const layers=irisLayerPaths(width,height),{radius,paperRadius}=layers;
   const closedIris=layers.closed,openIris=layers.paper;
   const supportsIris=Boolean(win.CSS?.supports?.('clip-path',closedIris)&&win.CSS.supports('clip-path',openIris));
@@ -147,7 +146,12 @@ export function initPortfolioOpening(root=globalThis.document?.querySelector('#m
  doc.addEventListener('focusin',event=>{if(active&&event.target!==skip)finish('focused');},options);
  doc.addEventListener('pointerdown',event=>{if(active&&event.target!==skip&&event.target.closest?.('a,button,input,summary'))finish('interacted');},options);
  win.addEventListener('scroll',()=>{if(active)finish('scrolled');},{...options,passive:true});
- win.addEventListener('resize',()=>{if(active)finish('resized');},{...options,passive:true});
+ win.addEventListener('resize',()=>{
+  if(!active||!openingSize)return;
+  const bounds=stage.getBoundingClientRect();
+  // Initial mobile viewport notifications need not change the stage at all.
+  if(Math.abs(bounds.width-openingSize.width)>1||Math.abs(bounds.height-openingSize.height)>1)finish('resized');
+ },{...options,passive:true});
  const preferencesChanged=()=>{if(active)finish('preferences');syncReplay();};
  preference.addEventListener('change',preferencesChanged,options);
  connection?.addEventListener?.('change',preferencesChanged,options);

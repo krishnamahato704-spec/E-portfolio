@@ -2,14 +2,10 @@
 // entry claims this cover only after the hero, stylesheet and visible tab agree.
 (() => {
  const win=window,doc=document,root=doc.documentElement,entry=doc.currentScript,entryUrl=entry?.src;
- const sessionKey='portfolio-atlas-opening-v2';
  const preference=win.matchMedia('(prefers-reduced-motion: reduce)'),connection=win.navigator.connection;
  const events=new AbortController(),options={signal:events.signal};
  let state='bypassed',timer=0,remaining=4000,resumed=0;
- const eligible=()=>{
-  let seen=false;try{seen=win.sessionStorage.getItem(sessionKey)==='seen';}catch{}
-  return typeof root.animate==='function'&&!preference.matches&&!connection?.saveData&&!/^(slow-2g|2g)$/.test(connection?.effectiveType||'')&&!win.location.hash&&win.scrollY<25&&(!seen||new URLSearchParams(win.location.search).get('intro')==='replay');
- };
+ const eligible=()=>typeof root.animate==='function'&&!preference.matches&&!connection?.saveData&&!/^(slow-2g|2g)$/.test(connection?.effectiveType||'')&&!win.location.hash&&win.scrollY<25;
  const pause=()=>{
   if(!timer)return;
   remaining-=win.performance.now()-resumed;

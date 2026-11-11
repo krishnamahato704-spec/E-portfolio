@@ -97,8 +97,10 @@ try{
    const session=await browser.newContext({viewport:{width:1440,height:900}}),p=await session.newPage();
    await p.goto(url);await active(p);await p.keyboard.press('Escape');
    check(engine,'Escape exposes the full page immediately',await p.locator('.portfolio-opening').count()===0&&await p.locator('.opening-hero').getAttribute('data-opening-state')==='escaped');
-   await p.reload();await p.waitForTimeout(300);
-   check(engine,'A repeat visit in the same session skips the opening',await p.locator('.portfolio-opening').count()===0&&await p.locator('[data-opening-replay]').isVisible());
+   await p.reload();
+   const repeated=await p.waitForFunction(()=>document.querySelector('.opening-hero')?.dataset.openingState==='playing'&&document.querySelector('.portfolio-opening'),null,{timeout:3500}).then(()=>true,()=>false);
+   check(engine,'An ordinary repeat Home load in the same session starts its opening',repeated&&!new URL(p.url()).searchParams.has('intro'));
+   if(repeated)await p.keyboard.press('Escape');
    await p.locator('[data-opening-replay]').click();await active(p);
    check(engine,'Explicit Replay starts the sequence with a keyboard exit',await p.locator('[data-opening-skip]').evaluate(el=>el===document.activeElement));
    await p.locator('[data-opening-skip]').click();

@@ -7,7 +7,7 @@ const source=await fs.readFile(process.env.TEST_OPENING_STARTUP_SOURCE||new URL(
 
 // Run the real head script. Native event targets preserve abortable listeners;
 // a small clock lets these lifecycle checks exercise the four-second fallback.
-function startup({hidden=false,reduced=false}={}){
+function startup({hidden=false,reduced=false,seen=false}={}){
  let now=0,nextTimer=0;
  const timers=new Map(),attributes=new Map();
  const entry={tagName:'SCRIPT',src:'https://portfolio.example/src/opening-entry.js?v=release'};
@@ -20,7 +20,7 @@ function startup({hidden=false,reduced=false}={}){
  const window=Object.assign(new EventTarget(),{
   navigator:{connection},location:{hash:'',search:''},scrollY:0,
   performance:{now:()=>now},matchMedia:()=>preference,
-  sessionStorage:{getItem:()=>null},
+  sessionStorage:{getItem:()=>seen?'seen':null},
   setTimeout:(callback,delay)=>{const id=++nextTimer;timers.set(id,{callback,at:now+delay});return id;},
   clearTimeout:id=>timers.delete(id)
  });
@@ -52,6 +52,12 @@ test('A first visit loaded in the background keeps its prepaint cover',()=>{
  const page=startup({hidden:true});
  assert.equal(page.covered(),true);
  assert.equal(page.boot.state,'pending');
+});
+
+test('An earlier viewing cannot suppress startup on a new home document',()=>{
+ const page=startup({seen:true});
+ assert.equal(page.covered(),true);
+ assert.equal(page.boot.claim(),true);
 });
 
 test('Time spent in a background tab does not consume the opening startup allowance',()=>{
