@@ -1,5 +1,4 @@
-/* Original paper-and-archive treatment. The existing portfolio remains below
-   its added summary; motion is an enhancement, never a condition for reading. */
+/* Original paper-and-archive treatment. The summary follows the original animated opening; motion is an enhancement, never a condition for reading. */
 @media screen {
  body[data-route=home] .portfolio-summary {
   position:relative;isolation:isolate;display:grid;place-items:center;

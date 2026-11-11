@@ -41,7 +41,8 @@ try{
    }
    if(width===390){
     await page.goto(base);
-    check(engine,'Joining availability appears within the first phone screen',await page.locator('.summary-availability').evaluate(el=>el.getBoundingClientRect().top>=0&&el.getBoundingClientRect().bottom<800));
+    check(engine,'Joining availability appears within the first phone screen',await page.locator('.hero-joining strong').evaluate(el=>el.getBoundingClientRect().top>=0&&el.getBoundingClientRect().bottom<800));
+    check(engine,'The original opening precedes the summary immediately',await page.locator('.opening-hero').evaluate(hero=>hero.getBoundingClientRect().top<innerHeight&&hero.nextElementSibling?.classList.contains('portfolio-summary')));
     await page.goto(base+'resources/');
     check(engine,'First teaching file starts within one screen of the phone heading',await page.locator('#resource-list>.resource-row').first().evaluate(el=>el.getBoundingClientRect().top<850));
     await page.goto(base+'#teaching-evidence');

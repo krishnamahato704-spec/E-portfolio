@@ -241,7 +241,11 @@ try{
   const motion=await context({reducedMotion:'no-preference'});const moving=await motion.newPage();
   await moving.goto(base,{waitUntil:'domcontentloaded'});
   record('opening: the headline is visible without an overlay or opening audio',await moving.locator('h1.hero-intro-line').isVisible()&&await moving.locator('.identity-intro,audio').count()===0);
-  record('home: the summary precedes the preserved opening',await moving.locator('.portfolio-summary').evaluate(summary=>Boolean(summary.compareDocumentPosition(document.querySelector('.opening-hero'))&Node.DOCUMENT_POSITION_FOLLOWING)));
+  record('home: the original opening is first and the summary follows immediately',await moving.locator('.opening-hero').evaluate(hero=>hero.getBoundingClientRect().top<innerHeight&&hero.nextElementSibling?.classList.contains('portfolio-summary')));
+  await moving.waitForFunction(()=>!document.querySelector('.hero-film').paused);
+  await moving.locator('.portfolio-summary').evaluate(summary=>scrollTo({top:summary.getBoundingClientRect().top+scrollY,behavior:'instant'}));
+  await moving.waitForFunction(()=>document.querySelector('.hero-film').paused);
+  record('home: reading the summary pauses the opening film off screen',await moving.locator('.opening-hero').evaluate(hero=>hero.getBoundingClientRect().bottom<=1));
   await moving.locator('.opening-hero').scrollIntoViewIfNeeded();
   await moving.waitForFunction(()=>!document.querySelector('.hero-film').paused);
   await moving.emulateMedia({reducedMotion:'reduce'});

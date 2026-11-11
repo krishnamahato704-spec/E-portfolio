@@ -1,6 +1,6 @@
 # Tasks
 
-- [x] Move screenshot-inspired summary before preserved Home opening; remove the repeated About summary.
+- [x] Keep the animated Home opening first and the new summary immediately below it; do not repeat the summary on About.
 - [x] Unify newest-first qualifications and experiences across public views and résumé.
 - [x] Add dated academic timeline and enclosed interactive paper cards.
 - [x] Verify responsive, keyboard, reduced-motion, filtering and no-JavaScript behavior.

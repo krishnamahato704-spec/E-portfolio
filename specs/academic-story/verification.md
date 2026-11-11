@@ -7,3 +7,7 @@ Local verification used bundled Node.js 24.22.1 and installed Microsoft Edge. Al
 The full browser, recruiter and packaged loading suites are checked before publication; their actual results are retained in the local outputs. Production publication uses the existing main-branch GitHub Pages pipeline and Git-linked Vercel project. A successful source push alone is not treated as a successful deployment.
 
 The recruiter access suite passed 105/105 checks, the packaged performance regression suite passed 19/19 checks, and the palette suite passed 182/182 text/action/control pairs. These local browser runs used installed Edge; production CI also exercises its configured browsers.
+
+## Final order correction
+
+The owner requested the animated opening first and the new summary immediately below it. The original hero and summary are adjacent, and their links lead forward to the summary and then teaching evidence. All 128 unit tests and the 50/50 opening/gallery checks pass for this order. Focused rendering at 320, 390, 768 and 1440 pixels confirms the order, forward anchors and absence of horizontal overflow. The existing timeline designs and colors are unchanged.

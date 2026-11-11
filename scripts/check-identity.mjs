@@ -6,6 +6,7 @@ const server=spawn(process.execPath,['scripts/serve.mjs'],{env:{...process.env,P
 const results=[];
 const record=(engine,name,pass,details)=>{results.push({engine,name,pass:!!pass,...(details?{details}:{})});if(!pass)console.error('FAIL',engine,name,details||'');};
 const showOpening=page=>page.locator('.opening-hero').evaluate(hero=>hero.scrollIntoView({block:'start',behavior:'instant'}));
+const showSummary=page=>page.locator('.portfolio-summary').evaluate(summary=>scrollTo({top:summary.getBoundingClientRect().top+scrollY,behavior:'instant'}));
 await fs.mkdir('outputs/redesign',{recursive:true});
 try{
  for(let i=0;i<80;i++){try{if((await fetch(base)).ok)break;}catch{}await new Promise(r=>setTimeout(r,100));}
@@ -41,15 +42,12 @@ try{
    record(engine,'Headline reveal starts with the background film unloaded',reveal.filmUnloaded);
    await page.waitForFunction(()=>!document.querySelector('.opening-hero').getAnimations({subtree:true}).some(animation=>animation.animationName==='hero-intro-reveal'&&(animation.playState==='running'||animation.pending)));
    await page.waitForTimeout(100);
-   record(engine,'The new summary precedes the preserved opening and is the first view',await page.evaluate(()=>{
+   record(engine,'The original animated opening is first and the summary follows immediately',await page.evaluate(()=>{
     const summary=document.querySelector('.portfolio-summary'),hero=document.querySelector('.opening-hero');
     if(!summary||!hero)return false;
-    const bounds=summary.getBoundingClientRect();
-    return Boolean(summary.compareDocumentPosition(hero)&Node.DOCUMENT_POSITION_FOLLOWING)&&bounds.top<innerHeight&&bounds.bottom>0&&hero.getBoundingClientRect().top>=innerHeight;
+    const bounds=hero.getBoundingClientRect();
+    return hero.nextElementSibling===summary&&bounds.top<innerHeight&&bounds.bottom>0&&summary.getBoundingClientRect().top>=bounds.bottom-1;
    }));
-   record(engine,'The below-fold film stays paused and unloaded before the visitor reaches the original opening',await page.locator('.hero-film').evaluate(film=>film.paused&&!film.getAttribute('src')));
-   await page.screenshot({path:'outputs/redesign/summary-'+engine+'-first-view.png'});
-   await showOpening(page);
    await page.waitForFunction(()=>{const film=document.querySelector('.hero-film');return !film.paused&&film.readyState>=2;});
    record(engine,'The single muted film starts in the hero after the headline reveal',await page.evaluate(()=>window.heroReveal.startedWithFilm===false&&document.querySelectorAll('video').length===1&&document.querySelector('.opening-hero>.hero-film')?.muted&&document.querySelectorAll('audio,.identity-intro').length===0));
    record(engine,'Home stays readable beside the photograph gallery and playing film',await page.locator('.opening-hero h1').isVisible()&&await page.locator('[data-hero-gallery]').isVisible());
@@ -57,11 +55,14 @@ try{
    await page.locator('[data-film-pause]').click();await page.waitForFunction(()=>document.querySelector('.hero-film').paused);
    record(engine,'The visitor can pause the background film',await page.locator('[data-film-close]').isVisible());
    await page.locator('[data-film-pause]').click();await page.waitForFunction(()=>!document.querySelector('.hero-film').paused);
+   await showSummary(page);await page.waitForFunction(()=>document.querySelector('.hero-film').paused);
+   record(engine,'Scrolling to the summary pauses the original film off screen',await page.locator('.opening-hero').evaluate(hero=>hero.getBoundingClientRect().bottom<=1)&&await page.locator('.hero-film').evaluate(v=>v.paused));
+   await page.screenshot({path:'outputs/redesign/summary-'+engine+'-after-opening.png'});
+   await showOpening(page);await page.waitForFunction(()=>!document.querySelector('.hero-film').paused);
    await page.locator('#home-contact-title').scrollIntoViewIfNeeded();await page.waitForFunction(()=>document.querySelector('.hero-film').paused);
    record(engine,'Film decoding pauses off screen',await page.locator('.hero-film').evaluate(v=>v.paused));
-   await page.evaluate(()=>scrollTo({top:0,behavior:'instant'}));await page.waitForTimeout(150);
-   record(engine,'Returning to the top summary keeps the original film paused off screen',await page.locator('.hero-film').evaluate(v=>v.paused));
-   await showOpening(page);await page.waitForFunction(()=>!document.querySelector('.hero-film').paused);
+   await page.evaluate(()=>scrollTo({top:0,behavior:'instant'}));await page.waitForFunction(()=>!document.querySelector('.hero-film').paused);
+   record(engine,'Returning to the top opening resumes the film',await page.locator('.hero-film').evaluate(v=>!v.paused));
    await page.evaluate(()=>{
     let hidden=false;
     Object.defineProperty(document,'hidden',{configurable:true,get:()=>hidden});
@@ -77,22 +78,23 @@ try{
    await page.locator('[data-film-close]').click();
    record(engine,'Hiding the background leaves the gallery visible and restores control focus',await page.locator('[data-hero-gallery]').isVisible()&&!await page.locator('.hero-film').isVisible()&&await page.locator('.hero-film').evaluate(v=>v.paused)&&await page.locator('[data-film-pause]').evaluate(el=>document.activeElement===el));
    await page.locator('[data-opening-replay]').click();await page.locator('.portfolio-opening').waitFor({state:'attached'});
-   record(engine,'Replay stays with the preserved opening below the summary',await page.locator('.opening-hero').evaluate(hero=>{const bounds=hero.getBoundingClientRect();return bounds.top>=0&&bounds.top<innerHeight&&hero.dataset.openingState==='playing';}));
+   record(engine,'Replay returns to the original opening at the top',await page.locator('.opening-hero').evaluate(hero=>{const bounds=hero.getBoundingClientRect();return scrollY===0&&bounds.top>=0&&bounds.top<innerHeight&&hero.dataset.openingState==='playing';}));
    await page.keyboard.press('Escape');await page.locator('.portfolio-opening').waitFor({state:'detached'});
    record(engine,'Escape ends replay, restores its focus and preserves the hidden film preference',await page.locator('[data-opening-replay]').evaluate(el=>document.activeElement===el)&&!await page.locator('.hero-film').isVisible()&&await page.locator('.hero-film').evaluate(v=>v.paused));
    await page.evaluate(()=>{window.dispatchEvent(new PageTransitionEvent('pagehide',{persisted:true}));window.dispatchEvent(new PageTransitionEvent('pageshow',{persisted:true}));});
    record(engine,'Cached-page restoration preserves the hidden film',!await page.locator('.hero-film').isVisible()&&await page.locator('.hero-film').evaluate(v=>v.paused));
    await page.goto(base+'resources/');record(engine,'Inner pages have no opening media',await page.locator('video,audio,.hero-intro-line').count()===0);
    await page.locator('.site-header .brand').click();await page.waitForURL(base);
-   record(engine,'Internal Home links keep the new summary ready to read',await page.locator('.portfolio-summary').isVisible()&&await page.locator('.opening-hero h1').isVisible());
+   record(engine,'Internal Home links return to the original opening with the summary preserved below',await page.locator('.opening-hero h1').isVisible()&&await page.locator('.opening-hero').evaluate(hero=>hero.getBoundingClientRect().top<innerHeight&&hero.nextElementSibling?.classList.contains('portfolio-summary')));
    record(engine,'No browser exceptions',errors.length===0,errors);await ctx.close();
    const firstPhone=await browser.newContext({viewport:{width:320,height:844},hasTouch:true,...(engine==='firefox'?{}:{isMobile:true})}),phone=await firstPhone.newPage();
    await phone.goto(base,{waitUntil:'domcontentloaded'});
    await phone.waitForFunction(()=>document.querySelector('.opening-hero')?.dataset.openingState==='completed',null,{timeout:5000});
-   record(engine,'A narrow phone first shows the added summary before the preserved opening',await phone.evaluate(()=>{
+   record(engine,'A narrow phone first shows the original opening with the summary immediately below',await phone.evaluate(()=>{
     const summary=document.querySelector('.portfolio-summary'),hero=document.querySelector('.opening-hero');
-    return !!summary&&!!hero&&summary.getBoundingClientRect().top<innerHeight&&Boolean(summary.compareDocumentPosition(hero)&Node.DOCUMENT_POSITION_FOLLOWING);
+    return !!summary&&!!hero&&hero.getBoundingClientRect().top<innerHeight&&hero.nextElementSibling===summary;
    }));
+   await showSummary(phone);
    await phone.screenshot({path:'outputs/redesign/summary-'+engine+'-phone.png'});
    await showOpening(phone);
    record(engine,'A phone first visit completes its opening through initial viewport setup',await phone.locator('.portfolio-opening').count()===0&&await phone.locator('[data-opening-replay]').isVisible());

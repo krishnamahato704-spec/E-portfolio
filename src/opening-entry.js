@@ -187,7 +187,7 @@ function initPortfolioOpening(root=globalThis.document?.querySelector('#main'),{
  replay.addEventListener('click',()=>{
   if(limited())return;
   if(win.location.hash){const url=new URL(win.location.href);url.hash='';win.history.replaceState(win.history.state,'',url);}
-  // The summary now precedes this scene, so Replay returns to the scene itself.
+  // Replay returns to the animated scene itself.
   const sceneTop=Math.max(0,hero.getBoundingClientRect().top+win.scrollY-110);
   win.scrollTo({top:sceneTop,behavior:'instant'});
   launch=win.requestAnimationFrame(()=>{launch=win.requestAnimationFrame(()=>{launch=0;start(true);});});
