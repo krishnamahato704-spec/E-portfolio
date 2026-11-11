@@ -2,6 +2,7 @@ import {defaultContent,portfolioRole} from './content.js?v=editorial-20261004';
 import {recruiterFacts} from './recruiter.js?v=editorial-20261004';
 import {imageDimensions} from './image-dimensions.js?v=editorial-20261004';
 import {documentBytes} from './asset-metadata.js?v=editorial-20261004';
+import {sortQualifications} from './chronology.js?v=editorial-20261004';
 export function documentSize(url,base){
  const src=imageUrl(url,base);
  const local=src?.startsWith(base+'assets/')?src.slice(base.length):'';
@@ -59,7 +60,7 @@ export function img(url,alt,base,cls='',priority=false,deferred=false){
 }
 export function heading(label,title,desc=''){return `<header class="page-heading"><p class="eyebrow">${label}</p><h1>${title}</h1>${desc?`<p class="lead">${desc}</p>`:''}</header>`;}
 export function sectionHead(label,title,aside=''){return `<div class="section-heading"><div>${label?`<p class="eyebrow">${label}</p>`:''}<h2>${title}</h2></div>${aside}</div>`;}
-export function qualificationRows(c){return c.qualifications.map(q=>`<article class="qualification"><p class="period">${esc(q.period)}</p><div><h3>${esc(q.title)}</h3><p>${esc(q.place)}</p>${q.note?`<p class="small">${esc(q.note)}</p>`:''}${q.expected?`<p class="small">Expected completion: ${esc(q.expected)}</p>`:''}</div><span class="status ${/progress/i.test(q.status)?'progress':''}">${esc(q.status)}</span></article>`).join('');}
+export function qualificationRows(c){return sortQualifications(c.qualifications).map(q=>`<article class="qualification"><p class="period">${esc(q.period)}</p><div><h3>${esc(q.title)}</h3><p>${esc(q.place)}</p>${q.note?`<p class="small">${esc(q.note)}</p>`:''}${q.expected?`<p class="small">Expected completion: ${esc(q.expected)}</p>`:''}</div><span class="status ${/progress/i.test(q.status)?'progress':''}">${esc(q.status)}</span></article>`).join('');}
 export function optionalProfileFacts(c){return recruiterFacts(c).filter(([key])=>['Based in','Work preferences','Target classes','Boards of interest'].includes(key)).map(([label,value])=>`<p><strong>${esc(label)}:</strong> ${esc(value)}</p>`).join('');}
 function stableContent(value){if(Array.isArray(value))return value.map(stableContent);if(value&&typeof value==='object')return Object.fromEntries(Object.keys(value).sort().map(key=>[key,stableContent(value[key])]));return value;}
 export function resumeUrl(c,base){

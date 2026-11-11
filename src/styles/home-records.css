@@ -1,0 +1,135 @@
+/* Two chapters of the same history: classroom field notes in terracotta,
+   followed by an oat academic ledger. Rails stay outside the moving sheets. */
+@media screen {
+ body[data-route=home] .home-record-band {position:relative;isolation:isolate}
+ body[data-route=home] .journey-band {background:#9e3d2d;color:#fff5e7}
+ body[data-route=home] .education-band {background:#f5e5cd;color:#24221f;border-bottom:1px solid #cfbba8}
+ body[data-route=home] .home-learning-band {background:#fffdf8;border-block:1px solid #cfbba8}
+ body[data-route=home] .home-learning-band .professional-learning {padding-block:58px 66px}
+ body[data-route=home] .home-learning-band .section-heading {margin-bottom:30px}
+ body[data-route=home] .home-learning-band h2 {font:400 clamp(2rem,3vw,3rem)/1.15 'Source Serif 4',Georgia,serif;color:#24221f}
+ body[data-route=home] .home-learning-band .learning-highlights {gap:24px}
+ body[data-route=home] .home-learning-band .learning-highlight {padding:22px;border:1px solid #cfbba8;border-top:3px solid #9e3d2d;border-radius:0 12px 0 0;background:#f5f1e7}
+ body[data-route=home] .home-learning-band .learning-highlight h3 {font-size:1.125rem;line-height:1.4;color:#24221f}
+ body[data-route=home] .home-learning-band .learning-highlight p {font-size:.9375rem;line-height:1.6;color:#584d43}
+ body[data-route=home] .home-learning-band .learning-highlight:hover {background:#f5e5cd;border-color:#8f2d1b}
+ /* Earlier decorative page backgrounds put paper behind every section title.
+    These solid chapter backgrounds supply their own reading surface. */
+ body[data-route=home] .home-record-band :is(.section-heading h2,.section-heading .eyebrow,.education-caption,.education-details-link),
+ body[data-route=home] .home-learning-band .section-heading h2 {background:none}
+ body[data-route=home] .home-record-band .section-heading h2,
+ body[data-route=home] .home-learning-band .section-heading h2 {padding-inline:0;margin-left:0}
+ body[data-route=home] .home-education>.section-heading>.text-link {background:none}
+
+ /* Teaching: a vertical sequence of field records on a dark chapter page. */
+ body[data-route=home] .home-journey {display:grid;grid-template-columns:minmax(0,.4fr) minmax(0,1fr);gap:70px;padding-block:90px;border:0;background:none}
+ body[data-route=home] .home-journey>.section-heading {display:flex;position:sticky;top:180px;flex-direction:column;align-items:flex-start;align-self:start;justify-content:flex-start;gap:28px;margin:0}
+ body[data-route=home] .home-journey>.section-heading::before {content:'03 / IN THE CLASSROOM';font:600 .8125rem/1.6 var(--sans);letter-spacing:.1em;color:#fff5e7;margin:0}
+ body[data-route=home] .home-journey>.section-heading h2 {font:400 clamp(3rem,4.5vw,4.5rem)/1.08 'Source Serif 4',Georgia,serif;letter-spacing:-.045em;color:#fff5e7;text-wrap:balance;max-width:10ch;margin:0}
+ body[data-route=home] .home-journey>.section-heading>.text-link {display:inline-flex;min-height:46px;padding:9px 17px;border:1px solid #fff5e7;border-radius:99px;color:#fff5e7;background:#9e3d2d;font-size:.9375rem;line-height:1.5;white-space:normal}
+ body[data-route=home] .home-journey>.section-heading>.text-link:hover {background:#fff5e7;color:#8f2d1b}
+ body[data-route=home] .home-journey>.section-heading>.text-link:focus-visible {outline-color:#fff5e7}
+ body[data-route=home] .home-journey .school-stages {display:grid;grid-template-columns:minmax(0,1fr);grid-column:2;gap:30px;list-style:none;margin:0;padding:0 0 0 39px;position:relative;border:0;min-width:0}
+ body[data-route=home] .home-journey .school-stages::before {content:'';display:block;position:absolute;left:6px;top:37px;bottom:37px;width:1px;height:auto;right:auto;background:#fff5e7;opacity:.65;transform:none;pointer-events:none}
+ body[data-route=home] .home-journey .school-stage,body[data-route=home] .home-journey .school-stage:first-child {display:block;position:relative;grid-template-columns:none;gap:0;padding:0;margin:0;border:0;background:none;filter:none;opacity:1}
+ body[data-route=home] .home-journey .school-stage .stage-node {display:block;position:absolute;left:-39px;top:31px;width:13px;height:13px;border:2px solid #fff5e7;border-radius:50%;outline:5px solid #9e3d2d;background:#9e3d2d;box-shadow:none;transform:none;z-index:1}
+ body[data-route=home] .home-journey .school-stage.current-stage .stage-node {background:#fff5e7}
+ body[data-route=home] .home-journey .school-stage:nth-child(even) {padding-left:28px}
+ body[data-route=home] .home-journey .school-stage:nth-child(even) .stage-node {left:-39px}
+ body[data-route=home] .home-journey .journey-card.archive-panel {position:relative;display:grid;grid-template-columns:36px minmax(0,1fr);gap:18px;min-width:0;padding:30px 30px 25px;border:1px solid #cfbba8;border-left:0;border-radius:4px 22px 4px 4px;background:#fffdf8;color:#24221f;box-shadow:6px 6px 0 #6d271e66}
+ body[data-route=home] .home-journey .journey-card>.icon-disc {width:36px;height:36px;margin:0;padding:8px;border:0;border-radius:50%;background:#e4c5af;color:#8f2d1b}
+ body[data-route=home] .home-journey .journey-card .stage-period {font-size:.875rem;line-height:1.6;font-weight:650;letter-spacing:.02em;margin:0 0 11px;color:#8f2d1b}
+ body[data-route=home] .home-journey .journey-card h3 {font:600 clamp(1.4rem,1.9vw,1.85rem)/1.25 var(--sans);letter-spacing:-.035em;color:#24221f;margin:0 0 12px}
+ body[data-route=home] .home-journey .journey-card p {font-size:1rem;line-height:1.7;color:#584d43;max-width:61ch}
+ body[data-route=home] .home-journey .journey-card .journey-sentence {font-size:1rem;line-height:1.75;color:#24221f;margin-top:17px}
+ body[data-route=home] .home-journey .journey-card .status {display:inline-flex;background:#f5e5cd;border:1px solid #cfbba8;border-radius:99px;color:#584d43;padding:4px 11px;font-size:.8125rem;line-height:1.5;margin-top:19px}
+ body[data-route=home] .home-journey .journey-card .text-link {display:flex;width:fit-content;min-height:44px;font-size:.9375rem;line-height:1.5;color:#8f2d1b;margin-top:12px;border-color:#7b6353}
+ body[data-route=home] .home-journey .journey-card :focus-visible {outline-color:#8f2d1b}
+
+ /* Education: a left-to-right dated ledger at wide sizes. Current studies
+    sit next to each other; completed study follows in the same reading order. */
+ body[data-route=home] .home-education {display:block;padding-block:88px 80px;border:0;background:none}
+ body[data-route=home] .home-education>.section-heading {position:static;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:20px 42px;align-items:end;margin:0 0 25px}
+ body[data-route=home] .home-education>.section-heading::before {content:'04 / ACADEMIC RECORD';grid-column:1/-1;font:600 .8125rem/1.6 var(--sans);letter-spacing:.1em;color:#8f2d1b;margin:0}
+ body[data-route=home] .home-education>.section-heading h2 {font:400 clamp(3rem,4.5vw,4.5rem)/1.08 'Source Serif 4',Georgia,serif;letter-spacing:-.045em;color:#24221f;margin:0;max-width:17ch}
+ body[data-route=home] .home-education>.section-heading>.text-link {font-size:.9375rem;color:#8f2d1b;border-color:#7b6353;min-height:44px;align-self:end;white-space:normal}
+ body[data-route=home] .home-education>.education-caption {display:block;max-width:75ch;margin:0 0 43px;font-size:.9375rem;line-height:1.65;color:#584d43}
+ body[data-route=home] .home-education .education-focus {position:relative;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:30px;margin:0;padding:0;list-style:none;min-width:0}
+ body[data-route=home] .home-education .education-focus::before {content:'';position:absolute;display:block;left:0;right:0;top:47px;bottom:auto;width:auto;height:1px;background:#8f2d1b;opacity:.65;transform:none;pointer-events:none}
+ body[data-route=home] .home-education .education-record {position:relative;display:flex;flex-direction:column;gap:0;padding:0;margin:0;border:0;background:none;box-shadow:none;min-width:0}
+ body[data-route=home] .home-education .education-record .education-node {position:absolute;display:block;left:3px;top:41px;width:13px;height:13px;border:2px solid #8f2d1b;outline:5px solid #f5e5cd;transform:rotate(45deg);border-radius:1px;background:#f5e5cd;box-shadow:none;z-index:1}
+ body[data-route=home] .home-education .education-record.is-in-progress .education-node {background:#8f2d1b}
+ body[data-route=home] .home-education .education-record:nth-child(n) .education-period {display:block;grid-column:auto;grid-row:auto;margin:0;padding:0;color:#8f2d1b;font-size:1rem;line-height:1.6;font-weight:650;text-align:left;min-height:26px}
+ body[data-route=home] .home-education .education-record:nth-child(n) .education-card {position:relative;display:flex;flex:1;flex-direction:column;align-items:flex-start;gap:20px;grid-column:auto;grid-row:auto;margin:43px 0 0;padding:28px;border:1px solid #7b6353;border-top:4px solid #9e3d2d;border-radius:0 0 20px 0;box-shadow:none;background:#fffdf8;color:#24221f;min-width:0}
+ body[data-route=home] .home-education .education-card>.icon-disc {display:flex;width:38px;height:38px;padding:8px;border:1px solid #cfbba8;border-radius:0;background:#f5e5cd;color:#8f2d1b;flex:none}
+ body[data-route=home] .home-education .education-card h3 {font:600 clamp(1.5rem,2vw,1.9rem)/1.2 var(--sans);letter-spacing:-.035em;margin:0 0 13px;color:#24221f}
+ body[data-route=home] .home-education .education-card p {font-size:1rem;line-height:1.7;color:#584d43}
+ body[data-route=home] .home-education .education-card .education-note {font-size:.9375rem;line-height:1.65;margin-top:17px}
+ body[data-route=home] .home-education .education-card .education-score {font-size:1.1875rem;line-height:1.5;color:#8f2d1b;margin-top:14px}
+ body[data-route=home] .home-education .education-card .status {font-size:.8125rem;line-height:1.5;color:#584d43;padding:5px 10px;margin-top:22px;background:#f5f1e7;border:1px solid #cfbba8;border-radius:3px}
+ body[data-route=home] .home-education .education-record.is-in-progress .status {background:#f5e5cd;color:#8f2d1b}
+ body[data-route=home] .home-education>.education-details-link {display:inline-flex;align-items:center;min-height:46px;margin:34px 0 0;padding:9px 0;font-size:1rem;line-height:1.5;color:#8f2d1b;border-bottom:1px solid #7b6353;max-width:100%}
+ body[data-route=home] .home-education :focus-visible {outline-color:#8f2d1b}
+
+ @media (hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference) {
+  body[data-route=home] .home-journey .journey-card.archive-panel:hover {box-shadow:8px 10px 0 #6d271e88,0 16px 28px #38281f1a;border-color:#7b6353}
+  body[data-route=home] .home-education .education-card:hover {box-shadow:0 14px 30px #38281f13;border-color:#8f2d1b}
+ }
+ @media (max-width:1100px) {
+  body[data-route=home] .home-journey {grid-template-columns:minmax(0,.38fr) minmax(0,1fr);gap:40px;padding-block:72px}
+  body[data-route=home] .home-journey>.section-heading h2 {font-size:3.1rem}
+  body[data-route=home] .home-journey .school-stages {padding-left:32px}
+  body[data-route=home] .home-journey .school-stage .stage-node,body[data-route=home] .home-journey .school-stage:nth-child(even) .stage-node {left:-32px}
+  body[data-route=home] .home-journey .school-stage:nth-child(even) {padding-left:0}
+  body[data-route=home] .home-journey .journey-card.archive-panel {padding:27px 24px;gap:15px}
+  body[data-route=home] .home-education {padding-block:72px}
+  body[data-route=home] .home-education .education-focus {display:grid;grid-template-columns:minmax(0,1fr);gap:26px}
+  body[data-route=home] .home-education .education-focus::before {left:155px;right:auto;top:30px;bottom:30px;width:1px;height:auto}
+  body[data-route=home] .home-education .education-record {display:grid;grid-template-columns:132px minmax(0,1fr);gap:48px}
+  body[data-route=home] .home-education .education-record .education-node {left:149px;top:29px}
+  body[data-route=home] .home-education .education-record:nth-child(n) .education-period {grid-column:1;grid-row:1;text-align:right;padding-top:25px}
+  body[data-route=home] .home-education .education-record:nth-child(n) .education-card {display:grid;grid-template-columns:38px minmax(0,1fr);gap:20px;grid-column:2;grid-row:1;margin:0;padding:28px;border-top-width:1px;border-left:4px solid #9e3d2d}
+ }
+ @media (max-width:860px) {
+  body[data-route=home] .home-journey {display:block}
+  body[data-route=home] .home-journey>.section-heading {position:static;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:22px 30px;align-items:end;margin-bottom:40px}
+  body[data-route=home] .home-journey>.section-heading::before {grid-column:1/-1}
+  body[data-route=home] .home-journey>.section-heading h2 {max-width:12ch;font-size:clamp(2.8rem,6vw,3.5rem)}
+  body[data-route=home] .home-journey>.section-heading>.text-link {max-width:18ch;font-size:.875rem;justify-self:end}
+  body[data-route=home] .home-journey .school-stages {padding-left:36px;gap:25px}
+  body[data-route=home] .home-journey .school-stages::before {left:6px}
+  body[data-route=home] .home-journey .school-stage .stage-node,body[data-route=home] .home-journey .school-stage:nth-child(even) .stage-node {left:-36px}
+  body[data-route=home] .home-journey .journey-card.archive-panel {padding:29px;gap:18px}
+ }
+ @media (max-width:650px) {
+  body[data-route=home] .home-journey,body[data-route=home] .home-education {padding-block:58px}
+  body[data-route=home] .home-journey>.section-heading,body[data-route=home] .home-education>.section-heading {display:flex;flex-direction:column;align-items:flex-start;gap:22px;margin-bottom:32px}
+  body[data-route=home] .home-journey>.section-heading::before,body[data-route=home] .home-education>.section-heading::before {font-size:.75rem;line-height:1.6;letter-spacing:.09em}
+  body[data-route=home] .home-journey>.section-heading h2,body[data-route=home] .home-education>.section-heading h2 {font-size:clamp(2.75rem,11vw,3.5rem);line-height:1.08;max-width:12ch}
+  body[data-route=home] .home-journey>.section-heading>.text-link {max-width:none;font-size:.9375rem}
+  body[data-route=home] .home-journey .school-stages {padding-left:26px;gap:25px}
+  body[data-route=home] .home-journey .school-stage .stage-node,body[data-route=home] .home-journey .school-stage:nth-child(even) .stage-node {left:-26px;top:27px}
+  body[data-route=home] .home-journey .school-stages::before {top:33px;bottom:33px}
+  body[data-route=home] .home-journey .journey-card.archive-panel {display:flex;flex-direction:column;padding:25px 22px;gap:16px;border-radius:3px 18px 3px 3px;box-shadow:4px 4px 0 #6d271e66}
+  body[data-route=home] .home-journey .journey-card h3 {font-size:1.5rem;line-height:1.3}
+  body[data-route=home] .home-journey .journey-card p,body[data-route=home] .home-journey .journey-card .journey-sentence {font-size:1rem;line-height:1.7}
+  body[data-route=home] .home-journey .journey-card .stage-period {font-size:.875rem}
+  body[data-route=home] .home-education>.section-heading {margin-bottom:22px}
+  body[data-route=home] .home-education>.education-caption {font-size:.9375rem;line-height:1.7;margin-bottom:31px}
+  body[data-route=home] .home-education .education-focus {padding-left:27px;gap:27px}
+  body[data-route=home] .home-education .education-focus::before {left:6px;top:9px;bottom:30px}
+  body[data-route=home] .home-education .education-record {grid-template-columns:minmax(0,1fr);gap:15px}
+  body[data-route=home] .home-education .education-record .education-node {left:-27px;top:6px}
+  body[data-route=home] .home-education .education-record:nth-child(n) .education-period {grid-column:1;grid-row:1;text-align:left;padding:0;font-size:.9375rem}
+  body[data-route=home] .home-education .education-record:nth-child(n) .education-card {grid-column:1;grid-row:2;display:flex;flex-direction:column;padding:25px 22px;gap:17px;border-top:4px solid #9e3d2d;border-left:1px solid #7b6353}
+  body[data-route=home] .home-education .education-card h3 {font-size:1.5rem;line-height:1.25}
+  body[data-route=home] .home-education>.education-details-link {margin-top:28px;font-size:.9375rem}
+ }
+ @media (max-width:350px) {
+  body[data-route=home] .home-journey .journey-card.archive-panel,body[data-route=home] .home-education .education-record:nth-child(n) .education-card {padding:23px 18px}
+  body[data-route=home] .home-journey>.section-heading h2,body[data-route=home] .home-education>.section-heading h2 {font-size:2.55rem}
+ }
+}
+@media print {
+ .home-record-band {background:white!important;color:#111!important}
+}

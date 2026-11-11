@@ -4,7 +4,7 @@ import {defaultContent} from '../src/content.js';
 import {view} from '../src/views.js';
 import {democracyResource} from '../src/evidence.js';
 
-const opening=html=>html.match(/<section class="hero opening-hero"[\s\S]*?<\/section>/)?.[0]||'';
+const opening=html=>html.match(/<section\b[^>]*class="hero opening-hero"[\s\S]*?<\/section>/)?.[0]||'';
 const studentPanel=html=>opening(html).match(/<div[^>]+data-atlas-copy="student"[^>]*>[\s\S]*?<\/div>/)?.[0]||'';
 
 test('Home shows the teaching scope and a real lesson before gallery and personal narrative',()=>{

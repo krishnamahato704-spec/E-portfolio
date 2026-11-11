@@ -1,0 +1,163 @@
+/* Original paper-and-archive treatment. The existing portfolio remains below
+   its added summary; motion is an enhancement, never a condition for reading. */
+@media screen {
+ body[data-route=home] .portfolio-summary {
+  position:relative;isolation:isolate;display:grid;place-items:center;
+  min-height:max(850px,100svh);padding:150px var(--gutter) 64px;
+  border-bottom:1px solid #cfbba8;overflow:hidden;background:#f5f1e7;
+ }
+ body[data-route=home] .portfolio-summary::before {
+  content:'';position:absolute;inset:0;z-index:-2;pointer-events:none;
+  background-image:radial-gradient(#9e3d2d33 .7px,transparent .9px);
+  background-size:19px 19px;mask-image:linear-gradient(90deg,#000,transparent 30% 70%,#000);
+ }
+ body[data-route=home] .portfolio-summary::after {
+  content:'';position:absolute;width:620px;height:620px;left:-430px;top:170px;
+  border:1px solid #9e3d2d26;border-radius:50%;z-index:-1;pointer-events:none;
+  box-shadow:0 0 0 38px #9e3d2d06,0 0 0 76px #9e3d2d06,0 0 0 114px #9e3d2d06;
+ }
+ body[data-route=home] .summary-paper {width:100%;max-width:1180px;text-align:center}
+ body[data-route=home] .summary-availability {
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  max-width:100%;border:1px solid #9e3d2d66;border-radius:99px;background:#fffdf8;
+  color:#8f2d1b;padding:8px 18px;font-size:.8125rem;line-height:1.5;font-weight:650;
+ }
+ body[data-route=home] .summary-availability>span {width:7px;height:7px;border-radius:50%;background:#9e3d2d;flex:none}
+ body[data-route=home] .summary-byline {font-size:.8125rem;line-height:1.6;letter-spacing:.08em;text-transform:uppercase;color:#584d43;margin:25px 0 18px}
+ body[data-route=home] main .portfolio-summary h2 {
+  font:400 clamp(3.25rem,7.2vw,6.5rem)/1.03 'Source Serif 4',Georgia,serif;
+  color:#24221f;letter-spacing:-.055em;margin:0 auto 28px;max-width:100%;
+  text-wrap:balance;overflow-wrap:normal;word-break:normal;
+ }
+ body[data-route=home] .portfolio-summary h2 em {font-weight:400;font-style:italic;color:#8f2d1b}
+ body[data-route=home] .summary-description {
+  max-width:65ch;margin:0 auto;padding-top:23px;border-top:3px solid #e4c5af;
+  font-size:clamp(1.0625rem,1.6vw,1.375rem);line-height:1.7;color:#584d43;text-wrap:pretty;
+ }
+ body[data-route=home] .summary-description strong {color:#24221f;font-weight:650}
+ body[data-route=home] .summary-study {display:block;margin-top:5px}
+ body[data-route=home] .summary-tags {display:flex;flex-wrap:wrap;justify-content:center;gap:10px;list-style:none;padding:0;margin:30px auto 0;max-width:1040px}
+ body[data-route=home] .summary-tags li {background:#fffdf8;border:1px solid #cfbba8;border-radius:99px;padding:8px 15px;font-size:.8125rem;line-height:1.5;color:#8f2d1b;font-weight:600;max-width:100%}
+ body[data-route=home] .summary-scroll {display:inline-flex;align-items:center;gap:14px;min-height:44px;margin-top:25px;font-size:.875rem;color:#8f2d1b;text-decoration:underline;text-underline-offset:5px;text-decoration-color:#cfbba8}
+ body[data-route=home] .summary-scroll:hover {text-decoration-color:#8f2d1b}
+
+ /* Enclosed reading surfaces, with a folio edge and a quiet offset sheet. */
+ .archive-panel {
+  position:relative;min-width:0;background:#fffdf8;border:1px solid #cfbba8;
+  border-radius:4px 20px 4px 4px;padding:28px;
+  box-shadow:4px 4px 0 #e4c5af66;
+ }
+ .archive-panel::after {
+  content:'';position:absolute;right:14px;top:14px;width:18px;height:18px;
+  border-top:1px solid #9e3d2d66;border-right:1px solid #9e3d2d66;
+  border-top-right-radius:7px;pointer-events:none;
+ }
+ .archive-panel:focus-within {border-color:#8f2d1b;box-shadow:4px 4px 0 #e4c5af,0 0 0 1px #8f2d1b}
+ body[data-route=profile] .story-columns {gap:22px;align-items:stretch}
+ body[data-route=profile] .story-columns>.archive-panel {padding:28px 26px;border-top:3px solid #9e3d2d}
+ body[data-route=profile] .story-columns>.archive-panel p {font-size:1rem;line-height:1.8}
+ body[data-route=profile] .profile-interests .beyond-grid {gap:24px}
+ body[data-route=profile] .profile-interests .beyond-grid article.archive-panel {padding:30px;border:1px solid #cfbba8;background:#fffdf8;border-radius:4px 20px 4px 4px}
+ body[data-route=profile] .beyond-grid article.archive-panel .icon-disc {width:38px;height:38px;background:#f5e5cd;border-radius:50%;padding:8px;justify-content:center}
+ body[data-route=profile] .profile-page .classroom-feature>.archive-panel {padding:28px;background:#fff5e7;border:1px solid #cfbba8;box-shadow:4px 4px 0 #6d271e66;color:#38281f}
+ body[data-route=profile] .classroom-feature>.archive-panel :is(h2,p,.eyebrow,.text-link) {color:#38281f}
+
+ /* One continuous, newest-first academic rail. The dates remain outside the
+    sheets, like accession dates beside records in an archive. */
+ body[data-route=profile] .education-timeline {position:relative;list-style:none;margin:28px 0 0;padding:0;display:grid;gap:26px}
+ body[data-route=profile] .education-timeline::before {content:'';position:absolute;left:167px;top:27px;bottom:29px;width:1px;background:#9e3d2d77;pointer-events:none}
+ body[data-route=profile] .education-timeline .education-record {display:grid;grid-template-columns:145px minmax(0,1fr);gap:47px;position:relative;padding:0;border:0;margin:0;background:none;box-shadow:none;align-items:start}
+ body[data-route=profile] .education-timeline .education-record .education-node {display:block;position:absolute;left:161px;top:27px;width:13px;height:13px;border:2px solid #9e3d2d;outline:5px solid #f5f1e7;background:#fffdf8;border-radius:2px;transform:rotate(45deg);box-shadow:none;z-index:1}
+ body[data-route=profile] .education-timeline .education-record.is-in-progress .education-node {background:#9e3d2d}
+ body[data-route=profile] .education-timeline .education-record:nth-child(n) .education-period {grid-column:1;grid-row:1;padding:24px 0 0;margin:0;text-align:right;color:#8f2d1b;font-size:.9375rem;font-weight:650;line-height:1.6}
+ body[data-route=profile] .education-timeline .education-record:nth-child(n) .education-card {position:relative;grid-column:2;grid-row:1;display:grid;grid-template-columns:34px minmax(0,1fr);gap:18px;padding:28px 32px;border:1px solid #cfbba8;border-left:3px solid #9e3d2d;background:#fffdf8;border-radius:4px 20px 4px 4px;box-shadow:4px 4px 0 #e4c5af66}
+ body[data-route=profile] .education-timeline .education-card::after {content:'';position:absolute;right:14px;top:14px;width:18px;height:18px;border-top:1px solid #9e3d2d66;border-right:1px solid #9e3d2d66;border-top-right-radius:7px;pointer-events:none}
+ body[data-route=profile] .education-timeline .education-card>.icon-disc {width:34px;height:34px;border-radius:50%;padding:7px;background:#f5e5cd;color:#8f2d1b}
+ body[data-route=profile] .education-timeline .education-card h3 {padding-right:8px}
+ body[data-route=profile] .education-timeline .education-card .status {background:#f5f1e7;border-color:#cfbba8;color:#584d43}
+ body[data-route=profile] .education-timeline .education-record.is-in-progress .status {background:#f5e5cd;color:#8f2d1b}
+ body[data-route=profile] .education-caption {color:#584d43;font-size:.9375rem;max-width:68ch;margin:0 0 30px}
+
+ /* The detailed teaching records retain their original evidence and filters. */
+ body[data-route=teaching] .journey-index {gap:20px;background:none;border:0;margin-top:28px}
+ body[data-route=teaching] .journey-index li.archive-panel {padding:26px 24px;border:1px solid #cfbba8;background:#fffdf8;border-radius:4px 20px 4px 4px;box-shadow:4px 4px 0 #e4c5af66}
+ body[data-route=teaching] .journey-index li+li.archive-panel {border-left:1px solid #cfbba8}
+ body[data-route=teaching] .timeline-container {padding-left:31px;position:relative}
+ body[data-route=teaching] .timeline-track {display:block;position:absolute;left:6px;top:35px;bottom:35px;height:auto;width:1px;background:#9e3d2d77;transform:none}
+ body[data-route=teaching] .timeline-fill {display:none}
+ body[data-route=teaching] .experience-row {position:relative;border:0;padding:0 0 34px}
+ body[data-route=teaching] .milestone-rail {display:block;position:absolute;left:-31px;top:34px;width:13px;height:13px;padding:0}
+ body[data-route=teaching] .milestone-node {display:block;width:13px;height:13px;border:2px solid #9e3d2d;background:#fffdf8;outline:5px solid #f5f1e7;border-radius:2px;transform:rotate(45deg);box-shadow:none;position:static}
+ body[data-route=teaching] .milestone-node .node-dot {display:none}
+ body[data-route=teaching] .teaching-page .milestone-card.archive-panel,body[data-route=teaching] .teaching-page .experience-row:nth-child(even) .milestone-card.archive-panel {padding:34px;border:1px solid #cfbba8;border-left:3px solid #9e3d2d;background:#fffdf8;border-radius:4px 20px 4px 4px;box-shadow:4px 4px 0 #e4c5af66;gap:32px}
+ body[data-route=teaching] .teaching-page .milestone-card.archive-panel figure {position:static}
+ body[data-route=teaching] .teaching-page .milestone-card.archive-panel figure>a {height:350px;background:#f5e5cd}
+ body[data-route=teaching] .teaching-page .learning-grid {gap:22px}
+ body[data-route=teaching] .learning-grid>div.archive-panel {padding:26px;border:1px solid #cfbba8;border-radius:4px 20px 4px 4px;background:#fffdf8}
+ .school-stages .journey-card.archive-panel {border-radius:4px 20px 4px 4px;border-left:3px solid #9e3d2d;background:#fffdf8;box-shadow:4px 4px 0 #e4c5af66}
+
+ @media (hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference) {
+  [data-tilt] {transition:transform 220ms ease,box-shadow 220ms ease,border-color 220ms ease;transform:perspective(1000px) rotateX(var(--card-rx,0deg)) rotateY(var(--card-ry,0deg)) translateY(var(--card-lift,0px));transform-origin:center}
+  [data-tilt]:hover {--card-lift:-3px;border-color:#9e3d2d;box-shadow:7px 11px 0 #e4c5af55,0 18px 32px #38281f0d}
+  [data-tilt].is-tilting {transition:transform 90ms linear,box-shadow 220ms ease,border-color 220ms ease}
+ }
+ @media (max-width:1000px) {
+  body[data-route=home] .portfolio-summary {padding-top:145px;min-height:780px}
+  body[data-route=profile] .story-columns {grid-template-columns:1fr}
+  body[data-route=profile] .story-columns>.archive-panel p {max-width:none}
+  body[data-route=profile] .education-timeline::before {left:132px}
+  body[data-route=profile] .education-timeline .education-record {grid-template-columns:110px minmax(0,1fr);gap:47px}
+  body[data-route=profile] .education-timeline .education-record .education-node {left:126px}
+  body[data-route=teaching] .journey-index {gap:14px}
+  body[data-route=teaching] .journey-index li.archive-panel {padding:24px 20px}
+  body[data-route=teaching] .teaching-page .milestone-card.archive-panel,body[data-route=teaching] .teaching-page .experience-row:nth-child(even) .milestone-card.archive-panel {grid-template-columns:minmax(0,1fr) 220px;padding:28px;gap:26px}
+ }
+ @media (max-width:760px) {
+  body[data-route=home] .portfolio-summary {padding:128px 23px 42px;min-height:0}
+  body[data-route=home] main .portfolio-summary h2 {font-size:clamp(2.7rem,9.1vw,4.75rem);letter-spacing:-.055em;line-height:1.07;margin-bottom:24px;max-width:20ch}
+  body[data-route=home] .summary-byline {font-size:.6875rem;letter-spacing:.06em;margin:22px 0 18px}
+  body[data-route=home] .summary-availability {font-size:.75rem;padding:8px 14px}
+  body[data-route=home] .summary-description {font-size:1rem;line-height:1.75;padding-top:22px;text-wrap:pretty}
+  body[data-route=home] .summary-tags {gap:8px;margin-top:24px}
+  body[data-route=home] .summary-tags li {font-size:.75rem;padding:7px 12px}
+  body[data-route=home] .summary-scroll {margin-top:22px}
+  body[data-route=profile] .profile-interests .beyond-grid {gap:20px}
+  body[data-route=profile] .profile-interests .beyond-grid article.archive-panel {padding:26px}
+  body[data-route=profile] .story-columns>.archive-panel {padding:24px}
+  body[data-route=profile] .education-timeline {padding-left:27px;gap:24px}
+  body[data-route=profile] .education-timeline::before {left:6px;top:9px;bottom:30px}
+  body[data-route=profile] .education-timeline .education-record {grid-template-columns:minmax(0,1fr);gap:12px}
+  body[data-route=profile] .education-timeline .education-record .education-node {left:-27px;top:6px}
+  body[data-route=profile] .education-timeline .education-record:nth-child(n) .education-period {grid-column:1;grid-row:1;text-align:left;padding:0;font-size:.875rem}
+  body[data-route=profile] .education-timeline .education-record:nth-child(n) .education-card {grid-column:1;grid-row:2;grid-template-columns:minmax(0,1fr);padding:24px;gap:14px}
+  body[data-route=profile] .education-timeline .education-card h3 {font-size:1.375rem;line-height:1.3;padding:0}
+  body[data-route=profile] .education-timeline .education-card p {font-size:.9375rem}
+  body[data-route=profile] .profile-page .classroom-feature>.archive-panel {padding:24px}
+  body[data-route=teaching] .journey-index {gap:16px}
+  body[data-route=teaching] .journey-index li.archive-panel {padding:24px}
+  body[data-route=teaching] .timeline-container {padding-left:25px}
+  body[data-route=teaching] .milestone-rail {left:-25px}
+  body[data-route=teaching] .teaching-page .milestone-card.archive-panel,body[data-route=teaching] .teaching-page .experience-row:nth-child(even) .milestone-card.archive-panel {grid-template-columns:1fr;padding:25px 21px;gap:26px}
+  body[data-route=teaching] .teaching-page .milestone-card.archive-panel figure>a {height:280px}
+  body[data-route=teaching] .milestone-card.archive-panel .milestone-title {font-size:1.75rem;line-height:1.2}
+  body[data-route=teaching] .learning-grid>div.archive-panel {padding:24px}
+ }
+ @media (max-width:370px) {
+  body[data-route=home] .portfolio-summary {padding-inline:20px}
+  body[data-route=home] main .portfolio-summary h2 {font-size:2.55rem}
+  body[data-route=profile] .education-timeline .education-record:nth-child(n) .education-card {padding:21px 18px}
+  body[data-route=teaching] .teaching-page .milestone-card.archive-panel,body[data-route=teaching] .teaching-page .experience-row:nth-child(even) .milestone-card.archive-panel {padding:22px 18px}
+ }
+ @media (prefers-reduced-motion:reduce), (hover:none), (pointer:coarse) {
+  [data-tilt] {transform:none!important;transition:none!important}
+ }
+}
+@media print {
+ .portfolio-summary {display:none}
+ .archive-panel,[data-tilt] {transform:none!important;box-shadow:none!important;border-radius:0;break-inside:avoid}
+ .archive-panel::after,.education-timeline::before {display:none}
+ .education-timeline {display:block;list-style:none;padding:0;margin:0}
+ .education-timeline .education-record {display:block;margin:14px 0;break-inside:avoid}
+ .education-timeline .education-node {display:none}
+ .education-timeline .education-period {display:block;text-align:left!important;margin-bottom:6px}
+}

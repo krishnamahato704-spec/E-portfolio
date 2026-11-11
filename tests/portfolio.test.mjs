@@ -116,11 +116,14 @@ test('Clarified recruiter facts survive loading the legacy public record',()=>{
  const c=mergeContent({qualifications:[{title:'M.A. History',place:'Postgraduate study in History',period:'2025–Present',status:'In progress'}]});
  const html=view('profile',c);assert.match(html,/IGNOU/);assert.match(html,/First year cleared/);assert.match(html,/CTET Paper II.*Applied/i);assert.match(html,/May 2027/);
 });
-test('Editorial records retain owner order and escape document metadata',()=>{
+test('Editorial records display newest first without changing saved order and escape document metadata',()=>{
  const c=structuredClone(defaultContent);
  c.experiences.reverse();
+ const saved=structuredClone(c.experiences);
  const teaching=view('teaching',c);
- assert.ok(teaching.indexOf(esc(c.experiences[0].title))<teaching.indexOf(esc(c.experiences[1].title)));
+ assert.ok(teaching.indexOf(esc(defaultContent.experiences[0].title))<teaching.indexOf(esc(defaultContent.experiences[1].title)));
+ assert.ok(teaching.indexOf(esc(defaultContent.experiences[1].title))<teaching.indexOf(esc(defaultContent.experiences[2].title)));
+ assert.deepEqual(c.experiences,saved);
  for(const entry of c.experiences)assert.ok(teaching.includes(esc(entry.period)));
  c.certificates=[{...c.certificates[0],issuer:'<em>Owner issuer</em>',date:'Owner date'}];
  const evidence=view('credentials',c);

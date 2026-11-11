@@ -107,7 +107,9 @@ function initPortfolioOpening(root=globalThis.document?.querySelector('#main'),{
  };
  const start=(explicit=false)=>{
   if(active||events.signal.aborted)return;
-  if(!canPlayOpening({initial:explicit||initial,animated:typeof stage.animate==='function',top:win.scrollY,reduced:preference.matches,saveData:connection?.saveData,slow:/^(slow-2g|2g)$/.test(connection?.effectiveType||''),fragment:win.location.hash,hidden:doc.hidden})){win.__portfolioOpeningBoot?.release('bypassed');syncReplay();return;}
+  const sceneTop=Math.max(0,hero.getBoundingClientRect().top+win.scrollY-110);
+  const position=explicit?Math.abs(win.scrollY-sceneTop):win.scrollY;
+  if(!canPlayOpening({initial:explicit||initial,animated:typeof stage.animate==='function',top:position,reduced:preference.matches,saveData:connection?.saveData,slow:/^(slow-2g|2g)$/.test(connection?.effectiveType||''),fragment:win.location.hash,hidden:doc.hidden})){win.__portfolioOpeningBoot?.release('bypassed');syncReplay();return;}
   // Without an unbroken prepaint cover, an automatic late intro would recreate
   // the flash. Explicit Replay remains available after a failed/slow startup.
   if(!explicit&&!win.__portfolioOpeningBoot?.claim()){syncReplay();return;}
@@ -185,7 +187,9 @@ function initPortfolioOpening(root=globalThis.document?.querySelector('#main'),{
  replay.addEventListener('click',()=>{
   if(limited())return;
   if(win.location.hash){const url=new URL(win.location.href);url.hash='';win.history.replaceState(win.history.state,'',url);}
-  win.scrollTo({top:0,behavior:'instant'});
+  // The summary now precedes this scene, so Replay returns to the scene itself.
+  const sceneTop=Math.max(0,hero.getBoundingClientRect().top+win.scrollY-110);
+  win.scrollTo({top:sceneTop,behavior:'instant'});
   launch=win.requestAnimationFrame(()=>{launch=win.requestAnimationFrame(()=>{launch=0;start(true);});});
  },options);
  doc.addEventListener('keydown',event=>{if(active&&event.key==='Escape')finish('escaped');},options);

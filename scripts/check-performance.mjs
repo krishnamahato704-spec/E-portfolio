@@ -28,7 +28,11 @@ try{
    await heading.waitFor();
    record(engine,'Home is readable before a delayed application loads',await heading.evaluate(el=>Number(getComputedStyle(el).opacity)>=.85)&&await page.locator('.site-header').isVisible()&&!await page.locator('.hero-film').getAttribute('src'));
    await page.locator('.opening-hero').evaluate(hero=>Promise.allSettled(hero.getAnimations({subtree:true}).filter(animation=>animation.animationName==='hero-intro-reveal').map(animation=>animation.finished)));
-   releaseApp();await pageLoading;await page.waitForFunction(()=>typeof window.releaseTestFilm==='function');
+   releaseApp();await pageLoading;
+   // The added summary is the first view; exercise delayed playback only when
+   // the visitor reaches the preserved film scene below it.
+   await page.locator('.opening-hero').scrollIntoViewIfNeeded();
+   await page.waitForFunction(()=>typeof window.releaseTestFilm==='function');
    record(engine,'A delayed film cannot cover the heading or restart its reveal',await heading.isVisible()&&await page.locator('.opening-hero>.hero-film').count()===1&&await page.locator('.identity-intro').count()===0&&await heading.evaluate(el=>el.getAnimations().every(animation=>animation.animationName!=='hero-intro-reveal'||animation.playState==='finished')));
    await page.evaluate(()=>{window.releaseTestFilm();});
    await late.close();

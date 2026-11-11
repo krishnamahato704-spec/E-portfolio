@@ -5,6 +5,7 @@ const port=4175,base=`http://127.0.0.1:${port}/`;
 const server=spawn(process.execPath,['scripts/serve.mjs'],{env:{...process.env,PORT:String(port)},windowsHide:true,stdio:'ignore'});
 const results=[];
 const record=(engine,name,pass,details)=>{results.push({engine,name,pass:!!pass,...(details?{details}:{})});if(!pass)console.error('FAIL',engine,name,details||'');};
+const showOpening=page=>page.locator('.opening-hero').evaluate(hero=>hero.scrollIntoView({block:'start',behavior:'instant'}));
 await fs.mkdir('outputs/redesign',{recursive:true});
 try{
  for(let i=0;i<80;i++){try{if((await fetch(base)).ok)break;}catch{}await new Promise(r=>setTimeout(r,100));}
@@ -38,16 +39,29 @@ try{
    record(engine,'Headline reveal uses staggered timing and keeps the name readable',reveal.readable&&new Set(reveal.delays).size>1);
    record(engine,'Automatic entry keeps keyboard focus and leaves main interactive',reveal.focusKept);
    record(engine,'Headline reveal starts with the background film unloaded',reveal.filmUnloaded);
+   await page.waitForFunction(()=>!document.querySelector('.opening-hero').getAnimations({subtree:true}).some(animation=>animation.animationName==='hero-intro-reveal'&&(animation.playState==='running'||animation.pending)));
+   await page.waitForTimeout(100);
+   record(engine,'The new summary precedes the preserved opening and is the first view',await page.evaluate(()=>{
+    const summary=document.querySelector('.portfolio-summary'),hero=document.querySelector('.opening-hero');
+    if(!summary||!hero)return false;
+    const bounds=summary.getBoundingClientRect();
+    return Boolean(summary.compareDocumentPosition(hero)&Node.DOCUMENT_POSITION_FOLLOWING)&&bounds.top<innerHeight&&bounds.bottom>0&&hero.getBoundingClientRect().top>=innerHeight;
+   }));
+   record(engine,'The below-fold film stays paused and unloaded before the visitor reaches the original opening',await page.locator('.hero-film').evaluate(film=>film.paused&&!film.getAttribute('src')));
+   await page.screenshot({path:'outputs/redesign/summary-'+engine+'-first-view.png'});
+   await showOpening(page);
    await page.waitForFunction(()=>{const film=document.querySelector('.hero-film');return !film.paused&&film.readyState>=2;});
    record(engine,'The single muted film starts in the hero after the headline reveal',await page.evaluate(()=>window.heroReveal.startedWithFilm===false&&document.querySelectorAll('video').length===1&&document.querySelector('.opening-hero>.hero-film')?.muted&&document.querySelectorAll('audio,.identity-intro').length===0));
-   record(engine,'Home stays readable beside the photograph gallery and playing film',await page.locator('h1').isVisible()&&await page.locator('[data-hero-gallery]').isVisible());
+   record(engine,'Home stays readable beside the photograph gallery and playing film',await page.locator('.opening-hero h1').isVisible()&&await page.locator('[data-hero-gallery]').isVisible());
    await page.screenshot({path:'outputs/redesign/opening-'+engine+'-settled.png'});
    await page.locator('[data-film-pause]').click();await page.waitForFunction(()=>document.querySelector('.hero-film').paused);
    record(engine,'The visitor can pause the background film',await page.locator('[data-film-close]').isVisible());
    await page.locator('[data-film-pause]').click();await page.waitForFunction(()=>!document.querySelector('.hero-film').paused);
    await page.locator('#home-contact-title').scrollIntoViewIfNeeded();await page.waitForFunction(()=>document.querySelector('.hero-film').paused);
    record(engine,'Film decoding pauses off screen',await page.locator('.hero-film').evaluate(v=>v.paused));
-   await page.evaluate(()=>scrollTo({top:0,behavior:'instant'}));await page.waitForFunction(()=>!document.querySelector('.hero-film').paused);
+   await page.evaluate(()=>scrollTo({top:0,behavior:'instant'}));await page.waitForTimeout(150);
+   record(engine,'Returning to the top summary keeps the original film paused off screen',await page.locator('.hero-film').evaluate(v=>v.paused));
+   await showOpening(page);await page.waitForFunction(()=>!document.querySelector('.hero-film').paused);
    await page.evaluate(()=>{
     let hidden=false;
     Object.defineProperty(document,'hidden',{configurable:true,get:()=>hidden});
@@ -58,21 +72,31 @@ try{
    record(engine,'A hidden tab pauses the film',await page.locator('.hero-film').evaluate(v=>v.paused));
    await page.evaluate(()=>window.setTestTabHidden(false));await page.waitForFunction(()=>!document.querySelector('.hero-film').paused);
    await page.locator('[data-film-pause]').click();
-   await page.locator('#home-contact-title').scrollIntoViewIfNeeded();await page.evaluate(()=>scrollTo({top:0,behavior:'instant'}));await page.waitForTimeout(150);
+   await page.locator('#home-contact-title').scrollIntoViewIfNeeded();await showOpening(page);await page.waitForTimeout(150);
    record(engine,'Returning to the hero preserves a visitor pause',await page.locator('.hero-film').evaluate(v=>v.paused));
    await page.locator('[data-film-close]').click();
    record(engine,'Hiding the background leaves the gallery visible and restores control focus',await page.locator('[data-hero-gallery]').isVisible()&&!await page.locator('.hero-film').isVisible()&&await page.locator('.hero-film').evaluate(v=>v.paused)&&await page.locator('[data-film-pause]').evaluate(el=>document.activeElement===el));
+   await page.locator('[data-opening-replay]').click();await page.locator('.portfolio-opening').waitFor({state:'attached'});
+   record(engine,'Replay stays with the preserved opening below the summary',await page.locator('.opening-hero').evaluate(hero=>{const bounds=hero.getBoundingClientRect();return bounds.top>=0&&bounds.top<innerHeight&&hero.dataset.openingState==='playing';}));
+   await page.keyboard.press('Escape');await page.locator('.portfolio-opening').waitFor({state:'detached'});
+   record(engine,'Escape ends replay, restores its focus and preserves the hidden film preference',await page.locator('[data-opening-replay]').evaluate(el=>document.activeElement===el)&&!await page.locator('.hero-film').isVisible()&&await page.locator('.hero-film').evaluate(v=>v.paused));
    await page.evaluate(()=>{window.dispatchEvent(new PageTransitionEvent('pagehide',{persisted:true}));window.dispatchEvent(new PageTransitionEvent('pageshow',{persisted:true}));});
    record(engine,'Cached-page restoration preserves the hidden film',!await page.locator('.hero-film').isVisible()&&await page.locator('.hero-film').evaluate(v=>v.paused));
    await page.goto(base+'resources/');record(engine,'Inner pages have no opening media',await page.locator('video,audio,.hero-intro-line').count()===0);
    await page.locator('.site-header .brand').click();await page.waitForURL(base);
-   record(engine,'Internal Home links keep the page ready to read',await page.locator('h1').isVisible());
+   record(engine,'Internal Home links keep the new summary ready to read',await page.locator('.portfolio-summary').isVisible()&&await page.locator('.opening-hero h1').isVisible());
    record(engine,'No browser exceptions',errors.length===0,errors);await ctx.close();
    const firstPhone=await browser.newContext({viewport:{width:320,height:844},hasTouch:true,...(engine==='firefox'?{}:{isMobile:true})}),phone=await firstPhone.newPage();
    await phone.goto(base,{waitUntil:'domcontentloaded'});
    await phone.waitForFunction(()=>document.querySelector('.opening-hero')?.dataset.openingState==='completed',null,{timeout:5000});
+   record(engine,'A narrow phone first shows the added summary before the preserved opening',await phone.evaluate(()=>{
+    const summary=document.querySelector('.portfolio-summary'),hero=document.querySelector('.opening-hero');
+    return !!summary&&!!hero&&summary.getBoundingClientRect().top<innerHeight&&Boolean(summary.compareDocumentPosition(hero)&Node.DOCUMENT_POSITION_FOLLOWING);
+   }));
+   await phone.screenshot({path:'outputs/redesign/summary-'+engine+'-phone.png'});
+   await showOpening(phone);
    record(engine,'A phone first visit completes its opening through initial viewport setup',await phone.locator('.portfolio-opening').count()===0&&await phone.locator('[data-opening-replay]').isVisible());
-   record(engine,'The narrow phone heading and shortcuts are visible without overflow',await phone.locator('h1').isVisible()&&await phone.locator('.mobile-shortcuts').isVisible()&&await phone.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
+   record(engine,'The narrow phone heading and shortcuts are visible without overflow',await phone.locator('.opening-hero h1').isVisible()&&await phone.locator('.mobile-shortcuts').isVisible()&&await phone.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
    await phone.screenshot({path:'outputs/redesign/opening-'+engine+'-phone.png'});
    await phone.locator('.skip-link').focus();await phone.keyboard.press('Enter');
    record(engine,'The page skip link moves focus to main',await phone.evaluate(()=>document.activeElement.id==='main'));
@@ -86,16 +110,18 @@ try{
     if(mode==='autoplay-blocked')await p.addInitScript(()=>{HTMLMediaElement.prototype.play=function(){return Promise.reject(new DOMException('Blocked','NotAllowedError'));};});
     if(mode==='app-failure')await p.route('**/src/app.js*',r=>r.abort());
     await p.goto(base+(mode==='fragment'?'#teaching-evidence':''),{waitUntil:'domcontentloaded'});
+    if(mode!=='fragment')await showOpening(p);
     if(mode==='media-failure')await p.locator('[data-film-failed=true]').waitFor({state:'attached'});
     if(mode==='reduced'||mode==='fragment')await p.locator('[data-film-controls]:not([inert])').waitFor({state:'attached'});
-    record(engine,mode+' leaves the heading visible without a gate',await p.locator('h1').isVisible());
+    record(engine,mode+' leaves the original heading visible without a gate',await p.locator('.opening-hero h1').isVisible());
     if(mode==='reduced'||mode==='fragment')record(engine,mode+' skips the headline animation and automatic film',await p.evaluate(()=>!document.querySelector('.opening-hero').getAnimations({subtree:true}).some(animation=>animation.animationName==='hero-intro-reveal')&&!document.querySelector('.hero-film').getAttribute('src')));
     await context.close();
    }
    const dataSaver=await browser.newContext(),saving=await dataSaver.newPage();
    await saving.addInitScript(()=>Object.defineProperty(navigator,'connection',{value:{saveData:true,effectiveType:'4g'},configurable:true}));
    await saving.goto(base);await saving.locator('[data-hero-gallery][data-enhanced]').waitFor();
-   record(engine,'Data saving mode leaves the film unloaded and keeps photos static',await saving.locator('h1').isVisible()&&await saving.locator('.hero-film').evaluate(video=>!video.getAttribute('src'))&&await saving.locator('[data-hero-gallery]').getAttribute('data-rotation')==='paused');
+   await showOpening(saving);
+   record(engine,'Data saving mode leaves the film unloaded and keeps photos static',await saving.locator('.opening-hero h1').isVisible()&&await saving.locator('.hero-film').evaluate(video=>!video.getAttribute('src'))&&await saving.locator('[data-hero-gallery]').getAttribute('data-rotation')==='paused');
    await dataSaver.close();
    const photosContext=await browser.newContext({viewport:{width:1440,height:1000}}),photos=await photosContext.newPage();
    await photos.goto(base);await photos.locator('[data-hero-gallery][data-enhanced]').waitFor();
@@ -124,6 +150,7 @@ try{
    await photosContext.close();
    const staticContext=await browser.newContext({viewport:{width:390,height:844},reducedMotion:'reduce'}),staticPhotos=await staticContext.newPage();
    await staticPhotos.goto(base);await staticPhotos.locator('[data-hero-gallery][data-enhanced]').waitFor();
+   await showOpening(staticPhotos);
    record(engine,'Reduced motion keeps the phone gallery static and leaves film unloaded',await staticPhotos.locator('[data-hero-gallery]').getAttribute('data-rotation')==='paused'&&await staticPhotos.locator('.hero-film').evaluate(v=>v.paused&&!v.getAttribute('src')));
    await staticPhotos.locator('[data-gallery-next]').click();await staticPhotos.waitForFunction(()=>document.querySelector('[data-hero-gallery]').dataset.slide==='1');
    record(engine,'Phone gallery remains manually usable without overflow',await staticPhotos.locator('[data-hero-gallery]').getAttribute('data-slide')==='1'&&await staticPhotos.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));

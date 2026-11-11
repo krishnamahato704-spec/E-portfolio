@@ -1,4 +1,5 @@
 import {experiencePeriod} from '../src/recruiter.js';
+import {sortQualifications,sortExperiences} from '../src/chronology.js';
 import PDFDocument from 'pdfkit';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -26,11 +27,11 @@ export async function generateResume(c=defaultContent,{siteUrl=resolveSiteUrl()}
  text(left,'Available: '+c.profile.availability,9,'Helvetica-Bold');text(left,c.profile.workPreferences,8.8);
  text(left,c.profile.eligibility,8.5,'Helvetica',muted);
  section(left,'Education');
- for(const q of c.qualifications){text(left,q.title,9.2,'Helvetica-Bold');text(left,q.place,8.7);text(left,q.period+' | '+q.status,8.2,'Helvetica',muted);if(q.note)text(left,q.note,8.2,'Helvetica',muted);left.y+=3;}
+ for(const q of sortQualifications(c.qualifications)){text(left,q.title,9.2,'Helvetica-Bold');text(left,q.place,8.7);text(left,q.period+' | '+q.status,8.2,'Helvetica',muted);if(q.note)text(left,q.note,8.2,'Helvetica',muted);left.y+=3;}
  section(left,'Roles of interest');for(const role of c.profile.roles)text(left,role,8.7);text(left,'Boards of interest: '+c.profile.targetBoards,8.2,'Helvetica',muted);
  section(left,'Skills & languages');text(left,c.competencies.join(' · '),8.5);text(left,c.profile.languages.join(' · '),8.5);
  section(right,'Teaching & observation experience');
- for(const e of c.experiences){
+ for(const e of sortExperiences(c.experiences)){
   text(right,e.institution||e.title,10,'Helvetica-Bold');text(right,e.type+' | '+experiencePeriod(e)+' | '+e.status,8.4,'Helvetica',muted);
   const points=e.id==='panchsheel'?(e.points||[]).filter((_,i)=>[0,1,3].includes(i)):(e.points||[]).slice(0,3);
   for(const point of points)text(right,'• '+point,8.8);right.y+=6;

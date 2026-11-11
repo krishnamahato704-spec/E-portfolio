@@ -10,8 +10,9 @@ test('Home puts teaching evidence before education while About preserves the ful
  c.experiences[0].duration='12';c.experiences[0].institution='Owner school';
  const home=view('home',c);
  const profile=view('profile',c);
- assert.ok(profile.indexOf('2014')<profile.indexOf('2017'));
- assert.ok(profile.indexOf('2017')<profile.indexOf('2018–2021'));
+ assert.ok(profile.indexOf('2025–Present')<profile.indexOf('2018–2021'));
+ assert.ok(profile.indexOf('2018–2021')<profile.indexOf('2017'));
+ assert.ok(profile.indexOf('2017')<profile.indexOf('2014'));
  assert.ok(home.indexOf('<h3>B.Ed.</h3>')<home.indexOf('<h3>B.A. History'));
  assert.doesNotMatch(home,/<h3>Class X/);
  assert.match(profile,/<h3>Class X/);

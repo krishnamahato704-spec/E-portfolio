@@ -95,13 +95,14 @@ export function initBackgroundFilm() {
   if ('IntersectionObserver' in window) {
     const observer = new IntersectionObserver(entries => {
       if (events.signal.aborted) return;
-      visible = entries[0].isIntersecting;
+      // A boundary touching the viewport can be intersecting with zero area.
+      visible = entries[0].isIntersecting && entries[0].intersectionRatio > 0;
       if (visible) resume();
       else {
         waitingForFragment = false;
         film.pause();
       }
-    });
+    }, {threshold:[0,0.01]});
     observer.observe(hero);
     events.signal.addEventListener('abort', () => observer.disconnect(), { once: true });
   }

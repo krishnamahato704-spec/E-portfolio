@@ -2,6 +2,7 @@ import {wireCollections} from './collections.js?v=editorial-20261004';
 import {initNavigation} from './navigation.js?v=editorial-20261004';
 import {initMotion,cleanupMotion} from './motion.js?v=editorial-20261004';
 import {wireViewer} from './viewer.js?v=editorial-20261004';
+import {initAcademicCards,cleanupAcademicCards} from './academic-cards.js?v=editorial-20261004';
 const route=document.body.dataset.route;
 const base=document.body.dataset.base;
 initNavigation();
@@ -19,6 +20,7 @@ function wire(){
  });
  wireCollections();
  wireViewer();
+ initAcademicCards();
  document.querySelectorAll('img').forEach(im=>im.addEventListener('error',()=>{if(!im.alt){im.remove();return;}const note=document.createElement('p');note.className='image-error';note.textContent=im.alt+' — image temporarily unavailable.';im.replaceWith(note)},{once:true}));
 }
 if(route==='admin') import('./admin.js?v=editorial-20261004').then(x=>x.initStudio(base));
@@ -30,6 +32,6 @@ else {
   import('./hero-gallery.js?v=editorial-20261004').then(photos=>{gallery=photos;if(active)gallery.initHeroGallery();});
  }
  initMotion({initial:true});
- window.addEventListener('pagehide',()=>{active=false;film?.cleanupBackgroundFilm();gallery?.cleanupHeroGallery();cleanupMotion();});
- window.addEventListener('pageshow',e=>{if(e.persisted){active=true;initMotion();film?.initBackgroundFilm();gallery?.initHeroGallery();}});
+ window.addEventListener('pagehide',()=>{active=false;film?.cleanupBackgroundFilm();gallery?.cleanupHeroGallery();cleanupMotion();cleanupAcademicCards();});
+ window.addEventListener('pageshow',e=>{if(e.persisted){active=true;initMotion();initAcademicCards();film?.initBackgroundFilm();gallery?.initHeroGallery();}});
 }

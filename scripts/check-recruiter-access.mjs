@@ -41,14 +41,14 @@ try{
    }
    if(width===390){
     await page.goto(base);
-    check(engine,'Joining availability appears within the first phone screen',await page.locator('.hero-joining').evaluate(el=>el.getBoundingClientRect().bottom<800));
+    check(engine,'Joining availability appears within the first phone screen',await page.locator('.summary-availability').evaluate(el=>el.getBoundingClientRect().top>=0&&el.getBoundingClientRect().bottom<800));
     await page.goto(base+'resources/');
     check(engine,'First teaching file starts within one screen of the phone heading',await page.locator('#resource-list>.resource-row').first().evaluate(el=>el.getBoundingClientRect().top<850));
     await page.goto(base+'#teaching-evidence');
     await page.locator('#teaching-evidence').waitFor();
     await page.evaluate(()=>document.fonts.ready);
     check(engine,'Direct evidence link lands at the selected work without playing the film',await page.evaluate(()=>!document.querySelector('.hero-film').getAttribute('src')&&document.querySelector('#teaching-evidence').getBoundingClientRect().top>=0&&document.querySelector('#teaching-evidence').getBoundingClientRect().top<150));
-    const order=await page.locator('main>section').evaluateAll(sections=>sections.map(s=>s.className));
+    const order=await page.locator('main>section,main>.home-record-band>section').evaluateAll(sections=>sections.map(s=>s.className));
     check(engine,'Evidence and experience precede detailed education',order.findIndex(s=>s.includes('selected-evidence'))<order.findIndex(s=>s.includes('home-journey'))&&order.findIndex(s=>s.includes('home-journey'))<order.findIndex(s=>s.includes('home-education')),order);
     for(const target of ['resume/','resources/','contact/']){
      await page.locator(`.mobile-shortcuts a[href$="${target}"]`).click();

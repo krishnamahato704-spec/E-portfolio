@@ -241,6 +241,8 @@ try{
   const motion=await context({reducedMotion:'no-preference'});const moving=await motion.newPage();
   await moving.goto(base,{waitUntil:'domcontentloaded'});
   record('opening: the headline is visible without an overlay or opening audio',await moving.locator('h1.hero-intro-line').isVisible()&&await moving.locator('.identity-intro,audio').count()===0);
+  record('home: the summary precedes the preserved opening',await moving.locator('.portfolio-summary').evaluate(summary=>Boolean(summary.compareDocumentPosition(document.querySelector('.opening-hero'))&Node.DOCUMENT_POSITION_FOLLOWING)));
+  await moving.locator('.opening-hero').scrollIntoViewIfNeeded();
   await moving.waitForFunction(()=>!document.querySelector('.hero-film').paused);
   await moving.emulateMedia({reducedMotion:'reduce'});
   await moving.waitForFunction(()=>document.querySelector('.hero-film').paused,null,{timeout:1000});
