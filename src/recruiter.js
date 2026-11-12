@@ -18,7 +18,7 @@ export function recruiterFacts(content) {
     ['Roles of interest',p.roles.join(' · ')],
     ['Direct teaching',schoolPractice?p.directTeaching:''],
     ['Additional teaching',schoolPractice?p.additionalTeaching:''],
-    ['Earliest joining',p.availability],
+    [/^TGT\b/.test(p.roles[0]||'')?'TGT joining availability':'Earliest joining',p.availability],
     ['Based in',p.location],
     ['Work preferences',p.workPreferences],
     ['Target classes',p.targetClasses],

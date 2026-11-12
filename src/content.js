@@ -7,12 +7,12 @@ export const defaultContent = {
     "email": "krishnamahato704@gmail.com",
     "eyebrow": "Social Science Teacher · B.Ed. Candidate",
     "headline": "I help students use evidence to understand people, places and how societies work.",
-    "summary": "Social Science teacher with a background in History and Economics, teacher education and classroom experience in Social Science and English.",
+    "summary": "Early-career Social Science teacher with supervised school and community teaching experience, focused on TGT Social Science roles.",
     "portrait": "https://oyqevsygintkjrkfbzpx.supabase.co/storage/v1/object/public/portfolio-media/evidence/images/1787826897958_3tk4ud_portrait.jpeg",
     "roles": [
-      "TGT Social Science",
-      "TGT English (B.Ed. Pedagogy)",
-      "PGT History (post-M.A. 2027)"
+      "TGT Social Science (primary interest)",
+      "TGT English (additional pedagogy subject)",
+      "PGT History (after M.A. completion)"
     ],
     "subjects": [
       "History",
@@ -31,7 +31,7 @@ export const defaultContent = {
     "eligibility": "CTET Paper II — Applied · Examination window: 12–13 December 2026 · Exact date/shift subject to admit card",
     "location": "Noida, India",
     "workPreferences": "Open to relocation anywhere in India",
-    "targetClasses": "Classes 6–10 (TGT) · Classes 11–12 (PGT History post-M.A. 2027)",
+    "targetClasses": "Classes 6–10 (TGT) · Classes 11–12 (PGT History after M.A. completion)",
     "targetBoards": "CBSE · ICSE · Cambridge · IB",
     "directTeaching": "Social Science · Classes 6–9; select Class 11 History lessons",
     "additionalTeaching": "English · Classes 6 and 8 (B.Ed. pedagogy)"
@@ -144,7 +144,7 @@ export const defaultContent = {
       "number": "02"
     },
     {
-      "text": "I plan checks before, during and after explanation. The Democracy plan includes diagnostic questions, guided practice and an independent task; collecting responses will help me evaluate these choices.",
+      "text": "My diagnostic cycle used three assessments and two remedial phases. The progress test led me to revisit map work, vocabulary and answer construction; the final review identified support still needed.",
       "title": "Assessment that changes teaching",
       "number": "03"
     }

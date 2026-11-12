@@ -47,7 +47,10 @@ test('Teaching philosophy renders editorial sequence preserving exactly three pr
   assert.ok(html.includes('Classroom Implication'), 'Classroom implication cue is present');
   assert.ok(html.includes('questions about prior knowledge lead to discussion of elections'), 'Principle 1 implication present');
   assert.ok(html.includes('a concept diagram, photographs, oral discussion and written responses'), 'Principle 2 implication present');
-  assert.ok(html.includes('diagnostic questions, guided practice and an independent accountability task'), 'Principle 3 implication present');
+  assert.ok(html.includes('Recorded assessment cycle'), 'Principle 3 identifies its completed evidence');
+  assert.ok(html.includes('43.10, 44.50 and 48.00 out of 80'), 'Principle 3 reports the documented scores');
+  assert.ok(html.includes('Papers were not equated for difficulty'), 'The score comparison retains its limitation');
+  assert.ok(html.includes('href="../assets/evidence/diagnostic-assessment-report-and-tests.pdf"'), 'Principle 3 links the original report');
 });
 
 test('Teaching philosophy presents Tagore and Vygotsky as supporting intellectual influences', async () => {

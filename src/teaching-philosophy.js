@@ -1,5 +1,7 @@
-import {esc,list,link,img} from './view-helpers.js?v=editorial-20261004';
-import {democracyResource} from './evidence.js?v=editorial-20261004';
+import {esc,list,link,img,arrow} from './view-helpers.js?v=editorial-20261004';
+import {democracyResource,documentUrl} from './evidence.js?v=editorial-20261004';
+
+import {diagnosticCaseStudy} from './assessment-case-study.js?v=editorial-20261004';
 
 const influences = [
   {
@@ -21,6 +23,7 @@ const influences = [
 ];
 
 export function homePhilosophySection(c,base){
+  const assessment=diagnosticCaseStudy(c);
   return `<section id="teaching-philosophy" class="container section home-philosophy" aria-labelledby="home-philosophy-title">
  <header class="home-philosophy-heading">
   <div><p class="eyebrow">Ideas that guide my teaching</p><h2 id="home-philosophy-title">My Teaching Philosophy</h2></div>
@@ -38,11 +41,12 @@ export function homePhilosophySection(c,base){
  <div class="home-philosophy-principles">${c.practice.map((p,i)=>`
   <article><span class="home-principle-number" aria-hidden="true">${String(i+1).padStart(2,'0')}</span><h3>${esc(p.title)}</h3><p>${esc(p.text)}</p></article>`).join('')}
  </div>
- <div class="home-philosophy-links">${link(base,'teaching','Read my full teaching approach','text-link')}${democracyResource(c)?link(base,'democracy','Explore the Democracy lesson plan','text-link'):''}</div>
+ <div class="home-philosophy-links">${link(base,'teaching','Read my full teaching approach','text-link')}${assessment?`<a class="text-link" href="${esc(documentUrl(assessment.resource.url,base))}">Read the diagnostic assessment report ${arrow}</a>`:democracyResource(c)?link(base,'democracy','Explore the Democracy lesson plan','text-link'):''}</div>
 </section>`;
 }
 
 export function philosophySection(c,base){
+  const assessment=diagnosticCaseStudy(c);
   const implications = [
     'Plan example: questions about prior knowledge lead to discussion of elections and peaceful protest (pages 3–5).',
     'Plan example: a concept diagram, photographs, oral discussion and written responses support access (pages 3–5). Targeted adaptations are not specified.',
@@ -94,8 +98,8 @@ export function philosophySection(c,base){
       </div>
       <p class="principle-core">${esc(p.text)}</p>
       <div class="principle-implication">
-       <span class="implication-label">Classroom Implication · Planned example</span>
-       <p class="implication-text">${esc(implications[i]||'An evidence example can be added when available.')}</p>${democracyResource(c)?link(base,'democracy','Evidence: Democracy lesson plan'):''}<p class="small">Reflection: the plan’s review fields are blank. A completed account of learner responses is the next evidence to add.</p>
+       <span class="implication-label">Classroom Implication · ${assessment&&p.title==='Assessment that changes teaching'?'Recorded assessment cycle':'Planned example'}</span>
+       <p class="implication-text">${esc(assessment&&p.title==='Assessment that changes teaching'?assessment.summary:implications[i]||'An evidence example can be added when available.')}</p>${assessment&&p.title==='Assessment that changes teaching'?`<a class="text-link" href="${esc(documentUrl(assessment.resource.url,base))}">Evidence: Diagnostic assessment report ${arrow}</a>`:democracyResource(c)?link(base,'democracy','Evidence: Democracy lesson plan'):''}<p class="small">${assessment&&p.title==='Assessment that changes teaching'?esc(assessment.limitation):'Reflection: the plan’s review fields are blank. A completed account of learner responses is the next evidence to add.'}</p>
       </div>
      </div>
     </article>`).join('')}

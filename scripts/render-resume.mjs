@@ -1,5 +1,6 @@
 import {experiencePeriod} from '../src/recruiter.js';
 import {sortQualifications,sortExperiences} from '../src/chronology.js';
+import {diagnosticCaseStudy} from '../src/assessment-case-study.js';
 import PDFDocument from 'pdfkit';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -24,7 +25,7 @@ export async function generateResume(c=defaultContent,{siteUrl=resolveSiteUrl()}
  const text=(col,value,size=9,face='Helvetica',color=ink)=>{col.y=draw(value,col.x,col.y,col.width,size,face,color)+2;};
  const section=(col,label)=>{col.y+=7;text(col,label.toUpperCase(),9.5,'Helvetica-Bold','#3b2e26');doc.strokeColor('#ded0c0').lineWidth(.5).moveTo(col.x,col.y).lineTo(col.x+col.width,col.y).stroke();col.y+=7;};
  section(left,'Professional profile');text(left,c.profile.summary,9);
- text(left,'Available: '+c.profile.availability,9,'Helvetica-Bold');text(left,c.profile.workPreferences,8.8);
+ text(left,(/^TGT\b/.test(c.profile.roles[0]||'')?'TGT availability: ':'Available: ')+c.profile.availability,9,'Helvetica-Bold');text(left,c.profile.workPreferences,8.8);
  text(left,c.profile.eligibility,8.5,'Helvetica',muted);
  section(left,'Education');
  for(const q of sortQualifications(c.qualifications)){text(left,q.title,9.2,'Helvetica-Bold');text(left,q.place,8.7);text(left,q.period+' | '+q.status,8.2,'Helvetica',muted);if(q.note)text(left,q.note,8.2,'Helvetica',muted);left.y+=3;}
@@ -37,12 +38,14 @@ export async function generateResume(c=defaultContent,{siteUrl=resolveSiteUrl()}
   for(const point of points)text(right,'• '+point,8.8);right.y+=6;
  }
  section(right,'Selected teaching evidence');
+ const assessment=diagnosticCaseStudy(c);
  const selectedEvidence=[
+  assessment?.resource,
   c.resources.find(x=>x.category==='Lesson plan'),
   c.resources.find(x=>internshipStudyIds.includes(x.id))||c.resources.find(x=>x.id==='ntcc-community-report')
- ].filter(Boolean);
+ ].filter(Boolean).filter((resource,index,resources)=>resources.indexOf(resource)===index).slice(0,2);
  for(const resource of selectedEvidence){
-  text(right,resource.title,9.1,'Helvetica-Bold');text(right,[resource.grade,resource.date,resource.evidenceStatus].filter(Boolean).join(' | '),8.2,'Helvetica',muted);
+  text(right,resource.title,9.1,'Helvetica-Bold');text(right,resource===assessment?.resource?assessment.cvSummary:[resource.grade,resource.date,resource.evidenceStatus].filter(Boolean).join(' | '),8.2,'Helvetica',muted);
  }
  section(right,'Selected credentials');
  const credentials=[c.certificates.find(x=>x.id==='gemini-badge'),c.certificates.find(x=>x.id==='nptel-writing'),c.certificates.find(x=>x.category==='Presentation')].filter(Boolean);
